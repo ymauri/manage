@@ -1,0 +1,10 @@
+services:
+    login_listener: 
+        class: Manage\AdminBundle\Listener\LoginListener
+        arguments: [@security.context, @router]        
+        tags:
+            - { name: kernel.event_listener, event: security.interactive_login}
+            - { name: kernel.event_listener, event: kernel.response}
+#    admin.example:
+#        class: Manage\AdminBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
