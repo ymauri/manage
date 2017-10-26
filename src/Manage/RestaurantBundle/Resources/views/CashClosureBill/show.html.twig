@@ -1,0 +1,84 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Bill</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>E500</th>
+                <td>{{ entity.e500 }}</td>
+            </tr>
+            <tr>
+                <th>E200</th>
+                <td>{{ entity.e200 }}</td>
+            </tr>
+            <tr>
+                <th>E100</th>
+                <td>{{ entity.e100 }}</td>
+            </tr>
+            <tr>
+                <th>E50</th>
+                <td>{{ entity.e50 }}</td>
+            </tr>
+            <tr>
+                <th>E20</th>
+                <td>{{ entity.e20 }}</td>
+            </tr>
+            <tr>
+                <th>E10</th>
+                <td>{{ entity.e10 }}</td>
+            </tr>
+            <tr>
+                <th>E5</th>
+                <td>{{ entity.e5 }}</td>
+            </tr>
+            <tr>
+                <th>E2</th>
+                <td>{{ entity.e2 }}</td>
+            </tr>
+            <tr>
+                <th>E1</th>
+                <td>{{ entity.e1 }}</td>
+            </tr>
+            <tr>
+                <th>E050</th>
+                <td>{{ entity.e050 }}</td>
+            </tr>
+            <tr>
+                <th>E020</th>
+                <td>{{ entity.e020 }}</td>
+            </tr>
+            <tr>
+                <th>E010</th>
+                <td>{{ entity.e010 }}</td>
+            </tr>
+            <tr>
+                <th>Eind</th>
+                <td>{{ entity.eind }}</td>
+            </tr>
+            <tr>
+                <th>Waarvan</th>
+                <td>{{ entity.waarvan }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('bill') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('bill_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

@@ -10,7 +10,9 @@
             <link href={{asset('css/bootstrap.min.css')}} rel="stylesheet" media="screen">
             <link href={{asset('css/style.css')}} rel="stylesheet" media="screen">
             <link href={{asset('css/default.css')}} rel="stylesheet" media="screen">
+            <link href={{asset('css/datepicker.css')}} rel="stylesheet" media="screen">
             <script src={{asset('js/modernizr.custom.js')}}></script>
+            <script src={{asset('js/jquery.js')}}></script>
         {% endblock %}
     </head>
     <body id="{% block id '' %}">
@@ -35,13 +37,13 @@
                 <footer>
                     &copy;{{'now'|date('Y')}} - Manage
                 </footer>           
-                {% block javascripts %}
-                    <script src={{asset('js/jquery.js')}}></script>
+                {% block javascripts %}                   
                     <script src={{asset('js/bootstrap.min.js')}}></script>
                     <script src={{asset('js/jquery.smooth-scroll.min.js')}}></script>
                     <script src={{asset('js/jquery.dlmenu.js')}}></script>
                     <script src={{asset('js/wow.min.js')}}></script>
                     <script src={{asset('js/custom.js')}}></script>
+                    <script src={{asset('js/bootstrap-datepicker.js')}}></script>
                 {% endblock %}
             </div>
         </div>

@@ -2,6 +2,8 @@ admin:
     resource: "@AdminBundle/Controller/"
     type:     annotation
     prefix:   /
-#app:
-#    resource: "@AppBundle/Controller/"
-#    type:     annotation
+    
+restaurant:
+    resource: "@RestaurantBundle/Controller/"
+    type:     annotation
+    prefix: /restaurant

@@ -544,6 +544,7 @@ footer {
 	background: #2b2b2b;
 	color: #ddd;
 	padding: 50px 0 30px;
+        margin-top: 30px;
 }
 
 
@@ -595,4 +596,52 @@ more media queries
 .global-container{
     min-height: 488px;
     margin-top: 20px;
+}
+
+section.x-group, section.z-group {
+    margin: 0 70px 10px 0;
+}
+
+#data-total .form-control, #data-bills .form-control, #data-begin .form-control{
+    max-width: 80px;
+    text-align: right;
+}
+
+input.form-basic-restaurant-date{
+     max-width: 110px;
+     display: inline;
+}
+
+#form-basic-restaurant fieldset{
+    border-bottom: 1px solid #999;
+    padding: 20px 0;
+}
+
+.cashclosure-basic input, .cashclosure-basic textarea{
+    max-width: 200px;
+    display: inline;
+}
+
+#form-basic-restaurant .form-cashclosure-details, #form-basic-restaurant .form-cashclosure-help{
+    display: inline;
+    font-size: 16px;
+    padding: 0 0 8px 8px;
+    cursor: pointer;
+    color: #428bca;
+        
+}
+
+#form-basic-restaurant .form-cashclosure-details:hover, #form-basic-restaurant .form-cashclosure-help:hover{
+    text-decoration: underline;
+        
+}
+
+.totales{
+    padding-top: 15px;
+    border-top: 1px solid #D9D9D9;
+    font-weight: bold;
+}
+
+#data-total .table{
+    text-align: center;
 }
