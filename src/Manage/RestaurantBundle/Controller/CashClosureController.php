@@ -52,7 +52,8 @@ class CashClosureController extends Controller{
             
             if ($form_basic->isValid() 
                 && $form_total->isValid() 
-                && $form_total->isValid()) {   
+                && $form_begin->isValid()
+                && $form_bill->isValid()) {   
                 
                 $total = $this->validateFormTotal($entity_total);
                 $t = $this->getDoctrine()->getEntityManager();

@@ -67,8 +67,10 @@ class CashClosureBeginBillType extends AbstractType
                 'read_only' =>true,
                 'precision' =>2,
             ))
-            ->add('extra')
-            ->add('standard')
+            ->add('extra', 'checkbox',array(
+                'mapped'=>false))
+            ->add('standard', 'checkbox',array(
+                'mapped'=>false))
         ;
     }
     

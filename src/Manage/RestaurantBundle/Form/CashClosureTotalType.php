@@ -57,7 +57,8 @@ class CashClosureTotalType extends AbstractType
                     'value' => 0.00
                 )
             ))
-            ->add('suitesapart', 'checkbox', array('required'=>false))
+            ->add('suitesapart', 'checkbox',array(
+                'mapped'=>false))
             ->add('laagdag','number', array(
                 'precision'=>2,))
             ->add('laagavond','number', array(

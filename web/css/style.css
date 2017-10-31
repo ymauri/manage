@@ -602,7 +602,10 @@ section.x-group, section.z-group {
     margin: 0 70px 10px 0;
 }
 
-#data-total .form-control, #data-bills .form-control, #data-begin .form-control{
+#data-total .form-control, 
+#data-bills .form-control, 
+#data-begin .form-control, 
+#form-basic-reception .form-control{
     max-width: 80px;
     text-align: right;
 }
@@ -612,17 +615,24 @@ input.form-basic-restaurant-date{
      display: inline;
 }
 
-#form-basic-restaurant fieldset{
+#form-basic-restaurant fieldset,
+#form-basic-reception fieldset{
     border-bottom: 1px solid #999;
     padding: 20px 0;
 }
 
-.cashclosure-basic input, .cashclosure-basic textarea{
-    max-width: 200px;
-    display: inline;
+.cashclosure-basic input,
+.cashclosure-basic textarea,
+fieldset.reception-basic  input,
+fieldset.reception-basic textarea,
+fieldset.reception-basic select{
+    max-width: 200px !important;
+    display: inline !important;
+    text-align: left !important;
 }
 
-#form-basic-restaurant .form-cashclosure-details, #form-basic-restaurant .form-cashclosure-help{
+/*#form-basic-restaurant .form-cashclosure-details, #form-basic-restaurant .form-cashclosure-help{*/
+h2 .info{
     display: inline;
     font-size: 16px;
     padding: 0 0 8px 8px;
@@ -631,7 +641,8 @@ input.form-basic-restaurant-date{
         
 }
 
-#form-basic-restaurant .form-cashclosure-details:hover, #form-basic-restaurant .form-cashclosure-help:hover{
+/*#form-basic-restaurant .form-cashclosure-details:hover, #form-basic-restaurant .form-cashclosure-help:hover{*/
+h2 .info:hover{    
     text-decoration: underline;
         
 }

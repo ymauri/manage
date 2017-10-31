@@ -2,7 +2,7 @@ admin:
     resource: "@AdminBundle/Controller/"
     type:     annotation
     prefix:   /
-    
+
 restaurant:
     resource: "@RestaurantBundle/Controller/"
     type:     annotation
