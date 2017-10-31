@@ -1,0 +1,65 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Reception list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Details</th>
+                <th>Dated</th>
+                <th>Vdstart</th>
+                <th>Vdend</th>
+                <th>Vdamount</th>
+                <th>Vnstart</th>
+                <th>Vnend</th>
+                <th>Vnamount</th>
+                <th>Thereisfree</th>
+                <th>Generalamount</th>
+                <th>Halfprice</th>
+                <th>Profit</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('reception_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.name }}</td>
+                <td>{{ entity.details }}</td>
+                <td>{% if entity.dated %}{{ entity.dated|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.vdstart }}</td>
+                <td>{{ entity.vdend }}</td>
+                <td>{{ entity.vdamount }}</td>
+                <td>{{ entity.vnstart }}</td>
+                <td>{{ entity.vnend }}</td>
+                <td>{{ entity.vnamount }}</td>
+                <td>{{ entity.thereisfree }}</td>
+                <td>{{ entity.generalamount }}</td>
+                <td>{{ entity.halfprice }}</td>
+                <td>{{ entity.profit }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('reception_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('reception_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('reception_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

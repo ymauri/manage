@@ -1,0 +1,39 @@
+# you can read more about security in the related section of the documentation
+# http://symfony.com/doc/current/book/security.html
+security:
+    
+    encoders:
+        Manage\AdminBundle\Entity\User: {algorithm: sha512, encode_as_base64: true, iterations: 10}
+   
+    role_hierarchy:
+        ROLE_SUPERADMIN:      [ROLE_ADMIN]
+        ROLE_MANAGER:         [ROLE_SUPERADMIN, ROLE_ADMIN]
+        
+    providers:
+        email:
+            entity: {class: Manage\AdminBundle\Entity\User, property: email}
+   
+    firewalls:     
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+            
+        login:
+            pattern:  ^/login$
+            security: false
+        
+        admin:
+            pattern:  ^/*
+            provider: email
+            form_login:
+                login_path: login
+                check_path: login_check
+                default_target_path: home    
+            logout:
+                path: logout
+                target: login
+            
+    access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}
+        - { path: ^/*, roles: ROLE_MANAGER}
+        

@@ -1,0 +1,266 @@
+<fieldset id="data-total" class="col-md-12">
+                <h4>Totaalstroken</h4>
+                <!--<form action={{'cashclosure_create'}} method="post" class="form-horizontal" role="form">
+                    <!--errores del formulario total-->
+                    <div class="for-errors col-md-12"> 
+                        {{form_errors(form_total)}}
+                    </div>
+                    <section class="x-group col-md-3 col-md-offset-3 ">
+                        <strong class="row form-group text-primary">X-Strook Dag</strong> 
+                        <div class="row form-group">
+                          {{form_label(form_total.xlaag,'8000 - X Omzet Laag',{'attr':{                       
+                            'class' :' control-label',
+                            }})}}
+                          {{form_widget(form_total.xlaag, {'attr':{                       
+                            'class' :'input-sm pull-right form-control x-control',
+                            'placeholder' : 0.00
+                            }})}}  
+                        </div>
+                        <div class="row form-group">
+                          {{form_label(form_total.xkitchen,'8002 - X Omzet Keuken',{'attr':{                       
+                            'class' :' control-label',
+                            }})}}
+                          {{form_widget(form_total.xkitchen, {'attr':{                       
+                            'class' :'input-sm pull-right form-control x-control',
+                             'placeholder' : 0.00
+                            }})}}  
+                        </div>
+                        <div class="row form-group">
+                          {{form_label(form_total.xhoog,'8001 - X Omzet Hoog',{'attr':{                       
+                            'class' :' control-label',
+                            }})}}
+                          {{form_widget(form_total.xhoog, {'attr':{                       
+                            'class' :'input-sm pull-right form-control x-control',
+                            'placeholder' : 0.00
+                          }})}}  
+                        </div>
+                        <div class="row form-group">
+                          {{form_label(form_total.xparking,'8050 - X Parkeren',{'attr':{                       
+                           'class' :' control-label',
+                            }})}}
+                          {{form_widget(form_total.xparking , {'attr':{                       
+                           'class' :'input-sm pull-right form-control x-control',
+                           'placeholder' : 0.00
+                          }})}} 
+                        </div>
+                        <div class="row form-group">
+                          {{form_label(form_total.xentry,'9999 - X Entree Laag',{'attr':{                       
+                            'class' :' control-label',
+                            }})}}
+                          {{form_widget(form_total.xentry , {'attr':{                       
+                            'class' :'input-sm pull-right form-control x-control',
+                            'placeholder' : 0.00
+                          }})}}
+                        </div>
+                        <div class="row form-group">
+                          {{form_label(form_total.xspacesrent,'8998 - X Zaalhuur',{'attr':{                       
+                            'class' :' control-label',
+                            }})}}
+                          {{form_widget(form_total.xspacesrent , {'attr':{                       
+                            'class' :'input-sm pull-right form-control x-control',
+                            'placeholder' : 0.00
+                          }})}}
+                        </div>
+                        <div class="row form-group">
+                          {{form_label(form_total.xothers,'8041 - X Techniek & Overig',{'attr':{                       
+                            'class' :' control-label',
+                            }})}}
+                          {{form_widget(form_total.xothers , {'attr':{                       
+                            'class' :'input-sm pull-right form-control x-control',
+                            'placeholder' : 0.00
+                          }})}} 
+                        </div>
+                        <div class="row form-group totales">
+                          {{form_label(form_total.xtotal,'Totaal X-Omzet €',{'attr':{                       
+                            'class' :' control-label',
+                            }})}}
+                          {{form_widget(form_total.xtotal , {'attr':{                       
+                            'class' :'input-sm pull-right form-control ',
+                            'placeholder' : 0.00
+                          }})}} 
+                        </div>
+                    </section>
+                    <section class="z-group col-md-3 col-md-offset-3 ">
+                        <strong class="row form-group text-primary">Z-Strook Totaal</strong>
+                        <div class="row form-group">
+                          {{form_label(form_total.zlaag,'8000 - Z Omzet Laag',{'attr':{                       
+                            'class' :' control-label',
+                            }})}}
+                          {{form_widget(form_total.zlaag, {'attr':{                       
+                            'class' :'input-sm pull-right form-control z-control',
+                            'placeholder' : 0.00
+                          }})}}
+                        </div>
+                        <div class="row form-group">
+                          {{form_label(form_total.zkitchen,'8002 - Z Omzet Keuken',{'attr':{                       
+                            'class' :' control-label',
+                            }})}}
+                          {{form_widget(form_total.zkitchen, {'attr':{                       
+                            'class' :'input-sm pull-right form-control z-control',
+                            'placeholder' : 0.00
+                          }})}}
+                        </div>
+                        <div class="row form-group">
+                          {{form_label(form_total.zhoog,'8001 - Z Omzet Hoog',{'attr':{                       
+                            'class' :' control-label',
+                            }})}}
+                          {{form_widget(form_total.zhoog, {'attr':{                       
+                            'class' :'input-sm pull-right form-control z-control',
+                            'placeholder' : 0.00
+                          }})}}  
+                        </div>
+                        <div class="row form-group">
+                          {{form_label(form_total.zparking,'8050 - Z Parkeren',{'attr':{                       
+                            'class' :' control-label',
+                            }})}}
+                          {{form_widget(form_total.zparking , {'attr':{                       
+                            'class' :'input-sm pull-right form-control z-control',
+                            'placeholder' : 0.00
+                          }})}} 
+                        </div>
+                       <div class="row form-group">
+                          {{form_label(form_total.zentry,'9999 - Z Entree Laag',{'attr':{                       
+                            'class' :' control-label',
+                            }})}}
+                          {{form_widget(form_total.zentry , {'attr':{                       
+                            'class' :'input-sm pull-right form-control z-control',
+                            'placeholder' : 0.00
+                          }})}}
+                        </div>
+                        <div class="row form-group">
+                          {{form_label(form_total.zspacesrent,'8998 - Z Zaalhuur',{'attr':{                       
+                            'class' :' control-label',
+                            }})}}
+                          {{form_widget(form_total.zspacesrent , {'attr':{                       
+                           'class' :'input-sm pull-right form-control z-control',
+                           'placeholder' : 0.00
+                          }})}}
+                        </div>
+                        <div class="row form-group">
+                          {{form_label(form_total.zothers,'8041 - Z Techniek & Overig',{'attr':{                       
+                            'class' :' control-label',
+                            }})}}
+                          {{form_widget(form_total.zothers , {'attr':{                       
+                            'class' :'input-sm pull-right form-control z-control',
+                            'placeholder' : 0.00
+                          }})}} 
+                        </div>
+                        <div class="row form-group totales">
+                          {{form_label(form_total.ztotal,'Totaal Z-Omzet €',{'attr':{                       
+                            'class' :' control-label',
+                            }})}}
+                          {{form_widget(form_total.ztotal , {'attr':{                       
+                            'class' :'input-sm pull-right form-control',
+                            'placeholder' : 0.00
+                          }})}}
+                        </div>
+                    </section>
+                    <section class="col-md-12">
+                        <div class="row col-md-4">
+                            <div class="checkbox">
+                                <label>
+                                 <strong>Suites apart specificeren</strong> {{form_widget(form_total.suitesapart,{'attr':{                       
+                                  'type' :'checkbox',}})}}
+                                </label>
+                            </div>
+                                <table class="suites-table table-condensed" hidden="">
+                                    <tr>
+                                        <td></td>
+                                        <td>Dag</td>
+                                        <td>Avond</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Omzet Laag</td>
+                                        <td>{{form_widget(form_total.laagdag , {'attr':{'class' :'input-sm pull-right form-control suites-control','placeholder' : 0.00 }})}}</td>
+                                        <td>{{form_widget(form_total.laagavond , {'attr':{'class' :'input-sm pull-right form-control suites-control','placeholder' : 0.00 }})}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Omzet Hoog</td>
+                                        <td>{{form_widget(form_total.hoogdag , {'attr':{'class' :'input-sm pull-right form-control suites-control','placeholder' : 0.00 }})}}</td>
+                                        <td>{{form_widget(form_total.hoogavond , {'attr':{'class' :'input-sm pull-right form-control suites-control','placeholder' : 0.00 }})}}</td>
+                                    </tr>
+                                    <tr class="totales">
+                                        <td>Omzet Suites</td>
+                                        <td>{{form_widget(form_total.suites , {'attr':{'class' :'input-sm pull-right form-control ','placeholder' : 0.00 }})}}</td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+                                        <br/>
+                            {{form_rest(form_total)}}
+                        </div>
+                    </section>
+                <!--</form>-->
+            </fieldset>
+                          
+
+    <script>
+        function updateX(){
+             var xtotal = Number($('#manage_restaurantbundle_cashclosuretotal_xlaag').val())
+                      +  Number($('#manage_restaurantbundle_cashclosuretotal_xkitchen').val())
+                      +  Number($('#manage_restaurantbundle_cashclosuretotal_xhoog').val())
+                      +  Number($('#manage_restaurantbundle_cashclosuretotal_xparking').val())
+                      +  Number($('#manage_restaurantbundle_cashclosuretotal_xentry').val())
+                      +  Number($('#manage_restaurantbundle_cashclosuretotal_xspacesrent').val())
+                      +  Number($('#manage_restaurantbundle_cashclosuretotal_xothers').val())
+            $('#manage_restaurantbundle_cashclosuretotal_xtotal').val(xtotal);   
+        }
+        
+        function updateZ(){
+            var ztotal = Number($('#manage_restaurantbundle_cashclosuretotal_zlaag').val())
+                      +  Number($('#manage_restaurantbundle_cashclosuretotal_zkitchen').val())
+                      +  Number($('#manage_restaurantbundle_cashclosuretotal_zhoog').val())
+                      +  Number($('#manage_restaurantbundle_cashclosuretotal_zparking').val())
+                      +  Number($('#manage_restaurantbundle_cashclosuretotal_zentry').val())
+                      +  Number($('#manage_restaurantbundle_cashclosuretotal_zspacesrent').val())
+                      +  Number($('#manage_restaurantbundle_cashclosuretotal_zothers').val())
+            $('#manage_restaurantbundle_cashclosuretotal_ztotal').val(ztotal);  
+        }
+        
+        function updateSuites(){
+            var suites =  Number($('#manage_restaurantbundle_cashclosuretotal_laagdag').val())
+                        + Number($('#manage_restaurantbundle_cashclosuretotal_laagavond').val())
+                        + Number($('#manage_restaurantbundle_cashclosuretotal_hoogdag').val())
+                        + Number($('#manage_restaurantbundle_cashclosuretotal_hoogavond').val())
+            $('#manage_restaurantbundle_cashclosuretotal_suites').val(suites)
+        }
+        
+        $('#data-total').ready(function (){
+            updateX();
+            updateZ(); 
+            updateSuites();
+            if ($('#manage_restaurantbundle_cashclosuretotal_suitesapart').is(':checked')){
+                $('.suites-table').show(300);
+            }
+        })
+        $('#data-total').on('keyup', '.x-control', function(){
+            //$(this).val(parseFloat($(this).val()).toFixed(2) )
+            updateX();
+        })
+        $('#data-total').on('keyup', '.z-control', function(){
+            //$(this).val(parseFloat($(this).val()).toFixed(2) )
+            updateZ();          
+        })        
+        $('#data-total').on('keyup', '.suites-control', function(){
+            //$(this).val(parseFloat($(this).val()).toFixed(2) )
+            updateSuites();          
+        })        
+        $('#data-total').on('click', '#manage_restaurantbundle_cashclosuretotal_suitesapart', function(){
+            if ($('#manage_restaurantbundle_cashclosuretotal_suitesapart').is (':checked')){
+                $('.suites-table').show();
+                $('#manage_restaurantbundle_cashclosuretotal_laagdag').val('')
+                $('#manage_restaurantbundle_cashclosuretotal_laagavond').val('')
+                $('#manage_restaurantbundle_cashclosuretotal_hoogdag').val('')
+                $('#manage_restaurantbundle_cashclosuretotal_hoogavond').val('')
+                $('#manage_restaurantbundle_cashclosuretotal_suites').val('')
+            }
+            else
+                $('.suites-table').hide();
+                $('#manage_restaurantbundle_cashclosuretotal_laagdag').val(0)
+                $('#manage_restaurantbundle_cashclosuretotal_laagavond').val(0)
+                $('#manage_restaurantbundle_cashclosuretotal_hoogdag').val(0)
+                $('#manage_restaurantbundle_cashclosuretotal_hoogavond').val(0)
+                $('#manage_restaurantbundle_cashclosuretotal_suites').val(0)
+        })
+        
+       
+    </script>
