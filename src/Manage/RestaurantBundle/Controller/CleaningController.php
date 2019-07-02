@@ -619,8 +619,9 @@ class CleaningController extends Controller
             $resultextra = array();
             for ($i = 1; $i <= 31; $i++){
                 $date = new \DateTime($i."-".$month);
+                $monthdate = explode("-", $month);
                 //Si existe la fecha y el día es menor al día de hoy
-                if (checkdate((integer)$date->format("m"), $date->format("d"), (integer)$date->format("Y")) && strtotime($date->format("d-m-Y")) < strtotime(date("d-m-Y"))){
+                if (checkdate((integer)$monthdate[0], (integer)$i, (integer)$monthdate[1]) && strtotime($date->format("d-m-Y")) < strtotime(date("d-m-Y"))){
                     $cleanings = $em->getRepository("RestaurantBundle:Cleaning")->findBy(array("dated"=> $date, "isextra"=>0));
                     if (!is_null($cleanings)){
                         $totalhoras = 0;
@@ -675,7 +676,6 @@ class CleaningController extends Controller
                     
                 }
             }
-            
             return  array('entities' => $result, "extra" => $resultextra, "dated" => new \DateTime("1-".$month));
 
         } else {

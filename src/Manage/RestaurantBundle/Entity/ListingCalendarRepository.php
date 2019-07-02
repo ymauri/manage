@@ -26,7 +26,7 @@ class ListingCalendarRepository extends EntityRepository {
         $listings = $consulta->getResult();
         $final = array();
         foreach ($listings as $listing) {
-            if ($types[0]==""){
+            if (count($types) == 0 || $types[0]==""){
                 $final[] = $listing[0];
             }else{
                 //Verificar el tipo de listing
