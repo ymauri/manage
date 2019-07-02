@@ -1,0 +1,76 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title %} New Source {% endblock %}
+{% block body %}
+<div class="portlet">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-notebook"></i>Source
+        </div>
+        <div class="tools">
+            <a href="{{path('source')}}" class=" blue">
+                <i class="fa fa-list-alt"></i> List
+            </a>
+        </div>
+    </div>
+        <div class="portlet box blue-hoki">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-plus"></i>New
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                {% if form_errors(form)%}
+                    <div class="form-errors alert alert-danger">
+                        {{form_errors(form)}}
+                    </div>
+                {% endif %}
+                <form class="container-fluid form-horizontal" action="{{path('source_create')}}" method="POST" {{form_enctype(form)}}>
+                    <div class="form-body col-md-5">
+                        <div class="row form-group">
+                            {{form_label(form.details,'Name',{'attr':{                       
+                      'class' :' control-label',
+                            }})}}
+                            {{form_widget(form.details, {'attr':{                       
+                      'class' :'input-sm pull-right form-control'
+                            }})}}  
+                            {{form_errors(form.details)}}  
+                        </div>
+
+                        <div class="row form-group">
+                            {{form_label(form.guesty,'Guesty name',{'attr':{
+                      'class' :' control-label',
+                            }})}}
+                            {{form_widget(form.guesty, {'attr':{
+                      'class' :'input-sm pull-right form-control'
+                            }})}}
+                            {{form_errors(form.guesty)}}
+                        </div>
+                         <div class="row form-group">
+                             <div class="">
+                             <label>
+                                 {{form_widget(form.isactive,{'attr':{
+                                     'type' :'checkbox',}})}} Is Active
+                             </label>
+                                 </div>
+                        </div>
+                        <div class="row form-group">
+                             <div class="">
+                             <label>
+                                 {{form_widget(form.extrafield,{'attr':{
+                                     'type' :'checkbox',}})}}  Has extra field
+                             </label>
+                                 </div>
+                        </div>
+                        <div class="row form-group ">
+                            {{ form_rest(form) }}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+</div>
+{% endblock %}

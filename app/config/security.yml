@@ -21,7 +21,43 @@ security:
         login:
             pattern:  ^/login$
             security: false
-        
+
+        command:
+            pattern:  ^/command/*
+            anonymous: ~
+            security: false
+
+        guesty:
+            pattern:  ^/guesty/*
+            anonymous: ~
+            security: false
+
+        rule:
+            pattern:  ^/rule/execute
+            anonymous: ~
+            security: false
+
+        hoook:
+            pattern:  ^/rule/hook/*
+            anonymous: ~
+            security: false
+
+        webhoook:
+            pattern:  ^/hook/*
+            anonymous: ~
+            security: false
+            
+        external:
+            pattern:  ^/external/*
+            anonymous: ~
+            security: false
+            
+        cleanness:
+            pattern:  ^/cleanness/*
+            anonymous: ~
+            security: false
+
+
         admin:
             pattern:  ^/*
             provider: email
@@ -34,6 +70,11 @@ security:
                 target: login
             
     access_control:
+
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}
+        - { path: ^/guesty/*, roles: IS_AUTHENTICATED_ANONYMOUSLY}
+        - { path: ^/rule/hook/*, roles: IS_AUTHENTICATED_ANONYMOUSLY}
+        - { path: ^/rule/execute, roles: IS_AUTHENTICATED_ANONYMOUSLY}
+        - { path: ^/hook/*, roles: IS_AUTHENTICATED_ANONYMOUSLY}
         - { path: ^/*, roles: ROLE_MANAGER}
         

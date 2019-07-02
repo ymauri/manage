@@ -1,0 +1,246 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title %} Help content {% endblock %}
+{% block body %}
+<div class="portlet">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-list"></i>Hotel Help Content
+        </div>
+        <div class="tools">
+            <a href="{{path('help')}}" class=" blue">
+                <i class="fa fa-list-alt"></i> List
+            </a>
+        </div>
+    </div>
+    <div class="portlet box blue-hoki">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-pencil"></i>Edit
+            </div>
+            <div class="tools">
+                <a href="javascript:;" class="collapse">
+                </a>
+            </div>
+        </div>
+        <div class="portlet-body form" style="padding: 0 !important;">
+            <form class="form-horizontal form-bordered" id="hotel" action="{{ path('help_edit', {'form':'hotel'}) }}" method="post">
+                <div class="form-body">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{ form.date.label }}</label>
+                        <div class="col-md-6">
+                            <input type="text" value="{{ form.date.content }}" class="form-control" name="date">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <h3 style="text-align: center;">Checkout</h3>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{ form.checkout_listing.label }}</label>
+                        <div class="col-md-6">
+                            <input type="text" value="{{ form.checkout_listing.content }}" class="form-control" name="checkout_listing">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{ form.checkout_name.label }}</label>
+                        <div class="col-md-6">
+                            <input type="text" value="{{ form.checkout_name.content }}" class="form-control" name="checkout_name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{ form.checkout_nights.label }}</label>
+                        <div class="col-md-6">
+                            <input type="text" value="{{ form.checkout_nights.content }}" class="form-control" name="checkout_nights">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{ form.checkout_details.label }}</label>
+                        <div class="col-md-6">
+                            <input type="text" value="{{ form.checkout_details.content }}" class="form-control" name="checkout_details">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <h3 style="text-align: center;">Checkin</h3>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{ form.checkin_listing.label }}</label>
+                        <div class="col-md-6">
+                            <input type="text" value="{{ form.checkin_listing.content }}" class="form-control" name="checkin_listing">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{ form.checkin_name.label }}</label>
+                        <div class="col-md-6">
+                            <input type="text" value="{{ form.checkin_name.content }}" class="form-control" name="checkin_name">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{ form.checkin_source.label }}</label>
+                        <div class="col-md-6">
+                            <input type="text" value="{{ form.checkin_source.content }}" class="form-control" name="checkin_source">
+                            <br> <a class="btn default" data-toggle="modal" href="#responsive"> Sources </a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{ form.checkin_betalen.label }}</label>
+                        <div class="col-md-6">
+                            <input type="text" value="{{ form.checkin_betalen.content }}" class="form-control" name="checkin_betalen">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{ form.checkin_voldaan.label }}</label>
+                        <div class="col-md-6">
+                            <input type="text" value="{{ form.checkin_voldaan.content }}" class="form-control" name="checkin_voldaan">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{ form.checkin_nights.label }}</label>
+                        <div class="col-md-6">
+                            <input type="text" value="{{ form.checkin_nights.content }}" class="form-control" name="checkin_nights">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{ form.checkin_guests.label }}</label>
+                        <div class="col-md-6">
+                            <input type="text" value="{{ form.checkin_guests.content }}" class="form-control" name="checkin_guests">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{ form.checkin_toer.label }}</label>
+                        <div class="col-md-6">
+                            <input type="text" value="{{ form.checkin_toer.content }}" class="form-control" name="checkin_toer">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{ form.checkin_tickets.label }}</label>
+                        <div class="col-md-6">
+                            <input type="text" value="{{ form.checkin_tickets.content }}" class="form-control" name="checkin_tickets">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{ form.checkin_parking.label }}</label>
+                        <div class="col-md-6">
+                            <input type="text" value="{{ form.checkin_parking.content }}" class="form-control" name="checkin_parking">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{ form.checkin_extra.label }}</label>
+                        <div class="col-md-6">
+                            <input type="text" value="{{ form.checkin_extra.content }}" class="form-control" name="checkin_extra">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{ form.checkin_borg.label }}</label>
+                        <div class="col-md-6">
+                            <input type="text" value="{{ form.checkin_borg.content }}" class="form-control" name="checkin_borg">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{ form.checkin_total.label }}</label>
+                        <div class="col-md-6">
+                            <input type="text" value="{{ form.checkin_total.content }}" class="form-control" name="checkin_total">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{ form.checkin_details.label }}</label>
+                        <div class="col-md-6">
+                            <input type="text" value="{{ form.checkin_details.content }}" class="form-control" name="checkin_details">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <h3 style="text-align: center;">Eind Float</h3>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{ form.eind_float.label }}</label>
+                        <div class="col-md-6">
+                            <input type="text" value="{{ form.eind_float.content }}" class="form-control" name="eind_float">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <h3 style="text-align: center;">Pin Terminals</h3>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{ form.pin_terminal.label }}</label>
+                        <div class="col-md-6">
+                            <input type="text" value="{{ form.pin_terminal.content }}" class="form-control" name="pin_terminal">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <div class="row">
+                        <div class="col-md-offset-5 col-md-12">
+                            <button type="submit" class="btn blue-hoki"><i class=""></i>Save</button>
+                            <a href="{{ path('help') }}"><button type="button" class="btn default">Cancel</button></a>
+                        </div>
+                    </div>
+                </div>
+                <div id="responsive" class="modal fade" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                <h4 class="modal-title">Kanaal</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="scroller" style="height:300px" data-always-visible="1" data-rail-visible1="1">
+                                    <div class="row">
+                                        <div class="col-md-12 form-body">
+                                            <div class="row" style="margin-bottom: 10px;">
+                                                <label class="control-label col-md-3">{{ form.checkin_source_airbnb.label }}</label>
+                                                <div class="col-md-6">
+                                                    <input type="text" value="{{ form.checkin_source_airbnb.content }}" class="form-control" name="checkin_source_airbnb">
+                                                </div>
+                                            </div>
+                                            <div class="row" style="margin-bottom: 10px;">
+                                                <label class="control-label col-md-3">{{ form.checkin_source_booking.label }}</label>
+                                                <div class="col-md-6">
+                                                    <input type="text" value="{{ form.checkin_source_booking.content }}" class="form-control" name="checkin_source_booking">
+                                                </div>
+                                            </div>
+                                            <div class="row" style="margin-bottom: 10px;">
+                                                <label class="control-label col-md-3">{{ form.checkin_source_website.label }}</label>
+                                                <div class="col-md-6">
+                                                    <input type="text" value="{{ form.checkin_source_website.content }}" class="form-control" name="checkin_source_website">
+                                                </div>
+                                            </div>
+                                            <div class="row" style="margin-bottom: 10px;">
+                                                <label class="control-label col-md-3">{{ form.checkin_source_expedia.label }}</label>
+                                                <div class="col-md-6">
+                                                    <input type="text" value="{{ form.checkin_source_expedia.content }}" class="form-control" name="checkin_source_expedia">
+                                                </div>
+                                            </div>
+                                            <div class="row" style="margin-bottom: 10px;">
+                                                <label class="control-label col-md-3">{{ form.checkin_source_direct.label }}</label>
+                                                <div class="col-md-6">
+                                                    <input type="text" value="{{ form.checkin_source_direct.content }}" class="form-control" name="checkin_source_direct">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn default" data-dismiss="modal" >Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="ajax" role="basic" aria-hidden="true">
+                    <div class="page-loading page-loading-boxed">
+                        <img src="../../assets/global/img/loading-spinner-grey.gif" alt="" class="loading">
+									<span>
+									&nbsp;&nbsp;Loading... </span>
+                    </div>
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

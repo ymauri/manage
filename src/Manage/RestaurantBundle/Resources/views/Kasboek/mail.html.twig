@@ -1,0 +1,2177 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="max-width: 1200px;font-family: Tahoma;font-size: 13px;color: black; padding: 10px; margin: 0 auto;">
+<table style="max-width: 1200px; font-family: Lucida; font-size: 13px">
+    <thead>
+    <tr>
+        <td colspan="4"><img src="{{ asset('img/tphlogo.jpg') }}" style="max-width: 280px; margin: 30px 175px 0;"></td>
+    </tr>
+    <tr>
+        <td colspan="4"><h4
+                    style="color: #FF8C11;font-weight: bold;font-size: 19px;margin: 40px; text-align: center; font-family: sans-serif;">
+                Kasboek</h4></td>
+    </tr>
+    <tr>
+        <td style="font-weight: bold;">Datum Formulier</td>
+        <td><input style=" text-align: center; font-weight: bold; font-size: 13px;  max-width: 80px; padding: 2px 0; font-family: Lucida;" disabled="disabled" value='{{entity_basic.dated | date("d-m-Y")}}'></td>
+        <td></td>
+        <td></td>
+    </tr>
+
+    </thead>
+</table>
+<br/>
+<table>
+    <tbody>
+    <tr>
+        <td style="font-weight: bold">Begin Saldo €</td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.beginsaldo |  number_format(2,',','.') }}"></td>
+            <td style="font-weight: bold">Eind Saldo €</td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.eindsaldo |  number_format(2,',','.') }}"></td>
+        <td style="font-weight: bold">Kasverschil €</td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.kasverschil |  number_format(2,',','.') }}"></td>
+    </tr>
+    </tbody>
+</table>
+<br/>
+{# --------------------- BEGIN Contanten --------------------- #}
+<table>
+    <tr>
+        <td>
+            <table style="max-width: 600px; font-family: Sans-Serif; font-size: 13px">
+                <thead>
+                <tr>
+                    <th colspan="6" style="font-family: Sans-Serif; font-size: 13px; text-align: center; font-weight: bold;">Contanten</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="font-family: Sans-Serif; font-size: 13px; text-align: center;">Los</td>
+                    <td style="font-family: Sans-Serif; font-size: 13px; text-align: center;">Rol</td>
+                    <td style="font-family: Sans-Serif; font-size: 13px; text-align: center;">Waarde</td>
+                    <td style="font-family: Sans-Serif; font-size: 13px; text-align: center;" colspan="2">Bedrag</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>€ 0,01</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.los.e001 | number_format(2, ',', '.') }}"></td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.rol.e001 | number_format(2, ',', '.') }}"></td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.waarde.e001 | number_format(2, ',', '.') }}"></td>
+                    <td>€</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.bedrag.e001 | number_format(2, ',', '.') }}"></td>
+                </tr>
+                <tr>
+                    <td>€ 0,02</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.los.e002 | number_format(2, ',', '.') }}"></td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.rol.e002 | number_format(2, ',', '.') }}"></td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.waarde.e002 | number_format(2, ',', '.') }}"></td>
+                    <td>€</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.bedrag.e002 | number_format(2, ',', '.') }}"></td>
+                </tr>
+                <tr>
+                    <td>€ 0,05</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.los.e005 | number_format(2, ',', '.') }}"></td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.rol.e005 | number_format(2, ',', '.') }}"></td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.waarde.e005 | number_format(2, ',', '.') }}"></td>
+                    <td>€</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.bedrag.e005 | number_format(2, ',', '.') }}"></td>
+                </tr>
+                <tr>
+                    <td>€ 0,10</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.los.e010 | number_format(2, ',', '.') }}"></td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.rol.e010 | number_format(2, ',', '.') }}"></td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.waarde.e010 | number_format(2, ',', '.') }}"></td>
+                    <td>€</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.bedrag.e010 | number_format(2, ',', '.') }}"></td>
+                </tr>
+                <tr>
+                    <td>€ 0,20</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.los.e020 | number_format(2, ',', '.') }}"></td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.rol.e020 | number_format(2, ',', '.') }}"></td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.waarde.e020 | number_format(2, ',', '.') }}"></td>
+                    <td>€</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.bedrag.e020 | number_format(2, ',', '.') }}"></td>
+                </tr>
+                <tr>
+                    <td>€ 0,50</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.los.e050 | number_format(2, ',', '.') }}"></td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.rol.e050 | number_format(2, ',', '.') }}"></td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.waarde.e050 | number_format(2, ',', '.') }}"></td>
+                    <td>€</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.bedrag.e050 | number_format(2, ',', '.') }}"></td>
+                </tr>
+                <tr>
+                    <td>€ 1</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.los.e1 | number_format(2, ',', '.') }}"></td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.rol.e1 | number_format(2, ',', '.') }}"></td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.waarde.e1 | number_format(2, ',', '.') }}"></td>
+                    <td>€</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.bedrag.e1 | number_format(2, ',', '.') }}"></td>
+                </tr>
+                <tr>
+                    <td>€ 2</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.los.e2 | number_format(2, ',', '.') }}"></td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.rol.e2 | number_format(2, ',', '.') }}"></td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.waarde.e2 | number_format(2, ',', '.') }}"></td>
+                    <td>€</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.bedrag.e2 | number_format(2, ',', '.') }}"></td>
+                </tr>
+                <tr>
+                    <td>€ 5</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.los.e5 | number_format(2, ',', '.') }}"></td>
+                    <td></td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.waarde.e5 | number_format(2, ',', '.') }}"></td>
+                    <td>€</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.bedrag.e5 | number_format(2, ',', '.') }}"></td>
+                </tr>
+                <tr>
+                    <td>€ 10</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.los.e10 | number_format(2, ',', '.') }}"></td>
+                    <td></td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.waarde.e10 | number_format(2, ',', '.') }}"></td>
+                    <td>€</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.bedrag.e10 | number_format(2, ',', '.') }}"></td>
+                </tr>
+                <tr>
+                    <td>€ 20</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.los.e20 | number_format(2, ',', '.') }}"></td>
+                    <td></td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.waarde.e20 | number_format(2, ',', '.') }}"></td>
+                    <td>€</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.bedrag.e20 | number_format(2, ',', '.') }}"></td>
+                </tr>
+                <tr>
+                    <td>€ 50</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.los.e50 | number_format(2, ',', '.') }}"></td>
+                    <td></td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.waarde.e50 | number_format(2, ',', '.') }}"></td>
+                    <td>€</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.bedrag.e50 | number_format(2, ',', '.') }}"></td>
+                </tr>
+                <tr>
+                    <td>€ 100</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.los.e100 | number_format(2, ',', '.') }}"></td>
+                    <td></td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.waarde.e100 | number_format(2, ',', '.') }}"></td>
+                    <td>€</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.bedrag.e100 | number_format(2, ',', '.') }}"></td>
+                </tr>
+                <tr>
+                    <td>€ 200</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.los.e200 | number_format(2, ',', '.') }}"></td>
+                    <td></td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.waarde.e200 | number_format(2, ',', '.') }}"></td>
+                    <td>€</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.bedrag.e200 | number_format(2, ',', '.') }}"></td>
+                </tr>
+                <tr>
+                    <td>€ 500</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.los.e500 | number_format(2, ',', '.') }}"></td>
+                    <td></td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.waarde.e500 | number_format(2, ',', '.') }}"></td>
+                    <td>€</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.bedrag.e500 | number_format(2, ',', '.') }}"></td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="5" style="text-align: right; font-weight: bold;">Totaal €</td>
+                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.bedrag.total | number_format(2, ',', '.') }}"></td>
+                </tr>
+                </tfoot>
+            </table>
+        </td>
+        <td>
+            <table style="max-width: 600px; font-family: Lucida; font-size: 13px">
+                <tr>
+                    <td>
+                        <table >
+                            <thead>
+                            <tr>
+                                <th colspan="5">Floats</th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th>Waarde</th>
+                                <th>Aantal</th>
+                                <th colspan="2">Bedrag</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Standaard</td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.floats.wstandar}}"></td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.floats.astandar}}"></td>
+                                <td>€</td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.floats.bstandar}}"></td>
+                            </tr>
+                            <tr>
+                                <td>Extra 1</td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.floats.wextra1}}"></td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.floats.aextra1}}"></td>
+                                <td>€</td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.floats.bextra1}}"></td>
+                            </tr>
+                            <tr>
+                                <td>Extra 2</td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.floats.wextra2}}"></td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.floats.aextra2}}"></td>
+                                <td>€</td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.floats.bextra2}}"></td>
+                            </tr>
+                            <tr>
+                                <td>Extra 3</td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.floats.wextra3}}"></td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.floats.aextra3}}"></td>
+                                <td>€</td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.floats.bextra3}}"></td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th colspan="4" style="text-align: right; font-weight: bold;">Totaal €</th>
+                                <th><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.floats.total}}"></th>
+                            </tr>
+                            </tfoot>
+
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table class="table table-condensed">
+                            <thead>
+                            <tr>
+                                <th colspan="5">Salarissen</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Salarissen 1</td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.salarissen.name1}}"></td>
+                                <td>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                    &nbsp; </td>
+                                <td>€</td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.salarissen.bedrag1}}"></td>
+                            </tr>
+                            <tr>
+                                <td>Salarissen 2</td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.salarissen.name2}}"></td>
+                                <td>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                    &nbsp; </td>
+                                <td>€</td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.salarissen.bedrag2}}"></td>
+                            </tr>
+                            <tr>
+                                <td>Salarissen 3</td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.salarissen.name3}}"></td>
+                                <td>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                    &nbsp; </td>
+                                <td>€</td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.salarissen.bedrag3}}"></td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th colspan="4" style="text-align: right; font-weight: bold;">Totaal €</th>
+                                <th><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.salarissen.total}}"></th>
+                            </tr>
+                            </tfoot>
+                        </table>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+
+                        <table class="table table-condensed">
+                            <thead>
+                            <tr>
+                                <th colspan="5">Kas & Vouchers</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Kas & Vouchers 1</td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.kas.name1 | number_format(2, ',', '.') }}"></td>
+                                <td>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; </td>
+                                <td>€</td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.kas.bedrag1 | number_format(2, ',', '.') }}"></td>
+                            </tr>
+                            <tr>
+                                <td>Kas & Vouchers 2</td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.kas.name2 | number_format(2, ',', '.') }}"></td>
+                                <td>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; </td>
+                                <td>€</td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.kas.bedrag2 | number_format(2, ',', '.') }}"></td>
+                            </tr>
+                            <tr>
+                                <td>Kas & Vouchers 3</td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.kas.name3 | number_format(2, ',', '.') }}"></td>
+                                <td>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; </td>
+                                <td>€</td>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.kas.bedrag3 | number_format(2, ',', '.') }}"></td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="4" style="text-align: right; font-weight: bold;">Totaal €</th>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.kas.total | number_format(2, ',', '.') }}"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="text-align: right; font-weight: bold;">Totaal €</td>
+                                <td style="border: none;"><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.totalsalarissenkas | number_format(2, ',', '.') }}"></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+{# --------------------- END Contanten --------------------- #}
+<br/>
+<br/>
+<table>
+    <tbody>
+    <tr>
+        <td style="font-weight: bold">Totaal € &nbsp;&nbsp;</td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.totalinkas |  number_format(2,',','.') }}"></td>
+    </tr>
+    </tbody>
+</table>
+<br/>
+
+{# --------------------- BEGIN Turnovers --------------------- #}
+<table style="max-width: 1200px; font-family: Lucida; font-size: 13px">
+
+    {% if turn1 | length > 0 %}
+        <tr>
+            <td>
+            <table class="table-labels-turnover table table-condensed">
+                <thead>
+                <tr>
+                    <th> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" > </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8010 Omzet Food"> </td>
+                </tr>
+                <tr>
+                    <td> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8011 Omzet Drank Laag">  </td>
+                </tr>
+                <tr>
+                    <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8020 Omzet Drank Hoog"> </td>
+                </tr>
+                <tr>
+                    <td> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8041 Omzet Zaalhuur & Verhuur"> </td>
+                </tr>
+                <tr>
+                    <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8050 Omzet Vouchers"> </td>
+                </tr>
+                <tr>
+                    <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8061 Omzet Entreegelden Laag"> </td>
+                </tr>
+                <tr>
+                    <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8081 Omzet Parkeren"> </td>
+
+                </tr>
+                <tr>
+                    <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8090 Omzet Techniek & Overig"> </td>
+                </tr>
+                <tr>
+                    <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2501 Kruispost PIN/CCV"> </td>
+                </tr>
+                <tr>
+                    <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2502 Kruispost Credit Cards"> </td>
+                </tr>
+                <tr>
+                    <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2503 Kruispost op Rekening"> </td>
+                </tr>
+                <tr>
+                    <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2504 Kruispost Voorverkoop"> </td>
+                </tr>
+                <tr>
+                    <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2509 Kruispost Kadopagina.nl"> </td>
+                </tr>
+                <tr>
+                    <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2510 Kruispost Tiqets"> </td>
+                </tr>
+                <tr>
+                    <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2511 Kruispost Belevenissen.nl"> </td>
+                </tr>
+                <tr>
+                    <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2500 Kruispost Cash"> </td>
+                </tr>
+                <tr>
+                    <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="7011 Inkoop Food"> </td>
+                </tr>
+                <tr>
+                    <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4090 Bedrijfskleding"> </td>
+                </tr>
+                <tr>
+                    <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4220 Kleine Inventaris"> </td>
+                </tr>
+                <tr>
+                    <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4253 Was & Schoonmaak"> </td>
+                </tr>
+                <tr>
+                    <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4409 Bankkosten & Postzegels"> </td>
+                </tr>
+                <tr>
+                    <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="7061 Entertainment"> </td>
+                </tr>
+                <tr>
+                    <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4699 Diverse Algemene Kosten"> </td>
+                </tr>
+                </tbody>
+            </table>
+                </td>
+            {% set ctrol = 1 %}
+            {% for item in turn1 %}
+                {% if item != null %}
+                    <td>
+                    <table class="table-values-turnover table table-condensed">
+
+                        <thead>
+                        <tr>
+                            <th>{{ item.dated | date ('d-M') }}</th>
+                            {% set day = item.dated | date('j') %}
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ item.omzet.omzkitchen | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzlaag | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzhoog | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzspacerent | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzvouchersrek | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzentry | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzparking | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzothers | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontdebitcard | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontcreditcard | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontrekening | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontvooverkoop | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontkadopagina | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.onttickets | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontbelevoucher | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+
+                        {% for element in turnedit1 %}
+                            {% if element.day == day %}
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.cash > 0 %} value="{{ element.cash | number_format(2, ',', '.') }}" {% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" {% if element.inkoopfood > 0 %} value=" {{ element.inkoopfood | number_format(2, ',', '.') }} "{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" {% if element.bedrijfskleding > 0 %} value="{{ element.bedrijfskleding | number_format(2, ',', '.') }}"{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" {% if element.kleineinv > 0 %} value="{{ element.kleineinv | number_format(2, ',', '.')}}"{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.was > 0 %} value="{{ element.was | number_format(2, ',', '.')}}"{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.bankkosten > 0 %}  value="{{ element.bankkosten | number_format(2, ',', '.')}}"{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.entertainment > 0 %} value="{{ element.entertainment | number_format(2, ',', '.')}}"{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.diversekosten > 0 %} value="{{ element.diversekosten | number_format(2, ',', '.')}}"{% endif %}></td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                    </td>
+                {% else %}
+                    <td>
+                        <table class="table-values-turnover table table-condensed">
+
+                            <thead>
+                            <tr>
+                                <th> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 80px;" disabled="disabled" > </th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+
+                {% endif %}
+                {% set ctrol = ctrol + 1 %}
+            {% endfor %}
+
+        </tr>
+    {% endif %}
+    <br/>
+    <br/>
+    {% if turn2 | length > 0 %}
+        <tr>
+            <td>
+                <table class="table-labels-turnover table table-condensed">
+                    <thead>
+                    <tr>
+                        <th> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" > </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8010 Omzet Food"> </td>
+                    </tr>
+                    <tr>
+                        <td> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8011 Omzet Drank Laag">  </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8020 Omzet Drank Hoog"> </td>
+                    </tr>
+                    <tr>
+                        <td> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8041 Omzet Zaalhuur & Verhuur"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8050 Omzet Vouchers"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8061 Omzet Entreegelden Laag"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8081 Omzet Parkeren"> </td>
+
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8090 Omzet Techniek & Overig"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2501 Kruispost PIN/CCV"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2502 Kruispost Credit Cards"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2503 Kruispost op Rekening"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2504 Kruispost Voorverkoop"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2509 Kruispost Kadopagina.nl"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2510 Kruispost Tiqets"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2511 Kruispost Belevenissen.nl"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2500 Kruispost Cash"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="7011 Inkoop Food"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4090 Bedrijfskleding"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4220 Kleine Inventaris"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4253 Was & Schoonmaak"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4409 Bankkosten & Postzegels"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="7061 Entertainment"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4699 Diverse Algemene Kosten"> </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </td>
+            {% set ctrol = 1 %}
+            {% for item in turn2 %}
+                {% if item != null %}
+                    <td>
+                    <table class="table-values-turnover table table-condensed">
+                        <thead>
+                        <tr>
+                            <th>{{ item.dated | date ('d-M') }}</th>
+                            {% set day = item.dated | date('j') %}
+
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzkitchen | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzlaag | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzhoog | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzspacerent | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzvouchersrek | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzentry | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzparking | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzothers | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontdebitcard | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontcreditcard | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontrekening | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontvooverkoop | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontkadopagina | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.onttickets | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontbelevoucher | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        {% for element in turnedit2 %}
+                            {% if element.day == day %}
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.cash > 0 %} value="{{ element.cash | number_format(2, ',', '.') }}" {% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" {% if element.inkoopfood > 0 %} value=" {{ element.inkoopfood | number_format(2, ',', '.') }} "{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" {% if element.bedrijfskleding > 0 %} value="{{ element.bedrijfskleding | number_format(2, ',', '.') }}"{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" {% if element.kleineinv > 0 %} value="{{ element.kleineinv | number_format(2, ',', '.')}}"{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.was > 0 %} value="{{ element.was | number_format(2, ',', '.')}}"{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.bankkosten > 0 %}  value="{{ element.bankkosten | number_format(2, ',', '.')}}"{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.entertainment > 0 %} value="{{ element.entertainment | number_format(2, ',', '.')}}"{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.diversekosten > 0 %} value="{{ element.diversekosten | number_format(2, ',', '.')}}"{% endif %}></td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                        </td>
+                {% else %}
+                    <td>
+                    <table class="table-values-turnover table table-condensed">
+
+                        <thead>
+                        <tr>
+                            <th> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 80px;" disabled="disabled" > </th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                           <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        </tbody>
+
+
+                    </table>
+                        </td>
+                {% endif %}
+                {% set ctrol = ctrol + 1 %}
+            {% endfor %}
+
+        </tr>
+    {% endif %}
+    <br/>
+    <br/>
+    {% if turn3 | length > 0 %}
+        <tr>
+            <td>
+                <table class="table-labels-turnover table table-condensed">
+                    <thead>
+                    <tr>
+                        <th> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" > </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8010 Omzet Food"> </td>
+                    </tr>
+                    <tr>
+                        <td> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8011 Omzet Drank Laag">  </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8020 Omzet Drank Hoog"> </td>
+                    </tr>
+                    <tr>
+                        <td> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8041 Omzet Zaalhuur & Verhuur"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8050 Omzet Vouchers"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8061 Omzet Entreegelden Laag"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8081 Omzet Parkeren"> </td>
+
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8090 Omzet Techniek & Overig"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2501 Kruispost PIN/CCV"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2502 Kruispost Credit Cards"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2503 Kruispost op Rekening"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2504 Kruispost Voorverkoop"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2509 Kruispost Kadopagina.nl"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2510 Kruispost Tiqets"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2511 Kruispost Belevenissen.nl"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2500 Kruispost Cash"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="7011 Inkoop Food"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4090 Bedrijfskleding"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4220 Kleine Inventaris"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4253 Was & Schoonmaak"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4409 Bankkosten & Postzegels"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="7061 Entertainment"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4699 Diverse Algemene Kosten"> </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </td>
+            {% set ctrol = 1 %}
+            {% for item in turn3 %}
+                {% if item != null %}
+                    <td>
+                        <table class="table-values-turnover table table-condensed">
+
+                            <thead>
+                            <tr>
+                                <th>{{ item.dated | date ('d-M') }}</th>
+                                {% set day = item.dated | date('j') %}
+
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                           value="{{ item.omzet.omzkitchen | number_format(2, ',', '.') }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                           value="{{ item.omzet.omzlaag | number_format(2, ',', '.') }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                           value="{{ item.omzet.omzhoog | number_format(2, ',', '.') }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                           value="{{ item.omzet.omzspacerent | number_format(2, ',', '.') }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                           value="{{ item.omzet.omzvouchersrek | number_format(2, ',', '.') }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                           value="{{ item.omzet.omzentry | number_format(2, ',', '.') }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                           value="{{ item.omzet.omzparking | number_format(2, ',', '.') }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                           value="{{ item.omzet.omzothers | number_format(2, ',', '.') }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                           value="{{ item.ontdebitcard | number_format(2, ',', '.') }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                           value="{{ item.ontcreditcard | number_format(2, ',', '.') }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                           value="{{ item.ontrekening | number_format(2, ',', '.') }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                           value="{{ item.ontvooverkoop | number_format(2, ',', '.') }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                           value="{{ item.ontkadopagina | number_format(2, ',', '.') }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                           value="{{ item.onttickets | number_format(2, ',', '.') }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                           value="{{ item.ontbelevoucher | number_format(2, ',', '.') }}">
+                                </td>
+                            </tr>
+                            {% for element in turnedit3 %}
+                                {% if element.day == day %}
+                                    <tr class="{{ day }}">
+                                        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.cash > 0 %} value="{{ element.cash | number_format(2, ',', '.') }}" {% endif %}></td>
+                                    </tr>
+                                    <tr class="{{ day }}">
+                                        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" {% if element.inkoopfood > 0 %} value=" {{ element.inkoopfood | number_format(2, ',', '.') }} "{% endif %}></td>
+                                    </tr>
+                                    <tr class="{{ day }}">
+                                        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" {% if element.bedrijfskleding > 0 %} value="{{ element.bedrijfskleding | number_format(2, ',', '.') }}"{% endif %}></td>
+                                    </tr>
+                                    <tr class="{{ day }}">
+                                        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" {% if element.kleineinv > 0 %} value="{{ element.kleineinv | number_format(2, ',', '.')}}"{% endif %}></td>
+                                    </tr>
+                                    <tr class="{{ day }}">
+                                        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.was > 0 %} value="{{ element.was | number_format(2, ',', '.')}}"{% endif %}></td>
+                                    </tr>
+                                    <tr class="{{ day }}">
+                                        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.bankkosten > 0 %}  value="{{ element.bankkosten | number_format(2, ',', '.')}}"{% endif %}></td>
+                                    </tr>
+                                    <tr class="{{ day }}">
+                                        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.entertainment > 0 %} value="{{ element.entertainment | number_format(2, ',', '.')}}"{% endif %}></td>
+                                    </tr>
+                                    <tr class="{{ day }}">
+                                        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.diversekosten > 0 %} value="{{ element.diversekosten | number_format(2, ',', '.')}}"{% endif %}></td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </td>
+
+                {% else %}
+                    <td>
+                    <table class="table-values-turnover table table-condensed">
+
+                        <thead>
+                        <tr>
+                            <th> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 80px;" disabled="disabled" > </th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        </tbody>
+                    </table>
+                        </td>
+                {% endif %}
+                {% set ctrol = ctrol + 1 %}
+            {% endfor %}
+
+        </tr>
+    {% endif %}
+    <br/>
+    <br/>
+    {% if turn4 | length > 0 %}
+        <tr>
+            <td>
+                <table class="table-labels-turnover table table-condensed">
+                    <thead>
+                    <tr>
+                        <th> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" > </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8010 Omzet Food"> </td>
+                    </tr>
+                    <tr>
+                        <td> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8011 Omzet Drank Laag">  </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8020 Omzet Drank Hoog"> </td>
+                    </tr>
+                    <tr>
+                        <td> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8041 Omzet Zaalhuur & Verhuur"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8050 Omzet Vouchers"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8061 Omzet Entreegelden Laag"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8081 Omzet Parkeren"> </td>
+
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8090 Omzet Techniek & Overig"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2501 Kruispost PIN/CCV"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2502 Kruispost Credit Cards"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2503 Kruispost op Rekening"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2504 Kruispost Voorverkoop"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2509 Kruispost Kadopagina.nl"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2510 Kruispost Tiqets"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2511 Kruispost Belevenissen.nl"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2500 Kruispost Cash"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="7011 Inkoop Food"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4090 Bedrijfskleding"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4220 Kleine Inventaris"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4253 Was & Schoonmaak"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4409 Bankkosten & Postzegels"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="7061 Entertainment"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4699 Diverse Algemene Kosten"> </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+            {% set ctrol = 1 %}
+            {% for item in turn4 %}
+                {% if item != null %}
+                    <td>
+                    <table class="table-values-turnover table table-condensed">
+
+                        <thead>
+                        <tr>
+                            <th>{{ item.dated | date ('d-M') }}</th>
+                            {% set day = item.dated | date('j') %}
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzkitchen | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzlaag | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzhoog | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzspacerent | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzvouchersrek | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzentry | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzparking | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzothers | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontdebitcard | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontcreditcard | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontrekening | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontvooverkoop | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontkadopagina | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.onttickets | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontbelevoucher | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        {% for element in turnedit4 %}
+                            {% if element.day == day %}
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.cash > 0 %} value="{{ element.cash | number_format(2, ',', '.') }}" {% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" {% if element.inkoopfood > 0 %} value=" {{ element.inkoopfood | number_format(2, ',', '.') }} "{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" {% if element.bedrijfskleding > 0 %} value="{{ element.bedrijfskleding | number_format(2, ',', '.') }}"{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" {% if element.kleineinv > 0 %} value="{{ element.kleineinv | number_format(2, ',', '.')}}"{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.was > 0 %} value="{{ element.was | number_format(2, ',', '.')}}"{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.bankkosten > 0 %}  value="{{ element.bankkosten | number_format(2, ',', '.')}}"{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.entertainment > 0 %} value="{{ element.entertainment | number_format(2, ',', '.')}}"{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.diversekosten > 0 %} value="{{ element.diversekosten | number_format(2, ',', '.')}}"{% endif %}></td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                        </td>
+                {% else %}
+                    <td>
+                    <table class="table-values-turnover table table-condensed">
+
+                        <thead>
+                        <tr>
+                            <th> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 80px;" disabled="disabled" > </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        </tbody>
+
+
+                    </table>
+                        </td>
+                {% endif %}
+                {% set ctrol = ctrol + 1 %}
+            {% endfor %}
+
+        </tr>
+    {% endif %}
+    <br/>
+    <br/>
+    {% if turn5 | length > 0 %}
+        <tr>
+            <td>
+                <table class="table-labels-turnover table table-condensed">
+                    <thead>
+                    <tr>
+                        <th> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" > </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8010 Omzet Food"> </td>
+                    </tr>
+                    <tr>
+                        <td> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8011 Omzet Drank Laag">  </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8020 Omzet Drank Hoog"> </td>
+                    </tr>
+                    <tr>
+                        <td> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8041 Omzet Zaalhuur & Verhuur"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8050 Omzet Vouchers"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8061 Omzet Entreegelden Laag"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8081 Omzet Parkeren"> </td>
+
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8090 Omzet Techniek & Overig"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2501 Kruispost PIN/CCV"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2502 Kruispost Credit Cards"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2503 Kruispost op Rekening"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2504 Kruispost Voorverkoop"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2509 Kruispost Kadopagina.nl"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2510 Kruispost Tiqets"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2511 Kruispost Belevenissen.nl"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2500 Kruispost Cash"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="7011 Inkoop Food"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4090 Bedrijfskleding"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4220 Kleine Inventaris"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4253 Was & Schoonmaak"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4409 Bankkosten & Postzegels"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="7061 Entertainment"> </td>
+                    </tr>
+                    <tr>
+                        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4699 Diverse Algemene Kosten"> </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+            {% set ctrol = 1 %}
+            {% for item in turn5 %}
+                {% if item != null %}
+                    <td>
+                    <table class="table-values-turnover table table-condensed">
+
+                        <thead>
+                        <tr>
+                            <th>{{ item.dated | date ('d-M') }}</th>
+                            {% set day = item.dated | date ('j') %}
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzkitchen | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzlaag | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzhoog | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzspacerent | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzvouchersrek | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzentry | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzparking | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.omzet.omzothers | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontdebitcard | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontcreditcard | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontrekening | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontvooverkoop | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontkadopagina | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.onttickets | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"
+
+                                       value="{{ item.ontbelevoucher | number_format(2, ',', '.') }}">
+                            </td>
+                        </tr>
+                        {% for element in turnedit5 %}
+                            {% if element.day == day %}
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.cash > 0 %} value="{{ element.cash | number_format(2, ',', '.') }}" {% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" {% if element.inkoopfood > 0 %} value=" {{ element.inkoopfood | number_format(2, ',', '.') }} "{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" {% if element.bedrijfskleding > 0 %} value="{{ element.bedrijfskleding | number_format(2, ',', '.') }}"{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" {% if element.kleineinv > 0 %} value="{{ element.kleineinv | number_format(2, ',', '.')}}"{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.was > 0 %} value="{{ element.was | number_format(2, ',', '.')}}"{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.bankkosten > 0 %}  value="{{ element.bankkosten | number_format(2, ',', '.')}}"{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.entertainment > 0 %} value="{{ element.entertainment | number_format(2, ',', '.')}}"{% endif %}></td>
+                                </tr>
+                                <tr class="{{ day }}">
+                                    <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  {% if element.diversekosten > 0 %} value="{{ element.diversekosten | number_format(2, ',', '.')}}"{% endif %}></td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    </td>
+                {% else %}
+                    <td>
+                    <table class="table-values-turnover table table-condensed">
+
+                        <thead>
+                        <tr>
+                            <th> <input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 80px;" disabled="disabled" > </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                            </td>
+                        </tr>
+
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                            <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        <tr>
+                                                <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;"  >
+                        </tr>
+                        </tbody>
+
+                    </table>
+                    </td>
+                {% endif %}
+                {% set ctrol = ctrol + 1 %}
+            {% endfor %}
+
+        </tr>
+    {% endif %}
+
+
+</table>
+{# --------------------- END Turnovers --------------------- #}
+<br/>
+<br/>
+{# --------------------- BEGIN Final --------------------- #}
+<table style="max-width: 800px; font-family: Lucida; font-size: 13px">
+    <thead>
+    <tr>
+        <th colspan="4" style="font-family: Lucida; font-size: 15px; text-align: center;">The Penthouse Kasboek</th>
+    </tr>
+
+    </thead>
+    <tbody>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8010 Omzet Food €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzkitchen | number_format(2,',','.')  }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzexkitchen | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzbtwkitchen | number_format(2,',','.') }}" ></td>
+    </tr>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8011 Omzet Drank Laag €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzlaag | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzexlaag | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzbtwlaag | number_format(2,',','.') }}" ></td>
+    </tr>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8020 Omzet Drank Hoog €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzhoog | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzexhoog | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzbtwhoog | number_format(2,',','.') }}" ></td>
+    </tr>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8041 Omzet Zaalhuur & Verhuur €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzspacerent | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzexspacerent | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzbtwspacerent | number_format(2,',','.') }}" ></td>
+    </tr>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8050 Omzet Vouchers €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzvoucher | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzexvoucher | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzbtwvoucher | number_format(2,',','.') }}" ></td>
+    </tr>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8061 Omzet Entreegelden Laag €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzentry | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzexentry | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzbtwentry | number_format(2,',','.') }}" ></td>
+    </tr>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8081 Omzet Parkeren €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzparking | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzexparking | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzbtwparking | number_format(2,',','.') }}" ></td>
+    </tr>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="8090 Omzet Techniek & Overig €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzothers | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzexothers | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzbtwothers | number_format(2,',','.') }}" ></td>
+    </tr>
+
+    </tbody>
+    <tfoot>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px; font-weight: bold;" disabled="disabled" value="Totaal IN €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omztotalin | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzextotalin | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.in.omzbtwtotalin | number_format(2,',','.') }}" ></td>
+    </tr>
+    </tfoot>
+</table>
+<br/>
+
+<table style="max-width: 800px; font-family: Lucida; font-size: 13px">
+    <tbody>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2501 Kruispost PIN/CCV €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.pinccv | number_format(2,',','.') }}" ></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2502 Kruispost Credit Cards €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.creditcards | number_format(2,',','.') }}" ></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2503 Kruispost op Rekening €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.rekening | number_format(2,',','.') }}" ></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2504 Kruispost Voorverkoop €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.voorverkoop | number_format(2,',','.') }}" ></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2509 Kruispost Kadopagina.nl €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.kadopagina | number_format(2,',','.') }}" ></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2510 Kruispost Tiqets €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.tickets | number_format(2,',','.') }}" ></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2511 Kruispost Belevenissen.nl €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.belevenissen | number_format(2,',','.') }}" ></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="2500 Kruispost Cash €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.cash | number_format(2,',','.') }}" ></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="7011 Inkoop Food €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.inkoopfood | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.exinkoopfood | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.btwinkoopfood | number_format(2,',','.') }}" ></td>
+    </tr>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4090 Bedrijfskleding €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.bedrijfskleding | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.exbedrijfskleding | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.btwbedrijfskleding | number_format(2,',','.') }}" ></td>
+    </tr>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4220 Kleine Inventaris €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.kleineinv | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.exkleineinv | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.btwkleineinv | number_format(2,',','.') }}" ></td>
+    </tr>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4253 Was & Schoonmaak €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.was | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.exwas | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.btwwas | number_format(2,',','.') }}" ></td>
+    </tr>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4409 Bankkosten & Postzegels €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.bankkosten | number_format(2,',','.') }}" ></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="7061 Entertainment €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.entertainment | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.exentertainment | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.btwentertainment | number_format(2,',','.') }}" ></td>
+    </tr>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px;" disabled="disabled" value="4699 Diverse Algemene Kosten €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.diversekosten | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.exdiversekosten | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.btwdiversekosten | number_format(2,',','.') }}" ></td>
+    </tr>
+
+    </tbody>
+    <tfoot>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px; font-weight: bold;" disabled="disabled" value="Totaal OIT €" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.totalout | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.extotalout | number_format(2,',','.') }}" ></td>
+        <td><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.btwtotalout | number_format(2,',','.') }}" ></td>
+    </tr>
+    <tr>
+        <td><input style="margin: 1px 0 0 0; background-color: #ffffff; border: none; padding: 4px 0; color: black; width: 205px; font-weight: bold;" disabled="disabled" value="Saldo €" ></td>
+        <td ><input disabled="disabled" style=" max-width: 80px; padding: 2px 0; font-family: Lucida; font-size: 13px; text-align:right;" value="{{ entity_basic.out.saldo | number_format(2,',','.') }}" ></td>
+        <td ></td>
+        <td ></td>
+    </tr>
+    </tfoot>
+</table>
+{# --------------------- BEGIN Final --------------------- #}
+
+</body>
+</html>

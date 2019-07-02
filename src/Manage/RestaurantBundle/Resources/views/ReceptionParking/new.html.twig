@@ -1,15 +1,59 @@
-{% extends '::base.html.twig' %}
-
-{% block body -%}
-    <h1>ReceptionParking creation</h1>
-
-    {{ form(form) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('receptionparking') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title %} New Parking {% endblock %}
+{% block body %}
+<div class="portlet">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-direction"></i>Parking
+        </div>
+        <div class="tools">
+            <a href="{{path('receptionparking')}}" class=" blue">
+                <i class="fa fa-list-alt"></i> List
+            </a>
+        </div>
+    </div>
+        <div class="portlet box blue-hoki">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-plus"></i>New
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+            {% if form_errors(form)%}
+            <div class="form-errors alert alert-danger">
+                {{form_errors(form)}}
+            </div>
+            {% endif %}
+            <form class="container-fluid form-horizontal" action="{{path('receptionparking_create')}}" method="POST" {{form_enctype(form)}}>
+                <div class="form-body col-md-5">
+                <div class="row form-group">
+                    {{form_label(form.details,'Name',{'attr':{                       
+                      'class' :' control-label',
+                      }})}}
+                    {{form_widget(form.details, {'attr':{                       
+                      'class' :'input-sm pull-right form-control'
+                      }})}}  
+                    {{form_errors(form.details)}}  
+                </div>
+                <div class="row form-group">
+                    {{form_label(form.value,'Value',{'attr':{                       
+                      'class' :' control-label',
+                      }})}}
+                    {{form_widget(form.value, {'attr':{                       
+                      'class' :'input-sm pull-right form-control'
+                      }})}}  
+                    {{form_errors(form.value)}}  
+                </div>
+                <div class="row form-group ">
+                {{ form_rest(form) }}
+                </div>
+            </div>    
+            </form>
+            </div>
+        </div>
+        </div>
 {% endblock %}

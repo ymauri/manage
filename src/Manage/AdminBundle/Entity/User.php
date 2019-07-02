@@ -16,28 +16,30 @@ class User implements UserInterface{
     * @ORM\Column(type="integer")
     * @ORM\GeneratedValue
     */
-    protected $id;
+    private $id;
 
     /** @ORM\Column(type="string", length=255) */
-    protected $email;
+    private $email;
 
     /** @ORM\Column(type="string", length=255) */
-    protected $password;
+    private $password;
 
     /** @ORM\Column(type="string", length=255) */
-    protected $name;
+    private $name;
 
     /** @ORM\Column(type="string", length=255) */
-    protected $lastname;
+    private $lastname;
 
     /** @ORM\Column(type="boolean") */
-    protected $enable;
+    private $enable;
 
     /** @ORM\Column(type="string", length=255) */
-    protected $salt;
+    private $salt;
 
-    /** @ORM\ManyToOne(targetEntity="Role")*/
-    protected $role;
+    /** @ORM\ManyToOne(targetEntity="Role", inversedBy="users")
+     *      
+     */
+    private $role;
 
     public function __construct() {
         $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
@@ -81,10 +83,9 @@ class User implements UserInterface{
      * @return User
      */
     public function setPassword($password) {
-       
-               
-        $this->password = $password;
 
+        if (false == empty($password))
+            $this->password = $password;
         return $this;
     }
 
@@ -204,13 +205,22 @@ class User implements UserInterface{
     }
     
     public function __toString(){
-        return$this->getName().' '.$this->getLastname();
+        return $this->getName();
     }
     
     public function getRoles() {
-        return array('ROLE_MANAGER');
+        return array('ROLE_SUPERADMIN', 'ROLE_MANAGER');
+    }
+
+    public function getRole() {
+        return $this->role;
     }
     
+    public function setRole($r){
+        $this->role = $r;
+        return $this;
+    }
+
     public function getUsername() {
         return $this->email;
     }

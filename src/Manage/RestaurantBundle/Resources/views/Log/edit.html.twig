@@ -1,0 +1,334 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title%} Log {% endblock %}    
+{% block body %}
+    <script>numeral.locale('nl-nl');</script>
+<div class="portlet">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon icon-bell"></i> Logboek Keuken, Restaurant, Receptie & Hotel
+        </div>
+        <div class="tools">
+            <a href="{{path('log', {'date': 'today' | date('m-Y')})}}" class=" blue">
+                <i class="fa fa-list-alt"></i> List
+            </a>
+        </div>
+    </div>
+    <div class="portlet box blue-hoki">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-list"></i>Form
+            </div>
+            <div class="tools">
+                <a href="javascript:;" class="collapse">
+                </a>
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <div class="row">
+                <form id="form-log" class="container-fluid form-horizontal edit"  autocomplete="off">
+                    <div class="form-body">
+                        <fieldset class="log-basic">
+                            <div class="col-md-6">
+                                <div class="row form-group">
+                                    <label>Select date</label>
+                                    <input type="text" id="log_dated" name="dated" readonly="readonly" class="form-control datepicker" data-provide="datepicker" readonly="readonly" data-date-format="dd-mm-yyyy"{% if entity_basic.dated %} value='{{entity_basic.dated |date('d-m-Y')}}' {% else %} value='{{'today' | date('d-m-Y') }}' {% endif %} style="float: none !important;">   
+                                    <span><i class="fa fa-calendar" ></i>   <b class="string-date"> </b></span>
+                                </div>
+                            </div>
+                        </fieldset>
+                            <script>
+                                var days = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                                var options = {
+                                    year: "numeric", month: "long",
+                                    day: "numeric"
+                                };
+                                separated = $('#log_dated').val().split('-')
+                                fecha = new Date((separated[1]+'-'+separated[0]+'-'+separated[2]).replace(/-/g, "/"))
+                                $('.string-date').text(days[fecha.getUTCDay()] + ', ' + fecha.toLocaleDateString("en-us", options))
+
+                                $('#log_dated').on({
+                                    'change':function(){
+                                        separated = $(this).val().split('-')
+                                        fecha = new Date((separated[1]+'-'+separated[0]+'-'+separated[2]).replace(/-/g, "/"))
+                                        $('.string-date').text(days[fecha.getUTCDay()] + ', ' + fecha.toLocaleDateString("en-us", options))
+                                    }
+                                })
+
+                        </script>            
+                        <fieldset class="col-md-12">
+                            <h4>Bediening Log</h4>
+                            <div class=" col-md-7">
+                                <div class="form-group">
+                                    <label for="bedlunch">Lunch Opmerkingen</label>
+                                    <textarea id="bedlunch" name="bedlunch" class="form-control">{{entity_basic.bedlunch}}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="beddinner">Dinner Opmerkingen</label>
+                                    <textarea id="beddinner" name="beddinner" class="form-control">{{entity_basic.beddinner}}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="bedsuites">Suites Opmerkingen</label>
+                                    <textarea id="bedsuites" name="bedsuites" class="form-control">{{entity_basic.bedsuites}}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="bedacties">Acties voor morgen</label>
+                                    <textarea id="bedacties" name="bedacties" class="form-control">{{entity_basic.bedacties}}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="bedlost">Lost & Found</label>
+                                    <textarea id="bedlost" name="bedlost" class="form-control">{{entity_basic.bedlost}}</textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class='col-md-12'>
+                            <div class=" col-md-7">
+                                <div class="form-group" style="margin-bottom: 0">
+                                    <label for="managerdag">Manager DAG:</label>
+                                    <select id="managerdag" name="managerdag" class="form-control mandatory">
+                                        <option></option>
+                                        {% for item in list_manager %}
+                                            <option value="{{ item.id }}" {% if entity_basic.managerdag.id is defined and entity_basic.managerdag.id == item.id  %} selected = "selected" {% endif %}>{{ item.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0">
+                                    <label for="manageravond">Manager AVOND:</label>
+                                    <select id="manageravond" name="manageravond" class="form-control mandatory">
+                                        <option></option>
+                                        {% for item in list_manager %}
+                                            <option value="{{ item.id }}" {% if entity_basic.manageravond.id is defined and entity_basic.manageravond.id == item.id  %} selected = "selected" {% endif %}>{{ item.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0">
+                                    <label for="lastguesttime">Sluitingstijd (laatste gast vertrokken):</label>
+                                    <input type="time" id="lastguesttime" name="lastguesttime" required="required" class=" form-control timepicker timepicker-24 pull-right  input-sm " value="{{entity_basic.lastguesttime | date('H:i') }}">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0">
+                                    <label for="weather">Hoe was het weer vandaag?</label>
+                                    <input id="weather" name="weather" class="form-control" value="{{entity_basic.weather}}">
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="col-md-12">
+                            <h4>Keuken Log</h4>
+                            <div class=" col-md-7">
+                                <div class="form-group">
+                                    <label for="keulunch">Lunch Opmerkingen</label>
+                                    <textarea id="keulunch" name="keulunch" class="form-control">{{entity_basic.keulunch}}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="keudinner">Dinner Opmerkingen</label>
+                                    <textarea id="keudinner" name="keudinner" class="form-control">{{entity_basic.keudinner}}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="keusuites">Suites Opmerkingen</label>
+                                    <textarea id="keusuites" name="keusuites" class="form-control">{{entity_basic.keusuites}}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="keuacties">Acties voor morgen</label>
+                                    <textarea id="keuacties" name="keuacties" class="form-control">{{entity_basic.keuacties}}</textarea>
+                                </div>
+                            </div>
+                        </fieldset>  
+                        <fieldset class='col-md-12'>
+                            <div class=" col-md-7">
+                                <div class="form-group" style="margin-bottom: 0">
+                                    <label for="chef">Chef</label>
+                                    <select id="chef" name="chef" class="form-control mandatory">
+                                        <option></option>
+                                        {% for item in list_chef %}
+                                            <option value="{{ item.id }}" {% if entity_basic.chef.id is defined and entity_basic.chef.id == item.id  %} selected = "selected" {% endif %}>{{ item.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>  
+                        <fieldset class="col-md-12">
+                            <h4>Receptie Log</h4>
+                            <div class=" col-md-7">
+                                <div class="form-group">
+                                    <label for="recapp">Appartementen Opmerkingen</label>
+                                    <textarea id="recapp" name="recapp" class="form-control">{{entity_basic.recapp}}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="recrest">Restaurant Opmerkingen</label>
+                                    <textarea id="recrest" name="recrest" class="form-control">{{entity_basic.recrest}}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="recsales">Sales Opmerkingen</label>
+                                    <textarea id="recsales" name="recsales" class="form-control">{{entity_basic.recsales}}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="recmenu">Menu's geprint voor morgen</label>
+                                    <textarea id="recmenu" name="recmenu" class="form-control">{{entity_basic.recmenu}}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="recacties">Acties voor morgen</label>
+                                    <textarea id="recacties" name="recacties" class="form-control">{{entity_basic.recacties}}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="reclost">Lost & Found</label>
+                                    <textarea id="reclost" name="reclost" class="form-control">{{entity_basic.reclost}}</textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class='col-md-12'>
+                            <div class=" col-md-7">
+                                <div class="form-group" style="margin-bottom: 0">
+                                    <label for="receptiedag">Receptie DAG:</label>
+                                    <select id="receptiedag" name="receptiedag" class="form-control mandatory">
+                                        <option></option>
+                                        {% for item in list_recepties %}
+                                            <option value="{{ item.id }}" {% if entity_basic.receptiedag.id is defined and entity_basic.receptiedag.id == item.id  %} selected = "selected" {% endif %}>{{ item.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0">
+                                    <label for="receptieavond">Receptie AVOND:</label>
+                                    <select id="receptieavond" name="receptieavond" class="form-control mandatory">
+                                        <option></option>
+                                        {% for item in list_recepties %}
+                                            <option value="{{ item.id }}" {% if entity_basic.receptieavond.id is defined and entity_basic.receptieavond.id == item.id  %} selected = "selected" {% endif %}>{{ item.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0">
+                                    <label for="closetime">Sluitingstijd receptie (alleen avonddienst):</label>
+                                    <input type="time" id="closetime" name="closetime" required="required" class=" form-control timepicker timepicker-24 pull-right  input-sm " value="{{entity_basic.closetime | date('H:i') }}">
+                                </div>
+                                <div class="form-group" hidden="hidden">
+                                    <input type="text" id="finished" name="finished" required="required" class=" " {% if entity_basic.finished%} value="{{entity_basic.finished | date('d-m-Y') }}" {% endif %}>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="col-md-12" style="border:none;">
+                                <div class="col-md-6 col-md-offset-3">
+                                    {% if not show %}
+                                        <button type = 'submit' class="btn save blue-hoki" >Tussentijds bewaren</button>
+                                        <button type = 'submit' class="btn final save green-seagreen" hidden>Verzenden</button>
+                                        <a href="{{path('log', {'date': entity_basic.dated | date('m-Y')})}}"><button type = 'button' class="btn blue-hoki">Annuleer</button></a>
+
+                                    {% else %}
+                                        <a href="{{path('log', {'date': 'today' | date('m-Y')})}}"><button type = 'button' class="btn blue-hoki">List</button></a>
+                                    {% endif %}
+                                </div>
+
+                        </fieldset>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        {% if show %}
+            $('input.form-control').prop('readonly', 'readonly')
+            $('input[type="checkbox"]').prop('readonly', 'readonly').prop('disabled', "disabled")
+            $('textarea').prop('readonly', 'readonly')
+            $('select').prop('readonly', 'readonly').prop('disabled', "disabled")
+            $('.save-while').remove()
+        {% endif %}
+        
+         //Enviar la iformación de los formularios
+         $('.save').on({
+            "click":function(e){
+                e.preventDefault();
+                Metronic.startPageLoading();
+                boton = $(this)
+                if (formHasError()){
+                    setTimeout(function(){ Metronic.stopPageLoading()}, 2000)
+                }
+                else{
+                    array_to_send = new Object()
+                    $('form').each(function(index, form){
+                        array_to_send[$(form).attr('id')] = $(form).serializeArray()
+                    })
+                    if (boton.hasClass('final')){
+                        fecha = new Date();
+                        mes = fecha.getMonth()+1
+                        if (mes.toString().length == 1) mes = '0'+mes
+                        dia = fecha.getDate()
+                        if (dia.toString().length == 1) dia = '0'+dia
+                        $('#finished').val(dia.toString()+'-'+mes.toString()+'-'+fecha.getFullYear().toString())
+                        array_to_send['final'] = 'true';
+                    }
+                    $('form .form-control').hide()
+                    $.post('{{path('log_edit', {'id':entity_basic.id})}}', {'data':array_to_send}, function(response){
+                        Metronic.stopPageLoading()
+                        if (response != 'true') {
+                            $('form .form-control').show()
+                            $('.alert-error').text(response);
+                            $('.alert-error').show()
+                            setTimeout(function () {
+                                $('.alert-error').hide(300)
+                            }, 4400)
+                        }
+                        else {
+                            $('form .form-control').show()
+                            if (boton.hasClass('final'))
+                                $('.alert-success').text('Success! The form is done.')
+                            else
+                                $('.alert-success').text('Success! The form has been modified.');
+                            $('.alert-success').show()
+                            setTimeout(function () {
+                                $('.alert-success').hide(300)
+                            }, 4400)
+                            if (boton.hasClass('final'))  window.location="{{ path('log', {'date': 'today' | date('m-Y')}) }}";
+                        }
+                    })
+                }
+            }
+         })
+        function formHasError() {
+            $('div.form-group').removeClass('has-error')
+            var control = false;
+            $('body').append('<a class="go-to-error" href=".has-error"></a>')
+            Metronic.startPageLoading();
+            $('.mandatory').each(function() {
+                if ($(this).val() === '') {
+                    $(this).parent('div.form-group').addClass('has-error')
+                    control = true;
+                }
+            })
+            $('.go-top').trigger('click')
+            return control
+        }
+        {% if not show %}
+            setInterval(function(){
+                array_to_send = new Object()
+                $('form').each(function(index, form){
+                    array_to_send[$(form).attr('id')] = $(form).serializeArray()
+                })
+                $.post('{{path('log_edit', {'id':entity_basic.id})}}', {'data':array_to_send})
+            }, 30000);
+        {% endif %}
+
+        $('.cancel').click(function(){
+
+            bootbox.dialog({
+                message: "This form will be removed from the system",
+                title: "Delete form",
+                buttons: {
+
+                    main: {
+                        label: "Cancel",
+                        className: ""
+                    },
+                    success: {
+                        label: "Confirm",
+                        className: "blue-hoki",
+                        callback: function() {
+                            window.location="{{ path('log_delete', {'id':entity_basic.id}) }}";
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}
+

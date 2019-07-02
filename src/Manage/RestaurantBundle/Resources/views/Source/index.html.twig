@@ -1,0 +1,79 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title%} Sources {% endblock %}
+{% block body %}
+         <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-notebook"></i>Source
+                </div>
+                <div class="tools">
+                    <a href="{{path('source_new')}}" class=" blue">
+                        <i class="fa fa-plus"></i> Create new
+                    </a>
+                </div>
+            </div>
+            <div class="table-responsive">
+
+             <table class="table table-striped table-condensed table-bordered table-advance  table-hover">
+                <thead>
+                    <tr>
+                          <th class="hidden-xs counter"> #
+
+                                </th>
+                        <th >
+                            <i class="fa fa-certificate"></i> Details
+                        </th>
+                        <th >
+                            <i class="fa fa-list"></i> Guesty
+                        </th>
+
+                          <th class="hidden-xs actions">
+                                    <i class="fa fa-check"></i> Is active
+                                </th>
+                        <th class="hidden-xs actions">
+                                    <i class="fa fa-check"></i> Has extra field
+                                </th>
+                        
+                        <th class="actions"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% set c = 1 %}
+                    {% for entity in entities %}
+                        <tr>
+                            <td class="hidden-xs counter"><b>{{ c }}</b></td>
+                            <td>{{ entity.details }}</td>
+                            <td>{{ entity.guesty }}</td>
+
+                            <td class="hidden-xs">{% if entity.isactive %}Yes{% else %} No {% endif %}</td>
+                            <td class="hidden-xs">{% if entity.extrafield %}Yes{% else %} No {% endif %}</td>
+                            <td>
+                                <div class="btn-group dropdown ">
+                                    <button class="btn blue-hoki btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+                                        Actions  <i class="fa fa-angle-down"></i>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>
+                                            <a href="{{ path('source_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-search"></span>View</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('source_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span>Edit</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('source_delete', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-remove"></span>Delete</a>
+                                        </li>
+
+
+                                    </ul>
+                                </div>
+</td>
+                        </tr>
+                        {% set c = c + 1 %}
+                    {% endfor %}
+                </tbody>
+            </table>
+               
+            </div>
+            
+        </div>
+{% endblock %}

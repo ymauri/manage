@@ -1,43 +1,67 @@
-{% extends '::base.html.twig' %}
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title%} Parking {% endblock %}
+{% block body %}
 
-{% block body -%}
-    <h1>ReceptionParking list</h1>
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-direction"></i>Parking
+                </div>
+                <div class="tools">                    
+                    <a href="{{path('receptionparking_new')}}" class=" blue">
+                        <i class="fa fa-plus"></i> Create new 
+                    </a>
+                </div>
+            </div>
+            <div class="table-responsive">
+               <table class="table table-striped table-condensed table-bordered table-advance  table-hover">
+                    <thead>
+                        <tr>
+                            <th class="hidden-xs counter"> #
 
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Details</th>
-                <th>Value</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('receptionparking_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.details }}</td>
-                <td>{{ entity.value }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('receptionparking_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('receptionparking_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                            </th>
+                            <th >
+                                <i class="fa fa-certificate"></i> Details
+                            </th>
+                            <th >
+                                <i class="fa fa-euro"></i> Value
+                            </th>
+                            <th class="actions"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% set c = 1 %}
+                        {% for entity in entities %}
+                            <tr>
+                                <td class="hidden-xs counter"><b>{{ c }}</b></td>
+                                <td>{{ entity.details }}</td>
+                                <td>{{ entity.value }}</td>
+                                <td>
+                                    <div class="btn-group dropdown ">
+                                        <button class="btn blue-hoki btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+                                            Actions  <i class="fa fa-angle-down"></i>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li>
+                                                <a href="{{ path('receptionparking_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-search"></span>View</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ path('receptionparking_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span>Edit</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ path('receptionparking_delete', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-remove"></span>Delete</a>
+                                            </li>
 
-        <ul>
-        <li>
-            <a href="{{ path('receptionparking_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
-    {% endblock %}
+
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% set c = c + 1 %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                   
+            </div>
+        </div>
+{% endblock %}

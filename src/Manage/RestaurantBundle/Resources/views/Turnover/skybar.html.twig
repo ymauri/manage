@@ -1,0 +1,77 @@
+<fieldset class="col-md-12 turnover-skybar">
+    <h4>Sky Bar</h4>
+    <section class="x-group col-md-3  ">
+        <strong class="row form-group text-primary">Omzet</strong> 
+        <div class="row form-group">
+            {{form_label(form_skybar.omzkitchen,'Food €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_skybar_omzkitchen" name="turnover_skybar[omzkitchen]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.skybar.omzkitchen | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_skybar.omzlaag,'Drank Laag €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_skybar_omzlaag" name="turnover_skybar[omzlaag]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.skybar.omzlaag | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_skybar.omzhoog,'Drank Hoog €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_skybar_omzhoog" name="turnover_skybar[omzhoog]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.skybar.omzhoog | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_skybar.omzentry,'Entree Laag €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_skybar_omzentry" name="turnover_skybar[omzentry]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.skybar.omzentry | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_skybar.omzspacerent,'Zaalhuur €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_skybar_omzspacerent" name="turnover_skybar[omzspacerent]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.skybar.omzspacerent | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_skybar.omzothers,'Techniek €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_skybar_omzothers" name="turnover_skybar[omzothers]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.skybar.omzothers | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_skybar.omzparking,'Parkeren €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_skybar_omzparking" name="turnover_skybar[omzparking]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.skybar.omzparking | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_skybar.omzvouchersrek,'Vouchers Rek * €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_skybar_omzvouchersrek" name="turnover_skybar[omzvouchersrek]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.skybar.omzvouchersrek | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group totales">
+            {{form_label(form_skybar.omztotal,' Totaal €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_skybar_omztotal" name="turnover_skybar[omztotal]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.skybar.omztotal | number_format(2,',','.')}}">
+        </div>
+    </section>
+    <section class="z-group col-md-3  ">
+        <strong class="row form-group text-primary">Ontvangsten</strong> 
+        <div class="row form-group">
+            {{form_label(form_skybar.ontdebitcard,'Debit Cards €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_skybar_ontdebitcard" name="turnover_skybar[ontdebitcard]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.skybar.ontdebitcard | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_skybar.ontcreditcard,'Credit Cards €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_skybar_ontcreditcard" name="turnover_skybar[ontcreditcard]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.skybar.ontcreditcard | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_skybar.ontrekening,'Op Rekening €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_skybar_ontrekening" name="turnover_skybar[ontrekening]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.skybar.ontrekening | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_skybar.ontbelevoucher,'Belevenissen.nl €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_skybar_ontbelevoucher" name="turnover_skybar[ontbelevoucher]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.skybar.ontbelevoucher | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_skybar.ontkadopagina,'Kadopagina €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_skybar_ontkadopagina" name="turnover_skybar[ontkadopagina]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.skybar.ontkadopagina | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_skybar.onttickets,'Tiqets €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_skybar_onttickets" name="turnover_skybar[onttickets]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.skybar.onttickets | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_skybar.ontvooverkoop,'Voorverkoop gelden €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_skybar_ontvooverkoop" name="turnover_skybar[ontvooverkoop]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.skybar.ontvooverkoop | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group totales">
+            {{form_label(form_skybar.onttotal,' Totaal €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_skybar_onttotal" name="turnover_skybar[onttotal]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.skybar.onttotal | number_format(2,',','.')}}">
+        </div>
+    </section>
+</fieldset>

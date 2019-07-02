@@ -86,7 +86,7 @@ class ReceptionParking {
     }
     
     public function __toString(){
-        return $this->details;
+        return $this->details .' '.$this->value .'€';
     }
     
 

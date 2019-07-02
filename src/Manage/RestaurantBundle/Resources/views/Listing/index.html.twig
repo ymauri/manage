@@ -1,0 +1,90 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title%} Location {% endblock %}
+{% block body %}
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-list"></i>Location
+                </div>
+                <div class="tools">                    
+                    <a href="{{path('listing_new')}}" class=" blue">
+                        <i class="fa fa-plus"></i> Create new 
+                    </a>
+                </div>
+            </div>
+            <div class="table-responsive">
+               <table class="table table-striped table-condensed table-bpriorityed table-advance table-hover">
+                    <thead>
+                        <tr>
+                          <th class="hidden-xs counter"> Priority
+
+                          </th>
+                            <th >
+                                <i class="fa fa-certificate"></i> Details
+                            </th>
+                            <th>
+                                <i class="fa fa-check"></i> Number
+                            </th>
+                            <th>
+                                <i class="fa fa-euro"></i> Min Price
+                            </th>
+                            <th>
+                                <i class="fa fa-euro"></i> Max Price
+                            </th>
+                            <th class="actions"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% set c = 1 %}
+                        {% for entity in entities %}
+                            <tr>
+                                <td class="hidden-xs counter"><b>{{ entity.priority }}</b></td>
+                                <td>{{ entity.details }}</td>
+                                <td>{{ entity.number }}</td>
+                                <td>{{ entity.minprice }}</td>
+                                <td>{{ entity.maxprice }}</td>
+                                <td>
+                                    <div class="btn-group dropdown ">
+                                        <button class="btn blue-hoki btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+                                            Actions  <i class="fa fa-angle-down"></i>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li>
+                                                <a href="{{ path('listing_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-search"></span>View</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ path('listing_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span>Edit</a>
+                                            </li>
+                                            <!--<li>
+                                                <a href="{{ path('listing_delete', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-remove"></span>Delete</a>
+                                            </li>-->
+                                            <li>
+                                                <a class=" priority_form_{{ entity.id }}"  href="#"><span class="glyphicon glyphicon-arrow-up"></span>Priority</a>
+                                            </li>
+                                            <script>
+                                                $('.priority_form_{{ entity.id }}').click(function(){
+                                                    bootbox.prompt("Change priority to:", function(result) {
+                                                        if (result > 0) {
+                                                            Metronic.startPageLoading();
+                                                            $.post("{{ path("listing_priority", {'id': entity.id}) }}",{'priority':result}, function(){
+                                                                window.location="{{ path('listing') }}";
+                                                            } )
+                                                        }
+                                                    });
+                                                });
+
+                                            </script>
+                                        </ul>
+
+
+                                    </div>
+                                </td>
+                            </tr>
+                            {% set c = c + 1 %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                   
+            </div>
+        </div>
+{% endblock %}

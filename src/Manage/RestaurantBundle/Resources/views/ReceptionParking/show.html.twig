@@ -1,36 +1,67 @@
-{% extends '::base.html.twig' %}
-
-{% block body -%}
-    <h1>ReceptionParking</h1>
-
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Details</th>
-                <td>{{ entity.details }}</td>
-            </tr>
-            <tr>
-                <th>Value</th>
-                <td>{{ entity.value }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('receptionparking') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('receptionparking_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title %} Show Parking {% endblock %}
+{% block body %}
+<div class="portlet">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-direction"></i>Parking
+        </div>
+        <div class="tools">
+            <a href="{{path('receptionparking_new')}}" class=" blue">
+                <i class="fa fa-plus"></i> Create new
+            </a>
+            <a href="{{path('receptionparking')}}" class=" blue">
+                <i class="fa fa-list-alt"></i> List
+            </a>
+        </div>
+    </div>
+            <div class="portlet box blue-hoki">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-search"></i>View
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+            {% if form_errors(delete_form)%}
+                <div class="form-errors alert alert-danger">
+                    {{form_errors(delete_form)}}
+                </div>
+            {% endif %}
+             <form class="container-fluid form-horizontal " >
+                <div class="form-body col-md-5">
+                <div class="row form-group">
+                    {{form_label(delete_form.details,'Name',{'attr':{                       
+                      'class' :' control-label',
+                    }})}}
+                    {{form_widget(delete_form.details, {'attr':{ 
+                      'readonly':'true',
+                      'class' :'input-sm pull-right form-control'
+                    }})}}  
+                </div>
+                <div class="row form-group">
+                    {{form_label(delete_form.value,'Value',{'attr':{                       
+                      'class' :' control-label',
+                    }})}}
+                    {{form_widget(delete_form.value, {'attr':{ 
+                      'readonly':'true',
+                      'class' :'input-sm pull-right form-control'
+                    }})}}  
+                </div>
+                <div class="row form-group ">
+                    <a  href="{{ path('receptionparking') }}">
+                        <input type = 'button' class="btn btn-primary" value="Back">
+                    </a>
+                    <a  href="{{ path('receptionparking_edit', {'id':entity.id}) }}">
+                        <input type = 'button' class="btn btn-primary" value="Update">
+                    </a>
+                </div>
+                </div>
+            </form>
+        </div>
+        </div>
+        </div>
 {% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title %} Show worker {% endblock %}
+{% block body %}
+<div class="portlet">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon icon-users"></i>Workers
+        </div>
+        <div class="tools">
+            <a href="{{path('worker_new')}}" class=" blue">
+                <i class="fa fa-plus"></i> Create new
+            </a>
+            <a href="{{path('worker')}}" class=" blue">
+                <i class="fa fa-list-alt"></i> List
+            </a>
+        </div>
+    </div>
+<div class="portlet box blue-hoki">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="fa fa-search"></i>View
+        </div>
+        <div class="tools">
+            <a href="javascript:;" class="collapse">
+            </a>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        {% if form_errors(show_form) %}
+            <div class="alert alert-danger display-hide" style="display: block;">
+                <button class="close" data-close="alert"></button>
+                <span>  {{form_errors(show_form)}} </span>
+            </div>
+        {% endif %}
+        <form class="container-fluid form-horizontal " >
+            <div class="form-body col-md-5">
+
+                <div class="row form-group">
+                    {{form_label(show_form.name,'Name',{'attr':{
+                        'class' :' control-label',
+                    }})}}
+                    {{form_widget(show_form.name, {'attr':{
+                        'class' :' form-control', 'readonly':true
+                    }})}}
+                    {{form_errors(show_form.name)}}
+                </div>
+                <div class="row form-group ">
+                    {{form_label(show_form.position,'Position',{'attr':{
+                        'class' :' control-label',
+                    }})}}
+                    {{form_widget(show_form.position, {'attr':{
+                        'class' :' form-control', 'readonly':true, 'disabled':'disabled'
+                    }})}}
+                    {{form_errors(show_form.position)}}
+                </div>
+                <div class="row form-group ">
+                    <div class="">
+                        <label>
+                            {{form_widget(show_form.isactive,{'attr':{'type' :'checkbox', 'disabled':'disabled'}})}} Is Active
+                        </label>
+                    </div>
+                </div>
+                <div class="row form-group ">
+                    <a  href="{{ path('worker') }}">
+                        <input type = 'button' class="btn btn-primary" value="Back">
+                    </a>
+                    <a  href="{{ path('worker_edit', {'id': entity.id}) }}">
+                        <input type = 'button' class="btn btn-primary" value="Update">
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+    </div>
+    {% endblock %}

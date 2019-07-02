@@ -1,16 +1,162 @@
-{% extends '::base.html.twig' %}
+<fieldset id="data-total" class="col-md-12">
+    <h4>Totaalstroken</h4>
+    <section class="x-group col-md-3 col-md-offset-3 " >
+        <strong class="row form-group text-primary">X-Strook Dag</strong> 
+        <div class="row form-group">
+            {{form_label(form_total.xlaag,'8000 - X Omzet Laag',{'attr':{                       
+                            'class' :' control-label',
+            }})}}
+            {{form_widget(form_total.xlaag, {'attr':{                       
+                            'class' :'input-sm pull-right form-control real  x-control',
+                            'placeholder' : '0,00'
+            }})}}  
+        </div>
+        <div class="row form-group">
+            {{form_label(form_total.xkitchen,'8002 - X Omzet Keuken',{'attr':{                       
+                            'class' :' control-label',
+            }})}}
+            {{form_widget(form_total.xkitchen, {'attr':{                       
+                            'class' :'input-sm pull-right form-control real  x-control',
+                             'placeholder' : '0,00'
+            }})}}  
+        </div>
+        <div class="row form-group">
+            {{form_label(form_total.xhoog,'8001 - X Omzet Hoog',{'attr':{                       
+                            'class' :' control-label',
+            }})}}
+            {{form_widget(form_total.xhoog, {'attr':{                       
+                            'class' :'input-sm pull-right form-control real  x-control',
+                            'placeholder' : '0,00'
+            }})}}  
+        </div>
+        <div class="row form-group">
+            {{form_label(form_total.xparking,'8050 - X Parkeren',{'attr':{                       
+                           'class' :' control-label',
+            }})}}
+            {{form_widget(form_total.xparking , {'attr':{                       
+                           'class' :'input-sm pull-right form-control real  x-control',
+                           'placeholder' : '0,00'
+            }})}} 
+        </div>
+        <div class="row form-group">
+            {{form_label(form_total.xentry,'9999 - X Entree Laag',{'attr':{                       
+                            'class' :' control-label',
+            }})}}
+            {{form_widget(form_total.xentry , {'attr':{                       
+                            'class' :'input-sm pull-right form-control real  x-control',
+                            'placeholder' : '0,00'
+            }})}}
+        </div>
+        <div class="row form-group">
+            {{form_label(form_total.xspacesrent,'8998 - X Zaalhuur',{'attr':{                       
+                            'class' :' control-label',
+            }})}}
+            {{form_widget(form_total.xspacesrent , {'attr':{                       
+                            'class' :'input-sm pull-right form-control real  x-control',
+                            'placeholder' : '0,00'
+            }})}}
+        </div>
+        <div class="row form-group">
+            {{form_label(form_total.xothers,'8041 - X Techniek & Overig',{'attr':{                       
+                            'class' :' control-label',
+            }})}}
+            {{form_widget(form_total.xothers , {'attr':{                       
+                            'class' :'input-sm pull-right form-control real  x-control',
+                            'placeholder' : '0,00'
+            }})}} 
+        </div>
+        <div class="row form-group totales">
+            {{form_label(form_total.xtotal,'Totaal X-Omzet €',{'attr':{                       
+                            'class' :' control-label',
+            }})}}
+            {{form_widget(form_total.xtotal , {'attr':{                       
+                            'class' :'input-sm pull-right form-control real  ',
+                            'placeholder' : '0,00'
+            }})}} 
+        </div>
+    </section>
+    <section class="z-group col-md-3 col-md-offset-3 ">
+        <strong class="row form-group text-primary">Y-Strook Totaal</strong>
+        <div class="row form-group">
+            {{form_label(form_total.zlaag,'8000 - Y Omzet Laag',{'attr':{                       
+                            'class' :' control-label',
+            }})}}
+            {{form_widget(form_total.zlaag, {'attr':{                       
+                            'class' :'input-sm pull-right form-control real  z-control',
+                            'placeholder' : '0,00'
+            }})}}
+        </div>
+        <div class="row form-group">
+            {{form_label(form_total.zkitchen,'8002 - Y Omzet Keuken',{'attr':{                       
+                            'class' :' control-label',
+            }})}}
+            {{form_widget(form_total.zkitchen, {'attr':{                       
+                            'class' :'input-sm pull-right form-control real  z-control',
+                            'placeholder' : '0,00'
+            }})}}
+        </div>
+        <div class="row form-group">
+            {{form_label(form_total.zhoog,'8001 - Y Omzet Hoog',{'attr':{                       
+                            'class' :' control-label',
+            }})}}
+            {{form_widget(form_total.zhoog, {'attr':{                       
+                            'class' :'input-sm pull-right form-control real  z-control',
+                            'placeholder' : '0,00'
+            }})}}  
+        </div>
+        <div class="row form-group">
+            {{form_label(form_total.zparking,'8050 - Y Parkeren',{'attr':{                       
+                            'class' :' control-label',
+            }})}}
+            {{form_widget(form_total.zparking , {'attr':{                       
+                            'class' :'input-sm pull-right form-control real  z-control',
+                            'placeholder' : '0,00'
+            }})}} 
+        </div>
+        <div class="row form-group">
+            {{form_label(form_total.zentry,'9999 - Y Entree Laag',{'attr':{                       
+                            'class' :' control-label',
+            }})}}
+            {{form_widget(form_total.zentry , {'attr':{                       
+                            'class' :'input-sm pull-right form-control real  z-control',
+                            'placeholder' : '0,00'
+            }})}}
+        </div>
+        <div class="row form-group">
+            {{form_label(form_total.zspacesrent,'8998 - Y Zaalhuur',{'attr':{                       
+                            'class' :' control-label',
+            }})}}
+            {{form_widget(form_total.zspacesrent , {'attr':{                       
+                           'class' :'input-sm pull-right form-control real  z-control',
+                           'placeholder' : '0,00'
+            }})}}
+        </div>
+        <div class="row form-group">
+            {{form_label(form_total.zothers,'8041 - Y Techniek & Overig',{'attr':{                       
+                            'class' :' control-label',
+            }})}}
+            {{form_widget(form_total.zothers , {'attr':{                       
+                            'class' :'input-sm pull-right form-control real  z-control',
+                            'placeholder' : '0,00'
+            }})}} 
+        </div>
+        <div class="row form-group totales">
+            {{form_label(form_total.ztotal,'Totaal Y-Omzet €',{'attr':{
+                            'class' :' control-label',
+            }})}}
+            {{form_widget(form_total.ztotal , {'attr':{                       
+                            'class' :'input-sm pull-right form-control real ',
+                            'placeholder' : '0,00'
+            }})}}
+        </div>
+    </section>
+</fieldset>
 
-{% block body -%}
-    <h1>CashClosureTotal edit</h1>
+<!--</form>-->
 
-    {{ form(edit_form) }}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('cashclosuretotal') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
-{% endblock %}
+
+<script>
+
+
+</script>

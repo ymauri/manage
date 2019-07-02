@@ -1,0 +1,181 @@
+<fieldset id="kasboek_final" class="col-md-12">
+    <div class="col-md-6">
+        <table class="table table-condensed">
+            <thead>
+            <tr>
+                <th colspan="4">The Penthouse Kasboek</th>
+            </tr>
+
+            </thead>
+            <tbody>
+            <tr>
+                <td>8010 Omzet Food €</td>
+                <td>{{ form_widget(form_in.omzkitchen, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_in.omzexkitchen, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_in.omzbtwkitchen, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+            </tr>
+            <tr>
+                <td>8011 Omzet Drank Laag €</td>
+                <td>{{ form_widget(form_in.omzlaag, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_in.omzexlaag, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_in.omzbtwlaag, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+            </tr>
+            <tr>
+                <td>8020 Omzet Drank Hoog €	</td>
+                <td>{{ form_widget(form_in.omzhoog, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_in.omzexhoog, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_in.omzbtwhoog, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+            </tr>
+            <tr>
+                <td>8041 Omzet Zaalhuur & Verhuur €	</td>
+                <td>{{ form_widget(form_in.omzspacerent, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_in.omzexspacerent, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_in.omzbtwspacerent, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+            </tr>
+            <tr>
+                <td>8050 Omzet Vouchers €</td>
+                <td>{{ form_widget(form_in.omzvoucher, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_in.omzexvoucher, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_in.omzbtwvoucher, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+            </tr>
+            <tr>
+                <td>8061 Omzet Entreegelden Laag €</td>
+                <td>{{ form_widget(form_in.omzentry, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_in.omzexentry, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_in.omzbtwentry, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+            </tr>
+            <tr>
+                <td>8081 Omzet Parkeren €</td>
+                <td>{{ form_widget(form_in.omzparking, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_in.omzexparking, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_in.omzbtwparking, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+            </tr>
+            <tr>
+                <td>8090 Omzet Techniek & Overig €</td>
+                <td>{{ form_widget(form_in.omzothers, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_in.omzexothers, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_in.omzbtwothers, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+            </tr>
+
+            </tbody>
+            <tfoot>
+            <tr>
+                <td>Totaal IN €</td>
+                <td>{{ form_widget(form_in.omztotalin, {'attr':{ 'class' :'input-sm form-control real'}}) }}</td>
+                <td>{{ form_widget(form_in.omzextotalin, {'attr':{ 'class' :'input-sm form-control real'}}) }}</td>
+                <td>{{ form_widget(form_in.omzbtwtotalin, {'attr':{ 'class' :'input-sm form-control real'}}) }}</td>
+            </tr>
+            </tfoot>
+        </table>
+        <table class="table table-condensed">
+            <tbody>
+            <tr>
+                <td>2501 Kruispost PIN/CCV €</td>
+                <td>{{ form_widget(form_out.pinccv, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>2502 Kruispost Credit Cards €</td>
+                <td>{{ form_widget(form_out.creditcards, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>2503 Kruispost op Rekening €</td>
+                <td>{{ form_widget(form_out.rekening, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>2504 Kruispost Voorverkoop €</td>
+                <td>{{ form_widget(form_out.voorverkoop, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>2509 Kruispost Kadopagina.nl €</td>
+                <td>{{ form_widget(form_out.kadopagina, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>2510 Kruispost Tiqets €</td>
+                <td>{{ form_widget(form_out.tickets, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>2511 Kruispost Belevenissen.nl €</td>
+                <td>{{ form_widget(form_out.belevenissen, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>2500 Kruispost Cash €</td>
+                <td>{{ form_widget(form_out.cash, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>7011 Inkoop Food €</td>
+                <td>{{ form_widget(form_out.inkoopfood, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_out.exinkoopfood, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_out.btwinkoopfood, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+            </tr>
+            <tr>
+                <td>4090 Bedrijfskleding €</td>
+                <td>{{ form_widget(form_out.bedrijfskleding, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_out.exbedrijfskleding, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_out.btwbedrijfskleding, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+            </tr>
+            <tr>
+                <td>4220 Kleine Inventaris €</td>
+                <td>{{ form_widget(form_out.kleineinv, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_out.exkleineinv, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_out.btwkleineinv, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+            </tr>
+            <tr>
+                <td>4253 Was & Schoonmaak €</td>
+                <td>{{ form_widget(form_out.was, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_out.exwas, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_out.btwwas, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+            </tr>
+            <tr>
+                <td>4409 Bankkosten & Postzegels €</td>
+                <td>{{ form_widget(form_out.bankkosten, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>7061 Entertainment €</td>
+                <td>{{ form_widget(form_out.entertainment, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_out.exentertainment, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_out.btwentertainment, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+            </tr>
+            <tr>
+                <td>4699 Diverse Algemene Kosten €</td>
+                <td>{{ form_widget(form_out.diversekosten, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_out.exdiversekosten, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                <td>{{ form_widget(form_out.btwdiversekosten, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+            </tr>
+
+            </tbody>
+            <tfoot>
+            <tr>
+                <td>Totaal OIT €</td>
+                <td>{{ form_widget(form_out.totalout, {'attr':{ 'class' :'input-sm form-control real'}}) }}</td>
+                <td>{{ form_widget(form_out.extotalout, {'attr':{ 'class' :'input-sm form-control real'}}) }}</td>
+                <td>{{ form_widget(form_out.btwtotalout, {'attr':{ 'class' :'input-sm form-control real'}}) }}</td>
+            </tr>
+            <tr>
+                <td style="border: none;">Saldo €</td>
+                <td style="border: none;">{{ form_widget(form_out.saldo, {'attr':{ 'class' :'input-sm form-control real'}}) }}</td>
+                <td style="border: none;"></td>
+                <td style="border: none;"></td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+
+</fieldset>

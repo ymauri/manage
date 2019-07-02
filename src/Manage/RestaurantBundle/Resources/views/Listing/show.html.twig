@@ -1,0 +1,172 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title %} Show Location {% endblock %}
+{% block body %}
+<div class="portlet">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-list"></i>Location
+        </div>
+        <div class="tools">
+            <a href="{{path('listing_new')}}" class=" blue">
+                <i class="fa fa-plus"></i> Create new
+            </a>
+            <a href="{{path('listing')}}" class=" blue">
+                <i class="fa fa-list-alt"></i> List
+            </a>
+        </div>
+    </div>
+            <div class="portlet box blue-hoki">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-search"></i>View
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+            {% if form_errors(delete_form)%}
+                <div class="form-errors alert alert-danger">
+                    {{form_errors(delete_form)}}
+                </div>
+            {% endif %}
+             <form class="container-fluid form-horizontal " >
+                <div class="form-body">
+                    <div class="col-md-3 thumbnail" style="height: 200px; display: block; margin-right: 20px;">
+                        {% if entity.pathimage %}
+                            <img src="{{  asset('uploads/images/listing/' ~ entity.pathimage)  }}" alt="Without image" style="height: 100%;">
+                        {% else %}
+                            <img src="{{  asset('img/noimage.jpg')  }}" alt="Without image" style="height: 100%;">
+                        {% endif %}
+                    </div>
+                <div class="col-md-5">
+                <div class="row form-group">
+                    {{form_label(delete_form.details,'Name',{'attr':{                       
+                      'class' :' control-label',
+                    }})}}
+                    {{form_widget(delete_form.details, {'attr':{ 
+                      'disabled':'disabled',
+                      'class' :'input-sm pull-right form-control'
+                    }})}}  
+                </div>
+                <div class="row form-group">
+                    {{form_label(delete_form.number,'Number',{'attr':{
+                      'class' :' control-label',
+                    }})}}
+                    {{form_widget(delete_form.number, {'attr':{ 
+                      'disabled':'disabled',
+                      'class' :'input-sm pull-right form-control'
+                    }})}}  
+                </div>
+                    <div class="row form-group">
+                        {{form_label(delete_form.priority,'Priority',{'attr':{
+                            'class' :' control-label',
+                        }})}}
+                        {{form_widget(delete_form.priority, {'attr':{
+                            'disabled':'disabled',
+                            'class' :'input-sm pull-right form-control'
+                        }})}}
+                        {{form_errors(delete_form.priority)}}
+                    </div>
+                <div class="row form-group">
+                    {{form_label(delete_form.level,'Level',{'attr':{
+                      'class' :' control-label',
+                    }})}}
+                    {{form_widget(delete_form.level, {'attr':{
+                      'disabled':'disabled',
+                      'class' :'input-sm pull-right form-control'
+                    }})}}
+                </div>
+                    <div class="row form-group">
+                        {{form_label(delete_form.minprice,'Price € (Min Value)',{'attr':{
+                            'class' :' control-label',
+                        }})}}
+                        {{form_widget(delete_form.minprice, {'attr':{
+                            'disabled':'disabled',
+                            'class' :'input-sm pull-right form-control'
+                        }})}}
+                        {{form_errors(delete_form.minprice)}}
+                    </div>
+                    <div class="row form-group">
+                        {{form_label(delete_form.maxprice,'Price € (Max Value)',{'attr':{
+                            'class' :' control-label',
+                        }})}}
+                        {{form_widget(delete_form.maxprice, {'attr':{
+                            'disabled':'disabled',
+                            'class' :'input-sm pull-right form-control'
+                        }})}}
+                        {{form_errors(delete_form.maxprice)}}
+                    </div>
+                    <!--<div class="row form-group">
+                        {#{form_label(delete_form.type,'Tags',{'attr':{
+                            'class' :' control-label',
+                        }})}}
+                        {{form_widget(delete_form.type, {'attr':{
+                            'disabled':'disabled',
+                            'class' :'input-sm pull-right form-control'
+                        }})}}
+                        {{form_errors(delete_form.type)}#}
+                    </div>-->
+                    <div class="row form-group">
+                        <div class="">
+                            <label>
+                                {{form_widget(delete_form.activeforrent,{'attr':{
+                                    'disabled' :'disabled',}})}} Is Active for rent?
+                            </label>
+                        </div>
+
+                    </div>
+                <div class="row form-group ">
+                    <a  href="{{ path('listing') }}">
+                        <input type = 'button' class="btn btn-primary" value="Back">
+                    </a>
+                    <a  href="{{ path('listing_edit', {'id':entity.id}) }}">
+                        <input type = 'button' class="btn btn-primary" value="Update">
+                    </a>
+                </div>
+                </div>
+                    <div class="row col-md-12" style="margin-top: 30px;">
+                        <div class="table-responsive">
+                            <table class="table table-condensed  table-advance table-hover">
+                                <tbody>
+                                {% set c = 1 %}
+                                {% for entity in furnitures %}
+
+                                    <tr>
+                                        <td class="hidden-xs counter">
+                                            {% if entity.pathimage %}
+                                                <img src="{{  asset('uploads/images/furniture/' ~ entity.pathimage)  }}" alt="Without image" style="height: 64px;">
+                                            {% else %}
+                                                <img src="{{  asset('img/noimage.jpg')  }}" alt="Without image" style="height: 64px;">
+                                            {% endif %}
+
+                                        </td>
+
+                                        <td>
+                                            <p><b>Name: </b>{{ entity.name }}</p>
+                                            <p><b>Datails: </b>{{ entity.details }}</p>
+
+                                        </td>
+                                        <td>
+                                            <p><b>Serial Number: </b>{{ entity.serialnumber }}</p>
+                                            <p><b>Status: </b>{{ entity.status }}</p>
+                                        </td>
+
+                                    </tr>
+                                    {% set c = c + 1 %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+
+        </div>
+        </div>
+{% endblock %}

@@ -24,157 +24,116 @@ class CashClosureTotal
     /**
      * @var float
      *
-     * @ORM\Column(name="xlaag", type="float")
+     * @ORM\Column(name="xlaag", type="float", nullable=true)
      */
     private $xlaag;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="xkitchen", type="float")
+     * @ORM\Column(name="xkitchen", type="float",  nullable=true)
      */
     private $xkitchen;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="xhoog", type="float")
+     * @ORM\Column(name="xhoog", type="float", nullable=true)
      */
     private $xhoog;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="xparking", type="float")
+     * @ORM\Column(name="xparking", type="float", nullable=true)
      */
     private $xparking;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="xentry", type="float")
+     * @ORM\Column(name="xentry", type="float",  nullable=true)
      */
     private $xentry;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="xspacesrent", type="float")
+     * @ORM\Column(name="xspacesrent", type="float", nullable=true)
      */
     private $xspacesrent;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="xothers", type="float")
+     * @ORM\Column(name="xothers", type="float",  nullable=true)
      */
     private $xothers;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="xtotal", type="float")
+     * @ORM\Column(name="xtotal", type="float", nullable=true)
      */
     private $xtotal;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="zlaag", type="float")
+     * @ORM\Column(name="zlaag", type="float", nullable=true)
      */
     private $zlaag;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="zkitchen", type="float")
+     * @ORM\Column(name="zkitchen", type="float", nullable=true)
      */
     private $zkitchen;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="zhoog", type="float")
+     * @ORM\Column(name="zhoog", type="float", nullable=true)
      */
     private $zhoog;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="zparking", type="float")
+     * @ORM\Column(name="zparking", type="float", nullable=true)
      */
     private $zparking;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="zentry", type="float")
+     * @ORM\Column(name="zentry", type="float", nullable=true)
      */
     private $zentry;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="zspacesrent", type="float")
+     * @ORM\Column(name="zspacesrent", type="float", nullable=true)
      */
     private $zspacesrent;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="zothers", type="float")
+     * @ORM\Column(name="zothers", type="float", nullable=true)
      */
     private $zothers;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="ztotal", type="float")
+     * @ORM\Column(name="ztotal", type="float", nullable=true)
      */
     private $ztotal;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="suitesapart", type="boolean")
-     */
-    private $suitesapart;
-    
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="laagdag", type="float")
-     */
-    private $laagdag;
-    
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="laagavond", type="float")
-     */
-    private $laagavond;
-
-        /**
-     * @var float
-     *
-     * @ORM\Column(name="hoogdag", type="float")
-     */
-    private $hoogdag;
-    
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="hoogavond", type="float")
-     */
-    private $hoogavond;
-    
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="suites", type="float")
-     */
-    private $suites;
-
+   
     /**
      * Get id
      *
@@ -552,142 +511,5 @@ class CashClosureTotal
     {
         return $this->ztotal;
     }
-    
-    /**
-     * Set suitesapart
-     *
-     * @param boolean $suitesapart
-     * @return Suitesapart
-     */
-    public function setSuitesapart($suitesapart)
-    {
-        $this->suitesapart = $suitesapart;
 
-        return $this;
-    }
-
-    /**
-     * Get suitesapart
-     *
-     * @return boolean 
-     */
-    public function getSuitesapart()
-    {
-        return $this->suitesapart;
-    }
-    
-    /**
-     * Set laagdag
-     *
-     * @param float $laagdag
-     * @return Laagdag
-     */
-    public function setLaagdag($laagdag)
-    {
-        $this->laagdag = $laagdag;
-
-        return $this;
-    }
-
-    /**
-     * Get laagdag
-     *
-     * @return float 
-     */
-    public function getLaagdag()
-    {
-        return $this->laagdag;
-    }
-    
-        /**
-     * Set laagavond
-     *
-     * @param float $laagavond
-     * @return Laagavond
-     */
-    public function setLaagavond($laagavond)
-    {
-        $this->laagavond = $laagavond;
-
-        return $this;
-    }
-
-    /**
-     * Get laagavond
-     *
-     * @return float 
-     */
-    public function getLaagavond()
-    {
-        return $this->laagavond;
-    }
-    /**
-     * Set hoogdag
-     *
-     * @param float $hoogdag
-     * @return Hoogdag
-     */
-    public function setHoogdag($hoogdag)
-    {
-        $this->hoogdag = $hoogdag;
-
-        return $this;
-    }
-
-    /**
-     * Get hoogdag
-     *
-     * @return float 
-     */
-    public function getHoogdag()
-    {
-        return $this->hoogdag;
-    }
-    
-        /**
-     * Set hoogavond
-     *
-     * @param float $hoogavond
-     * @return Hoogavond
-     */
-    public function setHoogavond($hoogavond)
-    {
-        $this->hoogavond = $hoogavond;
-
-        return $this;
-    }
-
-    /**
-     * Get hoogavond
-     *
-     * @return float 
-     */
-    public function getHoogavond()
-    {
-        return $this->hoogavond;
-    }
-    
-        
-        /**
-     * Set suites
-     *
-     * @param float $suites
-     * @return Suites
-     */
-    public function setSuites($suites)
-    {
-        $this->suites = $suites;
-
-        return $this;
-    }
-
-    /**
-     * Get suites
-     *
-     * @return float 
-     */
-    public function getSuites()
-    {
-        return $this->suites;
-    }
 }

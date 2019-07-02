@@ -1,0 +1,420 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title%} Hotel{% endblock %}    
+{% block body %}
+    <script>numeral.locale('nl-nl');</script>
+    <div class="portlet">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon icon-home"></i> Hotel Kassa Cash & Log
+            </div>
+            <div class="tools">
+                <a href="{{path('hotel', {'date': 'today' | date('m-Y')})}}" class=" blue">
+                    <i class="fa fa-list-alt"></i> List
+                </a>
+            </div>
+        </div>
+        <div class="portlet box blue-hoki">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-list"></i> Form
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body porlet-hotel form">
+                <!-- BEGIN FORM-->
+                <div class="row">
+                    <form id="form-basic-hotel" class="container-fluid form-horizontal edit"  autocomplete="off">
+                        <div class="form-body">
+                            <fieldset class="hotel-basic">
+                                    <div class="col-md-6 col-md-offset-3">
+                                         <div class="row form-group">
+                                        <label>Select date</label>
+                                        <input type="text" id="restaurantbundle_hotel_dated" name="dated" readonly="readonly" class="form-control datepicker" data-provide="datepicker" data-date-format="dd-mm-yyyy"{% if entity_basic.dated %} value='{{entity_basic.dated|date('d-m-Y')}}' {% endif %} {% if entity_basic.finished != null %} disabled="disabled" {% endif %}>
+                                        {% if help.date.content %}<i class="fa fa-question-circle tooltips" style="color: #d4d4d4;"  data-placement="top" data-original-title="{{ help.date.content }}"></i>{% endif %}
+                                             <span><i class="fa fa-calendar" ></i>   <b class="string-date"> </b></span>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        <script>
+
+
+                            var days = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                            var options = { year: "numeric", month: "long", weekday: "long", day: "numeric" };
+                            separated = $('#restaurantbundle_hotel_dated').val().split('-')
+                            fecha = new Date((separated[1]+'-'+separated[0]+'-'+separated[2]).replace(/-/g, "/"))
+                            $('.string-date').text(fecha.toLocaleDateString("en-us", options))
+                            {% if entity_basic.finished == null %}
+                                $('#restaurantbundle_hotel_dated').on({
+                                    'change':function(){
+                                        fe = $('#restaurantbundle_hotel_dated').val()
+                                        //$('.string-date').text(days[fecha.getUTCDay()] + ', ' + fecha.toLocaleDateString("en-us", options))
+                                        if (fe == ""){
+                                            fe = {{ entity_basic.dated | date('d-m-Y')}}
+                                        }
+
+                                        else {
+                                            separated = $(this).val().split('-')
+                                            fecha = new Date((separated[1]+'-'+separated[0]+'-'+separated[2]).replace(/-/g, "/"))
+                                            $('.string-date').text(fecha.toLocaleDateString("en-us", options))
+
+                                        }
+
+                                        Metronic.startPageLoading()
+                                        $.post('{{path('hotel_change_date', {'id':entity_basic.id})}}', {'date': fe}, function(response){
+                                            window.location = window.location
+                                            Metronic.stopPageLoading()
+                                        })
+                                    }
+                                })
+                            {% endif %}
+
+                        </script>
+                            {% if canceled %}
+                            <fieldset class="hotel-basic">
+                            <div class="alert alert-success col-md-12" style="margin-bottom: 0px">
+                                {% for item in canceled %}
+                                    {% set currentlisting = '' %}
+                                    {% for val in listing%}
+                                        {% if item.listing == val.id %} {% set currentlisting = val.details %} {% endif %}
+                                    {% endfor  %}
+                                    {% if date(item.canceledat).diff(date(item.date)).days < 7  %} <li><b>{{ currentlisting }}</b> Reservation canceled at <b>{{ item.canceledat | date('d-m-Y') }}</b> <span style="color: #a94442;"><i class="fa fa-bell"></i> <b>Check Payment</b></span> Client:({{ item.name }}) Email: <a href="mailto:{{ item.email }}">{{ item.email }}</a> </li>{% endif %}
+                                {% endfor %}
+                            </div>
+                                </fieldset>
+                            {% endif %}
+                        </div>
+
+                    </form>
+
+
+
+
+                    {#  PÁGINA 1 DEL FORMULARIO  #}
+                    <div class="form-step-1 steps" >
+                        {% include "RestaurantBundle:Hotel:checkout.html.twig"%}
+                        <div class="form-body" style="padding: 0 25px;">
+                            <fieldset class="hotel-basic col-md-12" style="border-bottom: 1px solid #999 ;">
+
+                            </fieldset>
+                        </div>
+                    </div>
+
+                    {#  PÁGINA 2 DEL FORMULARIO  #}
+                    <div class="form-step-2 steps" hidden="hidden" >
+                        {% include "RestaurantBundle:Hotel:checkin.html.twig"%}
+                        <div class="form-body" style="padding: 0 25px;">
+                            <fieldset class="hotel-basic col-md-12" style="border-bottom: 1px solid #999 ;">
+
+                            </fieldset>
+                        </div>
+                    </div>
+
+                    {#  PÁGINA 3 DEL FORMULARIO  #}
+                    <div class="form-step-3 steps" hidden="hidden" >
+                        <form id="form-total-hotel" class="container-fluid form-horizontal edit" autocomplete="off" role="form">
+                            <div class="form-body">
+                                <fieldset id="data-totales" class="col-md-12">
+                                    <section class="col-md-4 col-md-offset-3">
+                                        <div class="row form-group">
+                                            <label for="totalover" class="required">Totaal Overnachtingen €</label>
+                                            <input type="text" id="totalover" name="totalover"  tabindex=-1 readonly="readonly" class=" pull-right form-control input-sm " value='{{entity_basic.totalover}}'>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label for="totalvoldan" class="required">Totaal Reeds voldaan €</label>
+                                            <input type="text" id="totalvoldan" name="totalvoldan" tabindex=-1 readonly="readonly" class=" pull-right form-control input-sm " value='{{entity_basic.totalvoldan}}'>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label for="totaltoer" class="required">Totaal Toeristenbelasting €</label>
+                                            <input type="text" id="totaltoer" name="totaltoer" tabindex=-1 readonly="readonly" class=" pull-right form-control input-sm " value='{{entity_basic.totaltoer}}'>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label for="totalborg" class="required">Ontvangen Borg €</label>
+                                            <input type="text" id="totalborg" name="totalborg" tabindex=-1 readonly="readonly" class=" pull-right form-control input-sm " value='{{entity_basic.totalborg}}'>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label for="totalretourborg" class="required">Retour Borg €</label>
+                                            <input type="text" id="totalretourborg" name="totalretourborg" tabindex=-1 readonly="readonly" class=" pull-right form-control input-sm " value='{{entity_basic.totalretourborg}}'>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label for="totalparking" class="required">Totaal Parking €</label>
+                                            <input type="text" id="totalparking" name="totalparking" tabindex=-1 readonly="readonly" class=" pull-right form-control input-sm " value='{{entity_basic.totalparking}}'>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label for="totalextra" class="required">Totaal Extra's €</label>
+                                            <input type="text" id="totalextra" name="totalextra" tabindex=-1 readonly="readonly" class=" pull-right form-control input-sm " value='{{entity_basic.totalextra}}'>
+                                        </div>
+                                        <div class="row form-group totales">
+                                            <label for="totaldag" class="required">TOTAAL DAGOPBRENGST €</label>
+                                            <input type="text" id="totaldag" name="totaldag" tabindex=-1 readonly="readonly" class=" pull-right form-control input-sm " value='{{entity_basic.totaldag}}'>
+                                        </div>
+                                    </section>
+
+                                </fieldset>
+                            </div>
+                        </form>
+
+
+
+                        {% include "RestaurantBundle:Hotel:bill.html.twig"%}
+                        {% include "RestaurantBundle:Hotel:card.html.twig"%}
+                        {% include "RestaurantBundle:Hotel:final.html.twig"%}
+                        <br/>
+                        <br/>
+                        <form id="form-notifier-hotel" class="container-fluid form-horizontal edit" autocomplete="off">
+                            <div class="form-body">
+                                <fieldset class="col-md-12 fieldset-userdoor">
+                                    <div class="row  col-md-5 col-md-offset-3">
+                                        <label for="" class="control-label col-md-4">Ingevuld door:</label>
+                                        <select id="userdoor" class="form-control input-sm listing-checkout last-checkout control-1" data-placeholder="Select..." name="userdoor" style="width: 120px;">
+                                            <option></option>
+                                            {% for val in users%}
+                                                <option value="{{val.id}}" {% if entity_basic.userdoor != null and entity_basic.userdoor.id == val.id %} selected='selected' {% endif %}>{{val.name}}</option>
+                                            {% endfor  %}
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group" hidden="hidden">
+                                        <input type="text" id="finished" name="finished" required="required" class=" " {% if entity_basic.finished%} value="{{entity_basic.finished | date('d-m-Y') }}" {% endif %}>
+                                    </div>
+
+
+                                </fieldset>
+                            </div>
+                        </form>
+
+
+                    </div>
+
+
+
+
+                    <fieldset class="col-md-6 col-md-offset-3" >
+                        <div class="form-body">
+                            <button type = 'button' class="btn back grey-steel" hidden ><i class="fa fa-backward font-blue-hoki" style="margin-right: 3px"></i> Terug</button>
+                            <button type = 'button' class="btn next grey-steel" hidden="hidden" >Verder <i class="fa fa-forward font-blue-hoki" style="margin-left: 3px"></i></button>
+                            {% if not show %}
+                                <button type = 'submit' class="btn save-while blue-hoki" >Tussentijds bewaren</button>
+                                <button type = 'submit' class="btn final-submit green-seagreen" hidden="hidden">Verzenden</button>
+                                <a href="{{path('hotel', {'date': entity_basic.dated | date('m-Y')})}}"><button type = 'button' class="btn blue-hoki">Annuleer</button></a>
+
+                               {# <button type = 'button' class="btn cancel red-sunglo">Annuleer</button>#}
+                            {% else %}
+                                <a href="{{path('hotel', {'date': 'today' | date('m-Y')})}}"><button type = 'button' class="btn blue-hoki">List</button></a>
+                            {% endif %}
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+
+
+    <script>
+        {% if show == 'true'%}
+            $('input').prop('readonly', 'readonly').prop('disabled', "disabled")
+            $('input').prop('readonly', 'readonly').prop('disabled', "disabled")
+            $('textarea').prop('readonly', 'readonly').prop('disabled', "disabled")
+            $('select').prop('readonly', 'readonly').prop('disabled', "disabled")
+            $('.save-while').remove()
+        {% endif %}
+
+        //Paginado
+        $('button.back').hide();
+        $('button.final-submit').hide();
+        var step_active = 1
+        $('button.next').click(function() {
+            step_active++
+            $('.steps').hide()
+            $('div.form-step-'+step_active).show()
+            $('.go-top').trigger('click')
+            if (step_active == 2) {
+                $('button.back').show()
+                $('button.next').show()
+                $('button.final-submit').hide();
+            }
+            if (step_active == 3) {
+                $('button.back').show()
+                $('button.next').hide()
+                $('button.final-submit').show();
+            }
+        })
+        $('button.back').click(function() {
+            step_active--
+            $('.steps').hide()
+            $('div.form-step-'+step_active).show()
+            $('.go-top').trigger('click')
+            if (step_active == 2 ) {
+                $('button.back').show()
+                $('button.next').show()
+                $('button.final-submit').hide();
+            }
+            if (step_active == 1) {
+                $('button.back').hide()
+                $('button.next').show()
+                $('button.final-submit').hide();
+            }
+        })
+        //Enviar la iformación de los formularios
+        $('button[type="submit"]').on({
+            "click":function(){
+                boton = $(this)
+
+                array_to_send = new Object()
+
+                $('input[name="betalen"]').first().trigger("keyup")
+
+                $('.porlet-hotel').find('form').each(function(index, form){
+                    array_to_send[$(form).attr('id')] = $(form).serializeArray()
+                })
+
+                Metronic.startPageLoading();
+                $('form .form-control').hide()
+                final = $(this).hasClass('final-submit') ? "true" : "false"
+                $.post('{{path('hotel_edit', {'id':entity_basic.id})}}', {'data':array_to_send, 'final': final}, function(response){
+                    Metronic.stopPageLoading()
+                    $('form .form-control').show()
+                    if ( ! typeof response === 'object' ) {
+                        $('form .form-control').show()
+                        $('.alert-error').text(response);
+                        $('.alert-error').show()
+                        setTimeout(function () {
+                            $('.alert-error').hide(300)
+                        }, 4400)
+                    }
+                    else {
+                        $('form .form-control').show()
+                        if (boton.hasClass('final-submit'))
+                            $('.alert-success').text('Success! The form is done.')
+                        else
+                            $('.alert-success').text('Success! The form has been modified.');
+                        $('.alert-success').show()
+                        setTimeout(function () {
+                            $('.alert-success').hide(300)
+                        }, 4400)
+                    }
+                    window.location="{{ path('hotel', {'date': entity_basic.dated | date('m-Y')}) }}";
+
+                })
+            },
+        })
+
+        $('div').on('keypress','.real', function(evt){
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 44 || charCode > 57)) {
+                return false;
+            }
+            var val = $(this).val()
+            $(this).val(val.split('.').join(','))
+
+            return true;
+        })
+        $('div').on('blur','.real', function(event){
+            $(event.target).val(function(index, value) {
+                if (value != '' && value != 0)
+                    return numeral(value).format('0.0,');
+                return '';
+
+            });
+        })
+        $('div').on('keypress','.entero', function(evt){
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 44 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        })
+        $('div').on('blur','.entero', function(event){
+            $(event.target).val(function(index, value) {
+                if (value != '' && value != 0)
+                    return numeral(value).format('0,0');
+                return '';
+            });
+        })
+        $('.cancel').click(function(){
+
+            bootbox.dialog({
+                message: "This form will be removed from the system",
+                title: "Delete form",
+                buttons: {
+
+                    main: {
+                        label: "Cancel",
+                        className: ""
+                    },
+                    success: {
+                        label: "Confirm",
+                        className: "blue-hoki",
+                        callback: function() {
+                            window.location="{{ path('hotel_delete', {'id':entity_basic.id}) }}";
+                        }
+                    }
+                }
+            });
+        });
+
+        function completeProfit(){
+            a = numeral($('#totalcontanten').val()).value() + numeral($('#totalccv').val()).value()
+            $('#totalont').val(numeral(a).format('0.0,'))
+            b = numeral($('#totalont').val()).value() - numeral($('#totaldag').val()).value() - numeral($('#saldoborg').val()).value()
+            $('#kasver').val(numeral(b).format('0.0,'))
+        }
+
+        {% if not show %}
+            setInterval(function(){
+                array_to_send = new Object()
+                $('.porlet-hotel').find('form').each(function(index, form){
+                    array_to_send[$(form).attr('id')] = $(form).serializeArray()
+                })
+
+                $.post('{{path('hotel_edit', {'id':entity_basic.id})}}', {'data':array_to_send, 'final': ''}, function(response){
+                    //Actualizar las fotos del cleaning
+                    $('.cleaning').each(function(){
+                        listing = $(this).attr('class').split("listing-")
+                        if (response[listing[1]] == 'clean')
+                                $(this).attr("src", "{{ asset('img/clear.png') }}")
+                        if (response[listing[1]] == 'checkedOut')
+                            $(this).attr("src", "{{ asset('img/dirty.png') }}")
+                        if (response[listing[1]] == 'dirty')
+                            $(this).attr("src", "{{ asset('img/guesty_out.png') }}")
+                        if (response[listing[1]] == 'working')
+                            $(this).attr("src", "{{ asset('img/readytoclear.png') }}")
+
+                    })
+                })
+            }, 120000);
+        {% endif %}
+
+        $('.real').trigger('keypress').trigger('blur')
+        $('.entero').trigger('keypress').trigger('blur')
+        $('#section-checkin select[name="source"]').trigger('change')
+        $('#section-checkin select[name="guests"]').trigger('change')
+        {% if not show %}
+
+        /*setInterval(function(){
+            $.post('{{path('hotel_dinamiccheckin', {'id':entity_basic.id})}}', function(response){
+                $('#dinamic').append(response)
+
+            })
+        }, 600000);*/
+        {% endif %}
+
+        $('#form-parking-hotel input[type="checkbox"]').on({
+            'click': function(){
+                if ($(this).is(':checked')){
+                    $(this).val(1)
+                }
+                else{
+                    $(this).val(0)
+                }
+            }
+        })
+    </script>
+{% endblock %}
+

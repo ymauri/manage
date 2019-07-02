@@ -1,0 +1,83 @@
+<fieldset class="col-md-12 turnover-omzet" >
+    <h4></h4>
+    <section class="x-group col-md-4  ">
+        <strong class="row form-group text-primary"></strong> 
+        <div class="row form-group">
+            {{form_label(form_omzet.omzkitchen,'8010 - Omzet Food',{'attr':{'class' :' control-label',}})}}
+            {{form_widget(form_omzet.omzkitchen, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.omzet.omzkitchen|number_format(2,',','.')}})}}  
+        </div>
+        <div class="row form-group">
+            {{form_label(form_omzet.omzlaag,'8011 - Omzet Drank Laag',{'attr':{'class' :' control-label',}})}}
+            {{form_widget(form_omzet.omzlaag, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.omzet.omzlaag|number_format(2,',','.') }})}}  
+        </div>
+        <div class="row form-group">
+            {{form_label(form_omzet.omzhoog,'8020 - Omzet Drank Hoog',{'attr':{'class' :' control-label',}})}}
+            {{form_widget(form_omzet.omzhoog, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.omzet.omzhoog|number_format(2,',','.')  }})}}  
+        </div>
+         <div class="row form-group">
+            {{form_label(form_omzet.omzspacerent,'8041 - Omzet Zaalhuur & Verhuur',{'attr':{'class' :' control-label',}})}}
+            {{form_widget(form_omzet.omzspacerent, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.omzet.omzspacerent|number_format(2,',','.')  }})}}  
+        </div>
+         <div class="row form-group">
+            {{form_label(form_omzet.omzvouchersrek,'8050 - Omzet Vouchers',{'attr':{'class' :' control-label',}})}}
+            {{form_widget(form_omzet.omzvouchersrek, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.omzet.omzvouchersrek|number_format(2,',','.')  }})}}  
+        </div>
+        <div class="row form-group">
+            {{form_label(form_omzet.omzentry,'8061 - Omzet Entreegelden Laag',{'attr':{'class' :' control-label',}})}}
+            {{form_widget(form_omzet.omzentry, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.omzet.omzentry|number_format(2,',','.')  }})}}  
+        </div>
+       <div class="row form-group">
+            {{form_label(form_omzet.omzparking,'8081 - Omzet Parkeren',{'attr':{'class' :' control-label',}})}}
+            {{form_widget(form_omzet.omzparking, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.omzet.omzparking|number_format(2,',','.')  }})}}  
+        </div>
+        <div class="row form-group">
+            {{form_label(form_omzet.omzothers,'8090 - Omzet Techniek & Overig',{'attr':{'class' :' control-label',}})}}
+            {{form_widget(form_omzet.omzothers, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.omzet.omzothers|number_format(2,',','.')  }})}}  
+        </div>
+       
+        <div class="row form-group totales">
+            {{form_label(form_omzet.omztotal,' TOTAAL OMZET',{'attr':{'class' :' control-label',}})}}
+            {{form_widget(form_omzet.omztotal, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.omzet.omztotal|number_format(2,',','.')  }})}}  
+        </div>
+    </section>
+    <section class="z-group col-md-4  ">
+        <strong class="row form-group text-primary"></strong> 
+        <div class="row form-group">
+            {{form_label(form_omzet.omzexkitchen,'Food ex BTW',{'attr':{'class' :' control-label',}})}}
+            {{form_widget(form_omzet.omzexkitchen, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.omzet.omzexkitchen|number_format(2,',','.')  }})}}  
+        </div>
+        <div class="row form-group">
+            {{form_label(form_omzet.omzexlaag,'Drank Laag ex BTW',{'attr':{'class' :' control-label',}})}}
+            {{form_widget(form_omzet.omzexlaag, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.omzet.omzexlaag|number_format(2,',','.')  }})}}  
+        </div>
+        <div class="row form-group">
+            {{form_label(form_omzet.omzexhoog,'Drank Hoog ex BTW',{'attr':{'class' :' control-label',}})}}
+            {{form_widget(form_omzet.omzexhoog, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.omzet.omzexhoog|number_format(2,',','.')  }})}}  
+        </div>
+         <div class="row form-group">
+            {{form_label(form_omzet.omzexspacerent,'Zaalhuur & Verhuur ex BTW',{'attr':{'class' :' control-label',}})}}
+            {{form_widget(form_omzet.omzexspacerent, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.omzet.omzexspacerent|number_format(2,',','.')  }})}}  
+        </div>
+         <div class="row form-group">
+            {{form_label(form_omzet.omzexvouchersrek,'Vouchers ex BTW',{'attr':{'class' :' control-label',}})}}
+            {{form_widget(form_omzet.omzexvouchersrek, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.omzet.omzexvouchersrek|number_format(2,',','.')  }})}}  
+        </div>
+        <div class="row form-group">
+            {{form_label(form_omzet.omzexentry,'Entreegelden Laag ex BTW',{'attr':{'class' :' control-label',}})}}
+            {{form_widget(form_omzet.omzexentry, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.omzet.omzexentry|number_format(2,',','.')  }})}}  
+        </div>
+       <div class="row form-group">
+            {{form_label(form_omzet.omzexparking,'Parkeren ex BTW',{'attr':{'class' :' control-label',}})}}
+            {{form_widget(form_omzet.omzexparking, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.omzet.omzexparking|number_format(2,',','.')  }})}}  
+        </div>
+        <div class="row form-group">
+            {{form_label(form_omzet.omzexothers,'Techniek & Overig ex BTW',{'attr':{'class' :' control-label',}})}}
+            {{form_widget(form_omzet.omzexothers, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.omzet.omzexothers|number_format(2,',','.')  }})}}  
+        </div>
+       
+        <div class="row form-group totales">
+            {{form_label(form_omzet.omzextotal,' TOTAAL OMZET EX BTW',{'attr':{'class' :' control-label',}})}}
+            {{form_widget(form_omzet.omzextotal, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.omzet.omzextotal|number_format(2,',','.')  }})}}  
+        </div>
+    </section>
+</fieldset>

@@ -1,0 +1,225 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title%} Turnover{% endblock %}    
+{% block body %}
+    <script>numeral.locale('nl-nl');</script>
+    <div class="portlet">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon icon-bell"></i>Turnover
+            </div>
+            <div class="tools">
+                <a href="{{path('turnover', {'date': 'today' | date('m-Y')})}}" class=" blue">
+                    <i class="fa fa-list-alt"></i> List
+                </a>
+            </div>
+        </div>
+        <div class="portlet box blue-hoki">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-list"></i> Form
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="row">
+                    <form id="form-basic-turnover" class="container-fluid form-horizontal edit"  action="{{path('turnover_edit',{'id':entity_basic.id})}}" method="POST" {{form_enctype(form_basic)}} autocomplete="off">
+                        <div class="form-body">
+                            <fieldset class="turnover-basic">
+                                <div class="col-md-6">
+                                    <div class="row form-group">
+                                        <label>Select date</label>
+                                        {{ form_widget(form_basic.dated) }}
+                                        {# <input type="text" id="adminbundle_turnover_dated" name="adminbundle_turnover[dated]" required="required" class="form-control real  datepicker" data-provide="datepicker" readonly="readonly" data-date-format="dd-mm-yyyy" value="{{ entity_basic.dated | date('d-m-Y') }}" {% if show %}disabled="disabled"{% endif %}>#}
+                                        <span><i class="fa fa-calendar" ></i>   <b class="string-date"> </b></span>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <script>
+                                var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                                var options = { year: "numeric", month: "long", weekday: "long", day: "numeric" };
+
+                                separated = $('#adminbundle_turnover_dated').val().split('-')
+                                fecha = new Date((separated[1] + '-' + separated[0] + '-' + separated[2]).replace(/-/g, "/"))
+                                $('.string-date').text(fecha.toLocaleDateString("en-us", options))
+
+                                {% if entity_basic.finished == null %}
+                                    $('#adminbundle_turnover_dated').on({
+                                        'change':function(){
+                                            separated = $(this).val().split('-')
+                                            fecha = new Date((separated[1]+'-'+separated[0]+'-'+separated[2]).replace(/-/g, "/"))
+                                            $('.string-date').text(fecha.toLocaleDateString("en-us", options))
+
+                                            //$('.string-date').text(days[fecha.getUTCDay()] + ', ' + fecha.toLocaleDateString("en-us", options))
+                                            Metronic.startPageLoading()
+                                            fecha.setDate(fecha.getDate() - 1);
+                                            mes = fecha.getMonth() + 1
+                                            mes = mes.toString().length == 1 ? '0' + mes.toString() : mes
+                                            string_data_date = fecha.getDate().toString()+'-'+ mes + '-'+fecha.getFullYear().toString()
+                                            $.post('{{path('turnover_change_date', {'id':entity_basic.id})}}', {'date':$(this).val(), 'data_date': string_data_date}, function(response){
+                                                if (response == 'true') window.location = window.location
+                                                else {alert('error')
+                                                Metronic.stopPageLoading()}
+                                            })
+                                        }
+                                    })
+                                {% endif %}
+
+                            </script>
+                            <fieldset class="col-md-12">
+                                <div class="col-md-3 form-group">
+                                    {{form_label(form_basic.chief,'Ingevuld door:',{'attr':{'class' :' control-label',}})}}
+                                    {{form_widget(form_basic.chief, {'attr':{'class' :' pull-right form-control  input-sm ', 'style': 'min-width:120px'  }})}}
+                                </div>
+                            </fieldset>
+                            {% include 'RestaurantBundle:Turnover:reception.html.twig' %}
+                            {% include 'RestaurantBundle:Turnover:service.html.twig' %}
+                            {% include 'RestaurantBundle:Turnover:skybar.html.twig' %}
+                            {% include 'RestaurantBundle:Turnover:omzet.html.twig' %}
+                            <fieldset class="col-md-12 turnover-final">
+                                <h4>L1nda Omzetten</h4>
+                                <section class="x-group col-md-4  ">
+                                    <strong class="row form-group text-primary"></strong> 
+                                    <div class="row form-group">
+                                        {{form_label(form_basic.omzkitchendag,'Omzet Food Dag',{'attr':{'class' :' control-label',}})}}
+                                        {{form_widget(form_basic.omzkitchendag, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.omzkitchendag|number_format(2,',','.')  }})}}  
+                                    </div>
+                                    <div class="row form-group">
+                                        {{form_label(form_basic.omzkitchenavond,'Omzet Food Avond',{'attr':{'class' :' control-label',}})}}
+                                        {{form_widget(form_basic.omzkitchenavond, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.omzkitchenavond|number_format(2,',','.')  }})}}  
+                                    </div>
+                                    <div class="row form-group">
+                                        {{form_label(form_basic.omzbeverageps,'Omzet Beverage & Zaalhuur Totaal:',{'attr':{'class' :' control-label',}})}}
+                                        {{form_widget(form_basic.omzbeverageps, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.omzbeverageps|number_format(2,',','.')  }})}}  
+                                    </div>
+                                    <div class="row form-group">
+                                        {{form_label(form_basic.omzbeveragedag,'Omzet Beverage PH Dag',{'attr':{'class' :' control-label',}})}}
+                                        {{form_widget(form_basic.omzbeveragedag, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.omzbeveragedag|number_format(2,',','.')  }})}}  
+                                    </div>
+                                    <div class="row form-group">
+                                        {{form_label(form_basic.omzbeverageavond,'Omzet Beverage PH Avond',{'attr':{'class' :' control-label',}})}}
+                                        {{form_widget(form_basic.omzbeverageavond, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.omzbeverageavond|number_format(2,',','.')  }})}}  
+                                    </div>
+                                </section>
+                                <section class="z-group col-md-4  ">
+                                    <strong class="row form-group text-primary"></strong> 
+                                    <div class="row form-group">
+                                        {{form_label(form_basic.ontdebitcard,'2501 - Kruispost PIN/CCV',{'attr':{'class' :' control-label',}})}}
+                                        {{form_widget(form_basic.ontdebitcard, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.ontdebitcard|number_format(2,',','.')  }})}}  
+                                    </div>
+                                    <div class="row form-group">
+                                        {{form_label(form_basic.ontcreditcard,'2502 - Kruispost Credit Card',{'attr':{'class' :' control-label',}})}}
+                                        {{form_widget(form_basic.ontcreditcard, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.ontcreditcard|number_format(2,',','.')  }})}}  
+                                    </div>
+                                    <div class="row form-group">
+                                        {{form_label(form_basic.ontrekening,'2503 - Kruispost Op Rekening',{'attr':{'class' :' control-label',}})}}
+                                        {{form_widget(form_basic.ontrekening, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.ontrekening|number_format(2,',','.')  }})}}  
+                                    </div>
+                                    <div class="row form-group">
+                                        {{form_label(form_basic.ontvooverkoop,'2504 - Kruispost Voorverkoop gelden',{'attr':{'class' :' control-label',}})}}
+                                        {{form_widget(form_basic.ontvooverkoop, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.ontvooverkoop|number_format(2,',','.')  }})}}  
+                                    </div>
+                                    <div class="row form-group">
+                                        {{form_label(form_basic.ontkadopagina,'2509 - Kruispost Kadopagina',{'attr':{'class' :' control-label',}})}}
+                                        {{form_widget(form_basic.ontkadopagina, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.ontkadopagina|number_format(2,',','.')  }})}}  
+                                    </div>
+                                    <div class="row form-group">
+                                        {{form_label(form_basic.onttickets,'2510 - Kruispost Tiqets',{'attr':{'class' :' control-label',}})}}
+                                        {{form_widget(form_basic.onttickets, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.onttickets|number_format(2,',','.')  }})}}  
+                                    </div>
+                                    <div class="row form-group">
+                                        {{form_label(form_basic.ontbelevoucher,'2511 - Kruispost Belevenissen.nl',{'attr':{'class' :' control-label',}})}}
+                                        {{form_widget(form_basic.ontbelevoucher, {'attr':{'class' :' pull-right form-control real  input-sm' , 'value': entity_basic.ontbelevoucher|number_format(2,',','.')  }})}}  
+                                    </div>
+                                </section>
+                            </fieldset>
+
+                            <fieldset class="col-md-12" style="border-bottom: none" >
+                                <div class="col-md-6 col-md-offset-3">
+                                    {% if not show %}
+                                        <button type = 'submit' class="btn save-while blue-hoki" >Tussentijds bewaren</button>
+                                        <button type = 'submit' class="btn final-submit green-seagreen" hidden>Verzenden</button>
+                                        <a href="{{path('skybar', {'date': entity_basic.dated | date('m-Y')})}}"><button type = 'button' class="btn blue-hoki">Annuleer</button></a>
+                                    {% else %}
+                                        <a href="{{path('turnover', {'date': 'today' | date('m-Y')})}}"><button type = 'button' class="btn blue-hoki">List</button></a>
+                                    {% endif %}
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div hidden="hidden">
+                            {{form_rest(form_basic)}}
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+     <script>
+         {% if show %}
+            $('.form-control, #adminbundle_turnover_dated').attr('disabled', 'disabled')
+         {% endif %}
+             $('button[type="submit"]').click(function(e) {
+                 e.preventDefault();
+                 //Pantalla Loading
+                 Metronic.startPageLoading();
+                 $('.form-control').hide()
+
+                    if ($(this).hasClass('final-submit')) {
+                         fecha = new Date();
+                        mes = fecha.getMonth() + 1
+                        mes = mes.toString().length == 1 ? '0' + mes.toString() : mes
+                         $('#adminbundle_turnover_finished').val(fecha.getFullYear()+'-'+mes+'-'+fecha.getDate())
+                    }
+                     boton = $(this);
+                     $('#form-basic-turnover').ajaxSubmit(function(response){
+                         Metronic.stopPageLoading();
+                         $('.form-control').show();
+                         if (response == 'true') {
+                             if (boton.hasClass('final-submit'))
+                                 $('.alert-success').text('Success! The email has been sent')
+                             else
+                                 $('.alert-success').text('Success! The form has been modified.');
+                             $('.alert-success').show()
+                             setTimeout(function () {
+                                 $('.alert-success').hide(300)
+                             }, 4400)
+                             if (boton.hasClass('final-submit'))  window.location="{{ path('turnover', {'date': 'today' | date('m-Y')}) }}";
+                         }
+                         else{
+                             $('.alert-danger').text(response);
+                             $('.alert-danger').show()
+                             setTimeout(function () {
+                                 $('.alert-danger').hide(300)
+                             }, 4400)
+                         }
+                     })
+                 })
+
+             $('.cancel').click(function () {
+
+                 bootbox.dialog({
+                     message: "This form will be removed from the system",
+                     title: "Delete form",
+                     buttons: {
+
+                         main: {
+                             label: "Cancel",
+                             className: ""
+                         },
+                         success: {
+                             label: "Confirm",
+                             className: "blue-hoki",
+                             callback: function () {
+                                 window.location = "{{ path('turnover_delete', {'id':entity_basic.id}) }}";
+                             }
+                         }
+                     }
+                 });
+             });
+         </script>
+
+{% endblock %}

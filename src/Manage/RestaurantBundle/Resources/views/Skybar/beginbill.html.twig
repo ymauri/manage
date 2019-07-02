@@ -1,0 +1,218 @@
+<fieldset id="data-begin" class="col-md-12">
+    <h4>Begin Float</h4>
+    <div class="for-errors col-md-12"> 
+        {{form_errors(form_begin)}}
+    </div>
+    <div class="col-md-12">
+        <div class="row form-group">
+            {{form_label(form_begin.hascash,'Cash ontvangen?',{'attr':{
+                'class' :' control-label',
+            }})}}
+            {{form_widget(form_begin.hascash)}}
+        </div>
+    </div>
+    <div class="has_cash" hidden="hidden">
+        <div class="data_begin row col-md-12">
+        <section class="x-group col-md-2 pull-left" >
+            <div class="row form-group">
+                {{form_label(form_begin.standard,'Standaard float gebruikt?',{'attr':{
+                        'class' :' control-label',
+                }})}}
+                {{form_widget(form_begin.standard)}}
+            </div>
+            <script>
+                {#Standard == TRUE => Campos ocultos#}
+                {% if entity_basic.beginbill.standard == 1 %}
+                    $('#adminbundle_beginbill_standard_0').prop('checked', 'checked')
+                {% else %}
+                    $('#adminbundle_beginbill_standard_1').prop('checked', 'checked')
+                {% endif %}
+            </script>
+            <div class="section-begin-standard" {% if entity_basic.beginbill.standard == 1 %}hidden="hidden"{% endif %}>
+
+                <div class="row form-group">
+                    {{form_label(form_begin.s20,'€20',{'attr':{
+                    'class' :' control-label',
+                    }})}}
+                    {{form_widget(form_begin.s20 , {'attr':{
+                    'class' :'input-sm pull-right  form-control entero   bill-control',
+                    'placeholder' : 0
+                    }})}}
+                </div>
+                <div class="row form-group">
+                    {{form_label(form_begin.s10,'€10',{'attr':{
+                    'class' :' control-label',
+                    }})}}
+                    {{form_widget(form_begin.s10 , {'attr':{
+                    'class' :'input-sm pull-right  form-control entero   bill-control',
+                    'placeholder' : 0
+                    }})}}
+                </div>
+                <div class="row form-group">
+                    {{form_label(form_begin.s5,'€5',{'attr':{
+                    'class' :' control-label',
+                    }})}}
+                    {{form_widget(form_begin.s5 , {'attr':{
+                    'class' :'input-sm pull-right  form-control entero   bill-control',
+                    'placeholder' : 0
+                    }})}}
+                </div>
+                <div class="row form-group">
+                    {{form_label(form_begin.s2,'€2',{'attr':{
+                    'class' :' control-label',
+                    }})}}
+                    {{form_widget(form_begin.s2, {'attr':{
+                    'class' :'input-sm pull-right  form-control entero   bill-control',
+                    'placeholder' : 0
+                    }})}}
+                </div>
+                <div class="row form-group">
+                    {{form_label(form_begin.s1,'€1',{'attr':{
+                    'class' :' control-label',
+                    }})}}
+                    {{form_widget(form_begin.s1, {'attr':{
+                    'class' :'input-sm pull-right  form-control entero   bill-control',
+                    'placeholder' : 0
+                    }})}}
+                </div>
+                <div class="row form-group">
+                    {{form_label(form_begin.s050,'€0,50',{'attr':{
+                    'class' :' control-label',
+                    }})}}
+                    {{form_widget(form_begin.s050, {'attr':{
+                    'class' :'input-sm pull-right  form-control entero   bill-control',
+                    'placeholder' : 0
+                    }})}}
+                </div>
+                <div class="row form-group">
+                    {{form_label(form_begin.s020,'€0,20',{'attr':{
+                    'class' :' control-label',
+                    }})}}
+                    {{form_widget(form_begin.s020 , {'attr':{
+                    'class' :'input-sm pull-right  form-control entero   bill-control',
+                    'placeholder' : 0
+                    }})}}
+                </div>
+                <div class="row form-group">
+                    {{form_label(form_begin.s010,'€0,10',{'attr':{
+                    'class' :' control-label',
+                    }})}}
+                    {{form_widget(form_begin.s010 , {'attr':{
+                    'class' :'input-sm pull-right  form-control entero   bill-control',
+                    'placeholder' : 0
+                    }})}}
+                </div>
+            </div>
+        </section>
+
+        <section class="z-group col-md-2 pull-left">
+            <div class="row form-group">
+                {{form_label(form_begin.extra,'Extra float gebruikt?',{'attr':{
+                        'class' :' control-label',
+                }})}}
+                {{form_widget(form_begin.extra)}}
+            </div>
+            <script>
+                {% if entity_basic.beginbill.extra == 0 %}
+                $('#adminbundle_beginbill_extra_1').prop('checked', 'checked')
+                {% else %}
+                $('#adminbundle_beginbill_extra_0').prop('checked', 'checked')
+                {% endif %}
+
+            </script>
+             <div class="section-begin-extra" {% if entity_basic.beginbill.extra == 0 %} hidden="hidden" {% endif %}>
+                <div class="row form-group">
+                    {{form_label(form_begin.e20,'€20',{'attr':{
+                    'class' :' control-label',
+                    }})}}
+                    {{form_widget(form_begin.e20 , {'attr':{
+                    'class' :'input-sm pull-right  form-control entero   bill-control',
+                    'placeholder' : 0
+                    }})}}
+                </div>
+                <div class="row form-group">
+                    {{form_label(form_begin.e10,'€10',{'attr':{
+                    'class' :' control-label',
+                    }})}}
+                    {{form_widget(form_begin.e10 , {'attr':{
+                    'class' :'input-sm pull-right  form-control entero   bill-control',
+                    'placeholder' : 0
+                    }})}}
+                </div>
+                <div class="row form-group">
+                    {{form_label(form_begin.e5,'€5',{'attr':{
+                    'class' :' control-label',
+                    }})}}
+                    {{form_widget(form_begin.e5 , {'attr':{
+                    'class' :'input-sm pull-right  form-control entero   bill-control',
+                    'placeholder' : 0
+                    }})}}
+                </div>
+                <div class="row form-group">
+                    {{form_label(form_begin.e2,'€2',{'attr':{
+                    'class' :' control-label',
+                    }})}}
+                    {{form_widget(form_begin.e2, {'attr':{
+                    'class' :'input-sm pull-right  form-control entero   bill-control',
+                    'placeholder' : 0
+                    }})}}
+                </div>
+                <div class="row form-group">
+                    {{form_label(form_begin.e1,'€1',{'attr':{
+                    'class' :' control-label',
+                    }})}}
+                    {{form_widget(form_begin.e1, {'attr':{
+                    'class' :'input-sm pull-right  form-control entero   bill-control',
+                    'placeholder' : 0
+                    }})}}
+                </div>
+                <div class="row form-group">
+                    {{form_label(form_begin.e050,'€0,50',{'attr':{
+                    'class' :' control-label',
+                    }})}}
+                    {{form_widget(form_begin.e050, {'attr':{
+                    'class' :'input-sm pull-right  form-control entero   bill-control',
+                    'placeholder' : 0
+                    }})}}
+                </div>
+                <div class="row form-group">
+                    {{form_label(form_begin.e020,'€0,20',{'attr':{
+                    'class' :' control-label',
+                    }})}}
+                    {{form_widget(form_begin.e020 , {'attr':{
+                    'class' :'input-sm pull-right  form-control entero   bill-control',
+                    'placeholder' : 0
+                    }})}}
+                </div>
+                <div class="row form-group">
+                    {{form_label(form_begin.e010,'€0,10',{'attr':{
+                    'class' :' control-label',
+                    }})}}
+                    {{form_widget(form_begin.e010 , {'attr':{
+                    'class' :'input-sm pull-right  form-control entero   bill-control',
+                    'placeholder' : 0
+                    }})}}
+                </div>
+
+            </div>
+        </section>
+        </div>
+            <div class="row col-md-5 col-md-offset-0">
+                <div class=" row form-group totales col-md-6 col-md-offset-0">
+                    {{form_label(form_begin.total,'Totaal floats begin €',{'attr':{
+                    'class' :' control-label',
+                    }})}}
+                    {{form_widget(form_begin.total , {'attr':{
+                    'class' :'input-sm  form-control real pull-right ',
+                    'placeholder' : 0
+                    }})}}
+                </div>
+            </div>
+    </div>
+    <div hidden="hidden">
+        {{form_rest(form_begin)}}
+    </div>
+
+    <!--</form>-->
+</fieldset>
+

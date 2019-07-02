@@ -11,6 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
  *
  * @ORM\Table()
  * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Manage\RestaurantBundle\Entity\ReceptionVoucherRepository")
  */
 class ReceptionVoucher {
 
@@ -41,6 +42,12 @@ class ReceptionVoucher {
      * @ORM\Column(name="forreception", type="boolean")
      */
     private $forreception;
+    
+    /**
+     * @var boolean
+     * @ORM\Column(name="isext", type="boolean")
+     */
+    private $isext;
 
     /**
      * @var float
@@ -140,6 +147,26 @@ class ReceptionVoucher {
         return $this;
     }
     
+     /**
+     * Get forreception
+     *
+     * @return object 
+     */
+    public function getIsext() {
+        return $this->isext;
+    }
+
+    /**
+     * Set forreception
+     *
+     * @param object $isext
+     * @return boolean
+     */
+    public function setIsext($is) {
+        $this->isext = $is;
+        return $this;
+    }
+    
     /**
      * Get value
      *
@@ -160,7 +187,7 @@ class ReceptionVoucher {
     }
     
     public function __toString(){
-        return $this->details;
+        return $this->details .' '.$this->value .'€';
     }
     
 

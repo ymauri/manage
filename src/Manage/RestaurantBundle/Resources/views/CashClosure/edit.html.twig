@@ -1,16 +1,1288 @@
 {% extends 'AdminBundle::frame.html.twig' %}
+{% block title%} Service{% endblock %}    
 
-{% block body -%}
-    <h1>CashClosure edit</h1>
+{% block body %}
+    <script>numeral.locale('nl-nl');</script>
+<div class="portlet">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon icon-directions"></i> Service Kassa Cash & Log
+        </div>
+        <div class="tools">
+            <a href="{{path('cashclosure', {'date': 'today' | date('m-Y')})}}" class=" blue">
+                <i class="fa fa-list-alt"></i> List
+            </a>
+        </div>
+    </div>
+    <div class="portlet box blue-hoki">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-list"></i> Form
+            </div>
+            <div class="tools">
+                <a href="javascript:;" class="collapse">
+                </a>
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <div class="row">
+                <form id="form-basic-service" class="container-fluid form-horizontal edit" action="{{path('cashclosure_edit', {'id':entity_basic.id})}}" method="POST" {{form_enctype(form_basic)}} autocomplete="off" >
+                    <div class="form-body">
+                        <fieldset class="service-basic">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Select date</label>
+                                        {{ form_widget(form_basic.dated) }}
+                                       {# <input type="text" id="adminbundle_reception_dated" name="adminbundle_reception[dated]" required="required" class="form-control datepicker" data-provide="datepicker" readonly="readonly" data-date-format="dd-mm-yyyy" value="{{ entity_basic.dated | date('d-m-Y') }}" {% if show %}disabled="disabled"{% endif %}>#}
+                                        <span><i class="fa fa-calendar" ></i>   <b class="string-date"> </b></span>
+                                    </div>
+                            </div>
+                        </fieldset>
+                          <script>
+                              var days = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                            var options = {
+                                        year: "numeric", month: "long",
+                                        day: "numeric"
+                                    };
+                                    separated = $('#adminbundle_service_dated').val().split('-')
+                                   fecha = new Date((separated[1]+'-'+separated[0]+'-'+separated[2]).replace(/-/g, "/"))
+                                   $('.string-date').text(days[fecha.getUTCDay()] + ', ' + fecha.toLocaleDateString("en-us", options))
+                              
+                           $('#adminbundle_service_dated').on({
+                               'change':function(){
+                                   separated = $(this).val().split('-')
+                                   fecha = new Date((separated[1]+'-'+separated[0]+'-'+separated[2]).replace(/-/g, "/"))
+                                   $('.string-date').text(days[fecha.getUTCDay()] + ', ' + fecha.toLocaleDateString("en-us", options))
+                               }
+                           })         
+                        </script>              
+                        
+                        {% embed "RestaurantBundle:CashClosureTotal:edit.html.twig"%}{% endembed %}
+                        <fieldset id="data-sky" class="col-md-12 ">
+                            <h4>Sky Bar Vouchers</h4>
+                            <section class="x-group col-md-3 ">
+                                <div class="row form-group">
+                                    {{ form_label(form_basic.skydag,'Aantal DAG',{'attr':{ 'class' :' control-label',}}) }}
+                                    {{ form_widget(form_basic.skydag, {'attr':{'class' :'input-sm pull-right form-control entero ',}}) }}
+                                </div>
+                                <div class="row form-group">
+                                    {{ form_label(form_basic.skymoneydag,'Rekening DAG €',{'attr':{ 'class' :' control-label',}}) }}
+                                    {{ form_widget(form_basic.skymoneydag, {'attr':{'class' :'input-sm pull-right form-control real sky-control',}}) }}
+                                </div>
+                                <div class="row form-group">
+                                    {{ form_label(form_basic.skymeandag,'Gemiddeld €',{'attr':{ 'class' :' control-label',}}) }}
+                                    {{ form_widget(form_basic.skymeandag, {'attr':{'class' :'input-sm pull-right form-control real sky-control',}}) }}
+                                </div>
+                            </section>
+                            <section class="x-group col-md-2  ">
+                                <div class="row form-group">
+                                    {{ form_label(form_basic.voucherday,'R*',{'attr':{ 'class' :' control-label',}}) }}
+                                    {{ form_widget(form_basic.voucherday, {'attr':{'class' :'input-sm pull-right entero form-control ','disabled':'disabled'}}) }}
+                                </div>
+                            </section>
 
-    {{ form(edit_form) }}
+                            <section class="x-group col-md-3  ">
+                                <div class="row form-group">
+                                    {{ form_label(form_basic.skyavond,'Aantal AVOND',{'attr':{ 'class' :' control-label',}}) }}
+                                    {{ form_widget(form_basic.skyavond, {'attr':{'class' :'input-sm pull-right entero form-control ',}}) }}
+                                </div>
+                                <div class="row form-group">
+                                    {{ form_label(form_basic.skymoneyavond,'Rekening AVOND €',{'attr':{ 'class' :' control-label',}}) }}
+                                    {{ form_widget(form_basic.skymoneyavond, {'attr':{'class' :'input-sm pull-right form-control real sky-control',}}) }}
+                                </div>
+                                <div class="row form-group">
+                                    {{ form_label(form_basic.skymeanavond,'Gemiddeld €',{'attr':{ 'class' :' control-label',}}) }}
+                                    {{ form_widget(form_basic.skymeanavond, {'attr':{'class' :'input-sm pull-right form-control real sky-control',}}) }}
+                                </div>
+                            </section>
+                            <section class="x-group col-md-2 ">
+                                <div class="row form-group">
+                                    {{ form_label(form_basic.vouchernight,'R*',{'attr':{ 'class' :' control-label',}}) }}
+                                    {{ form_widget(form_basic.vouchernight, {'attr':{'class' :'input-sm pull-right form-control entero','disabled':'disabled'}}) }}
+                                </div>
+                            </section>
+                        </fieldset>
+                        <fieldset class="col-md-12">
+                             <section class="x-group col-md-3 col-md-offset-3 ">
+                                <div class="row form-group">
+                                    {{form_label(form_basic.skytotal,'Totaal Aantal Vouchers',{'attr':{ 'class' :' control-label',}})}}
+                                    {{form_widget(form_basic.skytotal, {'attr':{'class' :'input-sm pull-right form-control entero',}})}}
+                                </div>
+                             </section>
+                             <section class="x-group col-md-3 col-md-offset-3 ">
+                                 <div class="row form-group">
+                                    {{form_label(form_basic.skymoneytotal,'€',{'attr':{ 'class' :' control-label',}})}}
+                                    {{form_widget(form_basic.skymoneytotal, {'attr':{'class' :'input-sm pull-right form-control real',}})}}
+                                </div>
+                             </section>
+                             <section class="x-group col-md-3 col-md-offset-3 ">
+                                  <div class="row form-group">
+                                    {{form_label(form_basic.skymeantotal,'Totaal gemiddeld €',{'attr':{ 'class' :' control-label',}})}}
+                                    {{form_widget(form_basic.skymeantotal, {'attr':{'class' :'input-sm pull-right form-control real',}})}}
+                                </div>
+                             </section>
+                        </fieldset>
+                    
+                {% embed "RestaurantBundle:BeginBill:edit.html.twig"%}{% endembed %}
+            {% embed "RestaurantBundle:Bill:edit.html.twig"%}{% endembed %}
+        {% embed "RestaurantBundle:Card:serviceedit.html.twig"%}{% endembed %}
+        <fieldset class="col-md-12 gift-vouchers ">
+            <h4>Cadeauvouchers</h4>
+            <section class="x-group col-md-4  ">
+                <strong class="row form-group text-primary"></strong>
+                <div id="prepared-gift-form"></div>
+            </section>
+            <section class="z-group col-md-4  ">
+                <strong class="row form-group text-primary"></strong>
+                <div id="prepared-ext-form"></div>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('cashclosure') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+            </section>
+        </fieldset>
+                <fieldset class="col-md-12 totales-vouchers" >
+                    <section class="x-group col-md-4  ">
+                        <div class="row form-group">
+                            {{form_label(form_basic.giftvoucherstotal,'Totaal​ ​Penthouse​ ​Vouchers​ ​€',{'attr':{                       
+                                    'class' :' control-label',
+                            }})}}
+                            {{form_widget(form_basic.giftvoucherstotal , {'attr':{                       
+                                    'class' :' pull-right form-control real input-sm ',
+                                    'placeholder' : '0,00'
+                            }})}} 
+                        </div>
+                        <div class="row form-group">
+                            {{form_label(form_basic.belevoucherstotal,'Totaal Belevenissen.nl €',{'attr':{
+                                'class' :' control-label',
+                            }})}}
+                            {{form_widget(form_basic.belevoucherstotal , {'attr':{
+                                'class' :' pull-right form-control real input-sm ',
+                                'placeholder' : '0,00'
+                            }})}}
+                        </div>
+
+                    </section>
+                    <section class="x-group col-md-4  ">
+
+                        <div class="row form-group">
+                            {{form_label(form_basic.kadovoucherstotal,'Totaal Kadopagina.nl €',{'attr':{                       
+                                    'class' :' control-label',
+                            }})}}
+                            {{form_widget(form_basic.kadovoucherstotal , {'attr':{                       
+                                    'class' :' pull-right form-control real input-sm ',
+                                    'placeholder' : '0,00'
+                            }})}} 
+                        </div>
+                        <div class="row form-group">
+                            {{form_label(form_basic.ticketvoucherstotal,'Totaal Tiqets €',{'attr':{                       
+                                    'class' :' control-label',
+                            }})}}
+                            {{form_widget(form_basic.ticketvoucherstotal , {'attr':{                       
+                                    'class' :' pull-right form-control real input-sm ',
+                                    'placeholder' : '0,00'
+                            }})}} 
+                        </div>
+                    </section>
+
+                </fieldset>
+                        <fieldset class="col-md-12">
+                            <section class="x-group col-md-4  ">
+                            <div class="row form-group">
+                                {{form_label(form_basic.voucherstotal,'Totaal​ Cadeau​ Voucher Omzet​ €',{'attr':{
+                                    'class' :' control-label negrita'
+                                }})}}
+                                {{form_widget(form_basic.voucherstotal , {'attr':{
+                                    'class' :' pull-right form-control real input-sm ',
+                                    'placeholder' : '0,00'
+                                }})}}
+                            </div>
+                                </section>
+                        </fieldset>
+                        <fieldset id="data-kasbon" class="col-md-12">
+                            <h4>Voorgeschoten Kosten</h4>
+                            <br/>
+                                <section class="x-group col-md-3 pull-left" >
+                                    
+                                    <div class="voorgeschoten-dinamic">
+                                        <div class="row form-group"> 
+                                            <label for="" class="">Kasbon <span class="serial">1</span> voorgeschoten € </label>
+                                            <input id="voorgeschoten-1" name="1" required="required" class="input-sm form-control real pull-right voorgeschoten last" type="text" style="display: inline">
+                                        </div> 
+                                    </div>
+                                    <div class="row form-group totales">
+                                        {{form_label(form_basic.voorgeschotentotal,'Totaal voorgeschoten kosten €',{'attr':{'class' :' control-label',}})}}
+                                        {{form_widget(form_basic.voorgeschotentotal , {'attr':{   'class' :'input-sm pull-right form-control real','placeholder' : 0}})}}
+                                    </div>     
+                                </section>
+                            </fieldset>
+                        <fieldset id="data-rekening" class="col-md-12 ">
+                            <h4>Op Rekening</h4>
+                            <br/>
+                            <section class="x-group col-md-6  ">
+                                
+                                <div class="rekening-dinamic">
+                                    <div class="row form-group"> 
+                                        <label for="" class="">Op rekening <span class="serial-rekening">1</span></label>
+                                        <input id="rekening-value-1" name="1" required="required" class="input-sm form-control pull-right rekening-value real last number" type="text" style="display: inline; ">
+                                        <span class="pull-right" style="padding: 5px">€</span><input id="rekening-text-1" name="1" required="required" class="input-sm form-control pull-right rekening-text" type="text" style="display: inline; max-width: 170px;">
+                                    </div>
+                                </div>
+                                <div class="row form-group totales">
+                                    {{form_label(form_basic.rekeningtotal,'Totaal op rekening (Bank) €',{'attr':{                       
+                                            'class' :' control-label',
+                                    }})}}
+                                    {{form_widget(form_basic.rekeningtotal , {'attr':{                       
+                                            'class' :' pull-right form-control real input-sm ',
+                                            'placeholder' : '0,00'
+                                    }})}} 
+                                </div>
+                            </section>
+                        </fieldset>
+                        <fieldset id="data-voorverkoop" class="col-md-12 ">
+                            <h4>Voorverkoop</h4>
+                            <br/>
+                            <section class="x-group col-md-6  ">
+                                
+                                <div class="voorverkoop-dinamic">
+                                <div class="row form-group"> 
+                                    <label for="" class="">Voorverkoop <span class="serial-voorverkoop">1</span></label>
+                                    <input id="voorverkoop-value-1" name="1" required="required" class="input-sm form-control pull-right voorverkoop-value real last number" type="text" style="display: inline;">
+                                    <span class="pull-right" style="padding: 5px">€</span><input id="voorverkoop-text-1" name="1" required="required" class="input-sm form-control pull-right voorverkoop-text" type="text" style="display: inline; max-width: 170px;">
+                                </div>
+                                </div>
+                                <div class="row form-group totales">
+                                    {{form_label(form_basic.voorverkooptotal,'Totaal voorverkoop €',{'attr':{  'class' :' control-label', }})}}
+                                    {{form_widget(form_basic.voorverkooptotal , {'attr':{ 'class' :' pull-right form-control real input-sm ','placeholder' : '0,00'}})}}
+                                </div>
+                            </section>
+                        </fieldset>
+                        
+        <fieldset class="col-md-12">
+            <h4>Totalen</h4>
+            <section class="x-group col-md-5 ">
+
+
+
+                <div class="row form-group totales" style="border: none; padding: 0">
+                    {{form_label(form_basic.completeprofit,'OMZET​ ​TOTAAL​ ​€',{'attr':{'class' :' control-label',}})}}
+                    {{form_widget(form_basic.completeprofit , {'attr':{ 'readonly':true, 'class' :' pull-right form-control real input-sm ','placeholder' : '0,00'}})}}
+                </div>
+                <div class="row form-group totales" style="border: none; padding: 0">
+                    {{form_label(form_basic.ontvangen,'TOTAAL ONTVANGEN €',{'attr':{                       
+                                    'class' :' control-label',
+                    }})}}
+                    {{form_widget(form_basic.ontvangen , {'attr':{                       
+                                    'class' :' pull-right form-control real input-sm ',
+                                    'placeholder' : '0,00'
+                    }})}} 
+                </div>
+                <div class="row form-group totales" style="border: none; padding: 0">
+                    {{form_label(form_basic.kasverschil,'Kasverschil €',{'attr':{                       
+                                    'class' :' control-label',
+                    }})}}
+                    {{form_widget(form_basic.kasverschil , {'attr':{                       
+                                    'class' :' pull-right form-control real input-sm ',
+                                    'placeholder' : '0,00'
+                    }})}} 
+                </div>
+                <div class="row form-group totales" style="border: none; padding: 0">
+                    {{form_label(form_basic.details,'Toelichting kasverschil',{'attr':{'class' :' control-label'}})}}
+                    {{form_widget(form_basic.details , {'attr':{'style' :'min-width: 100% !important; min-height: 80px !important;'}})}}
+                </div>
+            </section>
+        </fieldset>
+
+        <fieldset class="col-md-12">
+            <h4>Team</h4>
+
+            <section class="x-group col-md-5  ">
+                <strong class="row form-group text-primary"></strong>
+
+                <div class="row form-group">
+                    {{form_label(form_basic.userdag,'Manager DAG',{'attr':{'class' :' control-label',}})}}
+                    {% if not show %}
+                        {{form_widget(form_basic.userdag , {'attr':{ 'class' :' pull-right form-control input-sm', 'style':'min-width: 110px'}})}}
+                    {% else %}
+                        <input class="pull-right form-control input-sm" disabled="disabled" value="{% if entity_basic.userdag %}{{ entity_basic.userdag.name }}{% endif %}"/>
+                    {% endif %}
+                </div>
+
+                <div class="row form-group">
+                    {{form_label(form_basic.useravond,'Manager AVOND',{'attr':{'class' :' control-label',}})}}
+                    {% if not show %}
+                        {{form_widget(form_basic.useravond , {'attr':{ 'class' :' pull-right form-control input-sm', 'style':'min-width: 110px'}})}}
+                    {% else %}
+                        <input class="pull-right form-control input-sm" disabled="disabled" value="{% if entity_basic.useravond %}{{ entity_basic.useravond.name }}{% endif %}"/>
+                    {% endif %}
+                </div>
+                <div class="row form-group">
+                    {{form_label(form_basic.time,'Sluitingstijd (laatste gast vertrokken):',{'attr':{'class' :' control-label',}})}}
+                    {{form_widget(form_basic.time,{'attr':{'class' :' form-control timepicker timepicker-24 pull-right  input-sm ', 'type':'text', 'style':'min-width: 110px'}} )}}
+                </div>
+            </section>
+        </fieldset> 
+    
+    <fieldset class="col-md-12" style="border:none;">
+        <div class="col-md-6 col-md-offset-3">
+            {% if not show %}
+                <button type = 'submit' class="btn save-while blue-hoki" >Tussentijds bewaren</button>
+                <button type = 'submit' class="btn final-submit green-seagreen" hidden>Verzenden</button>
+                <a href="{{path('cashclosure', {'date': entity_basic.dated | date('m-Y')})}}"><button type = 'button' class="btn blue-hoki">Annuleer</button></a>
+
+            {% else %}
+                <a href="{{path('cashclosure', {'date': 'today' | date('m-Y')})}}"><button type = 'button' class="btn blue-hoki">List</button></a>
+            {% endif %}
+        </div>
+    </fieldset>
+    <div hidden="hidden">
+    {{form_widget(form_basic.name)}}
+    {{form_widget(form_basic.updated)}}
+    {{form_widget(form_basic.finished)}}
+    {{form_rest(form_basic)}}
+</div>
+</div>
+</form>
+</div>       
+</div>
+</div>
+</div>
+{% endblock %}
+{% block javascripts%}
+    <script>
+
+        //Annadir dinamicamente los campos de los gift-vouchers
+        var saved_vouchers = JSON.parse($('#adminbundle_service_giftvouchers').val());
+        for (var i = 0; i < saved_vouchers.length; i++) {
+            create_gift_voucher(saved_vouchers[i])
+        }
+
+
+        //Annadir dinamicamente los campos de los ext-vouchers
+        var saved_vouchers_ext = JSON.parse($('#adminbundle_service_extvouchers').val());
+        for (var i = 0; i < saved_vouchers_ext.length; i++) {
+            create_ext_voucher(saved_vouchers_ext[i])
+        }
+
+
+        $('div').on('keypress','.real', function(evt){
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 44 || charCode > 57)) {
+                return false;
+            }
+            var val = $(this).val()
+            $(this).val(val.split('.').join(','))
+
+            return true;
+        })
+        $('div').on('blur','.real', function(event){
+            $(event.target).val(function(index, value) {
+                if (value != ''){
+                    ///return value
+                    //value = value.split('.').join(',')
+                    return numeral(value).format('0.0,');
+                }
+
+                return '';
+
+            });
+        })
+        $('div').on('keypress','.entero', function(evt){
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 44 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        })
+        $('div').on('blur','.entero', function(event){
+            $(event.target).val(function(index, value) {
+                if (value != '')
+                    //value = value.split('.').join(',')
+                    return numeral(value).format('0,');
+                return '';
+            });
+        })
+
+        //Llenar campo oculto con los valores de los vouchers antes de enviar el formulario
+        $('button[type="submit"]').click(function(e) {
+            e.preventDefault();
+            //Pantalla Loading
+            Metronic.startPageLoading();
+            $('.form-control').hide()
+            if (formHasError()) {
+                Metronic.stopPageLoading();
+                $('.form-control').show()
+                return false;
+            }
+            else {
+                //Conformar los arreglos con los datos a enviar a BD
+                var giftvouchersvalues = new Object();
+                $('.gift-voucher').each(function(index, item) {
+                    var id = $(item).attr('id')
+                    if (id != undefined) {
+                        var value = id.split('-')
+                        giftvouchersvalues[value[2]] = parseFloat($(item).val())
+                    }
+                })
+                $('#adminbundle_service_giftvouchersvalues').val(JSON.stringify(giftvouchersvalues));
+                var extvouchersvalues = new Object();
+                $('.ext-voucher').each(function(index, item) {
+                    var id = $(item).attr('id')
+                    if (id != undefined) {
+                        var value = id.split('-')
+                        extvouchersvalues[value[2]] = parseFloat($(item).val())
+                    }
+                })
+                $('#adminbundle_service_extvouchersvalues').val(JSON.stringify(extvouchersvalues));
+                updateNumbersRekening()
+                updateNumbersVoorverkoop()
+
+                array_to_work = $('#form-basic-service').clone()
+                array_to_work.find('input.form-control').each(function(index, item) {
+                    if (!$(item).hasClass('datepicker') && !$(item).hasClass('timepicker')){
+                        var num = numeral($(item).val()).value()
+                        if (num != null) {
+                            $(item).val(num)
+                        }
+                    }
+                })
+                boton = $(this)
+
+                array_to_work.ajaxSubmit(function(response){
+
+                    $('.form-control').show();
+
+                    if (response == 'true') {
+                        if (boton.hasClass('final-submit')){
+                            $('.alert-success').text('Success! The form is done.')
+                            $.post("{{ path("cashclosure_finish", {'id':entity_basic.id}) }}")
+                        }
+                        else{
+
+                            Metronic.stopPageLoading();
+                            $('.alert-success').text('Success! The form has been modified.');
+                        }
+
+                        $('.alert-success').show()
+                        setTimeout(function () {
+                            $('.alert-success').hide(300)
+                        }, 4400)
+                        if (boton.hasClass('final-submit'))  {
+                            window.location="{{ path('cashclosure', {'date': 'today' | date('m-Y')}) }}";
+
+                        }
+                        //initialStatus();
+                    }
+                    else{
+                        Metronic.stopPageLoading();
+
+                        $('.alert-error').text(response);
+                        $('.alert-error').show()
+                        setTimeout(function () {
+                            $('.alert-error').hide(300)
+                        }, 4400)
+                    }
+                })
+            }
+        })
+
+        //Actualizar el valor total de los voucher cada vez que se escriba en uno de los campos
+        $('input.gift-voucher').on({
+            "keyup": function() {
+                updateFreeVouchers()
+                updateVouchersTotal()
+            },
+
+        })
+        $('input.ext-voucher').on({
+            "keyup": function() {
+                totalesVouchersExt()
+            },
+
+        })
+
+        // Estado inicial del formulario
+        function initialStatus (){
+            $('#adminbundle_card_profit').parent().parent().parent().prop('hidden', true).attr('style', 'display: none')
+
+            if ($('#adminbundle_service_giftvouchersvalues').val() != ''){
+                var giftvouchers = JSON.parse($('#adminbundle_service_giftvouchersvalues').val())
+                for (var key in giftvouchers) {
+                    $('input#free-voucher-' + key).val(Number(giftvouchers[key]) > 0 ? numeral(giftvouchers[key]).format('0,0') : '')
+                }
+            }
+            if ($('#adminbundle_service_extvouchersvalues').val()){
+                var extvouchers = JSON.parse($('#adminbundle_service_extvouchersvalues').val())
+                for (var key in extvouchers) {
+                    $('input#ext-voucher-' + key).val(Number(extvouchers[key]) > 0 ? numeral(extvouchers[key]).format('0,0') : '')
+                }
+            }
+            //Mostrar o no los campos de Begin Float
+            if ($('#adminbundle_beginbill_standard_1').is(':checked')){
+                $('.section-begin-standard').show()
+            }
+            if ($('#adminbundle_beginbill_extra_0').is(':checked')){
+                $('.section-begin-extra').show()
+            }
+            // Mostrar u ocultar los bloques de acuerdo con el estado del checkbox
+            if ($('#adminbundle_card_iscc_0').is(':checked')){
+                $('.section-card-cc').show()
+
+            }
+
+
+            loadVoorgeschoten()
+            loadRekening()
+            loadVoorverkoop()
+
+            $('.real').trigger('keypress').trigger('blur');
+            $('.entero').trigger('keypress').trigger('blur');
+
+            //updateTotalRekening()
+
+            //updateCompleteprofit()
+        }
+
+        // Mostrar y ocultar los campos de acuerdo con el valor del campo Standard TRUE => OCULTO, FALSE => VISIBLE
+        $('#adminbundle_beginbill_standard input').on({
+            'click': function(){
+                if ($(this).val() == 0)
+                    $('.section-begin-standard').show()
+                else{
+                    $('.section-begin-standard').hide()
+                    $('.section-begin-standard input').val('');
+                    updateBeginFloat()
+                }
+                updateFieldsBeginBills()
+            }
+        })
+
+        // Mostrar y ocultar los campos de acuerdo con el valor del campo Extra TRUE => VISIBLE, FALSE => OCULTO
+        $('#adminbundle_beginbill_extra input').on({
+            'click': function(){
+                if ($(this).val() == 1)
+                    $('.section-begin-extra').show()
+                else{
+                    $('.section-begin-extra').hide()
+                    $('.section-begin-extra input').val('');
+                    updateBeginFloat()
+                }
+
+                updateFieldsBeginBills()
+            }
+        })
+
+
+        //Actualizar el Total del tercer bloque de tarjetas
+        function updateFieldTotalEX() {
+            var bb = numeral($('#adminbundle_card_exmaestro').val()).value()
+                    + numeral($('#adminbundle_card_exvisa').val()).value()
+                    + numeral($('#adminbundle_card_exvisaelec').val()).value()
+                    + numeral($('#adminbundle_card_exmastercard').val()).value()
+                    + numeral($('#adminbundle_card_examerican').val()).value()
+                    + numeral($('#adminbundle_card_exunion').val()).value()
+                    + numeral($('#adminbundle_card_exdiners').val()).value()
+                    + numeral($('#adminbundle_card_exvpay').val()).value()
+            $('#adminbundle_card_extotal').val(parser(bb));
+            updateCompleteprofit()
+        }
+
+        //Actualizar todos los cálculos finales del formulario
+        function updateCompleteprofit() {
+            var omzet = numeral($('#adminbundle_cashclosuretotal_ztotal').val()).value()
+            $('#adminbundle_service_completeprofit').val(numeral(omzet).format('0.0,'))
+
+            var complete = numeral($('#adminbundle_service_skymoneytotal').val()).value()
+                    + numeral($('#adminbundle_bill_eind').val()).value()
+                    + numeral($('#adminbundle_card_maestro').val()).value()
+                    + numeral($('#adminbundle_card_visa').val()).value()
+                    + numeral($('#adminbundle_card_visaelec').val()).value()
+                    + numeral($('#adminbundle_card_mastercard').val()).value()
+                    + numeral($('#adminbundle_card_american').val()).value()
+                    + numeral($('#adminbundle_card_union').val()).value()
+                    + numeral($('#adminbundle_card_diners').val()).value()
+                    + numeral($('#adminbundle_card_vpay').val()).value()
+                    + numeral($('#adminbundle_card_ccmaestro').val()).value()
+                    + numeral($('#adminbundle_card_ccvisa').val()).value()
+                    + numeral($('#adminbundle_card_ccvisaelec').val()).value()
+                    + numeral($('#adminbundle_card_ccmastercard').val()).value()
+                    + numeral($('#adminbundle_card_ccamerican').val()).value()
+                    + numeral($('#adminbundle_card_ccunion').val()).value()
+                    + numeral($('#adminbundle_card_ccdiners').val()).value()
+                    + numeral($('#adminbundle_card_ccvpay').val()).value()
+                    + numeral($('#adminbundle_card_exmaestro').val()).value()
+                    + numeral($('#adminbundle_card_exvisa').val()).value()
+                    + numeral($('#adminbundle_card_exvisaelec').val()).value()
+                    + numeral($('#adminbundle_card_exmastercard').val()).value()
+                    + numeral($('#adminbundle_card_examerican').val()).value()
+                    + numeral($('#adminbundle_card_exunion').val()).value()
+                    + numeral($('#adminbundle_card_exdiners').val()).value()
+                    + numeral($('#adminbundle_card_exvpay').val()).value()
+                    + numeral($('#adminbundle_card_alipay').val()).value()
+                    + numeral($('#adminbundle_service_voorgeschotentotal').val()).value()
+                    + numeral($('#adminbundle_service_voucherstotal').val()).value()
+                    + numeral($('#adminbundle_service_rekeningtotal').val()).value()
+                    + numeral($('#adminbundle_service_voorverkooptotal').val()).value()
+            $('#adminbundle_service_ontvangen').val(numeral(complete).format('0.0,'))
+            var kasv = complete - numeral($('#adminbundle_beginbill_total').val()).value() - omzet
+            $('#adminbundle_service_kasverschil').val(numeral(kasv).format('0.0,'))
+
+            if (kasv < 0)
+                $('#adminbundle_service_kasverschil').addClass('wrong')
+            else
+                $('#adminbundle_service_kasverschil').removeClass('wrong');
+        }
+
+        //Calcular el total de acuerdo con el tipo
+        function totalesVouchersExt() {
+            var kado = 0, bele = 0, tiq = 0
+            $('input.ext-voucher').each(function() {
+                var padre = $(this).parent()
+                var label = padre.children('label').text()
+
+                if (label.search(/Kadopagina/) >= 0) {
+                    kado += $(this).val() != '' ? numeral($(this).val()).value() * Number($(this).attr('name')) : 0
+                }
+                else if (label.search(/Belevenissen/) >= 0) {
+                    bele += $(this).val() != '' ? numeral($(this).val()).value() * Number($(this).attr('name')) : 0
+                }
+                else if (label.search(/Tiqets/) >= 0) {
+                    tiq += $(this).val() != '' ? numeral($(this).val()).value() * Number($(this).attr('name')) : 0
+                }
+            })
+            $('#adminbundle_service_kadovoucherstotal').val(parser(kado))
+            $('#adminbundle_service_belevoucherstotal').val(parser(bele))
+            $('#adminbundle_service_ticketvoucherstotal').val(parser(tiq))
+            updateVouchersTotal()
+            updateCompleteprofit();
+        }
+
+        //Actualizar el total General de Cadeau Vouchers
+        function updateVouchersTotal() {
+            var total = numeral($('#adminbundle_service_kadovoucherstotal').val()).value() +
+                    numeral($('#adminbundle_service_belevoucherstotal').val()).value() +
+                    numeral($('#adminbundle_service_ticketvoucherstotal').val()).value() +
+                    numeral($('#adminbundle_service_giftvoucherstotal').val()).value()
+            $('#adminbundle_service_voucherstotal').val(parser(total))
+            updateCompleteprofit();
+        }
+
+        //Calculo de tipos de vouchers
+        function updateFreeVouchers() {
+            var total = 0;
+            $('input.gift-voucher').each(function(index, value) {
+                if (!isNaN($(this).val()))
+                    total += numeral($(this).val()).value() * Number($(this).attr('name'))
+            })
+            return $('#adminbundle_service_giftvoucherstotal').val(parser(total))
+            updateCompleteprofit();
+        }
+
+        //Sección Eind Float
+        function updateFieldsBill() {
+            var bills = (numeral($('#adminbundle_bill_e500').val()).value() * 500)
+                    + (numeral($('#adminbundle_bill_e200').val()).value() * 200)
+                    + (numeral($('#adminbundle_bill_e100').val()).value() * 100)
+                    + (numeral($('#adminbundle_bill_e50').val()).value() * 50)
+                    + (numeral($('#adminbundle_bill_e20').val()).value() * 20)
+                    + (numeral($('#adminbundle_bill_e10').val()).value() * 10)
+                    + (numeral($('#adminbundle_bill_e5').val()).value() * 5)
+
+
+            var coins = (numeral($('#adminbundle_bill_e2').val()).value() * 2)
+                    + numeral($('#adminbundle_bill_e1').val()).value()
+                    + (numeral($('#adminbundle_bill_e050').val()).value() * 0.5)
+                    + (numeral($('#adminbundle_bill_e020').val()).value() * 0.2)
+                    + (numeral($('#adminbundle_bill_e010').val()).value() * 0.1)
+                    + (numeral($('#adminbundle_bill_e005').val()).value() * 0.05)
+            $('#adminbundle_bill_waarvan').val(parser(coins));
+            $('#adminbundle_bill_eind').val(parser((bills + coins)));
+            updateCompleteprofit();
+
+        }
+
+        //Validaciones de campos obligatorios antes de enviar el formulario o cambiar de página.
+        function formHasError() {
+            $('div.form-group').removeClass('has-error')
+            var control = false;
+            $('.mandatory').each(function() {
+                if ($(this).val() === '') {
+                    $(this).parent('div.form-group').addClass('has-error')
+                    control = true;
+
+                }
+            })
+            return control
+        }
+
+        //Sección Begin Float
+        function updateFieldsBeginBills() {
+            var bbe = (numeral($('#adminbundle_beginbill_e20').val()).value() * 20)
+                    + (numeral($('#adminbundle_beginbill_e10').val()).value() * 10)
+                    + (numeral($('#adminbundle_beginbill_e5').val()).value() * 5)
+                    + (numeral($('#adminbundle_beginbill_e2').val()).value() * 2)
+                    + numeral($('#adminbundle_beginbill_e1').val()).value()
+                    + (numeral($('#adminbundle_beginbill_e050').val()).value() * 0.5)
+                    + (numeral($('#adminbundle_beginbill_e020').val()).value() * 0.2)
+                    + (numeral($('#adminbundle_beginbill_e010').val()).value() * 0.1)
+            var bbs = (numeral($('#adminbundle_beginbill_s20').val()).value() * 20)
+                    + (numeral($('#adminbundle_beginbill_s10').val()).value() * 10)
+                    + (numeral($('#adminbundle_beginbill_s5').val()).value() * 5)
+                    + (numeral($('#adminbundle_beginbill_s2').val()).value() * 2)
+                    + numeral($('#adminbundle_beginbill_s1').val()).value()
+                    + (numeral($('#adminbundle_beginbill_s050').val()).value() * 0.5)
+                    + (numeral($('#adminbundle_beginbill_s020').val()).value() * 0.2)
+                    + (numeral($('#adminbundle_beginbill_s010').val()).value() * 0.1);
+            var total = bbs;
+
+            if ($('#adminbundle_beginbill_extra_0').is(':checked') == true)
+                total += bbe
+            $('#adminbundle_beginbill_total').val(parser(total));
+            updateCompleteprofit()
+        }
+
+        //Valores por defecto para la secciion Extra del Begin Float
+        function updateBeginFloat() {
+            if ($('#adminbundle_beginbill_e20').val() == '')
+                $('#adminbundle_beginbill_e20').val('5')
+            if ($('#adminbundle_beginbill_e10').val() == '')
+                $('#adminbundle_beginbill_e10').val('5')
+            if ($('#adminbundle_beginbill_e5').val() == '')
+                $('#adminbundle_beginbill_e5').val('5')
+            if ($('#adminbundle_beginbill_e2').val() == '')
+                $('#adminbundle_beginbill_e2').val('10')
+            if ($('#adminbundle_beginbill_e1').val() == '')
+                $('#adminbundle_beginbill_e1').val('10')
+            if ($('#adminbundle_beginbill_e050').val() == '')
+                $('#adminbundle_beginbill_e050').val('10')
+            if ($('#adminbundle_beginbill_s20').val() == '')
+                $('#adminbundle_beginbill_s20').val('5')
+            if ($('#adminbundle_beginbill_s10').val() == '')
+                $('#adminbundle_beginbill_s10').val('5')
+            if ($('#adminbundle_beginbill_s5').val() == '')
+                $('#adminbundle_beginbill_s5').val('5')
+            if ($('#adminbundle_beginbill_s2').val() == '')
+                $('#adminbundle_beginbill_s2').val('10')
+            if ($('#adminbundle_beginbill_s1').val() == '')
+                $('#adminbundle_beginbill_s1').val('10')
+            if ($('#adminbundle_beginbill_s050').val() == '')
+                $('#adminbundle_beginbill_s050').val('10')
+        }
+
+        //Funcion para crear cada campo de voucher tipo gift
+        function create_gift_voucher(data) {
+            var form_group = '<div class="row form-group">' +
+                    '<label for="" class="">' + data.details + '</label>' +
+                    '<input id="free-voucher-' + data.id + '" name="' + data.value + '" required="required" maxlength="3" class="input-sm pull-right form-control entero gift-voucher" value="" type="text">' +
+                    '</div>'
+            $('#prepared-gift-form').append(form_group)
+        }
+
+        //Funcion para crear cada campo de voucher tipo ext
+        function create_ext_voucher(data) {
+            var form_group = '<div class="row form-group">' +
+                    '<label for="" class="">' + data.details + '</label>' +
+                    '<input id="ext-voucher-' + data.id + '" name="' + data.value + '" required="required" maxlength="3" class="input-sm pull-right form-control entero ext-voucher" value="" type="text">' +
+                    '</div>'
+            $('#prepared-ext-form').append(form_group)
+        }
+
+        //Actualizar los totales de X-Strook Dag
+        function updateX() {
+            var xtotal = numeral($('#adminbundle_cashclosuretotal_xlaag').val()).value()
+                    + numeral($('#adminbundle_cashclosuretotal_xkitchen').val()).value()
+                    + numeral($('#adminbundle_cashclosuretotal_xhoog').val()).value()
+                    + numeral($('#adminbundle_cashclosuretotal_xparking').val()).value()
+                    + numeral($('#adminbundle_cashclosuretotal_xentry').val()).value()
+                    + numeral($('#adminbundle_cashclosuretotal_xspacesrent').val()).value()
+                    + numeral($('#adminbundle_cashclosuretotal_xothers').val()).value()
+            $('#adminbundle_cashclosuretotal_xtotal').val(numeral(xtotal).format('0.0,'));
+            updateCompleteprofit();
+        }
+
+        //Actualizar los totales de Z-Strook Dag
+        function updateZ() {
+            var ztotal = numeral($('#adminbundle_cashclosuretotal_zlaag').val()).value()
+                    + numeral($('#adminbundle_cashclosuretotal_zkitchen').val()).value()
+                    + numeral($('#adminbundle_cashclosuretotal_zhoog').val()).value()
+                    + numeral($('#adminbundle_cashclosuretotal_zparking').val()).value()
+                    + numeral($('#adminbundle_cashclosuretotal_zentry').val()).value()
+                    + numeral($('#adminbundle_cashclosuretotal_zspacesrent').val()).value()
+                    + numeral($('#adminbundle_cashclosuretotal_zothers').val()).value()
+            $('#adminbundle_cashclosuretotal_ztotal').val(numeral(ztotal).format('0.0,'));
+            updateCompleteprofit();
+        }
+
+
+
+        //Actualizar valores para la seeción Sky
+        $('#data-sky').on('keyup', '.form-control', function() {
+            updateSkyBar();
+        })
+
+        //Actualizar los totals de Sky Bar
+        function updateSkyBar() {
+            var skytotal = numeral($('#adminbundle_service_skydag').val()).value() +
+                    numeral($('#adminbundle_service_skyavond').val()).value()
+            if (!isNaN(skytotal))
+                $('#adminbundle_service_skytotal').val(skytotal)
+            var skymoneytotal = numeral($('#adminbundle_service_skymoneydag').val()).value() +
+                    numeral($('#adminbundle_service_skymoneyavond').val()).value()
+            if (!isNaN(skymoneytotal))
+                $('#adminbundle_service_skymoneytotal').val(parser(skymoneytotal))
+            var meandag = numeral($('#adminbundle_service_skymoneydag').val()).value() /
+                    numeral($('#adminbundle_service_skydag').val()).value()
+            if (!isNaN(meandag))
+                $('#adminbundle_service_skymeandag').val(parser(meandag))
+            var meanavond = numeral($('#adminbundle_service_skymoneyavond').val()).value() /
+                    numeral($('#adminbundle_service_skyavond').val()).value()
+            if (!isNaN(meanavond))
+                $('#adminbundle_service_skymeanavond').val(parser(meanavond))
+            var skymeantotal = numeral($('#adminbundle_service_skymoneytotal').val()).value() /
+                    numeral($('#adminbundle_service_skytotal').val()).value()
+            if (!isNaN(skymeantotal))
+                $('#adminbundle_service_skymeantotal').val(parser(skymeantotal))
+            updateCompleteprofit();
+        }
+
+        $("input.x-control").on({
+
+            "keyup": function(event) {
+                updateX()
+            },
+        });
+
+        $("input.z-control").on({
+            "focus": function(event) {
+                $(event.target).select();
+            },
+
+            "keyup": function(event) {
+                updateZ()
+            },
+        });
+
+
+        $('.sky-control').on({
+
+            "keyup": function(event) {
+                updateSkyBar()
+            },
+
+        })
+
+        //Actualizar el valor del total de los billetes de la seecion Begin Float
+        $('#data-begin input.bill-control').on({
+
+            "keyup": function(event) {
+                updateFieldsBeginBills();
+            },
+        })
+
+        //Actualizar el total de la seecion Eind Float
+        $('#data-bills input.bill-control').on({
+           "keyup": function(event) {
+                updateFieldsBill();
+            },
+        })
+
+
+        $('#adminbundle_card_iscc input').on({
+            'click': function() {
+                if ($(this).val() == '0'){
+                    $('.section-card-cc').hide()
+                    $('.section-card-cc .card-control').val('')
+                }
+                else {
+                    $('.section-card-cc').show()
+                    updateFieldTotal();
+                    updateFieldTotalCC()
+                }
+            }
+        })
+
+        //Actualizar el Total del primer bloque de tarjetas
+        function updateFieldTotal() {
+            var bb = numeral($('#adminbundle_card_maestro').val()).value()
+                    + numeral($('#adminbundle_card_visa').val()).value()
+                    + numeral($('#adminbundle_card_visaelec').val()).value()
+                    + numeral($('#adminbundle_card_mastercard').val()).value()
+                    + numeral($('#adminbundle_card_american').val()).value()
+                    + numeral($('#adminbundle_card_union').val()).value()
+                    + numeral($('#adminbundle_card_diners').val()).value()
+                    + numeral($('#adminbundle_card_vpay').val()).value()
+            $('#adminbundle_card_total').val(parser(bb));
+            updateCompleteprofit()
+        }
+
+        //Actualizar el Total del segundo bloque de tarjetas
+        function updateFieldTotalCC() {
+            var bb = numeral($('#adminbundle_card_ccmaestro').val()).value()
+                    + numeral($('#adminbundle_card_ccvisa').val()).value()
+                    + numeral($('#adminbundle_card_ccvisaelec').val()).value()
+                    + numeral($('#adminbundle_card_ccmastercard').val()).value()
+                    + numeral($('#adminbundle_card_ccamerican').val()).value()
+                    + numeral($('#adminbundle_card_ccunion').val()).value()
+                    + numeral($('#adminbundle_card_ccdiners').val()).value()
+                    + numeral($('#adminbundle_card_ccvpay').val()).value()
+            $('#adminbundle_card_totalcc').val(parser(bb));
+            updateCompleteprofit()
+        }
+
+        //Total Tarjetas de crédito
+        function updateTCredit() {
+            var bb =  numeral($('#adminbundle_card_ccvisa').val()).value()
+                    + numeral($('#adminbundle_card_ccvisaelec').val()).value()
+                    + numeral($('#adminbundle_card_ccmastercard').val()).value()
+                    + numeral($('#adminbundle_card_ccamerican').val()).value()
+                    + numeral($('#adminbundle_card_ccunion').val()).value()
+                    + numeral($('#adminbundle_card_ccdiners').val()).value()
+                    + numeral($('#adminbundle_card_alipay').val()).value()
+                    + numeral($('#adminbundle_card_visa').val()).value()
+                    + numeral($('#adminbundle_card_visaelec').val()).value()
+                    + numeral($('#adminbundle_card_mastercard').val()).value()
+                    + numeral($('#adminbundle_card_american').val()).value()
+                    + numeral($('#adminbundle_card_union').val()).value()
+                    + numeral($('#adminbundle_card_diners').val()).value()
+            $('#adminbundle_card_tcredit').val(parser(bb));
+            updateCompleteprofit()
+        }
+        var c = 1
+        //Campos dinámicos voorgeschoten
+        $('#data-kasbon').on('keyup', 'input.voorgeschoten', function(evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if ($(this).hasClass('last') && charCode != 9) {
+                if (c < 5) {
+                    $('#data-kasbon input.last').removeClass('last')
+                    create_voorgeschoten(c)
+                }
+
+            }else{
+                if (($(this).val() == '' || $(this).val() == 'undefined') && charCode != 9) {
+                    $(this).parent('div').remove()
+                }
+            }
+
+            update_numbers()
+            updateTotalVoorgeschoten()
+        })
+
+        function update_numbers() {
+            var save = new Object();
+            $('.serial').each(function(index) {
+                $(this).text(index + 1)
+                var padre = $(this).parent().parent()
+                var campo = padre.children('input')
+                campo.attr('name', index + 1)
+                c = index + 1;
+                if (campo.val() != '') {
+                    save[index + 1] = numeral(campo.val()).value()
+                }
+            })
+            $('#data-kasbon input[name="'+c+'"]').addClass('last')
+
+            $('#adminbundle_service_voorgeschoten').val(JSON.stringify(save))
+
+        }
+
+        function create_voorgeschoten(number) {
+            var form_group = '<div class="row form-group">' +
+                    '<label for="" class="">Kasbon <span class="serial"></span> voorgeschoten € </label>' +
+                    '<input id="voorgeschoten-' + number + '" name="' + number + '" required="required" class="input-sm pull-right form-control real voorgeschoten last" type="text">' +
+                    '</div>'
+            $('.voorgeschoten-dinamic').append(form_group)
+        }
+
+        function updateTotalVoorgeschoten() {
+            var total = 0
+            $('.voorgeschoten').each(function() {
+                //alert(numeral($(this).val()).value())
+                total += numeral($(this).val()).value()
+            })
+
+            $('#adminbundle_service_voorgeschotentotal').val(parser(total))
+            updateCompleteprofit()
+        }
+
+        //Crear campos dinámicos para voorgeschoten
+        function loadVoorgeschoten() {
+            var contador = 1
+            if ($('#adminbundle_service_voorgeschoten').val() != '') {
+                var saved_voorgeschoten = eval('(' + $('#adminbundle_service_voorgeschoten').val() + ')');
+                quitar = 0
+                    for (var key in saved_voorgeschoten) {
+                        if (quitar == 0) $('.voorgeschoten-dinamic').html('')
+                        quitar ++
+                        $('.voorgeschoten').removeClass('last')
+                        var form_group = '<div class="row form-group">' +
+                                '<label for="" class="">Kasbon <span class="serial">' + quitar + '</span> voorgeschoten € </label>' +
+                                '<input id="voorgeschoten-' + contador + '" name="' + saved_voorgeschoten[key] + '" required="required" class="input-sm pull-right form-control real voorgeschoten last" value="' + (saved_voorgeschoten[key]) + '" type="text">' +
+                                '</div>';
+                        $('.voorgeschoten-dinamic').append(form_group)
+                        $('#voorgeschoten-' + contador).trigger('keypress').trigger('blur')
+                    }
+
+                {% if not show %}
+
+                if (quitar < 5) {
+                    ///create_voorgeschoten(contador)
+                    //update_numbers()
+                }// $('.voorgeschoten-dinamic .voorgeschoten.last').trigger('keyup')
+                {% endif %}
+            }
+        }
+
+
+
+        //Funcion para crear los voorverkoop dinamicamente
+        function create_voorverkoop(number) {
+            var form_group = '<div class="row form-group">'+
+                    '<label for="" class="">Voorverkoop <span class="serial-voorverkoop"></span></label>'+
+                    '<input id="voorverkoop-value-'+number+'" name="'+number+'" required="required" class="input-sm form-control real pull-right voorverkoop-value last number" type="text" style="display: inline; ">'+
+                    '<span class="pull-right" style="padding: 5px">€</span><input id="voorverkoop-text-'+number+'" name="'+number+'" required="required" class="input-sm form-control pull-right voorverkoop-text last" type="text" style="display: inline; max-width: 170px;">'+
+                    '</div>'
+            $('.voorverkoop-dinamic').append(form_group)
+        }
+
+        //Actualizar la secuencia de números en los campos voorverkoop añadidos
+        function updateNumbersVoorverkoop() {
+            var save = new Object();
+            $('.serial-voorverkoop').each(function(index) {
+                $(this).text(index + 1)
+                var padre = $(this).parent().parent()
+                var text = padre.children('input.voorverkoop-text').val()
+                var value = numeral(padre.children('input.voorverkoop-value').val()).value()
+                if (value != '' ) {
+                    save[index + 1] = {'text':"'"+text.toString()+"'", 'value':value}
+                }
+            })
+            $('#adminbundle_service_voorverkoop').val(JSON.stringify(save))
+        }
+
+        //Actualizar el total de voorverkoop
+        function updateTotalVoorverkoop() {
+            var total = 0
+            $('.voorverkoop-value').each(function() {
+                total += numeral($(this).val()).value()
+            })
+            $('#adminbundle_service_voorverkooptotal').val(parser(total))
+            updateCompleteprofit()
+        }
+
+        //Campos dinámicos rekening
+        var control_voorverkoop = 2
+        $('#data-voorverkoop').on('keyup', 'input.voorverkoop-value', function(evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if ($(this).hasClass('last') && charCode != 9) {
+                $('#data-voorverkoop .last').removeClass('last')
+                create_voorverkoop(control_voorverkoop)
+                control_voorverkoop++
+            }
+            if (($(this).val() == '' || $(this).val() == 'undefined')&& charCode != 9) {
+                if (!$(this).hasClass('last') ) $(this).parent('div').remove()
+            }
+            updateNumbersVoorverkoop()
+            updateTotalVoorverkoop()
+//    updateCompleteProfit()
+        })
+
+
+        //Cargar los datos de voorverkoop cunado vengan de base de datos
+        function loadVoorverkoop() {
+            var contador = 1
+                if($('#adminbundle_service_voorverkoop').val() != '' && $('#adminbundle_service_voorverkoop').val() != '{}'){
+                var saved_voorverkoop = eval('(' + $('#adminbundle_service_voorverkoop').val() + ')');
+                //if (saved_voorverkoop.length > 0 ){
+                        quitar = 0;
+                    for (var key in saved_voorverkoop) {
+                        if (quitar == 0) $('.voorverkoop-dinamic').html(' ')
+                        quitar ++;
+                        $('.voorverkoop-value').removeClass('last')
+                        var form_group = '<div class="row form-group">'+
+                                '<label for="" class="">Voorverkoop <span class="serial-voorverkoop">'+contador+ '</span></label>'+
+                                '<input id="voorverkoop-value-'+contador+'" name="'+contador+'" required="required" class="input-sm form-control real pull-right voorverkoop-value last number" type="text" style="display: inline;" value='+saved_voorverkoop[key]['value']+'>'+
+                                '<span class="pull-right" style="padding: 5px">€</span><input id="voorverkoop-text-'+contador+'" name="'+contador+'" required="required" class="input-sm form-control pull-right voorverkoop-text last" type="text" style="display: inline; max-width: 170px;" value='+saved_voorverkoop[key]['text']+'>'+
+                                '</div>'
+                        $('.voorverkoop-dinamic').append(form_group)
+                        $('#voorverkoop-value-' + contador).trigger('keypress').trigger('blur')
+                        contador++
+                    }
+            }
+
+            {# {% if not show %}$('.voorverkoop-dinamic .voorverkoop-value.last').trigger('keyup'){% endif %}#}
+
+        }
+
+
+        //Funcion para crear los Rekening dinamicamente
+        function create_rekening(number) {
+            var form_group = '<div class="row form-group">'+
+                    '<label for="" class="">Op rekening <span class="serial-rekening"></span></label>'+
+                    '<input id="rekening-value-'+number+'" name="'+number+'" required="required" class="input-sm form-control real pull-right rekening-value last number" type="text" style="display: inline; ">'+
+                    '<span class="pull-right" style="padding: 5px">€</span><input id="rekening-text-'+number+'" name="'+number+'" required="required" class="input-sm form-control pull-right rekening-text last" type="text" style="display: inline; max-width: 170px;">'+
+                    '</div>'
+            $('.rekening-dinamic').append(form_group)
+        }
+
+        //Actualizar la secuencia de números en los campos rekening añadidos
+        function updateNumbersRekening() {
+            var save = new Object();
+            $('.serial-rekening').each(function(index) {
+                $(this).text(index + 1)
+                var padre = $(this).parent().parent()
+                var text = padre.children('input.rekening-text').val()
+                var value = numeral(padre.children('input.rekening-value').val()).value()
+                if (value != '') {
+                    save[index + 1] = {'text':"'"+text.toString()+"'", 'value':value}
+                }
+            })
+            $('#adminbundle_service_rekening').val(JSON.stringify(save))
+        }
+
+        //Actualizar el total de Rekening
+        function updateTotalRekening() {
+            var total = 0
+            $('.rekening-value').each(function() {
+                total += numeral($(this).val()).value()
+            })
+            $('#adminbundle_service_rekeningtotal').val(parser(total))
+            updateCompleteprofit()
+        }
+
+        //Campos dinámicos rekening
+        var control_rekening = 2
+        $('#data-rekening').on('keyup', 'input.rekening-value', function(evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if ($(this).hasClass('last') && charCode != 9) {
+                $('#data-rekening .last').removeClass('last')
+                create_rekening(control_rekening)
+                control_rekening++
+            }
+            if (($(this).val() == '' || $(this).val() == 'undefined') && charCode != 9) {
+                if (!$(this).hasClass('last') ) {
+                    $(this).parent('div').remove();
+                }
+
+            }
+            updateNumbersRekening()
+            updateTotalRekening()
+//    updateCompleteProfit()
+        })
+
+
+
+        //Cargar los datos de rekening cunado vengan de base de datos
+        function loadRekening() {
+            var contador = 1
+            if ($('#adminbundle_service_rekening').val() != '' && $('#adminbundle_service_rekening').val() != '{}') {
+                var saved_rekening = eval('(' + $('#adminbundle_service_rekening').val() + ')');
+                quitar = 0
+                    for (var key in saved_rekening) {
+                        if (quitar == 0) $('.rekening-dinamic').html('')
+                        quitar ++
+                        $('.rekening-value').removeClass('last')
+                        var form_group = '<div class="row form-group">' +
+                                '<label for="" class="">Op rekening <span class="serial-rekening">' + contador + '</span></label>' +
+                                '<input id="rekening-value-' + contador + '" name="' + contador + '" required="required" class="input-sm form-control real pull-right rekening-value last number" type="text" style="display: inline;" value="' + (saved_rekening[key]['value']) + '">' +
+                                '<span class="pull-right" style="padding: 5px">€</span><input id="rekening-text-' + contador + '" name="' + contador + '" required="required" class="input-sm form-control pull-right rekening-text last" type="text" style="display: inline; max-width: 170px;" value=' + saved_rekening[key]['text'] + '>' +
+                                '</div>'
+                        $('.rekening-dinamic').append(form_group)
+                        $('#rekening-value-' + contador).trigger('keypress').trigger('blur')
+                        contador++
+                    }
+            }
+            {#{% if not show %}$('.rekening-dinamic .rekening-value.last').trigger('keyup') {% endif %}#}
+        }
+
+        function parser(number) {
+            if (number != '')
+
+                return numeral(number).format('0.0,');
+            return '';
+        }
+
+        $("#data-card input.card-control, #adminbundle_card_alipay").on({
+            "keyup": function(event) {
+                updateFieldTotal();
+                updateFieldTotalCC();
+                updateFieldTotalEX();
+            },
+        });
+
+        initialStatus()
+
+        $('.cancel').click(function(){
+
+            bootbox.dialog({
+                message: "This form will be removed from the system",
+                title: "Delete form",
+                buttons: {
+
+                    main: {
+                        label: "Cancel",
+                        className: ""
+                    },
+                    success: {
+                        label: "Confirm",
+                        className: "blue-hoki",
+                        callback: function() {
+                            window.location="{{ path('cashclosure_delete', {'id':entity_basic.id}) }}";
+                        }
+                    }
+                }
+            });
+        });
+        {% if not show %}
+            setInterval(function(){
+                //Conformar los arreglos con los datos a enviar a BD
+                var giftvouchersvalues = new Object();
+                $('.gift-voucher').each(function(index, item) {
+                    var id = $(item).attr('id')
+                    if (id != undefined) {
+                        var value = id.split('-')
+                        giftvouchersvalues[value[2]] = parseFloat($(item).val())
+                    }
+                })
+                $('#adminbundle_service_giftvouchersvalues').val(JSON.stringify(giftvouchersvalues));
+
+                var extvouchersvalues = new Object();
+                $('.ext-voucher').each(function(index, item) {
+                    var id = $(item).attr('id')
+                    if (id != undefined) {
+                        var value = id.split('-')
+                        extvouchersvalues[value[2]] = parseFloat($(item).val())
+                    }
+                })
+                $('#adminbundle_service_extvouchersvalues').val(JSON.stringify(extvouchersvalues));
+
+                updateNumbersRekening()
+                updateNumbersVoorverkoop()
+                //Ocultando los campos para convertir los numeros antes de enviar el formulario
+                array_to_work = $('#form-basic-service').clone()
+                    array_to_work.find('input.form-control').each(function(index, item) {
+                        if (!$(item).hasClass('datepicker') && !$(item).hasClass('timepicker')){
+                            var num = numeral($(item).val()).value()
+                            if (num != null) {
+                                $(item).val(num)
+                            }
+                        }
+                    })
+
+                array_to_work.ajaxSubmit(function(response){})
+
+             }, 30000);
+        {% endif %}
+
+        {% if show %}
+            $('form input').attr('readonly', true)
+            $('form input').attr('disabled', 'disabled')
+            $('form select').attr('disabled', 'disabled')
+            $('form textarea').attr('disabled', 'disabled')
+        {% endif %}
+
+
+
+    </script>
 {% endblock %}

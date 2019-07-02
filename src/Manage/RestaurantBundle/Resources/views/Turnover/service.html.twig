@@ -1,0 +1,77 @@
+<fieldset class="col-md-12 turnover-service">
+    <h4>Restaurant</h4>
+    <section class="x-group col-md-3  ">
+        <strong class="row form-group text-primary">Omzet</strong> 
+        <div class="row form-group">
+            {{form_label(form_service.omzkitchen,'Food €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_service_omzkitchen" name="turnover_service[omzkitchen]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.service.omzkitchen | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_service.omzlaag,'Drank Laag €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_service_omzlaag" name="turnover_service[omzlaag]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.service.omzlaag | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_service.omzhoog,'Drank Hoog €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_service_omzhoog" name="turnover_service[omzhoog]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.service.omzhoog | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_service.omzentry,'Entree Laag €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_service_omzentry" name="turnover_service[omzentry]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.service.omzentry | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_service.omzspacerent,'Zaalhuur €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_service_omzspacerent" name="turnover_service[omzspacerent]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.service.omzspacerent | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_service.omzothers,'Techniek €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_service_omzothers" name="turnover_service[omzothers]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.service.omzothers | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_service.omzparking,'Parkeren €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_service_omzparking" name="turnover_service[omzparking]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.service.omzparking | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_service.omzvouchersrek,'Vouchers Rek * €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_service_omzvouchersrek" name="turnover_service[omzvouchersrek]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.service.omzvouchersrek | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group totales">
+            {{form_label(form_service.omztotal,' Totaal €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_service_omztotal" name="turnover_service[omztotal]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.service.omztotal | number_format(2,',','.')}}">
+        </div>
+    </section>
+    <section class="z-group col-md-3  ">
+        <strong class="row form-group text-primary">Ontvangsten</strong> 
+        <div class="row form-group">
+            {{form_label(form_service.ontdebitcard,'Debit Cards €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_service_ontdebitcard" name="turnover_service[ontdebitcard]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.service.ontdebitcard | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_service.ontcreditcard,'Credit Cards €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_service_ontcreditcard" name="turnover_service[ontcreditcard]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.service.ontcreditcard | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_service.ontrekening,'Op Rekening €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_service_ontrekening" name="turnover_service[ontrekening]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.service.ontrekening | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_service.ontbelevoucher,'Belevenissen.nl €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_service_ontbelevoucher" name="turnover_service[ontbelevoucher]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.service.ontbelevoucher | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_service.ontkadopagina,'Kadopagina €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_service_ontkadopagina" name="turnover_service[ontkadopagina]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.service.ontkadopagina | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_service.onttickets,'Tiqets €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_service_onttickets" name="turnover_service[onttickets]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.service.onttickets | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_service.ontvooverkoop,'Voorverkoop gelden €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_service_ontvooverkoop" name="turnover_service[ontvooverkoop]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.service.ontvooverkoop | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group totales">
+            {{form_label(form_service.onttotal,' Totaal €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_service_onttotal" name="turnover_service[onttotal]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.service.onttotal | number_format(2,',','.')}}">
+        </div>
+    </section>
+</fieldset>

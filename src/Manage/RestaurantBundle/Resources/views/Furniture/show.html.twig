@@ -1,0 +1,119 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title %} Show Furniture {% endblock %}
+{% block body %}
+<div class="portlet">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-layers"></i>Furniture
+        </div>
+        <div class="tools">
+            <a href="{{path('furniture_new')}}" class=" blue">
+                <i class="fa fa-plus"></i> Create new
+            </a>
+            <a href="{{path('furniture')}}" class=" blue">
+                <i class="fa fa-list-alt"></i> List
+            </a>
+        </div>
+    </div>
+            <div class="portlet box blue-hoki">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-search"></i>View
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+            {% if form_errors(delete_form)%}
+                <div class="form-errors alert alert-danger">
+                    {{form_errors(delete_form)}}
+                </div>
+            {% endif %}
+             <form class="container-fluid form-horizontal " >
+                <div class="form-body">
+                    <div class="col-md-3 thumbnail" style="height: 200px; display: block; margin-right: 20px;">
+                        {% if entity.pathimage %}
+                            <img src="{{  asset('uploads/images/furniture/' ~ entity.pathimage)  }}" alt="Without image" style="height: 100%;">
+                        {% else %}
+                            <img src="{{  asset('img/noimage.jpg')  }}" alt="Without image" style="height: 100%;">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-5">
+                        <div class="row form-group">
+                            {{form_label(delete_form.name,'Name',{'attr':{
+                                'class' :' control-label',
+                            }})}}
+                            {{form_widget(delete_form.name, {'attr':{
+                                'disabled' : 'disabled',
+                                'class' :'input-sm pull-right form-control'
+                            }})}}
+                            {{form_errors(delete_form.name)}}
+                        </div>
+                        <div class="row form-group">
+                            {{form_label(delete_form.details,'Details',{'attr':{
+                                'class' :' control-label',
+                            }})}}
+                            {{form_widget(delete_form.details, {'attr':{
+                                'disabled' : 'disabled',
+                                'class' :'input-sm pull-right form-control'
+                            }})}}
+                            {{form_errors(delete_form.details)}}
+                        </div>
+                        <div class="row form-group">
+                            {{form_label(delete_form.serialnumber,'Serial number',{'attr':{
+                                'class' :' control-label',
+                            }})}}
+                            {{form_widget(delete_form.serialnumber, {'attr':{
+                                'disabled' : 'disabled',
+                                'class' :'input-sm pull-right form-control'
+                            }})}}
+                            {{form_errors(delete_form.serialnumber)}}
+                        </div>
+                        <div class="row form-group">
+                            {{form_label(delete_form.status,'Status',{'attr':{
+                                'class' :' control-label',
+                            }})}}
+                            {{form_widget(delete_form.status, {'attr':{
+                                'disabled' : 'disabled',
+                                'class' :'input-sm pull-right form-control'
+                            }})}}
+                            {{form_errors(delete_form.status)}}
+                        </div>
+                        <div class="row form-group">
+                            {{form_label(delete_form.location,'Location',{'attr':{
+                                'class' :' control-label',
+                            }})}}
+                            {{form_widget(delete_form.location, {'attr':{
+                                'disabled' : 'disabled',
+                                'class' :'input-sm pull-right form-control'
+                            }})}}
+                            {{form_errors(delete_form.location)}}
+                        </div>
+                        <div class="row form-group" hidden="hidden">
+                            {{form_label(delete_form.image,'Image',{'attr':{
+                                'class' :' control-label',
+                            }})}}
+                            {{form_widget(delete_form.image, {'attr':{
+                                'class' :''
+                            }})}}
+                            {{form_errors(delete_form.image)}}
+                        </div>
+
+                        <div class="row form-group ">
+                            <a  href="{{ path('furniture') }}">
+                                <input type = 'button' class="btn btn-primary" value="Back">
+                            </a>
+                            <a  href="{{ path('furniture_edit', {'id':entity.id}) }}">
+                                <input type = 'button' class="btn btn-primary" value="Update">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        </div>
+        </div>
+{% endblock %}

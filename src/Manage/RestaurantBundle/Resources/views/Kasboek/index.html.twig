@@ -1,0 +1,199 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title%} Kasboek {% endblock %}
+{% block body %}
+    
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon icon-cup"></i>Kasboek
+                </div>
+                <div class="tools">                    
+                    <a href="{{path('kasboek_new')}}" class=" blue">
+                        <i class="fa fa-plus"></i> Create new 
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body" style="display: block;">
+                <div >
+                    <i class="blue-hoki">Select any date for filter this list by month</i>
+
+                    <div class="input-group input-medium date date-picker" data-date-format="mm-yyyy" data-date-viewmode="years" data-date-minviewmode="months">
+                        <input type="text"  class="form-control datepicker" data-provide="datepicker" readonly="readonly" data-date-format="MM-yyyy" >
+
+                        <span class="input-group-btn">
+                        <button class="filtro btn blue-hoki" type="button"><i class="fa fa-search "></i></button>
+                        </span>
+                    </div>
+                </div>
+                <br/>
+                <br/>
+                <i class="blue-hoki">{% if entities | length > 0 %}{{ entities | length }} Rows {% else %} No rows found {% endif %}</i>
+                <div  class="table-responsive">
+                    <table class="table table-striped table-condensed table-bordered table-advance table-hover">
+                        <thead>
+                            <tr>
+                                <th class="hidden-xs counter"> #
+                                </th>
+                                <th >
+                                    <i class="fa fa-calendar"></i> Dated
+                                </th>
+                                <th>
+                                    <i class="fa fa-calendar"></i> Updated
+                                </th>
+                                <th>
+                                    <i class="fa fa-calendar"></i> Finished
+                                </th>
+                                <th class="actions">
+                                    
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% set c = 1 %}
+                            {% for entity in entities %}
+                            <tr class="{% if entity.finished %}success{% else %} warning {% endif %}">
+                                <td class="highlight hidden-xs counter"><b>{{ c }}</b></td>
+                                <td >{% if entity.dated %}{{ entity.dated|date('d-m-Y') }}{% endif %}</td>
+                                <td >{% if entity.updated %}{{ entity.updated|date('d-m-Y') }}{% endif %}</td>
+                                <td >{% if entity.finished %}{{ entity.finished|date('d-m-Y') }}{% endif %}</td>
+                                <td>
+                                    <div class="btn-group dropdown ">
+                                        <button class="btn blue-hoki btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+                                            Actions  <i class="fa fa-angle-down"></i>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li>
+                                                <a class="mail_{{  entity.id  }}" href="#"><span class="glyphicon glyphicon-envelope"></span>Send Mail</a>
+                                            </li>
+                                            <script>
+                                                $('.mail_{{ entity.id }}').click(function(){
+
+                                                    bootbox.dialog({
+                                                        message: "This form will be sent via e-mail",
+                                                        title: "Send form",
+                                                        buttons: {
+
+                                                            main: {
+                                                                label: "Cancel",
+                                                                className: ""
+                                                            },
+                                                            success: {
+                                                                label: "Confirm",
+                                                                className: "blue-hoki",
+                                                                callback: function() {
+                                                                    window.location="{{ path('kasboek_mail', {'id':entity.id}) }}";
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                });
+
+                                            </script>
+                                            <li>
+                                                <a href="{{ path('kasboek_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-search"></span>View</a>
+                                            </li>
+                                            {% set updated = entity.updated | date('Y-m-d') %}
+                                            {% if ( date(updated).diff(date('now')).days < 2 ) or (app.user.role == 'ROLE_SUPERADMIN')  %}
+
+                                                {# if 'today - 3 day' | date('Ymd') - entity.updated | date('Ymd') <= 0 or app.user.role == 'ROLE_SUPERADMIN' #}
+                                                <li>
+                                                    <a href="{{ path('kasboek_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span>Edit</a>
+                                                </li>
+                                            {% if app.user.role == 'ROLE_SUPERADMIN' %}
+                                                <li>
+                                                    <a class="delete_form_{{ entity.id }}"  href="#"><span class="glyphicon glyphicon-remove"></span>Delete</a>
+                                                </li>
+                                                    <script>
+                                                        $('.delete_form_{{ entity.id }}').click(function(){
+
+                                                            bootbox.dialog({
+                                                                message: "This form will be removed from the system",
+                                                                title: "Delete form",
+                                                                buttons: {
+
+                                                                    main: {
+                                                                        label: "Cancel",
+                                                                        className: ""
+                                                                    },
+                                                                    success: {
+                                                                        label: "Confirm",
+                                                                        className: "blue-hoki",
+                                                                        callback: function() {
+                                                                            window.location="{{ path('kasboek_delete', {'id':entity.id}) }}";
+                                                                        }
+                                                                    }
+                                                                }
+                                                            });
+                                                        });
+
+                                                    </script>
+                                            {% endif %}
+                                            {% endif %}
+
+                                        </ul>
+                                    </div>
+                                    {% for notif in notifier if notif.form == entity.id %}
+                                        <span class="label label-info">
+                                            <a href="{{ path('notifier_mails_form', {'id':notif.form}) }}" style="color: #ffffff;">Sent <b style="color: black">{{ notif.cantidad }}</b></a>
+                                        </span>
+                                    {% else %}
+                                        <span class="label label-warning">
+                                            Not sent
+                                        </span>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                                {% set c = c + 1 %}
+                        {% endfor %}
+                           
+                        </tbody>
+                    </table>
+                </div>
+                <i class="blue-hoki">{% if entities | length > 0 %}{{ entities | length }} Rows {% else %} No rows found {% endif %}</i>
+
+            </div>
+        </div>
+    <script>
+
+        current = window.location
+        current = current.toString()
+        dir = current.split('date/')
+        sep = dir[1].split('-')
+        var monthNames = [ "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December" ];
+        fecha = new Date((sep[0]+'-01-'+sep[1].substr(0,4)).replace(/-/g, "/"))
+
+        $('input.datepicker').val(monthNames[fecha.getMonth()] + ' ' + fecha.getFullYear())
+
+        $('.filtro').click(function(){
+            current = window.location
+            current = current.toString()
+            dir = current.split('date')
+            if ($('input[data-provide="datepicker"]').val() != ''){
+                var monthNumber = { "January":"01", "February":"02", "March":"03", "April":"04", "May":"05", "June":"06",
+                    "July":"07", "August":"08", "September":"09", "October":"10", "November":"11", "December":"12" };
+                pickerdate = $('input[data-provide="datepicker"]').val().split("-")
+                dated = new Date((monthNumber[pickerdate[0]]+'-01-'+pickerdate[1]).replace(/-/g, "/"))
+                mes = parseInt(dated.getMonth()) + 1
+                if (mes.toString().length == 1) mes = '0' + mes.toString()
+                dir = dir[0]+ 'date/' + mes +'-'+ dated.getFullYear()
+                window.location = dir
+                //alert(dir)
+            } else {
+                bootbox.dialog({
+                    message: "Please select a valid date.",
+                    title: "Wrong date",
+                    buttons: {
+                        main: {
+                            label: "Close",
+                            className: ""
+                        },
+
+                    }
+                });
+            }
+
+        })
+    </script>
+{% endblock %}
+

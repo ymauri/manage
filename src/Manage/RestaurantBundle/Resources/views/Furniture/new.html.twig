@@ -1,0 +1,132 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title %} New Furniture {% endblock %}
+{% block body %}
+<div class="portlet">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-layers"></i>Furniture
+        </div>
+        <div class="tools">
+            <a href="{{path('furniture')}}" class=" blue">
+                <i class="fa fa-list-alt"></i> List
+            </a>
+        </div>
+    </div>
+        <div class="portlet box blue-hoki">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-plus"></i>New
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+            {% if form_errors(form)%}
+            <div class="form-errors alert alert-danger">
+                {{form_errors(form)}}
+            </div>
+            {% endif %}
+            <form class="container-fluid form-horizontal" action="{{path('furniture_create')}}" method="POST" {{form_enctype(form)}}>
+               <div class="form-body">
+                <div class="col-md-3 thumbnail" style="height: 200px; display: block; margin-right: 20px;">
+                    <img src="{{  asset('img/noimage.jpg')  }}" alt="Without image" style="height: 100%;">
+                </div>
+
+                <div class="col-md-5">
+                <div class="row form-group">
+                    {{form_label(form.name,'Name',{'attr':{
+                      'class' :' control-label',
+                      }})}}
+                    {{form_widget(form.name, {'attr':{
+                      'class' :'input-sm pull-right form-control'
+                      }})}}  
+                    {{form_errors(form.name)}}
+                </div>
+                <div class="row form-group">
+                    {{form_label(form.details,'Details',{'attr':{
+                      'class' :' control-label',
+                      }})}}
+                    {{form_widget(form.details, {'attr':{
+                      'class' :'input-sm pull-right form-control'
+                      }})}}  
+                    {{form_errors(form.details)}}
+                </div>
+                <div class="row form-group">
+                    {{form_label(form.serialnumber,'Serial number',{'attr':{
+                      'class' :' control-label',
+                      }})}}
+                    {{form_widget(form.serialnumber, {'attr':{
+                      'class' :'input-sm pull-right form-control'
+                      }})}}
+                    {{form_errors(form.serialnumber)}}
+                </div>
+                <div class="row form-group">
+                    {{form_label(form.status,'Status',{'attr':{
+                      'class' :' control-label',
+                      }})}}
+                    {{form_widget(form.status, {'attr':{
+                      'class' :'input-sm pull-right form-control'
+                      }})}}
+                    {{form_errors(form.status)}}
+                </div>
+                <div class="row form-group">
+                    {{form_label(form.location,'Location',{'attr':{
+                      'class' :' control-label',
+                      }})}}
+                    {{form_widget(form.location, {'attr':{
+                      'class' :'input-sm pull-right form-control'
+                      }})}}
+                    {{form_errors(form.location)}}
+                </div>
+                <div class="row form-group">
+                    {{form_label(form.image,'Image',{'attr':{
+                      'class' :' control-label',
+                      }})}}
+                    {{form_widget(form.image, {'attr':{
+                      'class' :''
+                      }})}}
+                    {{form_errors(form.image)}}
+                </div>
+
+                <div class="row form-group ">
+                {{ form_rest(form) }}
+                </div>
+            </div>
+            </div>
+
+
+            </form>
+            </div>
+        </div>
+        </div>
+    <script>
+
+        $('#restaurantbundle_furniture_image').on({
+            'change':function(evt){
+                var files = evt.target.files; // FileList object
+                // Obtenemos la imagen del campo "file".
+                for (var i = 0, f; f = files[i]; i++) {
+                    //Solo admitimos imágenes.
+                    if (!f.type.match('image.*')) {
+                        continue;
+                    }
+
+                    var reader = new FileReader();
+
+                    reader.onload = (function(theFile) {
+                        return function(e) {
+                            // Insertamos la imagen
+                            $(".thumbnail img").attr('src', e.target.result);
+                        };
+                    })(f);
+
+                    reader.readAsDataURL(f);
+                }
+            }
+        })
+
+    </script>
+{% endblock %}
+

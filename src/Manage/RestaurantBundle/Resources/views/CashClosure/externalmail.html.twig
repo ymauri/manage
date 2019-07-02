@@ -1,0 +1,48 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body style="max-width: 600px;font-family: Tahoma;font-size: 13px;color: black;padding: 10px; margin: 0 auto;">
+        <table style="max-width: 700px; font-family: Tahoma; font-size: 13px">
+            <table style="max-width: 600px; font-family: Lucida; font-size: 13px">
+                <thead>
+                <tr>
+                    <td colspan="4"><img src="http://log.towerleisure.nl/img/tph-logo.jpg" style="max-width: 280px; margin: 30px 175px 0;"></td>
+                </tr>
+                <tr>
+                    <td colspan="4"><h4 style="color: #FF8C11;font-weight: bold;font-size: 19px;margin: 40px; text-align: center; font-family: sans-serif;">Service Kassa Cash & Log</h4></td>
+                </tr>
+
+                </thead>
+
+            <tbody style="max-width: 700px; font-family: Tahoma; font-size: 13px">
+            <tr style="height: 30px;">
+                <td style="font-weight: bold;">Datum Formulier</td>
+                <td><input style=" max-width: 90px; font-size: 12px; text-align: center;" disabled="disabled" value='{{entity_basic.dated | date("d-m-Y")}}'></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <tr style="height: 30px;">
+                <td colspan="4" style="font-weight: bold;color: #FF8C11;font-size: 16px;">Op Rekening</td>
+            </tr>
+            {% for key, item in rekening %}
+                <tr style="height: 30px;">
+                    <td colspan="2"><span style="float: left; margin-right: 5px;">Op rekening {{ key }}</span>
+                        <input readonly="readonly" required="required" disabled="disabled" style="max-width: 200px; font-size: 12px; float:right;" value="{{item.text}}" type="text">
+                    </td>
+                    <td>
+                        <span style="float: left; margin-right: 5px;">€ </span><input readonly="readonly" required="required" disabled="disabled" style="max-width: 60px; font-size: 12px; float:left; text-align: right;" value="{{item.value | number_format (2 , ',', '.')}}" type="text">
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr style="height: 30px;">
+                <td colspan="2" style="border-top: 1px #666 solid; font-weight: bold;">Totaal op rekening (Bank)</td>
+                <td style="border-top: 1px #666 solid; "> <span style="float: left; margin-right: 5px;">€ </span><input readonly="readonly" required="required" disabled="disabled" style="max-width: 60px; font-size: 12px; float:left; text-align: right; font-weight: bold; color: black;" value="{{entity_basic.rekeningtotal | number_format (2, ',', '.')}}" type="text"></td>
+            </tr>
+
+            </tbody>
+        </table>
+    </body>
+</html>

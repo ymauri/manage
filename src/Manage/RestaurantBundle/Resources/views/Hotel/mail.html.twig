@@ -1,0 +1,546 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+<body style="font-family:Gotham, 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color:#f0f2ea; margin:0; padding:0; color:#333333;">
+
+<table width="100%" bgcolor="#FFFFFF" cellpadding="0" cellspacing="0" border="0">
+    <tbody>
+    <tr>
+        <td style="padding:40px 0;">
+            <!-- begin main block -->
+            <table cellpadding="0" cellspacing="0" width="608" border="0" align="center">
+                <tbody>
+                <tr>
+                    <td>
+                        <a href="http://log.towerleisure.nl/" style="display:block; width:324px; height:64px; margin:0 auto 30px;">
+                            <img src="http://log.towerleisure.nl/web/img/tphlogo.jpg" width="324" height="64" alt="ThePenthouse" style="display:block; border:0; margin:0;">
+                        </a>
+
+                        <!-- begin wrapper -->
+                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                            <tbody>
+                            <tr>
+                                <td width="8" height="4" colspan="2" style="background:url(http://demo.artlance.ru/email/shadow-top-left.png) no-repeat 100% 100%;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                                <td height="4" style="background:url(http://demo.artlance.ru/email/shadow-top-center.png) repeat-x 0 100%;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                                <td width="8" height="4" colspan="2" style="background:url(http://demo.artlance.ru/email/shadow-top-right.png) no-repeat 0 100%;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                            </tr>
+
+                            <tr>
+                                <td width="4" height="4" style="background:url(http://demo.artlance.ru/email/shadow-left-top.png) no-repeat 100% 0;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                                <td colspan="3" rowspan="3" bgcolor="#f0f2ea" style="padding:0 0 30px;">
+                                    <!-- begin content -->
+                                    <p style="margin:33px 30px 33px;; text-align:center; text-transform:uppercase; font-size:24px; line-height:30px; font-weight:bold; color:#484a42;">
+                                        Hotel Kassa Cash & Log <br>
+                                        <span style="margin:33px 30px 33px;; text-align:center;  text-transform:none;  font-size:18px; line-height:30px; color:#484a42;">Datum Formulier: {{entity_basic.dated | date("d-m-Y")}}</span>
+                                    </p>
+                                    <!-- begin articles -->
+                                    <table style="padding: 0 60px">
+
+                                        <tbody style="">
+
+
+                                        <tr style="height: 30px;">
+                                            <td  style="font-weight: bold;color: #FF8C11;font-size: 16px; text-align: center">Uitcheck</td>
+                                        </tr>
+                                        {% set control_chekout = 1 %}
+                                        {% if rcheckout|length > 0 %}
+                                            {% for var in rcheckout%}
+                                        <table style="border-bottom: solid  1px #707070">
+                                                <tr>
+                                                    <td >
+                                                        {% if var.fromguesty == 1 %}<img src="{{ asset('img/guesty_out.png') }}" style="max-width: 20px; min-width: 20px; float: left;"/>{% else %}<div style="padding: 0 15px"></div> {% endif %}
+                                                        <b>Uitcheck {{ control_chekout }}</b>
+                                                    </td>
+                                                    <td >
+
+                                                        <select disabled="disabled" style="background: white; border: none; height: 23px;">
+                                                            <option></option>
+
+                                                            {% for val in listing%}
+                                                                <option value="{{val.id}}" {% if var.listing.id == val.id %} selected = "selected"{% endif %}>{{val.details}}</option>
+                                                            {% endfor  %}
+                                                        </select>
+                                                    <input disabled="disabled"  style="display: inline; position: absolute; margin: 5px 0 0 5px; background: white; border: none" type="checkbox" id="confirm-checkout-{{control_chekout}}"  {% if var.checkoutdone %}checked="checked" {% endif %}>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+
+                                                    <td >Opmerkingen</td>
+                                                    <td><textarea disabled="disabled" style="min-width: 240px; max-width: 240px; background: white; border: none;height: 50px">{{ var.details }}</textarea></td>
+
+                                                </tr>
+
+                                            </table>
+
+
+                                                {% set control_chekout = control_chekout + 1 %}
+                                            {% endfor %}
+                                        {% endif %}
+
+                                        <tr style="height: 60px;">
+                                        </tr>
+                                        <tr style="height: 30px;">
+                                            <td colspan="4" style="font-weight: bold;color: #FF8C11;font-size: 16px; text-align: center">Incheck</td>
+                                        </tr>
+                                        {% set control = 1 %}
+                                        {% if rcheckin|length > 0 %}
+                                            {% for var in rcheckin%}
+                                        <table style="border-bottom: solid  1px #707070">
+                                                <tr>
+                                                    <td >
+                                                        {% if var.checkin %}<img src="{{ asset('img/guesty_in.png') }}" style="max-width: 20px; min-width: 20px; float: left;"/>{% else %}<div style="padding: 0 15px"></div> {% endif %}
+                                                        <b>Incheck {{ control }} {% if var.timeforcheck %}({{var.timeforcheck | date('H:i')}}){% endif %}</b>
+                                                    </td>
+                                                    <td >
+
+                                                        <select disabled="disabled" style="background: white; border: none; height: 23px;">
+                                                            <option></option>
+
+                                                            {% for val in listing %}
+                                                                <option value="{{val.id}}" {% if var.listing.id == val.id %} selected = "selected"{% endif %}>{{val.details}}</option>
+                                                            {% endfor  %}
+                                                        </select>
+                                                    <input disabled="disabled"  type="checkbox"  style="display: inline; position: absolute; background: white; border: none"  {% if var.checkindone %}checked="checked" {% endif %}></td>
+                                                </tr>
+
+                                                <tr>
+                                                    
+                                                    <td><label >Naam</label></td>
+                                                    <td><input type="text" style="min-width: 240px; max-width: 240px; background: white; border: none;height: 23px; padding: 0 4px" value="{{var.name}}" disabled="disabled">  </td>
+                                                </tr>
+                                                {% if var.checkin and var.fromguesty  %}
+                                                    <tr>
+                                                        <td><label >Suggested by Guesty</label></td>
+                                                        <td><input style="min-width: 240px; max-width: 240px; background: white; border: none;height: 23px" type="text" id="" disabled="disabled" value="{{ var.checkin.source }}">  </td>
+                                                    </tr>
+                                                {% endif  %}
+                                                <tr>
+                                                    
+                                                    <td><label >Kanaal</label></td>
+                                                    <td>
+                                                        <select style="background: white; border: none; height: 23px;" disabled="disabled" data-placeholder="Select...">
+                                                            <option></option>
+                                                            {% if var.fromguesty %}
+                                                                {% for val in sources %}
+                                                                    {% if var.checkin %}
+                                                                        {% if var.checkin.source == val.guesty %}
+                                                                            <option name="{{ val.extrafield }}" value="{{val.id}}" {% if var.source and var.source.id == val.id %} selected = "selected" {% endif %}>{{val.details}}</option>
+                                                                        {% endif  %}
+                                                                    {% endif  %}
+                                                                {% endfor  %}
+                                                            {% else  %}
+                                                                {% for val in sources %}
+                                                                    <option name="{{ val.extrafield }}" value="{{val.id}}" {% if var.source and var.source.id == val.id %} selected = "selected" {% endif %}>{{val.details}}</option>
+                                                                {% endfor  %}
+                                                            {% endif  %}
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr class="random" >
+                                                    
+                                                    <td><label >Te betalen €</label></td>
+                                                    <td><input type="text" style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{var.betalen | number_format(2 , ',', '.')}}">  </td>
+                                                </tr>
+                                                <tr class="random" >
+                                                    
+                                                    <td><label >Reeds voldaan €</label></td>
+                                                    <td><input type="text" style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled"  value="{{var.voldan | number_format(2 , ',', '.')}}"> </td>
+                                                </tr>
+                                                <tr>
+                                                    
+                                                    <td><label >Aantal nachten</label></td>
+                                                    <td> <input type="text" style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{var.nights}}">  </td>
+                                                </tr>
+                                                <tr>
+                                                    
+                                                    <td><label >Aantal personen</label></td>
+                                                    <td> <input type="text" style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{var.guests}}">  </td>
+                                                </tr>
+                                                <tr>
+                                                    
+                                                    <td><label >Toeristenbelasting €</label></td>
+                                                    <td> <input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" type="text" disabled="disabled" readonly="readonly" tabindex="-1" placeholder="0"  name="toer" value="{{var.toer }}"> </td>
+                                                </tr>
+                                                <tr>
+                                                    
+                                                    <td><label >Parking Dagtickets (€{{ entity_basic.parking }}/24uur)</label></td>
+                                                    <td> <input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" type="text" disabled="disabled" placeholder="0"  name='parkingdag' value="{{var.parkingdag}}"> </td>
+                                                </tr>
+                                                <tr>
+                                                    
+                                                    <td><label >Parking €</label></td>
+                                                    <td> <input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" type="text" disabled="disabled"  value="{{var.parking}}"> </td>
+                                                </tr>
+                                                <tr>
+                                                    
+                                                    <td><label >Verlenging/Late Check-Out/Extra's €</label></td>
+                                                    <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" type="text"  disabled="disabled" value="{{var.latecheckin | number_format(2 , ',', '.')}}">  </td>
+                                                </tr>
+                                                <tr>
+                                                    
+                                                    <td><label >Borg Ontvangen €</label></td>
+                                                    <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" type="text" disabled="disabled" value="{{var.borg | number_format(2 , ',', '.')}}">  </td>
+                                                </tr>
+                                                <tr>
+                                                    
+                                                    <td><label >Totaal te betalen €</label></td>
+                                                    {% set betalen = 0 %}
+                                                    {% set betalen = var.betalen  + (var.toer |replace({",":"."}))   + var.parking  + var.latecheckin  + var.borg - var.voldan  %}
+
+                                                    <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" type="text" disabled="disabled" value="{{ betalen | number_format(2 , ',', '.')}}"> </td>
+                                                </tr>
+                                                <tr>
+                                                    
+                                                    <td><label >Opmerkingen</label></td>
+                                                    <td><span style="min-width: 240px; max-width: 240px; background: white; border: none;height: 50px" type="text" disabled="disabled" >{{var.details}}</span>  </td>
+                                                </tr>
+                                                {% if var.checkin is defined %}
+                                                <tr>
+                                                    
+                                                    <td><label >Notes from Guesy</label></td>
+                                                    <td><span style="min-width: 240px; max-width: 240px; background: white; border: none;height: 50px" type="text" disabled="disabled" > {{var.checkin.note}} </span>  </td>
+                                                </tr>
+                                                {% endif %}
+                                                </table>
+                                                {% set control = control + 1 %}
+                                            {% endfor %}
+                                        {% endif %}
+
+                                        <tr style="height: 30px;"></tr>
+                                         <table>
+                                            <tr>
+                                                <td style="font-weight: bold;">Totaal Overnachtingen €</td>
+                                                <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value='{{entity_basic.totalover | number_format(2 , ',', '.') }}'> </td>
+
+                                            </tr>
+                                            <tr>
+                                                <td style="font-weight: bold;">Totaal Reeds voldaan €</td>
+                                                <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value='{{entity_basic.totalvoldan | number_format(2 , ',', '.') }}'> </td>
+
+
+                                            </tr>
+                                            <tr>
+                                                <td style="font-weight: bold;">Totaal Toeristenbelasting €</td>
+                                                <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value='{{entity_basic.totaltoer | number_format(2 , ',', '.') }}'> </td>
+
+
+                                            </tr>
+                                            <tr>
+                                                <td style="font-weight: bold;">Ontvangen Borg €</td>
+                                                <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value='{{entity_basic.totalborg | number_format(2 , ',', '.') }}'> </td>
+
+
+                                            </tr>
+                                            <tr>
+                                                <td style="font-weight: bold;">Retour Borg €</td>
+                                                <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value='{{entity_basic.totalretourborg | number_format(2 , ',', '.') }}'> </td>
+
+
+                                            </tr>
+                                            <tr>
+                                                <td style="font-weight: bold;">Totaal Parking €</td>
+                                                <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value='{{entity_basic.totalparking | number_format(2 , ',', '.') }}'> </td>
+
+
+                                            </tr>
+                                            <tr>
+                                                <td style="font-weight: bold;">Totaal Extra's €</td>
+                                                <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value='{{entity_basic.totalextra | number_format(2 , ',', '.') }}'> </td>
+
+
+                                            </tr>
+                                            <tr  style="height: 30px;">
+                                                <td style="font-weight: bold; border-top: 1px #666 solid; ">TOTAAL DAGOPBRENGST €</td>
+                                                <td style="border-top: 1px #666 solid; "><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value='{{entity_basic.totaldag | number_format(2 , ',', '.') }}'> </td>
+                                            </tr>
+                                         </table>
+                                        <tr style="height: 30px"></tr>
+                                        <table>
+                                            <tr style="height: 30px;">
+                                                <td colspan="2" style="font-weight: bold;color: #FF8C11;font-size: 16px;">Eind Float</td>
+                                            </tr>
+                                            <tr >
+                                                <td style="text-align: right;">€500</td>
+                                                <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.bill.e500}}" ></td>
+                                                <td style="text-align: right;">€2</td>
+                                                <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.bill.e2}}" ></td>
+
+
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align: right;">€200</td>
+                                                <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.bill.e200}}" ></td>
+                                                <td style="text-align: right;">€1</td>
+                                                <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.bill.e1}}" ></td>
+
+
+                                            </tr>
+                                            <tr >
+                                                <td style="text-align: right;">€100</td>
+                                                <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.bill.e100}}" ></td>
+                                                <td style="text-align: right;">€0,50</td>
+                                                <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.bill.e050}}" ></td>
+
+
+                                            </tr>
+                                            <tr >
+                                                <td style="text-align: right;">€50</td>
+                                                <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.bill.e50}}" ></td>
+                                                <td style="text-align: right;">€0,20</td>
+                                                <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.bill.e020}}" ></td>
+
+
+                                            </tr>
+                                            <tr >
+                                                <td style="text-align: right;">€20</td>
+                                                <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.bill.e20}}" ></td>
+                                                <td style="text-align: right;">€0,10</td>
+                                                <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.bill.e010}}" ></td>
+
+
+                                            </tr>
+                                            <tr >
+                                                <td style="text-align: right;">€10</td>
+                                                <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.bill.e10}}" ></td>
+                                                <td></td>
+                                                <td></td>
+
+                                            </tr>
+                                            <tr >
+                                                <td style="text-align: right;">€5</td>
+                                                <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.bill.e5}}" ></td>
+                                                <td></td>
+                                                <td></td>
+
+
+                                            </tr>
+
+                                            <tr style="height: 30px;">
+                                                <td colspan="3" style="font-weight: bold; border-top: 1px #666 solid; ">Totaal Contanten €</td>
+                                                <td style="border-top: 1px #666 solid;"><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.bill.eind | number_format(2 , ',', '.')}}" ></td>
+
+                                            </tr>
+                                        </table>
+                                        <tr style="height: 60px"></tr>
+                                        <table>
+
+
+                                        <tr style="height: 30px;">
+                                            <td colspan="4" style="font-weight: bold;color: #FF8C11;font-size: 16px;">Pin Terminals</td>
+                                        </tr>
+                                        <tr style="height: 30px;">
+                                            
+                                            <td>Nog een Pin / CC strook invullen?</td>
+                                            <td>{% if entity_basic.card.iscc %}<b>Ja</b>{% else %}<b>Nee</b>{% endif %}</td>
+                                        </tr>
+                                        <tr >
+                                            <td><b>Totaal CCV terminals €</b></td>
+                                            <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.total | number_format(2, ',', '.')}}" ></td>
+                                            <td>{%if entity_basic.card.iscc == 1%} <b>Totaal CCV terminals €</b> {% endif %}</td>
+                                            <td>{%if entity_basic.card.iscc == 1%} <input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.totalcc | number_format(2, ',', '.')}}"> {% endif %}</td>
+                                        </tr>
+                                            <tr >
+                                            <td>PIN / Maestro €</td>
+                                            <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.maestro | number_format(2, ',', '.')}}" ></td>
+                                            <td>{%if entity_basic.card.iscc == 1%} PIN / Maestro € {% endif %}</td>
+                                            <td>{%if entity_basic.card.iscc == 1%} <input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.ccmaestro | number_format(2, ',', '.')}}"> {% endif %}</td>
+                                        </tr>
+                                            <tr >
+                                                <td>V-pay €</td>
+                                                <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.vpay | number_format(2, ',', '.')}}" ></td>
+                                                <td>{%if entity_basic.card.iscc == 1%} V-pay € {% endif %}</td>
+                                                <td>{%if entity_basic.card.iscc == 1%} <input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.ccvpay | number_format(2, ',', '.')}}"> {% endif %}</td>
+                                            </tr>
+
+                                        <tr >
+                                            <td>Visa €</td>
+                                            <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.visa | number_format(2, ',', '.')}}" ></td>
+                                            <td>{%if entity_basic.card.iscc == 1%} Visa € {% endif %}</td>
+                                            <td>{%if entity_basic.card.iscc == 1%} <input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.ccvisa | number_format(2, ',', '.')}}"> {% endif %}</td>
+                                        </tr>
+                                        <tr >
+                                            <td>Visa Electron €</td>
+                                            <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.visaelec | number_format(2, ',', '.')}}" ></td>
+                                            <td>{%if entity_basic.card.iscc == 1%} Visa Electron € {% endif %}</td>
+                                            <td>{%if entity_basic.card.iscc == 1%} <input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.ccvisaelec | number_format(2, ',', '.')}}"> {% endif %}</td>
+                                        </tr>
+                                        <tr >
+                                            <td>Mastercard €</td>
+                                            <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.mastercard | number_format(2, ',', '.')}}" ></td>
+                                            <td>{%if entity_basic.card.iscc == 1%} Mastercard € {% endif %}</td>
+                                            <td>{%if entity_basic.card.iscc == 1%} <input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.ccmastercard | number_format(2, ',', '.')}}"> {% endif %}</td>
+                                        </tr>
+                                        <tr >
+                                            <td>American Express €</td>
+                                            <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.american | number_format(2, ',', '.')}}" ></td>
+                                            <td>{%if entity_basic.card.iscc == 1%} American Express € {% endif %}</td>
+                                            <td>{%if entity_basic.card.iscc == 1%} <input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.ccamerican | number_format(2, ',', '.')}}"> {% endif %}</td>
+                                        </tr>
+                                        <tr >
+                                            <td>Union Pay €</td>
+                                            <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.union | number_format(2, ',', '.')}}" ></td>
+                                            <td>{%if entity_basic.card.iscc == 1%} Union Pay € {% endif %}</td>
+                                            <td>{%if entity_basic.card.iscc == 1%} <input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.ccunion | number_format(2, ',', '.')}}"> {% endif %}</td>
+                                        </tr>
+                                        <tr >
+                                            <td>Diners €</td>
+                                            <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.diners | number_format(2, ',', '.')}}" ></td>
+                                            <td>{%if entity_basic.card.iscc == 1%} Diners € {% endif %}</td>
+                                            <td>{%if entity_basic.card.iscc == 1%} <input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.ccdiners | number_format(2, ',', '.')}}"> {% endif %}</td>
+                                        </tr>
+
+                                            <tr >
+                                                <td style="font-weight: bold; border-top: 1px #666 solid; "><b>Totaal Debit Cards €</b></td>
+                                                <td style="font-weight: bold; border-top: 1px #666 solid; "><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.tdebit | number_format(2, ',', '.')}}" ></td>
+                                                <td style="font-weight: bold; border-top: 1px #666 solid; ">{%if entity_basic.card.iscc == 1%} <b>Totaal Debit Cards €</b>{% endif %}</td>
+                                                <td style="font-weight: bold; border-top: 1px #666 solid; ">{%if entity_basic.card.iscc == 1%} <input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.cctdebit | number_format(2, ',', '.')}}"> {% endif %}</td>
+                                            </tr>
+                                            <tr >
+                                                <td><b>Totaal Credit Cards €</b></td>
+                                                <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.tcredit | number_format(2, ',', '.')}}" ></td>
+                                                <td>{%if entity_basic.card.iscc == 1%} <b>Totaal Credit Cards €</b>{% endif %}</td>
+                                                <td>{%if entity_basic.card.iscc == 1%} <input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.cctcredit | number_format(2, ',', '.')}}"> {% endif %}</td>
+                                            </tr>
+
+                                        <tr style="height: 15px;"></tr>
+                                        <tr >
+                                            <td>AliPay €</td>
+                                            <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.alipay | number_format(2, ',', '.')}}" ></td>
+                                        </tr>
+                                        </table>
+                                        <tr style="height: 60px"></tr>
+                                        <table>
+                                            {%if entity_basic.card.iscc == 1%}
+                                            <tr>
+                                            <td style=" font-weight: bold;">Totaal alle CCV terminals €</td>
+                                            <td style=""><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.totalccv | number_format(2, ',', '.')}}" ></td>
+
+                                        </tr>
+                                            {% endif %}
+
+
+                                        <tr style="">
+                                            <td style="font-weight: bold; ">Totaal Ontvangen €</td>
+                                            <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.totalont | number_format(2, ',', '.')}}" ></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold;">Totaal Overnachtingen inclusief extra's €</td>
+                                            <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.totalparkingextra | number_format(2, ',', '.')}}" ></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold;">Totaal Parking €</td>
+                                            <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.totalparking | number_format(2, ',', '.')}}" ></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold;">Totaal Toeristenbelasting €</td>
+                                            <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.totaltoer | number_format(2, ',', '.')}}" ></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold;">Totaal Contanten €</td>
+                                            <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.totalcontanten | number_format(2, ',', '.')}}" ></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold;">Totaal Debit (Pin/Maestro) Cards alle terminals €</td>
+                                            <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.totaldebit | number_format(2, ',', '.')}}" ></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold;">Totaal Credit Cards alle terminals €</td>
+                                            <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.totalcredit | number_format(2, ',', '.')}}" ></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold;">Totaal Dagopbrengst €</td>
+                                            <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.totaldag | number_format(2, ',', '.')}}" ></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold;">Saldo Borg €</td>
+                                            <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.saldoborg | number_format(2, ',', '.')}}" ></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold;">Kasverschil €</td>
+                                            {% if entity_basic.kasver | number_format(2, ',', '.')  != '-0,00' %}
+                                            <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.kasver | number_format(2, ',', '.') }}" ></td>
+                                            {% else %}
+                                                <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="0,00" ></td>
+
+                                            {% endif %}
+                                        </tr>
+                                        <tr style="height:60px;"></tr>
+
+                                        <tr>
+                                            <td style="font-weight: bold;">Ingevuld door</td>
+                                            <td><input style="min-width: 170px; max-width: 240px; padding: 0 4px; background: white; border: none;height: 23px;" disabled="disabled" {% if entity_basic.userdoor %} value="{{entity_basic.userdoor.name}}" {% endif %}></td>
+                                            
+                                            
+                                        </tr>
+                                            <tr>
+
+                                                <td >Toelichting kasverschil</td>
+                                                <td><textarea disabled="disabled" style="min-width: 240px; max-width: 240px; background: white; border: none;height: 70px">{{ entity_basic.details }}</textarea></td>
+
+                                            </tr>
+
+                                        </table>
+                                        </tbody>
+                                    </table>
+                                    <!-- /end articles -->
+                                    <p style="margin:0; border-top:2px solid #e5e5e5; font-size:5px; line-height:5px; margin:0 30px 29px;">&nbsp;</p>
+                                    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                        <tbody>
+                                        <tr valign="top">
+                                            <td width="30"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                                            <td>
+                                                <p style="margin:0; color:#333333; font-size:11px; line-height:18px;">
+                                                    Website: <a href="http://www.bluegroup.nl" style="color:#6d7e44; text-decoration:none; font-weight:bold;">www.bluegroup.nl</a>
+                                                </p>
+                                            </td>
+                                            <td width="30"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+
+                                            <td width="30"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <!-- end content -->
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td width="4" style="background:url(http://demo.artlance.ru/email/shadow-left-center.png) repeat-y 100% 0;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                                <td width="4" style="background:url(http://demo.artlance.ru/email/shadow-right-center.png) repeat-y 0 0;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                            </tr>
+
+                            <tr>
+                                <td width="4" height="4" style="background:url(http://demo.artlance.ru/email/shadow-left-bottom.png) repeat-y 100% 100%;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                                <td width="4" height="4" style="background:url(http://demo.artlance.ru/email/shadow-right-bottom.png) repeat-y 0 100%;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                            </tr>
+
+                            <tr>
+                                <td width="4" height="4" style="background:url(http://demo.artlance.ru/email/shadow-bottom-corner-left.png) no-repeat 100% 0;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                                <td width="4" height="4" style="background:url(http://demo.artlance.ru/email/shadow-bottom-left.png) no-repeat 100% 0;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                                <td height="4" style="background:url(http://demo.artlance.ru/email/shadow-bottom-center.png) repeat-x 0 0;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                                <td width="4" height="4" style="background:url(http://demo.artlance.ru/email/shadow-bottom-right.png) no-repeat 0 0;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                                <td width="4" height="4" style="background:url(http://demo.artlance.ru/email/shadow-bottom-corner-right.png) no-repeat 0 0;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <!-- end wrapper-->
+                        <p style="margin:0; padding:34px 0 0; text-align:center; font-size:11px; line-height:13px; color:#333333;">
+
+                        </p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <!-- end main block -->
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
+
+

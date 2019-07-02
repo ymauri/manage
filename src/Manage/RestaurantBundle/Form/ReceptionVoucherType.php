@@ -16,8 +16,15 @@ class ReceptionVoucherType extends AbstractType
     {
         $builder
             ->add('details')
-            ->add('isactive', 'checkbox')
-            ->add('forreception', 'checkbox')
+            ->add('isactive', 'checkbox', array(
+                'required'  =>false
+            ))
+            ->add('forreception', 'checkbox', array(
+                'required'  =>false
+            ))
+            ->add('isext', 'checkbox', array(
+                'required'  =>false
+            ))
             ->add('value')
         ;
     }

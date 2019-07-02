@@ -1,0 +1,125 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body style="max-width: 600px;font-family: Tahoma;font-size: 13px;color: black;padding: 10px; margin: 0 auto;">
+        <table style="max-width: 600px; font-family: Lucida; font-size: 13px">
+            <thead>
+                <tr>
+                    <td colspan="4"><img src="{{ asset('img/tphlogo.jpg')  }}" style="max-width: 280px; margin: 30px 175px 0;"></td>
+                </tr>
+                <tr> 
+                    <td colspan="4"><h4 style="color: #FF8C11;font-weight: bold;font-size: 19px;margin: 40px; text-align: center; font-family: sans-serif;">Logboek Keuken, Restaurant, Receptie & Hotel</h4></td>
+                </tr>
+            </thead>
+            <tbody style="max-width: 600px; font-family: Tahoma; font-size: 12px">
+            <tr style="height: 30px;">
+                <td colspan="4" style="font-weight: bold;color: #FF8C11;font-size: 16px;">Bediening Log</td>
+            </tr>
+                <tr>
+                    <td style="font-weight: bold;">Lunch Opmerkingen</td>
+                    <td colspan="3"><textarea rows="5" cols="40" style="color: black; font-size: 12px" disabled="disabled"> {{entity_basic.bedlunch }}</textarea></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Dinner Opmerkingen</td>
+                    <td colspan="3"><textarea rows="5" cols="40" style="color: black; font-size: 12px" disabled="disabled"> {{entity_basic.beddinner }}</textarea></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Suites Opmerkingen</td>
+                    <td colspan="3"><textarea rows="5" cols="40" style="color: black; font-size: 12px" disabled="disabled"> {{entity_basic.bedsuites }}</textarea></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Acties voor morgen</td>
+                    <td colspan="3"><textarea rows="5" cols="40" style="color: black; font-size: 12px" disabled="disabled"> {{entity_basic.bedacties }}</textarea></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Lost & Found</td>
+                    <td colspan="3"><textarea rows="5" cols="40" style="color: black; font-size: 12px" disabled="disabled"> {{entity_basic.bedlost }}</textarea></td>
+                </tr>
+                <tr style="height: 30px">
+                    <td style="font-weight: bold; border-top: 1px #666 solid; ">Manager DAG:</td>
+                    <td colspan="3" style="border-top: 1px #666 solid;"><input readonly="readonly" required="required" disabled="disabled" style=" font-size: 12px; color: black;" value="{% if entity_basic.managerdag %}{{ entity_basic.managerdag.name }}{% endif %}" type="text"></td>
+                </tr>
+                <tr style="height: 30px">
+                    <td style="font-weight: bold;  ">Manager AVOND:</td>
+                    <td colspan="3" ><input readonly="readonly" required="required" disabled="disabled" style=" font-size: 12px; color: black;" value="{% if entity_basic.manageravond %}{{ entity_basic.manageravond.name }}{% endif %}" type="text"></td>
+                </tr>
+                <tr style="height: 30px">
+                    <td style="font-weight: bold;  ">Sluitingstijd (laatste gast vertrokken):</td>
+                    <td colspan="3" ><input readonly="readonly" required="required" disabled="disabled" style=" font-size: 12px; color: black;" value="{{ entity_basic.lastguesttime | date ('h:i A') }}" type="text"></td>
+                </tr>
+                <tr style="height: 30px">
+                    <td style="font-weight: bold;  ">Hoe was het weer vandaag?</td>
+                    <td colspan="3" ><input readonly="readonly" required="required" disabled="disabled" style=" font-size: 12px; color: black;" value="{{ entity_basic.weather }}" type="text"></td>
+                </tr>
+                <tr style="height: 30px"></tr>
+                <tr style="height: 30px;">
+                    <td colspan="4" style="font-weight: bold;color: #FF8C11;font-size: 16px;">Keuken Log</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Lunch Opmerkingen</td>
+                    <td colspan="3"><textarea rows="5" cols="40" style="color: black; font-size: 12px" disabled="disabled"> {{entity_basic.keulunch }}</textarea></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Dinner Opmerkingen</td>
+                    <td colspan="3"><textarea rows="5" cols="40" style="color: black; font-size: 12px" disabled="disabled"> {{entity_basic.keudinner }}</textarea></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Suites Opmerkingen</td>
+                    <td colspan="3"><textarea rows="5" cols="40" style="color: black; font-size: 12px" disabled="disabled"> {{entity_basic.keusuites }}</textarea></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Acties voor morgen</td>
+                    <td colspan="3"><textarea rows="5" cols="40" style="color: black; font-size: 12px" disabled="disabled"> {{entity_basic.keuacties }}</textarea></td>
+                </tr>
+                <tr style="height: 30px">
+                    <td style="font-weight: bold; border-top: 1px #666 solid; ">Chef:</td>
+                    <td colspan="3" style="border-top: 1px #666 solid;"><input readonly="readonly" required="required" disabled="disabled" style=" font-size: 12px; color: black;" value="{% if entity_basic.chef %}{{ entity_basic.chef.name }}{% endif %}" type="text"></td>
+                </tr>
+
+            <tr style="height: 30px"></tr>
+                <tr style="height: 30px;">
+                    <td colspan="4" style="font-weight: bold;color: #FF8C11;font-size: 16px;">Receptie Log</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Appartementen Opmerkingen</td>
+                    <td colspan="3"><textarea rows="5" cols="40" style="color: black; font-size: 12px" disabled="disabled"> {{entity_basic.recapp }}</textarea></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Restaurant Opmerkingen</td>
+                    <td colspan="3"><textarea rows="5" cols="40" style="color: black; font-size: 12px" disabled="disabled"> {{entity_basic.recrest }}</textarea></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Sales Opmerkingen</td>
+                    <td colspan="3"><textarea rows="5" cols="40" style="color: black; font-size: 12px" disabled="disabled"> {{entity_basic.recsales }}</textarea></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Menu's geprint voor morgen</td>
+                    <td colspan="3"><textarea rows="5" cols="40" style="color: black; font-size: 12px" disabled="disabled"> {{entity_basic.recmenu }}</textarea></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Acties voor morgen</td>
+                    <td colspan="3"><textarea rows="5" cols="40" style="color: black; font-size: 12px" disabled="disabled"> {{entity_basic.recacties }}</textarea></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Lost & Found</td>
+                    <td colspan="3"><textarea rows="5" cols="40" style="color: black; font-size: 12px" disabled="disabled"> {{entity_basic.reclost }}</textarea></td>
+                </tr>
+                <tr style="height: 30px">
+                    <td style="font-weight: bold; border-top: 1px #666 solid; ">Receptie DAG:</td>
+                    <td colspan="3" style="border-top: 1px #666 solid;"><input readonly="readonly" required="required" disabled="disabled" style=" font-size: 12px; color: black;" value="{% if entity_basic.receptiedag %}{{ entity_basic.receptiedag.name }}{% endif %}" type="text"></td>
+                </tr>
+                <tr style="height: 30px">
+                    <td style="font-weight: bold;  ">Receptie AVOND:</td>
+                    <td colspan="3" ><input readonly="readonly" required="required" disabled="disabled" style=" font-size: 12px; color: black;" value="{% if entity_basic.receptieavond %}{{ entity_basic.receptieavond.name }}{% endif %}" type="text"></td>
+                </tr>
+                <tr style="height: 30px">
+                    <td style="font-weight: bold;  ">Sluitingstijd receptie (alleen avonddienst):</td>
+                    <td colspan="3" ><input readonly="readonly" required="required" disabled="disabled" style=" font-size: 12px; color: black;" value="{{ entity_basic.closetime | date ('h:i A') }}" type="text"></td>
+                </tr>
+
+            </tbody>
+        </table>
+    </body>
+</html>

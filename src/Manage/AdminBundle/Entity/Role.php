@@ -20,26 +20,26 @@ class Role implements RoleInterface {
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    private $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
      */
-    protected $name;
+    private $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text")
      */
-    protected $description;
+    private $description;
 
     /**
      * @ORM\OneToMany(targetEntity="User", mappedBy="role")
      */
-    protected $users;
+    private $users;
 
     /**
      * Constructor

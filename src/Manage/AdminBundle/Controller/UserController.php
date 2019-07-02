@@ -9,14 +9,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Manage\AdminBundle\Entity\User;
 use Manage\AdminBundle\Form\UserType;
+use Symfony\Component\Finder\Exception\AccessDeniedException;
 
 /**
  * User controller.
  *
  * @Route("/user")
  */
-class UserController extends Controller
-{
+class UserController extends Controller {
 
     /**
      * Lists all User entities.
@@ -27,209 +27,242 @@ class UserController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if ($user->getRole() == 'ROLE_SUPERADMIN') {
+            $em = $this->getDoctrine()->getManager();
+            $entities = $em->getRepository('AdminBundle:User')->findAll();
+            return array(
+                'entities' => $entities,
+            );
+        }
+        else {
+            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+        }
 
-        $entities = $em->getRepository('AdminBundle:User')->findAll();
-
-        return array(
-            'entities' => $entities,
-        );
     }
+
     /**
      * Creates a new User entity.
      *
      * @Route("/", name="user_create")
      * @Method("POST")
-     * @Template("AdminBundle:User:new.html.twig")
+     * @Template("AdminBundle:User:edit.html.twig")
      */
-    public function createAction(Request $request)
-    {
-        $entity = new User();
-        $form = $this->createCreateForm($entity);
-        $form->handleRequest($request);
+    public function createAction(Request $request) {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if ($user->getRole() == 'ROLE_SUPERADMIN') {
+            $entity = new User();
+            $form = $this->createCreateForm($entity);
+            $form->handleRequest($request);
+            $form->getData()->setEnable(true);
+            try {
 
-        if ($form->isValid()) {            
-            $encoder = $this->get('security.encoder_factory')->getEncoder($entity);
-            $pass = $encoder->encodePassword($entity->getPassword(), $entity->getSalt()); 
-            $entity->setPassword($pass);
-                        
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
+                if ($form->isValid()) {
+                    $encoder = $this->get('security.encoder_factory')->getEncoder($entity);
+                    $pass = $encoder->encodePassword($entity->getPassword(), $entity->getSalt());
+                    $entity->setPassword($pass);
 
-            return $this->redirect($this->generateUrl('user_show', array('id' => $entity->getId())));
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($entity);
+                    $em->flush();
+
+                    $this->addFlash('success', 'Success! The user has been created.');
+                    return $this->redirect($this->generateUrl('user_show', array('id' => $entity->getId())));
+                }
+            } catch (\Exception $ex) {
+                return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
+            }
+
+            return array(
+                'entity' => $entity,
+                'form' => $form->createView(),
+            );
         }
-
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        );
-    }
-
-    /**
-     * Creates a form to create a User entity.
-     *
-     * @param User $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createCreateForm(User $entity)
-    {
-        $form = $this->createForm(new UserType(), $entity, array(
-            'action' => $this->generateUrl('user_create'),
-            'method' => 'POST',
-        ));
-
-        $form->add('submit', 'submit', array('label' => 'Create'));
-
-        return $form;
+        else {
+            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+        }
     }
 
     /**
      * Displays a form to create a new User entity.
      *
-     * @Route("/new", name="user_new")
+     * @Route("/new/", name="user_new")
      * @Method("GET")
      * @Template()
      */
-    public function newAction()
-    {
-        $entity = new User();
-        $form   = $this->createCreateForm($entity);
+    public function newAction() {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if ($user->getRole() == 'ROLE_SUPERADMIN') {
+            $entity = new User();
+            $form = $this->createCreateForm($entity);
+            return array(
+                'entity' => $entity,
+                'form' => $form->createView(),
+            );
+        }
+        else {
+            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+        }
+    }
 
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        );
+    private function createCreateForm(User $entity) {
+        $form = $this->createForm(new UserType(), $entity, array(
+            'action' => $this->generateUrl('user_create'),
+            'method' => 'POST',
+        ));
+
+        $form->add('submit', 'submit', array('label' => 'Create', 'attr' => array('class' => 'btn btn-primary')));
+
+        return $form;
     }
 
     /**
      * Finds and displays a User entity.
      *
-     * @Route("/{id}", name="user_show")
+     * @Route("/{id}/", name="user_show")
      * @Method("GET")
      * @Template()
      */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
+    public function showAction($id) {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getId()== $id) {
+            $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AdminBundle:User')->find($id);
+            $entity = $em->getRepository('AdminBundle:User')->find($id);
 
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find User entity.');
+            if (!$entity) {
+                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this User.'));
+            }
+
+            $deleteForm = $this->createEditForm($entity);
+            $deleteForm->add('button', 'button', array('label' => 'Back'));
+            return array(
+                'entity' => $entity,
+                'delete_form' => $deleteForm->createView(),
+            );
         }
-
-        $deleteForm = $this->createDeleteForm($id);
-
-        return array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
-        );
+        else {
+            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+        }
     }
 
     /**
      * Displays a form to edit an existing User entity.
      *
-     * @Route("/{id}/edit", name="user_edit")
+     * @Route("/{id}/edit/", name="user_edit")
      * @Method("GET")
      * @Template()
      */
-    public function editAction($id)
-    {
+    public function editAction($id) {
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('AdminBundle:User')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find User entity.');
+            return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this User.'));
         }
 
-        $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getId() == $id) {
+            $editForm = $this->createEditForm($entity);
+            $deleteForm = $this->createDeleteForm($id);
 
-        return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        );
+            return array(
+                'entity' => $entity,
+                'edit_form' => $editForm->createView(),
+                'delete_form' => $deleteForm->createView(),
+            );
+        }
+        else {
+            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+        }
     }
 
     /**
-    * Creates a form to edit a User entity.
-    *
-    * @param User $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
-    private function createEditForm(User $entity)
-    {
+     * Creates a form to edit a User entity.
+     *
+     * @param User $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createEditForm(User $entity) {
         $form = $this->createForm(new UserType(), $entity, array(
             'action' => $this->generateUrl('user_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Save', 'attr' => array('class' => 'btn btn-primary')));
 
         return $form;
     }
+
     /**
      * Edits an existing User entity.
      *
-     * @Route("/{id}", name="user_update")
+     * @Route("/{id}/update/", name="user_update")
      * @Method("PUT")
      * @Template("AdminBundle:User:edit.html.twig")
      */
-    public function updateAction(Request $request, $id)
-    {
+    public function updateAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('AdminBundle:User')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find User entity.');
+            return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this User.'));
         }
 
         $deleteForm = $this->createDeleteForm($id);
+        $passwordOriginal = $entity->getPassword();
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
-        if ($editForm->isValid()) {
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('user_edit', array('id' => $id)));
+        try {
+            if ($editForm->isValid()) {
+                if ($editForm->getData()->getPassword() != $passwordOriginal) {
+                    $encoder = $this->get('security.encoder_factory')->getEncoder($entity);
+                    $passwordCodificado = $encoder->encodePassword($entity->getPassword(), $entity->getSalt());
+                    $entity->setPassword($passwordCodificado);
+                }
+                $em->flush();
+                $this->addFlash('success', 'Success! The user has been changed.');
+                return $this->redirect($this->generateUrl('user_show', array('id' => $id)));
+            }
+        } catch (\Exception $ex) {
+            return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
+
     /**
      * Deletes a User entity.
      *
-     * @Route("/{id}", name="user_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete/", name="user_delete")
+     * @Method("GET")
      */
-    public function deleteAction(Request $request, $id)
-    {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
+    public function deleteAction($id) {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('AdminBundle:User')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find User entity.');
+                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+
             }
 
             $em->remove($entity);
             $em->flush();
+            $this->addFlash('success', 'Success! The user has been removed.');
+            return $this->redirect($this->generateUrl('user'));
         }
-
-        return $this->redirect($this->generateUrl('user'));
+        else{
+            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+        }
     }
 
     /**
@@ -239,35 +272,16 @@ class UserController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm($id)
-    {
+    private function createDeleteForm($id) {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('user_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
+                        ->setAction($this->generateUrl('user_delete', array('id' => $id)))
+                        ->setMethod('DELETE')
+                        ->add('submit', 'submit', array('label' => 'Delete', 'attr' => array('class' => 'btn btn-primary')))
+                        ->getForm()
         ;
     }
-     /**
-     * Edit User Profile.
-     *
-     * @Route("/profile", name="user_profile")
-     * @Method("PUT")
-     */
-    public function profileAction() {
-        $usuario = $this->get('security.context')->getToken()->getUser();
-        $formulario = $this->createForm(new User(),$usuario);
-        $peticion = $this->getRequest();
-        
-        if($peticion->getMethod()=='POST'){
-            $formulario->bind($peticion);
-            if($formulario->isValid()){
-                // actualizar el perfil del usuario
-            }
-        }
-        return$this->render('AdminBundle:User:profile.html.twig',array(
-            'user' =>$usuario,
-            'formulario'=>$formulario->createView()
-        ));
-    }
+
+
+
+
 }

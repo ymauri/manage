@@ -1,0 +1,214 @@
+  
+<!-- BEGIN SIDEBAR -->
+    <div class="page-sidebar-wrapper">
+        <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
+        <!-- DOC: Change data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+        <div class="page-sidebar navbar-collapse collapse">
+            <!-- BEGIN SIDEBAR MENU -->
+            <ul class="page-sidebar-menu" data-auto-scroll="true" data-slide-speed="200">
+                <!-- DOC: To remove the sidebar toggler from the sidebar you just need to completely remove the below "sidebar-toggler-wrapper" LI element -->
+
+                <!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
+                <li class="sidebar-search-wrapper hidden-xs">
+                    <br/>
+                    <br/>
+                    <br/>
+                    <!-- END RESPONSIVE QUICK SEARCH FORM -->
+                </li>
+                <li class="start active ">
+                    <a href="{{ path('home') }}">
+                    <i class="icon-home"></i>
+                    <span class="title">Home</span>
+                    <span class="selected"></span>
+                    </a>
+                </li>
+                {% if app.user.role == 'ROLE_SUPERADMIN' %}
+                    <li class="">
+                        <a href="javascript:;">
+                            <i class="icon-users"></i>
+                            <span class="title"> Users</span>
+                            <span class="arrow"></span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="{{path('user')}}">
+                                    <i class=""></i> User list
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{path('notifier_mails')}}">
+                                    <i class=""></i> Mails
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li class="">
+                        <a href="javascript:;">
+                            <i class="icon-settings"></i>
+                            <span class="title"> Form settings</span>
+                            <span class="arrow"></span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="{{path('worker')}}"> Staff </a>
+                            </li>
+                            <li>
+                                <a href="{{path('notifier')}}"> Notifier </a>
+                            </li>
+                            <li>
+                                <a href="{{path('receptionparking')}}"> Parking </a>
+                            </li>
+                            <li>
+                                <a href="{{path('receptionvoucher')}}"> Vouchers </a>
+                            </li>
+                            <li>
+                                <a href="{{path('source')}}"> Source </a>
+                            </li>
+                            <li>
+                                <a href="{{path('listing')}}"> Listings </a>
+                            </li>
+
+                            <li>
+                                <a href="{{path('furniture')}}"> Furniture </a>
+                            </li>
+
+                            <li>
+                                <a href="{{path('help')}}"> Help Contents </a>
+                            </li>
+
+                            <li>
+                                <a href="{{path('parameters')}}"> Global settings </a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li class="">
+                        <a href="javascript:;">
+                            <i class="icon-notebook"></i>
+                            <span class="title"> Guesty</span>
+                            <span class="arrow"></span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="{{path('checkin', {'date': 'today' | date('d-m-Y')})}}"> Checkin </a>
+                            </li>
+                            <li>
+                                <a href="{{path('checkout', {'date': 'today' | date('d-m-Y')})}}"> Checkout </a>
+                            </li>
+                            <li>
+                                <a href="{{path('sourceguesty')}}"> Source name </a>
+                            </li>
+
+                            <li>
+                                <a href="{{path('blacklist')}}"> Black List </a>
+                            </li>
+
+                            <li>
+                                <a href="{{path('pricing')}}"> Princing </a>
+                            </li>
+                            <li>
+                                <a href="{{path('autopricing')}}"> Auto-Princing </a>
+                            </li>
+                            <li>
+                                <a href="{{path('rule_admin')}}"> Rules </a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+
+                {% endif %}
+                <li>
+                    {% if app.user.role == "ROLE_BASIC" %}
+                        <a href={{path('cleaning', {'date': 'today' | date('d-m-Y')})}}>
+                            <i class="icon-bell"></i>
+                            <span class="title">Cleaning</span>
+                        </a>
+                    {% else %}
+                        <a href="javascript:;">
+                            <i class="icon-bell"></i>
+                            <span class="title"> Cleaning</span>
+                            <span class="arrow"></span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="{{path('cleaning', {'date': 'today' | date('d-m-Y')})}}"> Today </a>
+                            </li>
+                            <li>
+                                <a href="{{path('cleaningextra')}}"> Long Stay </a>
+                            </li>
+                            <li>
+                                <a href="{{path('cleaning_summary', {'month': 'today' | date('m-Y')})}}"> Summary </a>
+                            </li>
+                        </ul>
+                    {% endif %}
+                </li>
+               <li class="last">
+                            <a href="javascript:;">
+                                <i class="icon-note"></i>
+                                <span class="title"> Forms</span>
+                                <span class="arrow"></span>
+                            </a>
+                            <ul class="sub-menu">
+
+                                {% if app.user.role == 'ROLE_MANAGER' or app.user.role == 'ROLE_SUPERADMIN' or app.user.role == 'ROLE_RECEPTION' %}
+                                    <li>
+                                        <a href="{{path('reception', {'date': 'today' | date('m-Y')})}}">
+                                            <i class=""></i> Receptie Kassa Cash & Log
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% if app.user.role == 'ROLE_MANAGER' or app.user.role == 'ROLE_SUPERADMIN' or app.user.role == 'ROLE_SERVICE' %}
+                                <li>
+                                    <a href="{{path('cashclosure', {'date': 'today' | date('m-Y')})}}" class="ajaxfy">
+                                        <i class=""></i> Service Kassa Cash & Log
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{path('skybar', {'date': 'today' | date('m-Y')})}}" class="ajaxfy">
+                                        <i class=""></i> Sky Bar & Suites Kassa Cash & Log
+                                    </a>
+                                </li>
+                                {% endif %}
+                                {% if app.user.role == 'ROLE_MANAGER' or app.user.role == 'ROLE_SUPERADMIN' or app.user.role == 'ROLE_RECEPTION' %}
+                                <li>
+                                    <a href="{{path('hotel',  {'date': 'today' | date('m-Y')})}}" class="ajaxfy">
+                                        <i class=""></i> Hotel Kassa Cash & Log
+                                    </a>
+                                </li>
+                                {% endif %}
+                                {% if app.user.role == 'ROLE_MANAGER' or app.user.role == 'ROLE_SUPERADMIN'%}
+                                <li>
+                                    <a href="{{path('turnover', {'date': 'today' | date('m-Y')})}}" class="ajaxfy">
+                                        <i class=""></i> Turnover
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{path('kasboekhotel', {'date': 'today' | date('m-Y')})}}" class="ajaxfy">
+                                        <i class=""></i> Hotel Kasboek
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{path('kasboek', {'date': 'today' | date('m-Y')})}}" class="ajaxfy">
+                                        <i class=""></i> Kasboek
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="{{path('log', {'date': 'today' | date('m-Y')})}}" class="ajaxfy">
+                                        Logboek Keuken, Restaurant, Receptie & Hotel
+                                    </a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                <!-- BEGIN FRONTEND THEME LINKS -->
+           
+              
+            </ul>
+            <!-- END SIDEBAR MENU -->
+        </div>
+    </div>
+    <!-- END SIDEBAR -->
+  

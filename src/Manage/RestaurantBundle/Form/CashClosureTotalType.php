@@ -5,6 +5,7 @@ namespace Manage\RestaurantBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class CashClosureTotalType extends AbstractType
 {
@@ -15,7 +16,8 @@ class CashClosureTotalType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('xlaag', 'number', array(
+            ->add('xlaag', 'money', array(
+
                 'precision'=>2,
                 //Buscar c'omo impedir que se escriban letras
             ))
@@ -32,10 +34,7 @@ class CashClosureTotalType extends AbstractType
             ->add('xothers', 'number', array(
                 'precision'=>2,))
             ->add('xtotal', 'number', array(
-                'read_only' =>true,
-                'attr'      =>array(
-                    'value' => 0.00
-                )
+                'attr'=>array('tabindex'=>-1,'readonly' => true,),
             ))
             ->add('zlaag', 'number', array(
                 'precision'=>2,))
@@ -52,24 +51,11 @@ class CashClosureTotalType extends AbstractType
             ->add('zothers', 'number', array(
                 'precision'=>2,))
             ->add('ztotal', 'number', array(
-                'read_only' =>true,
-                'attr'      =>array(
-                    'value' => 0.00
-                )
+                'attr'=>array('tabindex'=>-1,'readonly' => true,),
+
             ))
-            ->add('suitesapart', 'checkbox',array(
-                'mapped'=>false))
-            ->add('laagdag','number', array(
-                'precision'=>2,))
-            ->add('laagavond','number', array(
-                'precision'=>2,))
-            ->add('hoogdag','number', array(
-                'precision'=>2,))
-            ->add('hoogavond','number', array(
-                'precision'=>2,))
-            ->add('suites','number', array(
-                'precision'=>2,
-                'read_only' =>true,))
+            
+       
         ;
     }
     
@@ -88,6 +74,6 @@ class CashClosureTotalType extends AbstractType
      */
     public function getName()
     {
-        return 'manage_restaurantbundle_cashclosuretotal';
+        return 'adminbundle_cashclosuretotal';
     }
 }

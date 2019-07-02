@@ -1,0 +1,296 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body style="max-width: 600px;font-family: Tahoma;font-size: 13px;color: black;padding: 10px; margin: 0 auto;">
+        <table style="max-width: 700px; font-family: Tahoma; font-size: 13px">
+            <table style="max-width: 600px; font-family: Lucida; font-size: 13px">
+                <thead>
+                <tr>
+                    <td colspan="4"><img src="{{ asset('img/tphlogo.jpg')  }}" style="max-width: 280px; margin: 30px 175px 0;"></td>
+                </tr>
+                <tr>
+                    <td colspan="4"><h4 style="color: #FF8C11;font-weight: bold;font-size: 19px;margin: 40px; text-align: center; font-family: sans-serif;">Turnover</h4></td>
+                </tr>
+
+                </thead>
+
+            <tbody style="max-width: 700px; font-family: Tahoma; font-size: 13px">
+                <tr style="height: 30px;">
+                    <td style="font-weight: bold;">Datum Formulier</td>
+                    <td><input style=" max-width: 90px; font-size: 12px; text-align: center;" disabled="disabled" value='{{entity_basic.dated | date("d-m-Y")}}'></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td colspan="4" style="font-weight: bold;color: #FF8C11;font-size: 16px;">Receptie</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="font-weight: bold;color: #FF8C11;font-size: 12px;">Omzet</td>
+                    <td colspan="2" style="font-weight: bold;color: #FF8C11;font-size: 12px;">Ontvangsten</td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Vouchers €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.reception.omzvoucher | number_format (2, ',', '.')}}'></td>
+                    <td>Debit Cards €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.reception.ontdebitcard | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Parkeren €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.reception.omzparking | number_format (2, ',', '.')}}'></td>
+                    <td>Credit Cards €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.reception.ontcreditcard | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Overig (L) €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.reception.omzoverig | number_format (2, ',', '.')}}'></td>
+                     <td style="border-top: 1px #666 solid; font-weight: bold;">Totaal €</td>
+                    <td style="border-top: 1px #666 solid; "><input style=" max-width: 60px; text-align: right; font-size: 12px; font-weight: bold; color: black;" disabled="disabled" value='{{entity_basic.reception.onttotal | number_format (2, ',', '.')}}'></td>
+                   
+                </tr>
+                
+                <tr style="height: 30px;">
+                    <td style="border-top: 1px #666 solid; font-weight: bold;">Totaal €</td>
+                    <td style="border-top: 1px #666 solid; "><input style=" max-width: 60px; text-align: right; font-size: 12px; font-weight: bold; color: black;" disabled="disabled" value='{{entity_basic.reception.omztotal | number_format (2, ',', '.')}}'></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr style="height: 30px;">
+                </tr>
+                <tr style="height: 30px;">
+                    <td colspan="4" style="font-weight: bold;color: #FF8C11;font-size: 16px;">Restaurant</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="font-weight: bold;color: #FF8C11;font-size: 12px;">Omzet</td>
+                    <td colspan="2" style="font-weight: bold;color: #FF8C11;font-size: 12px;">Ontvangsten</td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Food €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.service.omzkitchen | number_format (2, ',', '.')}}'></td>
+                    <td>Debit Cards €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.service.ontdebitcard | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Drank Laag €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.service.omzlaag | number_format (2, ',', '.')}}'></td>
+                    <td>Credit Cards €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.service.ontcreditcard | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Drank Hoog €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.service.omzhoog | number_format (2, ',', '.')}}'></td>
+                    <td>Op Rekening €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.service.ontrekening | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Entree Laag €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.service.omzentry | number_format (2, ',', '.')}}'></td>
+                    <td>Belevenissen.nl €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.service.ontbelevoucher | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Zaalhuur €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.service.omzspacerent | number_format (2, ',', '.')}}'></td>
+                    <td>Kadopagina €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.service.ontkadopagina | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Techniek €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.service.omzothers | number_format (2, ',', '.')}}'></td>
+                    <td>Tiqets €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.service.onttickets | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Parkeren €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.service.omzparking | number_format (2, ',', '.')}}'></td>
+                    <td>Voorverkoop gelden €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.service.ontvooverkoop | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Vouchers Rek * €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.service.omzvouchersrek | number_format (2, ',', '.')}}'></td>
+                     <td style="border-top: 1px #666 solid; font-weight: bold;">Totaal €</td>
+                    <td style="border-top: 1px #666 solid; "><input style=" max-width: 60px; text-align: right; font-size: 12px; font-weight: bold; color: black;" disabled="disabled" value='{{entity_basic.service.onttotal | number_format (2, ',', '.')}}'></td>
+                   
+                </tr>
+                
+                <tr style="height: 30px;">
+                    <td style="border-top: 1px #666 solid; font-weight: bold;">Totaal €</td>
+                    <td style="border-top: 1px #666 solid; "><input style=" max-width: 60px; text-align: right; font-size: 12px; font-weight: bold; color: black;" disabled="disabled" value='{{entity_basic.service.omztotal | number_format (2, ',', '.')}}'></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr style="height: 30px;">
+                </tr>
+                <tr style="height: 30px;">
+                    <td colspan="4" style="font-weight: bold;color: #FF8C11;font-size: 16px;">Sky Bar</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="font-weight: bold;color: #FF8C11;font-size: 12px;">Omzet</td>
+                    <td colspan="2" style="font-weight: bold;color: #FF8C11;font-size: 12px;">Ontvangsten</td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Food €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.skybar.omzkitchen | number_format (2, ',', '.')}}'></td>
+                    <td>Debit Cards €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.skybar.ontdebitcard | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Drank Laag €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.skybar.omzlaag | number_format (2, ',', '.')}}'></td>
+                    <td>Credit Cards €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.skybar.ontcreditcard | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Drank Hoog €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.skybar.omzhoog | number_format (2, ',', '.')}}'></td>
+                    <td>Op Rekening €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.skybar.ontrekening | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Entree Laag €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.skybar.omzentry | number_format (2, ',', '.')}}'></td>
+                    <td>Belevenissen.nl €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.skybar.ontbelevoucher | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Zaalhuur €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.skybar.omzspacerent | number_format (2, ',', '.')}}'></td>
+                    <td>Kadopagina €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.skybar.ontkadopagina | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Techniek €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.skybar.omzothers | number_format (2, ',', '.')}}'></td>
+                    <td>Tiqets €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.skybar.onttickets | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Parkeren €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.skybar.omzparking | number_format (2, ',', '.')}}'></td>
+                    <td>Voorverkoop gelden €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.skybar.ontvooverkoop | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Vouchers Rek * €</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.skybar.omzvouchersrek | number_format (2, ',', '.')}}'></td>
+                     <td style="border-top: 1px #666 solid; font-weight: bold;">Totaal €</td>
+                    <td style="border-top: 1px #666 solid; "><input style=" max-width: 60px; text-align: right; font-size: 12px; font-weight: bold; color: black;" disabled="disabled" value='{{entity_basic.skybar.onttotal | number_format (2, ',', '.')}}'></td>
+                   
+                </tr>
+                
+                <tr style="height: 30px;">
+                    <td style="border-top: 1px #666 solid; font-weight: bold;">Totaal €</td>
+                    <td style="border-top: 1px #666 solid; "><input style=" max-width: 60px; text-align: right; font-size: 12px; font-weight: bold; color: black;" disabled="disabled" value='{{entity_basic.skybar.omztotal | number_format (2, ',', '.')}}'></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr style="height: 30px;">
+                </tr>
+                <tr style="height: 30px;">
+                <tr style="height: 30px;">
+                    <td>8010 - Omzet Food</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.omzet.omzkitchen | number_format (2, ',', '.')}}'></td>
+                    <td>Food ex BTW</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.omzet.omzexkitchen | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>8011 - Omzet Drank Laag</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.omzet.omzlaag | number_format (2, ',', '.')}}'></td>
+                    <td>Drank Laag ex BTW</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.omzet.omzexlaag | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>8011 - Omzet Drank Hoog</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.omzet.omzhoog | number_format (2, ',', '.')}}'></td>
+                    <td>Drank Hoog ex BTW</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.omzet.omzexhoog | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>8041 - Omzet Zaalhuur & Verhuur</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.omzet.omzspacerent | number_format (2, ',', '.')}}'></td>
+                    <td>Zaalhuur & Verhuur ex BTW</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.omzet.omzexspacerent | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>8050 - Omzet Vouchers</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.omzet.omzvouchersrek | number_format (2, ',', '.')}}'></td>
+                    <td>Vouchers ex BTW</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.omzet.omzexvouchersrek | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>8061 - Omzet Entreegelden Laag</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.omzet.omzentry | number_format (2, ',', '.')}}'></td>
+                    <td>Entreegelden Laag ex BTW</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.omzet.omzexentry | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>8081 - Omzet Parkeren</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.omzet.omzparking | number_format (2, ',', '.')}}'></td>
+                    <td>Parkeren ex BTW</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.omzet.omzexparking | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>8090 - Omzet Techniek & Overig</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.omzet.omzothers | number_format (2, ',', '.')}}'></td>
+                    <td>Techniek & Overig ex BTW</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.omzet.omzexothers | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td style="border-top: 1px #666 solid; font-weight: bold;">TOTAAL OMZET</td>
+                    <td style="border-top: 1px #666 solid; "><input style=" max-width: 60px; text-align: right; font-size: 12px; font-weight: bold; color: black;" disabled="disabled" value='{{entity_basic.omzet.omztotal | number_format (2, ',', '.')}}'></td>
+                    <td style="border-top: 1px #666 solid; font-weight: bold;">TOTAAL OMZET EX BTW</td>
+                    <td style="border-top: 1px #666 solid; "><input style=" max-width: 60px; text-align: right; font-size: 12px; font-weight: bold; color: black;" disabled="disabled" value='{{entity_basic.omzet.omzextotal | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                </tr>
+                <tr style="height: 30px;">
+                    <td colspan="4" style="font-weight: bold;color: #FF8C11;font-size: 16px;">L1nda Omzetten</td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Omzet Food Dag</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.omzkitchendag | number_format (2, ',', '.')}}'></td>
+                    <td>2501 - Kruispost PIN/CCV</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.ontdebitcard | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Omzet Food Avond</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.omzkitchenavond | number_format (2, ',', '.')}}'></td>
+                    <td>2502 - Kruispost Credit Card</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.ontcreditcard | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Omzet Beverage & Zaalhuur PS</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.omzbeverageps | number_format (2, ',', '.')}}'></td>
+                    <td>2503 - Kruispost Op Rekening</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.ontrekening | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Omzet Beverage PH Dag</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.omzbeveragedag | number_format (2, ',', '.')}}'></td>
+                    <td>2504 - Kruispost Voorverkoop gelden</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.ontvooverkoop | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td>Omzet Beverage PH Avond</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.omzbeverageavond | number_format (2, ',', '.')}}'></td>
+                    <td>2509 - Kruispost Kadopagina</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.ontkadopagina | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td></td>
+                    <td></td>
+                    <td>2510 - Kruispost Tiqets</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.onttickets | number_format (2, ',', '.')}}'></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td></td>
+                    <td></td>
+                    <td>2511 - Kruispost Belevenissen.nl</td>
+                    <td><input style=" max-width: 60px; text-align: right; font-size: 12px;" disabled="disabled" value='{{entity_basic.ontbelevoucher | number_format (2, ',', '.')}}'></td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

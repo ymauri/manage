@@ -1,0 +1,19 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title%} Reception{% endblock %}    
+{% block body %}
+        <div class="row">
+            <div class="col-md-12 page-404">
+                <div class="number">
+                    404
+                </div>
+                <div class="details">
+                    <h3>Object not found.</h3>
+                    <p>
+                        {{message}}<br/>
+                        <a href="{{path('home')}}">
+                            Return home </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+{% endblock %}

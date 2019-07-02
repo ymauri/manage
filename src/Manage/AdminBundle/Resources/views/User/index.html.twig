@@ -1,51 +1,72 @@
-{% extends '::base.html.twig' %}
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title%} Users {% endblock %}
+{% block body %}
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon icon-user"></i>Users
+                </div>
+                <div class="tools">                    
+                    <a href="{{path('user_new')}}" class=" blue">
+                        <i class="fa fa-plus"></i> Create new 
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body" style="display: block;">
+                <div  class="table-responsive">
+                    <table class="table table-striped table-condensed table-bordered table-advance  table-hover">
+                        <thead>
+                            <tr>
+                                <th class="hidden-xs counter"> #
 
-{% block body -%}
-    <h1>User list</h1>
+                                </th>
+                                <th >
+                                    <i class="fa fa-envelope"></i> Email
+                                </th>
+                                <th class="hidden-xs">
+                                    <i class="fa fa-certificate"></i> Name
+                                </th>
+                                <th class="hidden-xs">
+                                    <i class="fa fa-bookmark"></i> Lastname
+                                </th>
+                                <th class="actions">
+                                    
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% set c = 1 %}
+                            {% for entity in entities %}
+                            <tr >
+                                <td class="highlight hidden-xs counter"><b>{{ c }}</b></td>
+                                <td>{{ entity.email }}</td>
+                                <td class="hidden-xs">{{ entity.name }}</td>
+                                <td class="hidden-xs">{{ entity.lastname }}</td>
+                                <td>
+                                    <div class="btn-group dropdown ">
+                                        <button class="btn blue-hoki btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+                                            Actions  <i class="fa fa-angle-down"></i>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li>
+                                                <a href="{{ path('user_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-search"></span>View</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ path('user_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span>Edit</a>
+                                            </li>
 
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Email</th>
-                <th>Password</th>
-                <th>Name</th>
-                <th>Lastname</th>
-                <th>Enable</th>
-                <th>Salt</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('user_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.email }}</td>
-                <td>{{ entity.password }}</td>
-                <td>{{ entity.name }}</td>
-                <td>{{ entity.lastname }}</td>
-                <td>{{ entity.enable }}</td>
-                <td>{{ entity.salt }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('user_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('user_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                                        </ul>
+                                    </div>
+                                 </td>
+                            </tr>
+                                {% set c = c + 1 %}
+                        {% endfor %}
+                           
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+{% endblock %}
 
-        <ul>
-        <li>
-            <a href="{{ path('user_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
-    {% endblock %}
+        

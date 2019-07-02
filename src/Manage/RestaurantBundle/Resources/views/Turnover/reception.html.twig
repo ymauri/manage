@@ -1,0 +1,37 @@
+<fieldset class="col-md-12 turnover-reception">
+    <h4>Receptie</h4>
+    <section class="x-group col-md-3  ">
+        <strong class="row form-group text-primary">Omzet</strong> 
+        <div class="row form-group">
+            {{form_label(form_reception.omzvoucher,'Vouchers €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_reception_omzvoucher" name="turnover_reception[omzvoucher]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.reception.omzvoucher | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_reception.omzparking,'Parkeren €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_reception_omzparking" name="turnover_reception[omzparking]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.reception.omzparking | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_reception.omzoverig,'Overig (L) €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_reception_omzoverig" name="turnover_reception[omzoverig]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.reception.omzoverig | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group totales">
+            {{form_label(form_reception.omztotal,' Totaal €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_reception_omztotal" name="turnover_reception[omztotal]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.reception.omztotal | number_format(2,',','.')}}">
+        </div>
+    </section>
+    <section class="z-group col-md-3  ">
+        <strong class="row form-group text-primary">Ontvangsten</strong> 
+        <div class="row form-group">
+            {{form_label(form_reception.ontdebitcard,'Debit Cards €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_reception_ontdebitcard" name="turnover_reception[ontdebitcard]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.reception.ontdebitcard | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group">
+            {{form_label(form_reception.ontcreditcard,'Credit Cards €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_reception_ontcreditcard" name="turnover_reception[ontcreditcard]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.reception.ontcreditcard | number_format(2,',','.')}}">
+        </div>
+        <div class="row form-group totales">
+            {{form_label(form_reception.onttotal,' Totaal €',{'attr':{'class' :' control-label',}})}}
+            <input type="text" id="turnover_reception_onttotal" name="turnover_reception[onttotal]" readonly="readonly" required="required" tabindex="-1" class=" pull-right form-control real  input-sm" value="{{entity_basic.reception.onttotal | number_format(2,',','.')}}">
+        </div>
+    </section>
+</fieldset>

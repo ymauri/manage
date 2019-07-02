@@ -1,0 +1,158 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title %} Auto-Pricing {% endblock %}
+{% block body %}
+<div class="portlet">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-check"></i>  Auto-Pricing
+        </div>
+
+        <div class="tools">
+            
+        </div>
+    </div>
+            <div class="portlet box blue-hoki">
+               <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-search"></i>View
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <fieldset>
+                    <form id="filter-pricing" class="form-horizontal" action="{{path('pricing-filter')}}">
+                <div class="row form-group col-md-7">
+                    <div class="row form-group col-md-12">
+                        <label>Purpose</label>
+                        <select name="subject" class="subject form-control">
+                            <option value="available">Available days</option>
+                            <option value="gaps">Gaps</option>
+                        </select>
+                    </div>
+                    <div class="row form-group col-md-12">
+                        <h5><b>Affected period</b></h5>
+                        <p>
+                        <label>Starting from</label>
+                        <select name="startingFromDaysAhead" class="form-control">
+                            <option value="0">Today</option>
+                            <option value="1">1 day ahead</option>
+                            <option value="2">2 day ahead</option>
+                            <option value="3">3 day ahead</option>
+                            <option value="4">4 day ahead</option>
+                            <option value="5">5 day ahead</option>
+                            <option value="6">6 day ahead</option>
+                            <option value="7">7 day ahead</option>
+                            <option value="8">8 day ahead</option>
+                            <option value="9">9 day ahead</option>
+                        </select>
+                        <label>Till</label>
+                        <select name="tillDaysAhead" class="form-control">
+                            {% for i in 0..180 %}
+                                <option value="{{ i }}">{{ i }} days ahead</option>
+                            {% endfor %}
+                        </select>
+                        </p>
+                    </div>
+                    <div class="row form-group col-md-12">
+                        <h5><b>Action</b></h5>
+                        <p>
+                        <select name="goal" class="form-control">
+                            <option value="lower">Lower price</option>
+                            <option value="raise">Raise price</option>
+                        </select>
+                        <label>By</label>
+                        <input name="amount" class="form-control" type="number" style="max-width: 60px !important;">
+                        <select name="unit" class="form-control" style="max-width: 60px !important;">
+                            <option value="%">%</option>
+                            <option value="currency">€</option>
+                        </select>
+                        </p>
+                    </div>
+                    <div class="row form-group col-md-12 gaps" hidden="hidden">
+                        <h5><b>Gaps definition</b></h5>
+                        <p> <label>where gaps are a maximum of</label>
+                            <select name="condition" class="form-control" style="max-width: 60px !important;">
+                                <option value=""></option>
+                                {% for i in 1..9 %}
+                                    <option value="{{ i }}">{{ i }} days</option>
+                                {% endfor %}
+                            </select>
+                            <label>available days between occupied dates.</label>
+                        </p>
+                    </div>
+
+                </div>
+                <div class="row form-group col-md-3">
+                    <label style="min-height: 190px; vertical-align: -webkit-baseline-middle;">Listing</label>
+                    <select multiple id="listing" name="listing" class="form-control" style="min-height: 190px;">
+                        {% for var in listings%}
+                            {# temporalmente voy a usar como ID el number del dpto#}
+                        <option value="{{var.idguesty}}">{{var.number}}</option>
+                        {% endfor %}
+                    </select>
+                    
+                </div>
+                <div class="row form-group col-md-2">
+                    <button type = 'submit' class="btn save-filter blue-hoki" >Filter</button>
+
+                </div>
+                </form>
+                </fieldset>
+                    <fieldset class="data-for-update" hidden="hidden">
+                        <div class="details-autopricing alert alert-info"></div>
+                    </fieldset>
+
+               
+         </div>
+        </div>
+        </div>
+<script>
+    $('.data-for-update').hide()
+    $('.details-autopricing').html('')
+
+    $('.subject').on({
+        'change':function(){
+            if ($(this).val()=='gaps'){
+                $('.gaps').show()
+            }
+            else {
+                $('.gaps').hide()
+                $('select[name="condition"]').val('')
+            }
+        }
+    })
+    $('.save-filter').click(function(e){
+        e.preventDefault()
+
+        //Todos los campos deben estar llenos
+        if ($('#from').val()=='' || $('#to').val()=='' || $('#listing').val()=='' || $('#listing').val() == null ){
+           alert('You must complete all fields.');
+          return false
+        }
+
+        Metronic.startPageLoading();
+        $.post('{{path('autopricing-update')}}', {'data':$('#filter-pricing').serializeArray()}, function(response){
+            Metronic.stopPageLoading();
+            msg = "";
+            for (var i = 0; i < response.length; i ++ ){
+                if (response[i].data.status == 200)
+                    msg += '<p>Listing '+response[i].listing+' Success!</p>'
+                else
+                    msg += '<p>Listing '+response[i].listing+' Error!</p>'
+
+            }
+
+            $('.details-autopricing').html(msg)
+            $('.data-for-update').show()
+        })
+
+    })
+
+    
+        
+</script>
+{% endblock %}
+

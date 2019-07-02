@@ -1,0 +1,309 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title %} Kasboek{% endblock %}
+{% block body %}
+    <script>numeral.locale('nl-nl');</script>
+    <div class="portlet">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon icon-bell"></i>Kasboek
+            </div>
+            <div class="tools">
+                <a href="{{ path('kasboek', {'date': 'today' | date('m-Y')}) }}" class=" blue">
+                    <i class="fa fa-list-alt"></i> List
+                </a>
+            </div>
+        </div>
+        <div class="portlet box blue-hoki">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-list"></i> Form
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                </div>
+            </div>
+
+
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="row">
+                    <form id="form-basic-kasboek" class=" form-horizontal edit"
+                          action="{{ path('kasboek_edit',{'id':entity_basic.id}) }}"
+                          method="POST" {{ form_enctype(form_basic) }} autocomplete="off">
+                        <div class="form-body">
+                            <fieldset class="kasboek-basic" >
+                                <div class="col-md-2" style="margin: auto 20px">
+                                    <div class="row form-group">
+                                        <label class="control-label ">Maand</label>
+                                        <input type="text" id="adminbundle_kasboek_dated" name="adminbundle_kasboek[dated]" class="form-control input-sm col-md-2 pull-right datepicker" data-provide="datepicker" readonly="readonly" data-date-format="MM-yyyy" value="{{ entity_basic.dated | date('F-Y') }}" style="text-align: center;" {% if entity_basic.finished != null %} disabled="disabled" {% endif %}>
+                                        {# <input type="text" id="adminbundle_kasboek_dated" name="adminbundle_Kasboek[dated]" required="required" class="form-control real  datepicker" data-provide="datepicker" readonly="readonly" data-date-format="dd-mm-yyyy" value="{{ entity_basic.dated | date('d-m-Y') }}" {% if show %}disabled="disabled"{% endif %}>#}
+
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="row form-group">
+                                        <label class="control-label ">Begin Saldo €</label>
+                                        {{ form_widget(form_basic.beginsaldo, {'attr':{ 'class' :'input-sm  form-control real pull-right', 'style':"max-width:80px; text-align:right;"}}) }}
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset class="kasboek-basic" >
+                                <div class="col-md-2" style="margin: auto 20px">
+                                    <div class="row form-group">
+                                        <label class="control-label ">Eind Saldo €</label>
+                                        {{ form_widget(form_basic.eindsaldo, {'attr':{ 'class' :'input-sm  form-control real pull-right', 'style':"max-width:80px; text-align:right;"}}) }}
+                                    </div>
+                                </div>
+                                <div class="col-md-2 ">
+                                    <div class="row form-group">
+                                        <label class="control-label ">Kasverschil €</label>
+                                        {{ form_widget(form_basic.kasverschil, {'attr':{ 'class' :'input-sm  form-control real pull-right', 'style':"max-width:80px; text-align:right;"}}) }}
+                                    </div>
+                                </div>
+                            </fieldset>
+                            {% include 'RestaurantBundle:Kasboek:contanten.html.twig' %}
+                            <fieldset class="col-md-12">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td style="font-weight: bold">Totaal € &nbsp;&nbsp;</td>
+                                            <td>{{ form_widget(form_basic.totalinkas, {'attr':{ 'class' :'input-sm  form-control real', 'style':"max-width:80px; text-align:right;"}}) }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </fieldset>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <fieldset class="col-md-12">
+                                {% include 'RestaurantBundle:Kasboek:turnovers.html.twig' %}
+                            </fieldset>
+
+                            {% include 'RestaurantBundle:Kasboek:final.html.twig' %}
+                            <fieldset class="col-md-12" style="border-bottom: none">
+                                <div class="col-md-6 col-md-offset-3">
+                                    {% if not show %}
+                                        <button type='submit' class="btn save-while blue-hoki">Tussentijds bewaren
+                                        </button>
+                                        <button type='submit' class="btn final-submit green-seagreen" hidden>Verzenden
+                                        </button>
+                                        <a href="{{path('kasboek', {'date': entity_basic.dated | date('m-Y')})}}"><button type = 'button' class="btn blue-hoki">Annuleer</button></a>
+
+
+                                    {% else %}
+                                        <a href="{{ path('kasboek', {'date': 'today' | date('m-Y')}) }}">
+                                            <button type='button' class="btn blue-hoki">List</button>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div hidden="hidden">
+                            {{ form_rest(form_basic) }}
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+           $('button[type="submit"]').click(function(e) {
+                e.preventDefault();
+                //Pantalla Loading
+                Metronic.startPageLoading();
+                $('.form-control').hide()
+
+                   /*if ($(this).hasClass('final-submit')) {
+                        fecha = new Date();
+                       mes = fecha.getMonth() + 1
+                       mes = mes.toString().length == 1 ? '0' + mes.toString() : mes
+                        $('#adminbundle_kasboek_finished').val(fecha.getFullYear()+'-'+mes+'-'+fecha.getDate())
+                   }
+*/
+               array_to_work = $('#form-basic-kasboek').clone()
+               array_to_work.find('input.form-control').each(function(index, item) {
+                   if (!$(item).hasClass('datepicker') && !$(item).hasClass('timepicker') || !$(item).hasClass('texto')){
+                       var num = numeral($(item).val()).value()
+                       if (num != null) {
+                           $(item).val(num)
+                       }
+                   }
+               })
+                    boton = $(this)
+                    data_to_send = new Object()
+                    for (var i = 1; i <= 31; i++){
+                        tmp = new Object()
+                        $('tr.'+i+' input').each(function(index, item){
+                            tmp[$(item).attr('name')] = numeral($(item).val()).value()
+                        })
+                        data_to_send[i] = tmp
+                    }
+                $.post("{{path('kasboek_turnover', {'id':entity_basic.id})}}", {data:data_to_send},function(response){
+
+                } )
+               array_to_work.ajaxSubmit(function(response){
+                        Metronic.stopPageLoading();
+                        $('.form-control').show();
+                        if (response == 'true') {
+                            if (boton.hasClass('final-submit')) {
+                                $.post("{{ path("kasboek_finish", {'id':entity_basic.id}) }}")
+                                $('.alert-success').text('Success! The form is done.')
+                                $('.alert-success').text('Success! The email has been sent')
+                            }
+                            else
+                                $('.alert-success').text('Success! The form has been modified.');
+                            $('.alert-success').show()
+                            setTimeout(function () {
+                                $('.alert-success').hide(300)
+                            }, 4400)
+                            if (boton.hasClass('final-submit'))  window.location="{{ path('kasboek', {'date': 'today' | date('m-Y')}) }}";
+                        }
+                        else{
+                            $('.alert-danger').text(response);
+                            $('.alert-danger').show()
+                            setTimeout(function () {
+                                $('.alert-danger').hide(300)
+                            }, 4400)
+                        }
+                    })
+                })
+
+
+           $('div').on('keypress','.real', function(evt){
+               evt = (evt) ? evt : window.event;
+               var charCode = (evt.which) ? evt.which : evt.keyCode;
+               if (charCode > 31 && (charCode < 44 || charCode > 57)) {
+                   return false;
+               }
+               var val = $(this).val()
+               $(this).val(val.split('.').join(','))
+
+               return true;
+           })
+           $('div').on('blur','.real', function(event){
+               $(event.target).val(function(index, value) {
+                   if (value != '')
+                       return numeral(value).format('0.0,');
+                   return '';
+
+               });
+           })
+           $('div').on('keypress','.entero', function(evt){
+               evt = (evt) ? evt : window.event;
+               var charCode = (evt.which) ? evt.which : evt.keyCode;
+               if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                   return false;
+               }
+               return true;
+           })
+           $('div').on('blur','.entero', function(event){
+               $(event.target).val(function(index, value) {
+                   if (value != '')
+                       return numeral(value).format('0,0');
+                   return '';
+               });
+           })
+            $('.cancel').click(function () {
+
+                bootbox.dialog({
+                    message: "This form will be removed from the system",
+                    title: "Delete form",
+                    buttons: {
+
+                        main: {
+                            label: "Cancel",
+                            className: ""
+                        },
+                        success: {
+                            label: "Confirm",
+                            className: "blue-hoki",
+                            callback: function () {
+                                window.location = "{{ path('kasboek_delete', {'id':entity_basic.id}) }}";
+                            }
+                        }
+                    }
+                });
+            });
+
+           $('#kasboek_beginsaldo').on({
+               'keyup':function(){
+                   totalin = numeral($('#kasboek_in_omztotalin').val()).value()
+                   totalout = numeral($('#kasboek_out_totalout').val()).value()
+                   begin = numeral($('#kasboek_beginsaldo').val()).value()
+                   $('#kasboek_out_saldo').val(numeral(begin + totalin - totalout).format('0.0,'))
+                   $('#kasboek_eindsaldo').val(numeral(begin + totalin - totalout).format('0.0,'))
+                   eindsaldo = numeral($('#kasboek_eindsaldo').val()).value()
+                   inkas = numeral($('#kasboek_totalinkas').val()).value()
+                   $('#kasboek_kasverschil').val(numeral(inkas - eindsaldo).format('0.0,'))
+               }
+           })
+
+           $('#kasboek_contanten .form-control, #kasboek_totalinkas, #kasboek_final .form-control, #kasboek_beginsaldo, #kasboek_eindsaldo, #kasboek_kasverschil').trigger('keypress').trigger('blur');
+     function totalout(){
+        var total = 
+                numeral($('#kasboek_out_pinccv').val()).value() +
+                numeral($('#kasboek_out_creditcards').val()).value() +
+                numeral($('#kasboek_out_rekening').val()).value() +
+                numeral($('#kasboek_out_voorverkoop').val()).value() +
+                numeral($('#kasboek_out_kadopagina').val()).value() +
+                numeral($('#kasboek_out_tickets').val()).value() +
+                numeral($('#kasboek_out_belevenissen').val()).value() +        
+                numeral($('#kasboek_out_cash').val()).value() +
+                numeral($('#kasboek_out_inkoopfood').val()).value() +
+                numeral($('#kasboek_out_bedrijfskleding').val()).value() +
+                numeral($('#kasboek_out_kleineinv').val()).value() +
+                numeral($('#kasboek_out_was').val()).value() +
+                numeral($('#kasboek_out_bankkosten').val()).value() +
+                numeral($('#kasboek_out_entertainment').val()).value() +
+                numeral($('#kasboek_out_diversekosten').val()).value()
+        $('#kasboek_out_totalout').val(numeral(total).format('0.0,'))
+     }
+     
+     function totaloutex(){
+        var total = 
+                numeral($('#kasboek_out_exinkoopfood').val()).value() +
+                numeral($('#kasboek_out_exbedrijfskleding').val()).value() +
+                numeral($('#kasboek_out_exkleineinv').val()).value() +
+                numeral($('#kasboek_out_exwas').val()).value() +
+                numeral($('#kasboek_out_exentertainment').val()).value() +
+                numeral($('#kasboek_out_exdiversekosten').val()).value()
+        $('#kasboek_out_extotalout').val(numeral(total).format('0.0,'))
+     }
+     function totaloutbtw(){
+        var total = 
+                numeral($('#kasboek_out_btwinkoopfood').val()).value() +
+                numeral($('#kasboek_out_btwbedrijfskleding').val()).value() +
+                numeral($('#kasboek_out_btwkleineinv').val()).value() +
+                numeral($('#kasboek_out_btwwas').val()).value() +
+                numeral($('#kasboek_out_btwentertainment').val()).value() +
+                numeral($('#kasboek_out_btwdiversekosten').val()).value()
+        $('#kasboek_out_btwtotalout').val(numeral(total).format('0.0,'))
+     }
+     {% if show %}
+        $('.form-control').attr('disabled', 'disabled')
+    {% endif %}
+
+     $('#adminbundle_kasboek_dated').on({
+         'change':function(){
+
+             Metronic.startPageLoading()
+             $.post("{{ path('kasboek_change_date', {'id':entity_basic.id}) }}", {'newdate':$('#adminbundle_kasboek_dated').val()}, function(e){
+                 if (e == 'true') window.location = window.location
+                 if (e == 'false') {
+                     Metronic.stopPageLoading()
+                     $('.alert-danger').text('Error! The form date can\'t be modified.');
+                     $('.alert-danger').show()
+                     setTimeout(function () {
+                         $('.alert-danger').hide(300)
+                     }, 4400)
+                     //$('#adminbundle_kasboek_dated').val({{ entity_basic.dated | date('F-Y') }})
+                 }
+             })
+         }
+     })
+    </script>
+
+{% endblock %}

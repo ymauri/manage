@@ -23,461 +23,532 @@ class Reception {
 
     /**
      * @var string
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
     private $name;
 
     /**
      * @var string
-     * @ORM\Column(name="details", type="text")
+     * @ORM\Column(name="details", type="text", nullable=true)
      */
     private $details;
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="dated", type="date") 
+     * @ORM\Column(name="dated", type="date", nullable=true) 
      */
     private $dated;
 
     /**
      * @var object
-     * @ORM\ManyToOne(targetEntity="ReceptionVoucher")
+     * @ORM\Column(name="voucher", type="integer", nullable=true)
      */
     private $voucher;
 
     /**
      * @var integer
-     * @ORM\Column(name="vdstart", type="integer")
+     * @ORM\Column(name="vdstart", type="integer", nullable=true)
      */
     private $vdstart;
     
     /**
      * @var integer
-     * @ORM\Column(name="vdend", type="integer")
+     * @ORM\Column(name="vdend", type="integer", nullable=true)
      */
     private $vdend;
     
     /**
      * @var integer
-     * @ORM\Column(name="vdamount", type="integer")
+     * @ORM\Column(name="vdamount", type="integer", nullable=true)
      */
     private $vdamount;
     
         /**
          * @var integer
-     * @ORM\Column(name="vnstart", type="integer")
+     * @ORM\Column(name="vnstart", type="integer",nullable=true)
      */
     private $vnstart;
     
     /**
      * @var integer
-     * @ORM\Column(name="vnend", type="integer")
+     * @ORM\Column(name="vnend", type="integer", nullable=true)
      */
     private $vnend;
     
     /**
      * @var integer
-     * @ORM\Column(name="vnamount", type="integer")
+     * @ORM\Column(name="vnamount", type="integer", nullable=true)
      */
     private $vnamount;
     
     /**
      * @var integer
-     * @ORM\Column(name="freevoucher", type="integer")
+     * @ORM\Column(name="freevoucher", type="integer", nullable=true)
      */
     private $freevoucher;
     
     /**
      * @var float
-     * @ORM\Column(name="genralamount", type="float")
+     * @ORM\Column(name="genralamount", type="float", nullable=true)
      */
     private $generalamount;
     
     /**
      * @var integer
-     * @ORM\Column(name="halfprice", type="integer")
+     * @ORM\Column(name="halfprice", type="integer", nullable=true)
      */
     private $halfprice;
     
     /**
      * @var float
-     * @ORM\Column(name="profit", type="float")
+     * @ORM\Column(name="profit", type="float", nullable=true)
      */
     private $profit;
     
     /**
      * @var array
-     * @ORM\Column(name="giftvouchers", type="array")
+     * @ORM\Column(name="giftvouchers", type="array", nullable=true)
      */
     private $giftvouchers;
     
     /**
      * @var array
-     * @ORM\Column(name="giftvouchersvalues", type="array")
+     * @ORM\Column(name="giftvouchersvalues", type="array", nullable=true)
      */
     private $giftvouchersvalues;
     
      /**
      * @var array
-     * @ORM\Column(name="parcking", type="array")
+     * @ORM\Column(name="parcking", type="array", nullable=true)
      */
     private $parking;
     
          /**
      * @var array
-     * @ORM\Column(name="parckingvalues", type="array")
+     * @ORM\Column(name="parckingvalues", type="array", nullable=true)
      */
     private $parkingvalues;
     
      /**
      * @var float
-     * @ORM\Column(name="giftvoucherstotal", type="float")
+     * @ORM\Column(name="giftvoucherstotal", type="float", nullable=true)
      */
     private $giftvoucherstotal;
 
     /**
      * @var float
-     * @ORM\Column(name="parkingtotal", type="float")
+     * @ORM\Column(name="parkingtotal", type="float", nullable=true)
      */
     private $parkingtotal;
 
     /**
      * @var float
-     * @ORM\Column(name="othersales", type="float")
+     * @ORM\Column(name="othersales", type="float", nullable=true)
      */
     private $othersales;
 
         /**
      * @var float
-     * @ORM\Column(name="completeprofit", type="float")
+     * @ORM\Column(name="completeprofit", type="float", nullable=true)
      */
     private $completeprofit;
     
-    /* Get id
-     * @return integer 
+        /**
+     * @var object
+     * @ORM\OneToOne(targetEntity="Bill", cascade={"persist"})
      */
+    private $bill;
+    
+            /**
+     * @var object
+     * @ORM\OneToOne(targetEntity="BeginBill", cascade={"persist"})
+     */
+    private $beginbill;
+    
+                /**
+     * @var object
+     * @ORM\OneToOne(targetEntity="Card", cascade={"persist"})
+     */
+    private $card;
+    
+    /**
+     * @var array
+     * @ORM\Column(name="voorgeschoten", type="array", nullable=true)
+     */
+    private $voorgeschoten;
+    
+     /**
+     * @var float
+     * @ORM\Column(name="voorgeschotentotal", type="float", nullable=true)
+     */
+    private $voorgeschotentotal;
+    
+         /**
+     * @var float
+     * @ORM\Column(name="ontvangen", type="float", nullable=true)
+     */
+    private $ontvangen ;
+   
+             /**
+     * @var float
+     * @ORM\Column(name="kasverschil", type="float", nullable=true)
+     */
+    private $kasverschil;
+    
+                 /**
+     * @var object
+     *  @ORM\ManyToOne(targetEntity="Manage\AdminBundle\Entity\Worker")
+     */
+    private $userdag;
+    
+                 /**
+     * @var object
+     *  @ORM\ManyToOne(targetEntity="Manage\AdminBundle\Entity\Worker")
+     */
+    private $useravond;
+
+                 /**
+     * @var string
+     * @ORM\Column(name="notify", type="string", nullable=true)
+     */
+    private $notify;
+    
+                     /**
+     * @var string
+     * @ORM\Column(name="updated", type="date", nullable=true)
+     */
+    private $updated;
+                     /**
+     * @var string
+     * @ORM\Column(name="finished", type="date", nullable=true)
+     */
+    private $finished;
+
+    /**
+     * @var float
+     * @ORM\Column(name="time", type="time", nullable=true)
+     */
+    private $time;
+    
     public function getId() {
         return $this->id;
     }
-
-    /* Set details
-     * @param string $name
-     * @return Reception
-     */
+ 
     public function setName($name) {
         $this->name = $name;
 
         return $this;
-    }
-
-    /* Get details
-     * @return string 
-     */
+    } 
+    
     public function getName() {
         return $this->name;
     }
-    
-    /* Set details
-     * @param string $details
-     * @return CashClosure
-     */
+     
     public function setDetails($details) {
         $this->details = $details;
 
         return $this;
     }
 
-    /* Get details
-     * @return string 
-     */
     public function getDetails() {
         return $this->details;
     }
 
-    /**
-     * Set dated
-     *
-     * @param \DateTime $dated
-     * @return \DateTime
-     */
     public function setDated($dated) {
         $this->dated = $dated;
 
         return $this;
     }
 
-    /**
-     * Get dated
-     *
-     * @return \DateTime 
-     */
     public function getDated() {
         return $this->dated;
     }
 
-    /* @return float 
-     */
     public function getHalfprice() {
         return $this->halfprice;
     }
 
-    /* @param float $genralamount
-     * @return object
-     */
     public function setHalfprice($halfprice) {
         $this->halfprice = $halfprice;
         return $this;
     }
-    
-     /* @return float 
-     */
+ 
     public function getGeneralamount() {
         return $this->generalamount;
     }
 
-    /* @param float $genralamount
-     * @return object
-     */
     public function setGeneralamount($genralamount) {
         $this->generalamount = $genralamount;
         return $this;
     }
 
-     /* @return float 
-     */
     public function getProfit() {
         return $this->profit;
     }
 
-    /* @param float $profit
-     * @return object
-     */
     public function setProfit($profit) {
         $this->profit = $profit;
         return $this;
     }
-    
-    /* @return integer 
-     */
+ 
     public function getFreevoucher() {
         return $this->freevoucher;
     }
 
-    /* @param integer $freevoucher
-     * @return object
-     */
     public function setFreevoucher($freevoucher) {
         $this->freevoucher = $freevoucher;
         return $this;
     }
     
-     /* @return object 
-     */
     public function getVoucher() {
         return $this->voucher;
     }
 
-    /* @param object $voucher
-     * @return object
-     */
     public function setVoucher($voucher) {
         $this->voucher = $voucher;
         return $this;
     }
     
-      /* @return integer 
-     */
     public function getVdstart() {
         return $this->vdstart;
     }
 
-    /* @param integer $vdstart
-     * @return object
-     */
     public function setVdstart($vdstart) {
         $this->vdstart = $vdstart;
         return $this;
     }
     
-          /* @return integer 
-     */
     public function getVdend() {
         return $this->vdend;
-    }
-
-    /* @param integer $vdend
-     * @return object
-     */
+    } 
+    
     public function setVdend($vdend) {
         $this->vdend = $vdend;
         return $this;
-    }
+    } 
     
-     /* @return integer 
-     */
     public function getVdamount() {
         return $this->vdamount;
     }
-
-    /* @param integer $vdamount
-     * @return object
-     */
+ 
     public function setVdamount($vdamount) {
         $this->vdamount = $vdamount;
         return $this;
     }
-    
-          /* @return integer 
-     */
+     
     public function getVnstart() {
         return $this->vnstart;
-    }
-
-    /* @param integer $vnstart
-     * @return object
-     */
+    } 
+    
     public function setVnstart($vnstart) {
         $this->vnstart = $vnstart;
         return $this;
     }
-    
-          /* @return integer 
-     */
+     
     public function getVnend() {
         return $this->vnend;
     }
-
-    /* @param integer $vnend
-     * @return object
-     */
+ 
     public function setVnend($vnend) {
         $this->vnend = $vnend;
         return $this;
     }
-    
-     /* @return integer 
-     */
+     
     public function getVnamount() {
         return $this->vnamount;
     }
-
-    /* @param integer $vnamount
-     * @return object
-     */
+ 
     public function setVnamount($vnamount) {
         $this->vnamount = $vnamount;
         return $this;
     }
-    
-         /* @return array 
-     */
+     
     public function getGiftvouchers() {
         return $this->giftvouchers;
     }
-
-    /* @param array $giftvouchers
-     * @return object
-     */
+ 
     public function setGiftvouchers($giftvouchers) {
         $this->giftvouchers = $giftvouchers;
         return $this;
     }
-    
-             /* @return array 
-     */
+     
     public function getGiftvouchersvalues() {
         return $this->giftvouchersvalues;
     }
-
-    /* @param array $giftvouchersvalues
-     * @return object
-     */
+ 
     public function setGiftvouchersvalues($giftvouchersvalues) {
         $this->giftvouchersvalues = $giftvouchersvalues;
         return $this;
     }
-    
-             /* @return array 
-     */
+     
     public function getParking() {
         return $this->parking;
     }
-
-    /* @param array $parking
-     * @return object
-     */
+ 
     public function setParking($parking) {
         $this->parking = $parking;
         return $this;
     }
-    
-             /* @return array 
-     */
+     
     public function getParkingvalues() {
         return $this->parkingvalues;
     }
-
-    /* @param array $parkingvalues
-     * @return object
-     */
+ 
     public function setParkingvalues($parkingvalues) {
         $this->parkingvalues = $parkingvalues;
         return $this;
     }
-    
-                 /* @return float 
-     */
+     
     public function getGiftvoucherstotal() {
         return $this->giftvoucherstotal;
     }
-
-    /* @param float $giftvoucherstotal
-     * @return object
-     */
+ 
     public function setGiftvoucherstotal($giftvoucherstotal) {
         $this->giftvoucherstotal = $giftvoucherstotal;
         return $this;
     }
-    
-    /* @return float 
-     */
+     
     public function getParkingtotal() {
         return $this->parkingtotal;
     }
-
-    /* @param float $parkingtotal
-     * @return object
-     */
+ 
     public function setParkingtotal($parkingtotal) {
         $this->parkingtotal = $parkingtotal;
         return $this;
     }
-    
-        /* @return float 
-     */
+     
     public function getCompleteprofit() {
         return $this->completeprofit;
     }
-
-    /* @param float $completeprofit
-     * @return object
-     */
+ 
     public function setCompleteprofit($completeprofit) {
         $this->completeprofit = $completeprofit;
         return $this;
     }
-    
-            /* @return float 
-     */
+     
     public function getOthersales() {
         return $this->othersales;
     }
-
-    /* @param float $othersales
-     * @return object
-     */
+ 
     public function setOthersales($othersales) {
         $this->othersales = $othersales;
+        return $this;
+    }
+    
+    public function getBill() {
+        return $this->bill;
+    }
+
+    public function setBill($bill) {
+        $this->bill = $bill;
+
+        return $this;
+    }
+    
+    public function getBeginbill() {
+        return $this->beginbill;
+    }
+
+    public function setBeginbill($beginbill) {
+        $this->beginbill = $beginbill;
+        return $this;
+    }
+    
+    public function getCard() {
+        return $this->card;
+    }
+
+    public function setCard($card) {
+        $this->card = $card;
+        return $this;
+    }
+    
+    public function getVoorgeschoten () {
+        return $this->voorgeschoten ;
+    }
+
+    public function setVoorgeschoten ($voorgeschoten ) {
+        $this->voorgeschoten  = $voorgeschoten ;
+        return $this;
+    }
+    
+    public function getVoorgeschotentotal () {
+        return $this->voorgeschotentotal;
+    }
+
+    public function setVoorgeschotentotal($voorgeschotentotal) {
+        $this->voorgeschotentotal = $voorgeschotentotal;
+        return $this;
+    }
+    
+    public function getOntvangen () {
+        return $this->ontvangen;
+    }
+
+    public function setOntvangen($ontvangen) {
+        $this->ontvangen = $ontvangen;
+        return $this;
+    }
+    
+    public function getKasverschil () {
+        return $this->kasverschil;
+    }
+
+    public function setKasverschil($kasverschil) {
+        $this->kasverschil = $kasverschil;
+        return $this;
+    }
+    
+    public function getUserdag () {
+        return $this->userdag;
+    }
+
+    public function setUserdag($userdag) {
+        $this->userdag = $userdag;
+        return $this;
+    }
+    
+    public function getUseravond () {
+        return $this->useravond;
+    }
+
+    public function setUseravond($useravond) {
+        $this->useravond = $useravond;
+        return $this;
+    }
+    
+    public function getNotify () {
+        return $this->notify;
+    }
+
+    public function setNotify($notify) {
+        $this->notify = $notify;
+        return $this;
+    }
+    
+    public function getUpdated () {
+        return $this->updated;
+    }
+
+    public function setUpdated($updated) {
+        $this->updated = $updated;
+        return $this;
+    }
+    public function getFinished () {
+        return $this->finished;
+    }
+
+    public function setFinished($finished) {
+        $this->finished = $finished;
+        return $this;
+    }
+
+    public function getTime(){
+        return $this->time;
+    }
+
+    public function setTime($time){
+        $this->time = $time;
         return $this;
     }
     
@@ -485,4 +556,5 @@ class Reception {
         return $this->dated.' '.$this->name;
     }
 
+    
 }

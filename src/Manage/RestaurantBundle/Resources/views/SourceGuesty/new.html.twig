@@ -1,0 +1,52 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title %} New Source Guesty{% endblock %}
+{% block body %}
+<div class="portlet">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-notebook"></i>Source Guesty
+        </div>
+        <div class="tools">
+            <a href="{{path('sourceguesty')}}" class=" blue">
+                <i class="fa fa-list-alt"></i> List
+            </a>
+        </div>
+    </div>
+        <div class="portlet box blue-hoki">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-plus"></i>New
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                {% if form_errors(form)%}
+                    <div class="form-errors alert alert-danger">
+                        {{form_errors(form)}}
+                    </div>
+                {% endif %}
+                <form class="container-fluid form-horizontal" action="{{path('sourceguesty_create')}}" method="POST" {{form_enctype(form)}}>
+                    <div class="form-body col-md-5">
+                        <div class="row form-group">
+                            {{form_label(form.name,'Name',{'attr':{
+                      'class' :' control-label',
+                            }})}}
+                            {{form_widget(form.name, {'attr':{
+                      'class' :'input-sm pull-right form-control'
+                            }})}}  
+                            {{form_errors(form.name)}}
+                        </div>
+
+
+                        <div class="row form-group ">
+                            {{ form_rest(form) }}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+</div>
+{% endblock %}

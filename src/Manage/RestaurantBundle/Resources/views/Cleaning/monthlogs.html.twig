@@ -1,0 +1,134 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title%} Cleaning {% endblock %}
+{% block body %}
+    <div class="portlet">
+        <div class="portlet-title">
+            <div class="caption">Summary <strong>{{ dated | date ("M, Y") }}</strong></div>
+            <div class="tools">
+                <!--<a href="#" class=" blue">
+                    <i class="fa fa-plus"></i> Create new
+                </a>-->
+            </div>
+        </div>
+        <div class="portlet-body" style="display: block;">
+            <div  class="table-responsive">
+                <div class="row">
+                    <div class="col-md-7 col-sm-12">
+                        <div class="dataTables_paginate paging_simple_numbers" id="sample_2_paginate">
+                            <ul class="pagination">
+                                <li class="paginate_button previous" aria-controls="sample_2" tabindex="0" id="sample_2_previous">
+                                    <a href="{{ path('cleaning_summary', {'month': dated | date_modify ("- 1 month") | date("m-Y") }) }}"><i class="fa fa-angle-double-left"></i></a>
+                                </li>
+                                <li class="paginate_button active" tabindex="0"><a href="#">{{ dated | date ("m-Y") }}</a></li>
+                                <li class="paginate_button next" aria-controls="sample_2" tabindex="0" id="sample_2_next">
+                                    <a href="{{ path('cleaning_summary', {'month': dated | date_modify ("+ 1 month")| date("m-Y") }) }}"><i class="fa fa-angle-double-right"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <h4>Daily Cleaning</h4>
+                <table class="table table-striped table-condensed table-bordered table-advance  table-hover">
+                    <thead>
+                    <tr>
+                        <th class="" >Day</th>
+                        <th class="">
+                            <i class="fa fa-check-circle"></i> Check-outs
+                        </th>
+                        <th class="">
+                            <i class="fa fa-clock-o"></i> Minutes
+                        </th>
+                        <th class="">
+                            <i class="fa fa-clock-o"></i> Average
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% set totalminutes = 0 %}
+                    {% set totaldeptos = 0 %}
+                    {% set totallistings = 0 %}
+                    {% for entity in entities %}
+                            <tr >
+                                <td class="highlight"><b>{{ entity.day }}</b></td>
+                                <td class="">{{ entity.numberdptos }}</td>
+                                <td class="">{{ entity.minutes }}</td>
+                                <td class="">{% if entity.numberdptos > 0 %} {{ (entity.minutes / entity.numberdptos) | number_format(0,',',';') }} {% else %} 0 {% endif %}</td>
+                            </tr>
+                        {% set totalminutes = totalminutes + entity.minutes %}
+                        {% set totaldeptos = totaldeptos + entity.numberdptos %}
+                        {% set totallistings = totallistings + entity.minutes %}
+                    {% endfor %}
+
+                    </tbody>
+                    <tfoot>
+                    <tr >
+                        <td class="highlight"><b style="color: red">Total</b></td>
+                        <td class=""><b style="color: red">{{ totaldeptos }}</b></td>
+                        <td class=""><b style="color: red">{{ totalminutes }}</b></td>
+                        <td class=""><b style="color: red">{% if totaldeptos > 0 %}{{ (totalminutes / totaldeptos) |  number_format(0,',',';') }} {% else %} 0 {% endif %}</b></td>
+                    </tr>
+                    </tfoot>
+                </table>
+                <h4>Long Stay</h4>
+                <table class="table table-striped table-condensed table-bordered table-advance  table-hover">
+                    <thead>
+                    <tr>
+                        <th class="" >Day</th>
+                        <th class="">
+                            <i class="fa fa-check-circle"></i> Check-outs
+                        </th>
+                        <th class="">
+                            <i class="fa fa-clock-o"></i> Minutes
+                        </th>
+                        <th class="">
+                            <i class="fa fa-clock-o"></i> Average
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% set totalminutes = 0 %}
+                    {% set totaldeptos = 0 %}
+                    {% set totallistings = 0 %}
+                    {% for entity in extra %}
+                        <tr >
+                            <td class="highlight"><b>{{ entity.day }}</b></td>
+                            <td class="">{{ entity.deptos }}</td>
+                            <td class="">{{ entity.minutes }}</td>
+                            <td class="">{% if entity.numberdptos > 0 %} {{ (entity.minutes / entity.numberdptos) | number_format(0,',',';') }} {% else %} 0 {% endif %}</td>
+                        </tr>
+                        {% set totalminutes = totalminutes + entity.minutes %}
+                        {% set totaldeptos = totaldeptos + entity.numberdptos %}
+                        {% set totallistings = totallistings + entity.minutes %}
+                    {% endfor %}
+
+                    </tbody>
+                    <tfoot>
+                    <tr >
+                        <td class="highlight"><b style="color: red">Total</b></td>
+                        <td class=""><b style="color: red">{{ totaldeptos }}</b></td>
+                        <td class=""><b style="color: red">{{ totalminutes }}</b></td>
+                        <td class=""><b style="color: red">{% if totaldeptos > 0 %}{{ (totalminutes / totaldeptos) |  number_format(0,',',';') }} {% else %} 0 {% endif %}</b></td>
+                    </tr>
+                    </tfoot>
+                </table>
+
+                <div class="row">
+                    <div class="col-md-7 col-sm-12">
+                        <div class="dataTables_paginate paging_simple_numbers" id="sample_2_paginate">
+                            <ul class="pagination">
+                                <li class="paginate_button previous" aria-controls="sample_2" tabindex="0" id="sample_2_previous">
+                                    <a href="{{ path('cleaning_summary', {'month': dated | date_modify ("- 1 month") | date("m-Y") }) }}"><i class="fa fa-angle-double-left"></i></a>
+                                </li>
+                                <li class="paginate_button active" tabindex="0"><a href="#">{{ dated | date ("m-Y") }}</a></li>
+                                <li class="paginate_button next" aria-controls="sample_2" tabindex="0" id="sample_2_next">
+                                    <a href="{{ path('cleaning_summary', {'month': dated | date_modify ("+ 1 month")| date("m-Y") }) }}"><i class="fa fa-angle-double-right"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

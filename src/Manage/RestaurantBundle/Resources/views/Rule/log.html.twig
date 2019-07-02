@@ -1,0 +1,65 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title %} Rules Log {% endblock %}
+{% block body %}
+<div class="portlet">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-check"></i> Rules Log
+        </div>
+
+        <div class="tools">
+            <a href="{{path('rule_admin')}}" class=" blue">
+                <i class="fa fa-list"></i> Rule list
+            </a>
+        </div>
+    </div>
+            <div class="portlet box blue-hoki">
+               <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-list"></i>List
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                {% set count = 1 %}
+                <fieldset>
+                    <form id="filter-pricing" class="form-horizontal" action="#">
+                        <table class="table table-striped table-condensed table-bordered table-advance  table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Rule</th>
+                                    <th>Executed at</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                        {% for item in rules %}
+                           <tr>
+                               <th style="text-align: center;">{{ count }}</th>
+                               <td>  {{ item.rule.name }} </td>
+                               <td> {{ item.executedat | date ('d-m-Y') }} </td>
+                               <td>  {{ item.details }} </td>
+                           </tr>
+                            {% set count = count + 1 %}
+                        {% endfor %}
+                        </table>
+                    </form>
+                </fieldset>
+                    <fieldset class="data-for-update">
+                        
+                    </fieldset>
+                    <fieldset  style="border:none; padding: 20px 0;">  <div class="col-md-2 col-md-offset-4"> <button type = "submit" hidden="hidden" class="btn update-price blue-hoki" style="display:none"  >Update price in Guesty</button> </div> </fieldset>
+
+               
+         </div>
+        </div>
+        </div>
+<script>
+    
+
+</script>
+{% endblock %}
+

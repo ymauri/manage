@@ -1,0 +1,94 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title %} Show Checkin {% endblock %}
+{% block body %}
+<div class="portlet">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-check"></i> Checkin
+        </div>
+
+        <div class="tools">
+            <a href="{{path('checkin', {'date': entity.date | date('d-m-Y') })}}" class=" blue">
+                <i class="fa fa-list-alt"></i> List
+            </a>
+        </div>
+    </div>
+            <div class="portlet box blue-hoki">
+               <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-search"></i>View
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+
+            <form class="container-fluid form-horizontal " >
+                <div class="form-body col-md-5">
+                <table class="table table-advance">
+                    <thead><h5><i>Guesty provides this information</i></h5></thead>
+                    <tr>
+                        <td> <b>Listing</b></td>
+                        <td>{{ listing.number }}</td>
+                    </tr>
+                    <tr>
+                        <td> <b>Checkin</b></td>
+                        <td>{{ entity.time | date('d-m-Y h:m:s') }}</td>
+                    </tr>
+                    <tr>
+                        <td> <b>Status</b></td>
+                        <td>{{ entity.status }}</td>
+                    </tr>
+                    <tr>
+                        <td> <b>Guest</b></td>
+                        <td>{{ entity.name }}</td>
+                    </tr>
+                    <tr>
+                        <td> <b>Email</b></td>
+                        <td>{{ entity.email }}</td>
+                    </tr>
+                    <tr>
+                        <td> <b>Phone</b></td>
+                        <td>{{ entity.phone }}</td>
+                    </tr>
+                    <tr>
+                        <td> <b>Source</b></td>
+                        <td>{{ entity.source }}</td>
+                    </tr>
+                    <tr>
+                        <td> <b>Nights</b></td>
+                        <td>{{ entity.nights }}</td>
+                    </tr>
+                    <tr>
+                        <td> <b>Guests</b></td>
+                        <td>{{ entity.guests }}</td>
+                    </tr>
+                    <tr>
+                        <td> <b>Confirmation Code</b></td>
+                        <td>{{ entity.confcode }}</td>
+                    </tr>
+                    <tr>
+                        <td> <b>Te Betalen</b></td>
+                        <td>{{ entity.betalen }}</td>
+                    </tr>
+                    <tr>
+                        <td> <b>Reeds voldan</b></td>
+                        <td>{{ entity.voldan }}</td>
+                    </tr>
+                    <tr>
+                        <td> <b>Notes from guesty</b></td>
+                        <td>{{ entity.note }}</td>
+                    </tr>
+                </table>
+                    <a  href="{{ path('checkin', {'date': entity.date | date('d-m-Y')})}}">
+                        <input type = 'button' class="btn btn-primary" value="Back">
+                    </a>
+                </div>
+            </form>
+         </div>
+        </div>
+        </div>
+
+{% endblock %}

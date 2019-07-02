@@ -1,0 +1,148 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title %} New Location {% endblock %}
+{% block body %}
+<div class="portlet">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-list"></i>Location
+        </div>
+        <div class="tools">
+            <a href="{{path('listing')}}" class=" blue">
+                <i class="fa fa-list-alt"></i> List
+            </a>
+        </div>
+    </div>
+        <div class="portlet box blue-hoki">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-plus"></i>New
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+            {% if form_errors(form)%}
+            <div class="form-errors alert alert-danger">
+                {{form_errors(form)}}
+            </div>
+            {% endif %}
+            <form class="container-fluid form-horizontal" action="{{path('listing_create')}}" method="POST" {{form_enctype(form)}}>
+               <div class="form-body">
+                <div class="col-md-3 thumbnail" style="height: 200px; display: block; margin-right: 20px;">
+                    <img src="{{  asset('img/noimage.jpg')  }}" alt="Without image" style="height: 100%;">
+                </div>
+
+                <div class="col-md-5">
+                <div class="row form-group">
+                    {{form_label(form.details,'Name',{'attr':{                       
+                      'class' :' control-label',
+                      }})}}
+                    {{form_widget(form.details, {'attr':{                       
+                      'class' :'input-sm pull-right form-control'
+                      }})}}  
+                    {{form_errors(form.details)}}  
+                </div>
+                <div class="row form-group">
+                    {{form_label(form.number,'Number',{'attr':{                       
+                      'class' :' control-label',
+                      }})}}
+                    {{form_widget(form.number, {'attr':{                       
+                      'class' :'input-sm pull-right form-control'
+                      }})}}  
+                    {{form_errors(form.number)}}  
+                </div>
+                    <div class="row form-group">
+                        {{form_label(form.priority,'Priority',{'attr':{
+                            'class' :' control-label',
+                        }})}}
+                        {{form_widget(form.priority, {'attr':{
+                            'class' :'input-sm pull-right form-control'
+                        }})}}
+                        {{form_errors(form.priority)}}
+                    </div>
+                    <div class="row form-group">
+                    {{form_label(form.level,'Level',{'attr':{
+                      'class' :' control-label',
+                      }})}}
+                    {{form_widget(form.level, {'attr':{
+                      'class' :'input-sm pull-right form-control'
+                      }})}}
+                    {{form_errors(form.level)}}
+                </div>
+                    <div class="row form-group">
+                        {{form_label(form.minprice,'Price € (Min Value)',{'attr':{
+                            'class' :' control-label',
+                        }})}}
+                        {{form_widget(form.minprice, {'attr':{
+                            'class' :'input-sm pull-right form-control'
+                        }})}}
+                        {{form_errors(form.minprice)}}
+                    </div>
+                    <div class="row form-group">
+                        {{form_label(form.maxprice,'Price € (Max Value)',{'attr':{
+                            'class' :' control-label',
+                        }})}}
+                        {{form_widget(form.maxprice, {'attr':{
+                            'class' :'input-sm pull-right form-control'
+                        }})}}
+                        {{form_errors(form.maxprice)}}
+                    </div>
+                <div class="row form-group">
+                    {{form_label(form.image,'Image',{'attr':{
+                      'class' :' control-label',
+                      }})}}
+                    {{form_widget(form.image, {'attr':{
+                      'class' :''
+                      }})}}
+                    {{form_errors(form.image)}}
+                </div>
+                    <div class="row form-group">
+                        <div class="">
+                            <label>
+                                {{form_widget(form.activeforrent,{'attr':{
+                                    'type' :'',}})}} Is Active for rent?
+                            </label>
+                        </div>
+
+                    </div>
+                <div class="row form-group ">
+                {{ form_rest(form) }}
+                </div>
+            </div>
+            </div>
+
+
+            </form>
+            </div>
+        </div>
+        </div>
+    <script>
+
+        $('#restaurantbundle_listing_image').on({
+            'change':function(evt){
+                var files = evt.target.files; // FileList object
+                // Obtenemos la imagen del campo "file".
+                for (var i = 0, f; f = files[i]; i++) {
+                    //Solo admitimos imágenes.
+                    if (!f.type.match('image.*')) {
+                        continue;
+                    }
+
+                    var reader = new FileReader();
+
+                    reader.onload = (function(theFile) {
+                        return function(e) {
+                            // Insertamos la imagen
+                            $(".thumbnail img").attr('src', e.target.result);
+                        };
+                    })(f);
+
+                    reader.readAsDataURL(f);
+                }
+            }
+        })
+
+    </script>
+{% endblock %}

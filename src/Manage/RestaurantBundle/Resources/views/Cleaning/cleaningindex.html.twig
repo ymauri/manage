@@ -1,0 +1,219 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title %} Cleaning {% endblock %}
+{% block body %}
+    <div class="portlet">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-bell"></i>Cleaning <strong>{{ dated | date ("M d, Y") }}</strong>
+            </div>
+            <div class="tools">
+                {% if dated and app.user.role == 'ROLE_SUPERADMIN' %}
+                <a href="{{path('cleaninglog', {'date': dated })}}" class=" blue">
+                    <i class="fa fa-list-alt"></i> Logs
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+
+        <div class="form-body ">
+            <div class="portlet-body form">
+                <div>
+                    <i class="blue-hoki">Select any date for filter</i>
+
+                    <div class="input-group input-medium date date-picker" data-date-viewmode="years" data-date-minviewmode="months">
+                        <input type="text" class="form-control datepicker" data-provide="datepicker" readonly="readonly" data-date-format="MM dd, yyyy">
+                        <span class="input-group-btn">
+                            <button class="filtro btn blue-hoki" type="button"><i class="fa fa-search "></i></button>
+                        </span>
+                    </div>
+                </div>
+                <br/>
+
+                <div class="row" style="margin-top: 15px; height: auto">
+                    <div class="col-md-7 col-sm-7 col-lg-5">
+                        {% if cleanfirst | length > 0 %}
+                            <h4>Checkin Today</h4>
+
+                            {% set c = 1 %}
+                            {% for entity in cleanfirst %}
+                                <div class="cleanning note
+                                {% if entity.status == 'dirty' %} note-danger
+                                {% elseif entity.status == 'clean' %} note-success
+                                {% elseif entity.status == 'checkedOut' %} note-danger
+                                {% elseif entity.status == 'working' %} note-warning
+                                {% endif %} row">
+                                    <div class="col-lg-7 col-sm-7 col-md-7 col-xs-7">
+                                        <h3><strong>{{ entity.listing.number }}</strong></h3>
+                                        </div>
+                                    <div class="col-lg-2 col-sm-2 col-md-2 col-xs-3">
+                                        <form id="form-clean-{{ entity.id }}" method="POST">
+                                            <input hidden="hidden" name="id" value="{{ entity.id }}"/>
+                                            <input hidden="hidden" name="status" value="{{ entity.status }}"/>
+                                            <input hidden="hidden" name="dated" value="{{ entity.dated | date ("Y-m-d") }}"/>
+                                            {% if entity.status == 'dirty' %}
+                                                <button type="button" class="btn btn-danger ready-for-change">Dirty&nbsp;&nbsp; <i class="fa fa-bell"></i></button>
+                                            {% elseif entity.status  == 'checkedOut'  %}
+                                                <button type="button" class=" btn btn-danger ready-for-change">Checked Out &nbsp;<i class="fa fa-check"></i></button>
+                                            {% elseif entity.status  == 'working'  %}
+                                                <button type="button" class=" btn btn-warning ready-for-change">Working &nbsp;<i class="fa  fa-minus-circle"></i></button>
+                                            {% elseif entity.status == 'clean'  %}
+                                                <button type="button" class=" btn green btn-primary ready-for-change">Clean&nbsp;<i class="fa fa-thumbs-up"></i></button>
+
+                                            {% endif %}
+                                        </form>
+                                    </div>
+
+                                </div>
+                                {% set c = c + 1 %}
+                            {% endfor %}
+
+                        {% endif %}
+
+                        {% if cleanlater | length > 0 %}
+                            <h4>Checkin Later</h4>
+
+                            {% set c = 1 %}
+                            {% for entity in cleanlater %}
+                                <div class="cleanning note
+                                {% if entity.status == 'dirty' %}note-danger
+                                {% elseif entity.status == 'clean' %} note-success
+                                {% elseif entity.status == 'checkedOut' %} note-danger
+                                {% elseif entity.status == 'working' %} note-warning
+                                {% endif %} row">
+                                    <div class="col-lg-7 col-sm-7 col-md-7 col-xs-7">
+                                        <h3><strong>{{ entity.listing.number }}</strong></h3>
+                                    </div>
+                                    <div class="col-lg-2 col-sm-2 col-md-2 col-xs-3">
+                                        <form id="form-clean-{{ entity.id }}" method="POST">
+                                            <input hidden="hidden" name="id" value="{{ entity.id }}"/>
+                                            <input hidden="hidden" name="status" value="{{ entity.status }}"/>
+                                            <input hidden="hidden" name="dated" value="{{ entity.dated | date ("Y-m-d") }}"/>
+                                            {% if entity.status == 'dirty' %}
+                                                <button type="button" class="btn btn-danger ready-for-change">Dirty&nbsp;&nbsp; <i class="fa fa-bell"></i></button>
+                                            {% elseif entity.status  == 'checkedOut'  %}
+                                                <button type="button" class=" btn btn-danger ready-for-change">Checked Out<i class="fa fa-check"></i></button>
+                                            {% elseif entity.status  == 'working'  %}
+                                                <button type="button" class=" btn btn-warning ready-for-change">Working &nbsp;<i class="fa fa-minus-circle"></i></button>
+                                            {% elseif entity.status == 'clean'  %}
+                                                <button type="button" class=" btn green btn-primary ready-for-change">Clean&nbsp;<i class="fa fa-thumbs-up"></i></button>
+
+                                            {% endif %}
+                                        </form>
+                                    </div>
+
+                                </div>
+                                {% set c = c + 1 %}
+                            {% endfor %}
+
+                        {% endif %}
+
+                        {% if cleanprog | length > 0 %}
+                            <h4>Long Stay</h4>
+
+                            {% set c = 1 %}
+                            {% for entity in cleanprog %}
+                                <div class="cleanning note
+                                {% if entity.status == 'dirty' %}note-info
+                                {% elseif entity.status == 'clean' %} note-success
+                                {% elseif entity.status == 'checkedOut' %} note-info
+                                {% elseif entity.status == 'working' %} note-warning
+                                {% endif %} row">
+                                    <div class="col-lg-7 col-sm-7 col-md-7 col-xs-7">
+                                        <h3><strong>{{ entity.listing.number }}</strong></h3>
+                                    </div>
+                                    <div class="col-lg-2 col-sm-2 col-md-2 col-xs-3">
+                                        <form id="form-clean-{{ entity.id }}" method="POST">
+                                            <input hidden="hidden" name="id" value="{{ entity.id }}"/>
+                                            <input hidden="hidden" name="status" value="{{ entity.status }}"/>
+                                            <input hidden="hidden" name="dated" value="{{ entity.dated | date ("Y-m-d") }}"/>
+                                            {% if entity.status == 'dirty' %}
+                                                <button type="button" class="btn btn-primary ready-for-change">Dirty&nbsp;&nbsp; <i class="fa fa-bell"></i></button>
+                                            {% elseif entity.status  == 'checkedOut'  %}
+                                                <button type="button" class=" btn btn-primary ready-for-change">Checked Out<i class="fa fa-check"></i></button>
+                                            {% elseif entity.status  == 'working'  %}
+                                                <button type="button" class=" btn btn-warning ready-for-change">Working &nbsp;<i class="fa fa-minus-circle"></i></button>
+                                            {% elseif entity.status == 'clean'  %}
+                                                <button type="button" class=" btn green btn-primary ready-for-change">Clean&nbsp;<i class="fa fa-thumbs-up"></i></button>
+
+                                            {% endif %}
+                                        </form>
+                                    </div>
+
+                                </div>
+                                {% set c = c + 1 %}
+                            {% endfor %}
+
+                        {% endif %}
+                    </div>
+                    {% if cleanlater | length == 0 and cleanfirst | length == 0 and cleanprog | length == 0 %}
+                    <i> No rows found for selected date</i>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        var monthNames = [ "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December" ];
+
+        current = window.location
+        current = current.toString()
+        dir = current.split('cleaning/')
+        sep = dir[1].split('-')
+        fecha = new Date((sep[1]+'-'+sep[0]+'-'+sep[2]).replace(/-/g, "/"))
+        //$('input.datepicker').val(monthNames[fecha.getMonth()] + ' '+  fecha.getDate() + ', '+ fecha.getFullYear())
+
+
+        $('.filtro').click(function () {
+            current = window.location
+            current = current.toString()
+            dir = current.split('cleaning')
+            if ($('input[data-provide="datepicker"]').val() != '') {
+                dated = new Date(Date.parse($('input[data-provide="datepicker"]').val()))
+                mes = parseInt(dated.getMonth()) + 1
+                if (mes.toString().length == 1) mes = '0' + mes.toString()
+                dir = dir[0] + 'cleaning/' + dated.getDate().toString() + '-' + mes + '-' + dated.getFullYear()
+                window.location = dir
+                //alert(dir)
+            } else {
+                bootbox.dialog({
+                    message: "Please select a valid date.",
+                    title: "Wrong date",
+                    buttons: {
+                        main: {
+                            label: "Close",
+                            className: ""
+                        },
+
+                    }
+                });
+            }
+        })
+
+        $('.ready-for-change').click(function () {
+            Metronic.startPageLoading()
+            array_to_send = $(this).parent('form').serializeArray()
+            $.post('{{ path('cleaning_update_status') }}', {'data': array_to_send}, function (response) {
+                Metronic.stopPageLoading()
+                if (response == "true")
+                    window.location = window.location
+                else if (response ==  "false"){
+                    $('.alert-danger').text("There was an error saving data in Guesty.").show(300)
+                    setTimeout(function(){$('.alert-danger').hide(300)}, 4000)
+                    setTimeout(function(){window.location = window.location}, 4100)
+
+                } else {
+                    $('.alert-danger').text(response).show(300)
+                    setTimeout(function(){$('.alert-danger').hide(300)}, 4000)
+                }
+
+
+            })
+        })
+        setTimeout(function(){
+            window.location = window.location
+        }, 120000)
+    </script>
+{% endblock %}

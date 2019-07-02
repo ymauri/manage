@@ -1,0 +1,374 @@
+<fieldset id="data-card" class="col-md-12">
+{#    {{form_rest(form_card)}}#}
+    <h4>Pin Terminals</h4>
+    <div class="for-errors col-md-12"> 
+        {{form_errors(form_card)}}
+    </div>
+    <section class="x-group col-md-3 pull-left" >         
+        <div class="row form-group">
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+        </div>
+        <h5><b>PENTHOUSE</b></h5>
+        <div class="row form-group">
+            {{form_label(form_card.total,'Totaalstrook CCV 1 €',{'attr':{
+                'class' :' control-label',
+            }})}}
+            {{form_widget(form_card.total , {'attr':{                       
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+            }})}}
+        </div>        
+        <div class="row form-group">
+            {{form_label(form_card.maestro,'PIN / Maestro €',{'attr':{                       
+                'class' :' control-label',
+            }})}}
+            {{form_widget(form_card.maestro , {'attr':{                       
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+            }})}}
+        </div>
+        {#<div class="row form-group">
+            {{form_label(form_card.alipay,'AliPay €',{'attr':{                       
+                'class' :' control-label',
+            }})}}
+            {{form_widget(form_card.alipay , {'attr':{                       
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+            }})}}
+        </div>#}
+        <div class="row form-group">
+            {{form_label(form_card.visa,'Visa €',{'attr':{                       
+                'class' :' control-label',
+            }})}}
+            {{form_widget(form_card.visa , {'attr':{                       
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+            }})}} 
+        </div>            
+        <div class="row form-group">
+            {{form_label(form_card.visaelec,'Visa Electron €',{'attr':{                       
+                'class' :' control-label',
+            }})}}
+            {{form_widget(form_card.visaelec, {'attr':{                       
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+            }})}}
+        </div>
+        <div class="row form-group">
+            {{form_label(form_card.mastercard,'Mastercard €',{'attr':{                       
+                'class' :' control-label',
+            }})}}
+            {{form_widget(form_card.mastercard, {'attr':{                       
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+            }})}}
+        </div>
+        <div class="row form-group">
+            {{form_label(form_card.american,'American Express €',{'attr':{                       
+                'class' :' control-label',
+            }})}}
+            {{form_widget(form_card.american, {'attr':{                       
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+            }})}}  
+        </div>
+        <div class="row form-group">
+            {{form_label(form_card.union,'Union Pay €',{'attr':{                       
+                'class' :' control-label',
+            }})}}
+            {{form_widget(form_card.union , {'attr':{                       
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+            }})}} 
+        </div>
+        <div class="row form-group">
+            {{form_label(form_card.diners,'Diners €',{'attr':{                       
+                'class' :' control-label',
+            }})}}
+            {{form_widget(form_card.diners , {'attr':{                       
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+            }})}}
+        </div>            
+        <div class="row form-group">
+            {{form_label(form_card.vpay,'V-Pay €',{'attr':{                       
+                'class' :' control-label',
+            }})}}
+            {{form_widget(form_card.vpay , {'attr':{                       
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+            }})}}
+        </div>            
+            
+    </section>
+
+    <section class="z-group col-md-3 pull-left">
+
+        <div class="row ">
+            {{form_label(form_card.iscc,'Nog een Pin / CC strook invullen?',{'attr':{
+                    'class' :' control-label',
+            }})}}
+            {{form_widget(form_card.iscc )}}
+        </div>
+        <script>
+            {% if entity_basic.card.iscc == 1 %}
+                $('#adminbundle_card_iscc_0').prop('checked', 'checked')
+            {% else %}
+                $('#adminbundle_card_iscc_1').prop('checked', 'checked')
+            {% endif %}
+
+        </script>
+        <h5><b>VERANDA</b></h5>
+        <div class="section-card-cc" {% if entity_basic.card.iscc == 0 %} hidden="hidden" {% endif %}>
+            <div class="row form-group ">
+                {{form_label(form_card.totalcc,'Totaalstrook CCV 2 €',{'attr':{                       
+                'class' :' control-label',
+                }})}}
+                {{form_widget(form_card.totalcc , {'attr':{                       
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+                }})}}
+            </div>    
+            <div class="row form-group">
+                {{form_label(form_card.ccmaestro,'PIN / Maestro €',{'attr':{                       
+                'class' :' control-label',
+                }})}}
+                {{form_widget(form_card.ccmaestro , {'attr':{                       
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+                }})}}
+            </div>
+            {#<div class="row form-group">
+                {{form_label(form_card.ccalipay,'AliPay €',{'attr':{                       
+                'class' :' control-label',
+                }})}}
+                {{form_widget(form_card.ccalipay , {'attr':{                       
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+                }})}}
+            </div>#}
+            <div class="row form-group">
+                {{form_label(form_card.ccvisa,'Visa €',{'attr':{                       
+                'class' :' control-label',
+                }})}}
+                {{form_widget(form_card.ccvisa , {'attr':{                       
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+                }})}} 
+            </div>            
+            <div class="row form-group">
+                {{form_label(form_card.ccvisaelec,'Visa Electron €',{'attr':{                       
+                'class' :' control-label',
+                }})}}
+                {{form_widget(form_card.ccvisaelec, {'attr':{                       
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+                }})}}
+            </div>
+            <div class="row form-group">
+                {{form_label(form_card.ccmastercard,'Mastercard €',{'attr':{                       
+                'class' :' control-label',
+                }})}}
+                {{form_widget(form_card.ccmastercard, {'attr':{                       
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+                }})}}
+            </div>
+            <div class="row form-group">
+                {{form_label(form_card.ccamerican,'American Express €',{'attr':{                       
+                'class' :' control-label',
+                }})}}
+                {{form_widget(form_card.ccamerican, {'attr':{                       
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+                }})}}  
+            </div>
+            <div class="row form-group">
+                {{form_label(form_card.ccunion,'Union Pay €',{'attr':{                       
+                'class' :' control-label',
+                }})}}
+                {{form_widget(form_card.ccunion , {'attr':{                       
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+                }})}} 
+            </div>
+            <div class="row form-group">
+                {{form_label(form_card.ccdiners,'Diners €',{'attr':{                       
+                'class' :' control-label',
+                }})}}
+                {{form_widget(form_card.ccdiners , {'attr':{                       
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+                }})}}
+            </div>            
+            <div class="row form-group">
+                {{form_label(form_card.ccvpay,'V-Pay €',{'attr':{                       
+                'class' :' control-label',
+                }})}}
+                {{form_widget(form_card.ccvpay , {'attr':{                       
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+                }})}}
+            </div>            
+                    
+        </div>            
+    </section>
+
+    <section class="z-group col-md-3 pull-left" >
+        <div class="row form-group">
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+        </div>
+        <h5><b>SKY BAR</b></h5>
+        <div class="row form-group">
+            {{form_label(form_card.extotal,'Totaalstrook CCV 3 €',{'attr':{
+                'class' :' control-label',
+            }})}}
+            {{form_widget(form_card.extotal , {'attr':{
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+            }})}}
+        </div>
+        <div class="row form-group">
+            {{form_label(form_card.exmaestro,'PIN / Maestro €',{'attr':{
+                'class' :' control-label',
+            }})}}
+            {{form_widget(form_card.exmaestro , {'attr':{
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+            }})}}
+        </div>
+        {#<div class="row form-group">
+            {{form_label(form_card.alipay,'AliPay €',{'attr':{
+                'class' :' control-label',
+            }})}}
+            {{form_widget(form_card.alipay , {'attr':{
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+            }})}}
+        </div>#}
+        <div class="row form-group">
+            {{form_label(form_card.exvisa,'Visa €',{'attr':{
+                'class' :' control-label',
+            }})}}
+            {{form_widget(form_card.exvisa , {'attr':{
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+            }})}}
+        </div>
+        <div class="row form-group">
+            {{form_label(form_card.exvisaelec,'Visa Electron €',{'attr':{
+                'class' :' control-label',
+            }})}}
+            {{form_widget(form_card.exvisaelec, {'attr':{
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+            }})}}
+        </div>
+        <div class="row form-group">
+            {{form_label(form_card.exmastercard,'Mastercard €',{'attr':{
+                'class' :' control-label',
+            }})}}
+            {{form_widget(form_card.exmastercard, {'attr':{
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+            }})}}
+        </div>
+        <div class="row form-group">
+            {{form_label(form_card.examerican,'American Express €',{'attr':{
+                'class' :' control-label',
+            }})}}
+            {{form_widget(form_card.examerican, {'attr':{
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+            }})}}
+        </div>
+        <div class="row form-group">
+            {{form_label(form_card.exunion,'Union Pay €',{'attr':{
+                'class' :' control-label',
+            }})}}
+            {{form_widget(form_card.exunion , {'attr':{
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+            }})}}
+        </div>
+        <div class="row form-group">
+            {{form_label(form_card.exdiners,'Diners €',{'attr':{
+                'class' :' control-label',
+            }})}}
+            {{form_widget(form_card.exdiners , {'attr':{
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+            }})}}
+        </div>
+        <div class="row form-group">
+            {{form_label(form_card.exvpay,'V-Pay €',{'attr':{
+                'class' :' control-label',
+            }})}}
+            {{form_widget(form_card.exvpay , {'attr':{
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+            }})}}
+        </div>
+
+    </section>
+</fieldset>
+<fieldset class="col-md-12">
+
+    <section class="x-group col-md-3 pull-left">
+
+        <div class="row form-group">
+            <h5><b>Ali Pay</b></h5>
+            {{form_label(form_card.alipay,'AliPay €',{'attr':{
+                'class' :' control-label',
+            }})}}
+            {{form_widget(form_card.alipay , {'attr':{
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+            }})}}
+        </div>
+    </section>
+</fieldset>
+<fieldset class="col-md-12">
+    <section class="x-group col-md-3 pull-left" >  
+        <div class="row form-group ">
+                {{form_label(form_card.tdebit,'Totaal Debit Cards €',{'attr':{                       
+                'class' :' control-label',
+                }})}}
+                {{form_widget(form_card.tdebit , {'attr':{                       
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+                }})}}
+            </div>    
+        <div class="row form-group ">
+                {{form_label(form_card.profit,'Totaal Card Payments €',{'attr':{
+                'class' :' control-label',
+                }})}}
+                {{form_widget(form_card.profit , {'attr':{                       
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+                }})}}
+            </div>    
+    </section>
+     <section class="z-group col-md-3 pull-left" >  
+        <div class="row form-group ">
+                {{form_label(form_card.tcredit,'Totaal Credit Cards €',{'attr':{                       
+                'class' :' control-label',
+                }})}}
+                {{form_widget(form_card.tcredit , {'attr':{                       
+                'class' :'input-sm pull-right  form-control real  card-control',
+                'placeholder' : '0,00'
+                }})}}
+            </div>    
+    </section>
+            <div class="row col-md-12 col-md-offset-0">
+        {{form_rest(form_card)}}
+    </div> 
+</fieldset >
+    
+

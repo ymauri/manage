@@ -1,44 +1,89 @@
-{% extends '::base.html.twig' %}
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title %} Show Voucher {% endblock %}
+{% block body %}
+<div class="portlet">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-present"></i>Vouchers
+        </div>
+        <div class="tools">
+            <a href="{{path('receptionvoucher_new')}}" class=" blue">
+                <i class="fa fa-plus"></i> Create new
+            </a>
+            <a href="{{path('receptionvoucher')}}" class=" blue">
+                <i class="fa fa-list-alt"></i> List
+            </a>
+        </div>
+    </div>
+            <div class="portlet box blue-hoki">
+               <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-search"></i>View
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+            {% if form_errors(delete_form)%}
+                <div class="form-errors alert alert-danger">
+                    {{form_errors(delete_form)}}
+                </div>
+            {% endif %}
+            <form class="container-fluid form-horizontal " >
+                <div class="form-body col-md-5">
+                <div class="row form-group">
+                    {{form_label(delete_form.details,'Name',{'attr':{                       
+                      'class' :' control-label',
 
-{% block body -%}
-    <h1>ReceptionVoucher</h1>
+                    }})}}
+                    {{form_widget(delete_form.details, {'attr':{
+                        'disabled':'disabled',
+                      'class' :'input-sm pull-right form-control'
+                    }})}}  
+                </div>
+                <div class="row form-group">
+                    {{form_label(delete_form.value,'Value',{'attr':{                       
+                      'class' :' control-label',
+                    }})}}
+                    {{form_widget(delete_form.value, {'attr':{
+                        'disabled':'disabled',
+                      'class' :'input-sm pull-right form-control'
+                    }})}}  
+                </div>
+                <div class="row form-group">
+                     <div class="">
+                        <label>
+                        {{form_widget(delete_form.isactive,{'attr':{                       
+                          'type' :'checkbox','disabled':'disabled'}})}} Is Active
+                        </label>
+                    </div>
+                    <div class="">
+                        <label>
+                        {{form_widget(delete_form.forreception,{'attr':{                       
+                          'type' :'checkbox', 'disabled':'disabled'}})}} For Reception
+                        </label>
+                    </div>
+                    <div class="">
+                        <label>
+                        {{form_widget(delete_form.isext,{'attr':{                       
+                          'type' :'checkbox','disabled':'disabled'}})}} Is External
+                        </label>
+                    </div>
+                </div>
+                <div class="row form-group ">
+                    <a  href="{{ path('receptionvoucher') }}">
+                        <input type = 'button' class="btn btn-primary" value="Back">
+                    </a>
+                    <a  href="{{ path('receptionvoucher_edit', {'id':entity.id}) }}">
+                        <input type = 'button' class="btn btn-primary" value="Update">
+                    </a>
+                </div>
+                </div>
+            </form>
+         </div>
+        </div>
+        </div>
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Details</th>
-                <td>{{ entity.details }}</td>
-            </tr>
-            <tr>
-                <th>Isactive</th>
-                <td>{{ entity.isactive }}</td>
-            </tr>
-            <tr>
-                <th>Forreception</th>
-                <td>{{ entity.forreception }}</td>
-            </tr>
-            <tr>
-                <th>Value</th>
-                <td>{{ entity.value }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('receptionvoucher') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('receptionvoucher_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
 {% endblock %}

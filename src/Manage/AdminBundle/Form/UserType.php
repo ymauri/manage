@@ -16,10 +16,17 @@ class UserType extends AbstractType
     {
         $builder
             ->add('email')
-            ->add('password')
+            ->add('password','repeated',array(
+            'type'=>'password',
+            'invalid_message'=>'Both password must coincide',
+            'options'=>array('label'=>'Password'),
+            'required'=>false
+            ))
             ->add('name')
             ->add('lastname')
-            ->add('enable')
+            ->add('role', null, array(
+                 'required' => true
+            ))    
         ;
     }
     

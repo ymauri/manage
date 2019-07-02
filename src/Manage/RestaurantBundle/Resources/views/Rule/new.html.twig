@@ -1,0 +1,299 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title %} Rules {% endblock %}
+{% block body %}
+<div class="portlet">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-check"></i> Rules
+        </div>
+
+        <div class="tools">
+            
+        </div>
+    </div>
+            <div class="portlet box blue-hoki">
+               <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-check"></i>New Rule
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <fieldset>
+                    {% if form_errors(form) %}
+                        <div class="alert alert-danger display-hide" style="display: block;">
+                            <button class="close" data-close="alert"></button>
+                            <span>  {{form_errors(form)}} </span>
+                        </div>
+                    {% endif %}
+                    <form class="" action="{{path('rule_create')}}" method="POST" {{form_enctype(form)}}>
+                        <div class="form-body row">
+                            <div class="note note-info">
+                                <h5>Please, select when the rule will be excecuted. The form below changes according to the type of rule.</h5>
+                                <p>
+                                <div class=" form-group">
+                                    {{form_widget(form.typeofrule, {'attr':{
+                                        'class' :'check-list',
+                                    }})}}
+                                    {{form_errors(form.typeofrule)}}
+                                </div>
+                                </p>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group pull-left col-md-6" style="padding-left:0; ">
+                                    {{form_label(form.active,'Is Active?',{'attr':{
+                                        'class' :' control-label',
+                                    }})}}
+                                        {{form_widget(form.active,{'attr':{}})}}
+                                </div>
+                                <br/><br/><br/>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class=" form-group">
+                                    {{form_label(form.name,'Rule name',{'attr':{
+                                        'class' :' control-label',
+                                    }})}}
+                                    {{form_widget(form.name, {'attr':{
+                                        'class' :' form-control'
+                                    }})}}
+                                    {{form_errors(form.name)}}
+                                </div>
+                                <div class=" form-group ">
+                                    {{form_label(form.details,'Rule description',{'attr':{
+                                        'class' :' control-label',
+                                    }})}}
+                                    {{form_widget(form.details, {'attr':{
+                                        'class' :' form-control'
+                                    }})}}
+                                    {{form_errors(form.details)}}
+                                </div>
+
+                                <div class=" form-group ">
+                                {{form_label(form.method,'Goal',{'attr':{
+                                    'class' :' control-label',
+                                }})}}
+                                {{form_widget(form.method, {'attr':{
+                                    'class' :' form-control'
+                                }})}}
+                                {{form_errors(form.method)}}
+                            </div>
+                                <div class=" form-group ">
+                                    {{form_label(form.priority,'Priority',{'attr':{
+                                        'class' :' control-label',
+                                    }})}}
+                                    {{form_widget(form.priority, {'attr':{
+                                        'class' :' form-control'
+                                    }})}}
+                                    {{form_errors(form.priority)}}
+                                </div>
+                                <div class=" form-group ">
+                                    {{form_widget(form.bytype, {'attr':{
+                                        'class' :' radio-list',
+                                    }})}}
+                                    {{form_errors(form.bytype)}}
+                                </div>
+                                <div class=" form-group  by-listing-tag">
+                                    {{form_label(form.typeofapartment,'Type of listing',{'attr':{
+                                        'class' :' control-label',
+                                    }})}}
+                                    {{form_widget(form.typeofapartment, {'attr':{
+                                        'class' :' form-control'
+                                    }})}}
+                                    {{form_errors(form.typeofapartment)}}
+                                </div>
+                                <div class=" form-group by-listing-number ">
+                                    {{form_label(form.apartments,'Listing Number',{'attr':{
+                                        'class' :' control-label',
+                                    }})}}
+                                    {{form_widget(form.apartments, {'attr':{
+                                        'class' :' form-control'
+                                    }})}}
+                                    {{form_errors(form.apartments)}}
+                                </div>
+                            
+                            <div class=" form-group ">
+                                {{form_label(form.cond,'Condition',{'attr':{
+                                    'class' :' control-label',
+                                }})}}
+                                {{form_widget(form.cond, {'attr':{
+                                    'class' :' form-control'
+                                }})}}
+                                {{form_errors(form.cond)}}
+                            </div>
+
+                            <div class=" form-group ">
+                                {{form_label(form.conditionvalue,'Condition Value (X)',{'attr':{
+                                    'class' :' control-label',
+                                }})}}
+                                {{form_widget(form.conditionvalue, {'attr':{
+                                    'class' :' form-control'
+                                }})}}
+                                {{form_errors(form.conditionvalue)}}
+                            </div>
+                            </div>
+                            <div class="col-md-6">
+
+                            <div class=" form-group ">
+                                {{form_label(form.action,'Action',{'attr':{
+                                    'class' :' control-label',
+                                }})}}
+                                {{form_widget(form.action, {'attr':{
+                                    'class' :' form-control'
+                                }})}}
+                                {{form_errors(form.action)}}
+                            </div>
+
+                            <div class=" form-group ">
+                                {{form_label(form.actionvalue,'Action Value',{'attr':{
+                                    'class' :' control-label',
+                                }})}}
+                                {{form_widget(form.actionvalue, {'attr':{
+                                    'class' :' form-control'
+                                }})}}
+                                {{form_errors(form.actionvalue)}}
+                            </div>
+                            <div class=" form-group ">
+                                {{form_label(form.unit,'Unit',{'attr':{
+                                    'class' :' control-label',
+                                }})}}
+                                {{form_widget(form.unit, {'attr':{
+                                    'class' :' form-control'
+                                }})}}
+                                {{form_errors(form.unit)}}
+                            </div>
+                            <div class=" form-group hide-on-hook">
+                                {{form_label(form.daysahead,'Affected date',{'attr':{
+                                    'class' :' control-label',
+                                }})}}
+                                {{form_widget(form.daysahead, {'attr':{
+                                    'class' :' form-control'
+                                }})}}
+                                {{form_errors(form.daysahead)}}
+                            </div>
+                                <div class=" form-group hide-on-cronjob">
+                                    {{form_label(form.startingfrom,'Starting from',{'attr':{
+                                        'class' :' control-label',
+                                    }})}}
+                                    {{form_widget(form.startingfrom, {'attr':{
+                                        'class' :' form-control'
+                                    }})}}
+                                    {{form_errors(form.startingfrom)}}
+                                </div>
+                            <div class=" form-group hide-on-hook">
+                                {{form_label(form.begin,'Begins on',{'attr':{
+                                    'class' :' control-label',
+                                }})}}
+                                {{form_widget(form.begin, {'attr':{
+                                    'class' :'form-control ',
+                                    'type'  : 'date'
+                                }})}}
+                                {{form_errors(form.begin)}}
+                            </div>
+                            <div class=" form-group hide-on-hook">
+                                {{form_label(form.ends,'Till',{'attr':{
+                                    'class' :' control-label',
+                                }})}}
+                                {{form_widget(form.ends, {'attr':{
+                                    'class' :'form-control ',
+                                    'type'  : 'date'
+                                }})}}
+                                {{form_errors(form.ends)}}
+                            </div>
+                                <br/>
+
+                                <div class=" form-group ">
+                                    {{form_label(form.dayweek,'Day of the week',{'attr':{
+                                        'class' :' control-label',
+                                    }})}}
+                                    {{form_widget(form.dayweek, {'attr':{
+                                        'class' :'',
+                                    }})}}
+                                    {{form_errors(form.dayweek)}}
+                                </div>
+                                <br/>
+                            <div class=" form-group hide-on-hook ">
+                                {{form_label(form.time,'Executes at',{'attr':{
+                                    'class' :' control-label',
+                                }})}}
+                                {{form_widget(form.time, {'attr':{
+                                    'class' :'form-control ',
+                                    'type'  : 'time'
+                                }})}}
+                                {{form_errors(form.time)}}
+                            </div>
+
+
+                        </div>
+                            <div class=" form-group col-md-12 pull-right">
+                                {{ form_rest(form) }}
+                            </div>
+
+                        </div>
+                    </form>
+                </fieldset>
+                    <fieldset class="data-for-update">
+                        
+                    </fieldset>
+                    <fieldset  style="border:none; padding: 20px 0;">  <div class="col-md-2 col-md-offset-4"> <button type = "submit" hidden="hidden" class="btn update-price blue-hoki" style="display:none"  >Update price in Guesty</button> </div> </fieldset>
+
+               
+         </div>
+        </div>
+        </div>
+    <script>
+
+        $(document).ready(function(){
+            $('select[multiple="multiple"], select[multiple]').select2();
+            $('.by-listing-tag').hide();
+            $('.by-listing-number').show();
+            $('.hide-on-cronjob').hide();
+        })
+
+        $('#restaurantbundle_rule_bytype_0').click(function(){
+            if ($(this).is(':checked')){
+                $('.by-listing-tag').show();
+                $('.by-listing-number').hide();
+            }
+        })
+        $('#restaurantbundle_rule_bytype_1').click(function(){
+            if ($(this).is(':checked')){
+                $('.by-listing-tag').hide();
+                $('.by-listing-number').show();
+            }
+        })
+
+        $('#restaurantbundle_rule_bytype_1').trigger('click')
+
+        $('#restaurantbundle_rule_cond').change(function(){
+            if ($(this).val() == 'none_condition'){
+                $('#restaurantbundle_rule_conditionvalue').parent().val('').hide();
+            }
+            else {
+                $('#restaurantbundle_rule_conditionvalue').parent().show();
+            }
+        })
+
+        $('#restaurantbundle_rule_cond').trigger('change');
+
+        $('#restaurantbundle_rule_typeofrule_0').trigger('click')
+
+        $('#restaurantbundle_rule_typeofrule_1').click(function(){
+            if ($(this).is(':checked')){
+                $('.hide-on-hook').hide();
+                $('.hide-on-cronjob').show();
+            }
+        })
+        $('#restaurantbundle_rule_typeofrule_0').click(function(){
+            if ($(this).is(':checked')){
+                $('.hide-on-hook').show();
+                $('.hide-on-cronjob').hide();
+            }
+        })
+
+    </script>
+{% endblock %}
+

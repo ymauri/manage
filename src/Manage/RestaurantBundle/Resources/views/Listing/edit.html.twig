@@ -1,0 +1,196 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title %}Location {% endblock %}
+{% block body %}
+<div class="portlet">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-list"></i>Location
+        </div>
+        <div class="tools">
+            <a href="{{path('listing_new')}}" class=" blue">
+                <i class="fa fa-plus"></i> Create new
+            </a>
+            <a href="{{path('listing')}}" class=" blue">
+                <i class="fa fa-list-alt"></i> List
+            </a>
+        </div>
+    </div>
+     <div class="portlet box blue-hoki">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-pencil"></i>Edit
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+            {% if form_errors(edit_form)%}
+            <div class="form-errors alert alert-danger">
+                {{form_errors(edit_form)}}
+            </div>
+            {% endif %}
+            <form class="container-fluid form-horizontal" action="{{path('listing_update', {'id':entity.id})}}" method="post" {{form_enctype(edit_form)}}>
+                <input name="_method" value="PUT" type="hidden">
+                <div class="form-body ">
+                    <div class="col-md-3 thumbnail" style="height: 200px; display: block; margin-right: 20px;">
+                        {% if entity.pathimage %}
+                        <img src="{{  asset('uploads/images/listing/' ~ entity.pathimage)  }}" alt="Without image" style="height: 100%;">
+                        {% else %}
+                            <img src="{{  asset('img/noimage.jpg')  }}" alt="Without image" style="height: 100%;">
+                        {% endif %}
+                    </div>
+                <div class="col-md-5">
+                <div class="row form-group">
+                    {{form_label(edit_form.details,'Name',{'attr':{                       
+                      'class' :' control-label',
+                      }})}}
+                    {{form_widget(edit_form.details, {'attr':{                       
+                      'class' :'input-sm pull-right form-control'
+                      }})}} 
+                    {{form_errors(edit_form.details)}}  
+                </div>
+                <div class="row form-group">
+                    {{form_label(edit_form.number,'Number',{'attr':{                       
+                      'class' :' control-label',
+                      }})}}
+                    {{form_widget(edit_form.number, {'attr':{                       
+                      'class' :'input-sm pull-right form-control'
+                      }})}} 
+                    {{form_errors(edit_form.number)}}  
+                </div>
+                    <div class="row form-group">
+                        {{form_label(edit_form.priority,'Priority',{'attr':{
+                            'class' :' control-label',
+                        }})}}
+                        {{form_widget(edit_form.priority, {'attr':{
+                            'class' :'input-sm pull-right form-control'
+                        }})}}
+                        {{form_errors(edit_form.priority)}}
+                    </div>
+                <div class="row form-group">
+                    {{form_label(edit_form.level,'Level',{'attr':{
+                      'class' :' control-label',
+                      }})}}
+                    {{form_widget(edit_form.level, {'attr':{
+                      'class' :'input-sm pull-right form-control'
+                      }})}}
+                    {{form_errors(edit_form.level)}}
+                </div>
+                    <div class="row form-group">
+                        {{form_label(edit_form.minprice,'Price € (Min Value)',{'attr':{
+                            'class' :' control-label',
+                        }})}}
+                        {{form_widget(edit_form.minprice, {'attr':{
+                            'class' :'input-sm pull-right form-control'
+                        }})}}
+                        {{form_errors(edit_form.minprice)}}
+                    </div>
+                    <div class="row form-group">
+                        {{form_label(edit_form.maxprice,'Price € (Max Value)',{'attr':{
+                            'class' :' control-label',
+                        }})}}
+                        {{form_widget(edit_form.maxprice, {'attr':{
+                            'class' :'input-sm pull-right form-control'
+                        }})}}
+                        {{form_errors(edit_form.maxprice)}}
+                    </div>
+                   <!-- <div class="row form-group">
+                        {#{form_label(edit_form.type,'Tags',{'attr':{
+                            'class' :' control-label',
+                        }})}}
+                        {{form_widget(edit_form.type, {'attr':{
+                            'disabled':'disabled',
+                            'class' :'input-sm pull-right form-control'
+                        }})}}
+                        {{form_errors(edit_form.type)}#}
+                    </div>-->
+                    <div class="row form-group">
+                        {{form_label(edit_form.image,'Image',{'attr':{
+                            'class' :' control-label',
+                        }})}}
+                        {{form_widget(edit_form.image, {'attr':{
+                            'class' :''
+                        }})}}
+                        {{form_errors(edit_form.image)}}
+                    </div>
+                    <div class="row form-group">
+                        <div class="">
+                            <label>
+                                {{form_widget(edit_form.activeforrent,{'attr':{
+                                    'type' :'',}})}} Is Active for rent?
+                            </label>
+                        </div>
+
+                    </div>
+                <div class="row form-group ">
+                {{ form_rest(edit_form) }}
+                </div>
+            </div>
+                    <div class="row col-md-12" style="margin-top: 30px;">
+                        <div class="table-responsive">
+                            <table class="table table-condensed  table-advance table-hover">
+                                <tbody>
+                                {% set c = 1 %}
+                                {% for entity in furnitures %}
+
+                                    <tr>
+                                        <td class="hidden-xs counter">
+                                            {% if entity.pathimage %}
+                                                <img src="{{  asset('uploads/images/furniture/' ~ entity.pathimage)  }}" alt="Without image" style="height: 64px;">
+                                            {% else %}
+                                                <img src="{{  asset('img/noimage.jpg')  }}" alt="Without image" style="height: 64px;">
+                                            {% endif %}
+
+                                        </td>
+
+                                        <td>
+                                            <p><b>Name: </b>{{ entity.name }}</p>
+                                            <p><b>Datails: </b>{{ entity.details }}</p>
+
+                                        </td>
+                                        <td>
+                                            <p><b>Serial Number: </b>{{ entity.serialnumber }}</p>
+                                            <p><b>Status: </b>{{ entity.status }}</p>
+                                        </td>
+
+                                    </tr>
+                                    {% set c = c + 1 %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+            </div>
+            </form>
+            </div>
+        </div>
+        </div>
+    <script>
+
+        $('#restaurantbundle_listing_image').on({
+            'change':function(evt){
+                var files = evt.target.files; // FileList object
+                // Obtenemos la imagen del campo "file".
+                for (var i = 0, f; f = files[i]; i++) {
+                    //Solo admitimos imágenes.
+                    if (!f.type.match('image.*')) {
+                        continue;
+                    }
+                    var reader = new FileReader();
+                    reader.onload = (function(theFile) {
+                        return function(e) {
+                            // Insertamos la imagen
+                            $(".thumbnail img").attr('src', e.target.result);
+                        };
+                    })(f);
+
+                    reader.readAsDataURL(f);
+                }
+            }
+        })
+
+    </script>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title %} Edit Cleaning {% endblock %}
+{% block body %}
+    <div class="portlet">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon icon-bell"></i>Cleaning
+            </div>
+            <div class="tools">
+                <a href="{{ path('cleaningextra_new') }}" class=" blue">
+                    <i class="fa fa-plus"></i> Create new
+                </a>
+                <a href="{{ path('cleaningextra') }}" class=" blue">
+                    <i class="fa fa-list-alt"></i> List
+                </a>
+            </div>
+        </div>
+        <div class="portlet box blue-hoki">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-pencil"></i>Edit
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                {% if form_errors(form) %}
+                    <div class="alert alert-danger display-hide" style="display: block;">
+                        <button class="close" data-close="alert"></button>
+                        <span>  {{ form_errors(form) }} </span>
+                    </div>
+                {% endif %}
+                <form class="container-fluid form-horizontal"
+                      action="{{ path('cleaningextra_update', {'id':entity.id}) }}"
+                      method="post" {{ form_enctype(form) }}>
+                    <input name="_method" value="PUT" type="hidden">
+                    <div class="form-body col-md-5">
+
+                        <div class="row form-group">
+                            {{ form_label(form.listing,'Listing',{'attr':{
+                                'class' :' control-label',
+                            }}) }}
+                            {{ form_widget(form.listing, {'attr':{
+                                'class' :' form-control'
+                            }}) }}
+                            {{ form_errors(form.listing) }}
+                        </div>
+                        <div class="row form-group ">
+                            {{ form_label(form.begin,'From',{'attr':{
+                                'class' :' control-label',
+                            }}) }}
+                            {{ form_widget(form.begin, {'attr':{
+                                'class' :' form-control'
+                            }}) }}
+                            {{ form_errors(form.begin) }}
+                        </div>
+                        <div class="row form-group ">
+                            {{ form_label(form.end,'To',{'attr':{
+                                'class' :' control-label',
+                            }}) }}
+                            {{ form_widget(form.end, {'attr':{
+                                'class' :' form-control'
+                            }}) }}
+                            {{ form_errors(form.end) }}
+                        </div>
+                        <div class=" form-group ">
+                            {{form_label(form.dayweek,'Day of the week',{'attr':{
+                                'class' :' control-label',
+                            }})}}
+                            {{form_widget(form.dayweek, {'attr':{
+                                'class' :'',
+                            }})}}
+                            {{form_errors(form.dayweek)}}
+                        </div>
+                        <div class="row form-group ">
+                            {{ form_label(form.details,'Details',{'attr':{
+                                'class' :' control-label',
+                            }}) }}
+                            {{ form_widget(form.details, {'attr':{
+                                'class' :' form-control'
+                            }}) }}
+                            {{ form_errors(form.details) }}
+                        </div>
+                        <div class="row form-group ">
+                            {{ form_rest(form) }}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title %} Show Source {% endblock %}
+{% block body %}
+<div class="portlet">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-notebook"></i>Source
+        </div>
+        <div class="tools">
+            <a href="{{path('source_new')}}" class=" blue">
+                <i class="fa fa-plus"></i> Create new
+            </a>
+            <a href="{{path('source')}}" class=" blue">
+                <i class="fa fa-list-alt"></i> List
+            </a>
+        </div>
+    </div>
+            <div class="portlet box blue-hoki">
+               <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-search"></i>View
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+            {% if form_errors(delete_form)%}
+                <div class="form-errors alert alert-danger">
+                    {{form_errors(delete_form)}}
+                </div>
+            {% endif %}
+            <form class="container-fluid form-horizontal " >
+                <div class="form-body col-md-5">
+                <div class="row form-group">
+                    {{form_label(delete_form.details,'Name',{'attr':{                       
+                      'class' :' control-label',
+                    }})}}
+                    {{form_widget(delete_form.details, {'attr':{ 
+                      'disabled':'disabled',
+                      'class' :'input-sm pull-right form-control'
+                    }})}}  
+                </div>
+
+                    <div class="row form-group">
+                        {{form_label(delete_form.guesty,'Guesty name',{'attr':{
+                            'class' :' control-label',
+                        }})}}
+                        {{form_widget(delete_form.guesty, {'attr':{
+                            'disabled':'disabled',
+                            'class' :'input-sm pull-right form-control',
+
+                        }})}}
+                        {{form_errors(delete_form.guesty)}}
+                    </div>
+                <div class="row form-group">
+                     <div class="">
+                        <label>
+                        {{form_widget(delete_form.isactive,{'attr':{                       
+                          'type' :'checkbox', 'disabled':'disabled',}})}} Is Active
+                        </label>
+                    </div>
+                </div>
+                    <div class="row form-group">
+                     <div class="">
+                        <label>
+                        {{form_widget(delete_form.extrafield,{'attr':{
+                          'type' :'checkbox', 'disabled':'disabled',}})}} Has extra field
+                        </label>
+                    </div>
+                </div>
+                <div class="row form-group ">
+                    <a  href="{{ path('source') }}">
+                        <input type = 'button' class="btn btn-primary" value="Back">
+                    </a>
+                    <a  href="{{ path('source_edit', {'id':entity.id}) }}">
+                        <input type = 'button' class="btn btn-primary" value="Update">
+                    </a>
+                </div>
+                </div>
+            </form>
+         </div>
+        </div>
+        </div>
+
+{% endblock %}

@@ -1,0 +1,137 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title %}Furniture {% endblock %}
+{% block body %}
+<div class="portlet">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-layers"></i>Furniture
+        </div>
+        <div class="tools">
+            <a href="{{path('furniture_new')}}" class=" blue">
+                <i class="fa fa-plus"></i> Create new
+            </a>
+            <a href="{{path('furniture')}}" class=" blue">
+                <i class="fa fa-list-alt"></i> List
+            </a>
+        </div>
+    </div>
+     <div class="portlet box blue-hoki">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-pencil"></i>Edit
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+            {% if form_errors(edit_form)%}
+            <div class="form-errors alert alert-danger">
+                {{form_errors(edit_form)}}
+            </div>
+            {% endif %}
+            <form class="container-fluid form-horizontal" action="{{path('furniture_update', {'id':entity.id})}}" method="post" {{form_enctype(edit_form)}}>
+                <input name="_method" value="PUT" type="hidden">
+                <div class="form-body ">
+                    <div class="col-md-3 thumbnail" style="height: 200px; display: block; margin-right: 20px;">
+                        {% if entity.pathimage %}
+                        <img src="{{  asset('uploads/images/furniture/' ~ entity.pathimage)  }}" alt="Without image" style="height: 100%;">
+                        {% else %}
+                            <img src="{{  asset('img/noimage.jpg')  }}" alt="Without image" style="height: 100%;">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-5">
+                        <div class="row form-group">
+                            {{form_label(edit_form.name,'Name',{'attr':{
+                                'class' :' control-label',
+                            }})}}
+                            {{form_widget(edit_form.name, {'attr':{
+                                'class' :'input-sm pull-right form-control'
+                            }})}}
+                            {{form_errors(edit_form.name)}}
+                        </div>
+                        <div class="row form-group">
+                            {{form_label(edit_form.details,'Details',{'attr':{
+                                'class' :' control-label',
+                            }})}}
+                            {{form_widget(edit_form.details, {'attr':{
+                                'class' :'input-sm pull-right form-control'
+                            }})}}
+                            {{form_errors(edit_form.details)}}
+                        </div>
+                        <div class="row form-group">
+                            {{form_label(edit_form.serialnumber,'Serial number',{'attr':{
+                                'class' :' control-label',
+                            }})}}
+                            {{form_widget(edit_form.serialnumber, {'attr':{
+                                'class' :'input-sm pull-right form-control'
+                            }})}}
+                            {{form_errors(edit_form.serialnumber)}}
+                        </div>
+                        <div class="row form-group">
+                            {{form_label(edit_form.status,'Status',{'attr':{
+                                'class' :' control-label',
+                            }})}}
+                            {{form_widget(edit_form.status, {'attr':{
+                                'class' :'input-sm pull-right form-control'
+                            }})}}
+                            {{form_errors(edit_form.status)}}
+                        </div>
+                        <div class="row form-group">
+                            {{form_label(edit_form.location,'Location',{'attr':{
+                                'class' :' control-label',
+                            }})}}
+                            {{form_widget(edit_form.location, {'attr':{
+                                'class' :'input-sm pull-right form-control'
+                            }})}}
+                            {{form_errors(edit_form.location)}}
+                        </div>
+                        <div class="row form-group">
+                            {{form_label(edit_form.image,'Image',{'attr':{
+                                'class' :' control-label',
+                            }})}}
+                            {{form_widget(edit_form.image, {'attr':{
+                                'class' :''
+                            }})}}
+                            {{form_errors(edit_form.image)}}
+                        </div>
+
+                        <div class="row form-group ">
+                            {{ form_rest(edit_form) }}
+                        </div>
+
+                    </div>
+            </div>
+            </form>
+            </div>
+        </div>
+        </div>
+    <script>
+
+        $('#restaurantbundle_furniture_image').on({
+            'change':function(evt){
+                var files = evt.target.files; // FileList object
+                // Obtenemos la imagen del campo "file".
+                for (var i = 0, f; f = files[i]; i++) {
+                    //Solo admitimos imágenes.
+                    if (!f.type.match('image.*')) {
+                        continue;
+                    }
+
+                    var reader = new FileReader();
+
+                    reader.onload = (function(theFile) {
+                        return function(e) {
+                            // Insertamos la imagen
+                            $(".thumbnail img").attr('src', e.target.result);
+                        };
+                    })(f);
+
+                    reader.readAsDataURL(f);
+                }
+            }
+        })
+
+    </script>
+{% endblock %}

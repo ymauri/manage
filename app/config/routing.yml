@@ -6,4 +6,4 @@ admin:
 restaurant:
     resource: "@RestaurantBundle/Controller/"
     type:     annotation
-    prefix: /restaurant
+    prefix: /

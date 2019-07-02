@@ -6,8 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use Manage\RestaurantBundle\Entity\ReceptionVoucher;
-use Doctrine\ORM\EntityManager;
+use Manage\AdminBundle\Entity\WorkerRepository;
+use Manage\AdminBundle\Entity\Worker;
 
 class ReceptionType extends AbstractType
 {
@@ -16,37 +16,74 @@ class ReceptionType extends AbstractType
      * @param array $options
      */
     public function buildForm (FormBuilderInterface $builder, array $options)
-    {
+    {   
+        
         $builder
-            ->add('name')
-            ->add('details')
+            ->add('name', 'text', array(
+                'attr'=>array(
+                    'value'=>'Receptie Kassa Cash & Log',
+                    'hidden'=>true,
+                )
+            ))
+            ->add('details','textarea')
             ->add('dated', 'date', array(
                 'widget' => 'single_text',
-                'format' => 'yyyy-MM-dd',               
+                'format' => 'dd-MM-yyyy',
                 'attr' => array(
                     'class' => 'form-control datepicker',
                     'data-provide' => 'datepicker',
-                    'data-date-format' => 'yyyy-mm-dd'
+                    'readonly' => true,
+                    'data-date-format' => 'dd-mm-yyyy',
                 )))
-            ->add('vdstart', 'number')
-            ->add('vdend', 'number')
+              
+            ->add('vdstart', 'number', array(
+                    'attr'   => array(
+                        
+                        'maxlength'=>'6'
+                    )))
+            ->add('vdend', 'number', array(
+                'attr'   => array(
+                    'type'=>'number',
+                    'maxlength'=>'6'
+                )))
             ->add('vdamount', 'number', array(
-                'read_only' =>true,
+
+                'attr'=>array('tabindex'=>-1,'readonly' =>true,),
             ))
-            ->add('vnstart', 'number')
-            ->add('vnend', 'number')
+            ->add('vnstart', 'number', array(
+                'attr'   => array(
+                    'type'=>'number',
+                    'maxlength'=>'6'
+                )))
+            ->add('vnend', 'number', array(
+                'attr'   => array(
+                    'type'=>'number',
+                    'maxlength'=>'6'
+                )))
             ->add('vnamount', 'number', array(
-                'read_only' =>true,
+                'attr'=>array('tabindex'=>-1,'readonly' =>true,),
             ))
-            ->add('freevoucher', 'number')
+            ->add('freevoucher', 'number', array(
+                'attr'=>array('maxlength'=>3),
+            ))
             ->add('generalamount', 'number', array(
-                'read_only' =>true,
+                'attr'=>array('tabindex'=>-1,'readonly' =>true,),
             ))
-            ->add('halfprice', 'number')
+            ->add('halfprice', 'number', array(
+                'attr'=>array('maxlength'=>3),
+            ))
             ->add('profit', 'number', array(
-                'read_only' =>true,
+                'attr'=>array('tabindex'=>-1,'readonly' =>true,),
+                'precision' => 2
             ))
-            ->add('voucher')
+            ->add('voucher', null, array(
+
+                'attr'      => array(
+                    'hidden'    => 'true',
+                    'tabindex'=>-1,
+                    'readonly'=>true,
+                )
+            ))
             ->add('giftvouchers', 'text',array(
                 'label'     => false,
                 'attr'      => array(
@@ -60,12 +97,17 @@ class ReceptionType extends AbstractType
                 )
             ))
             ->add('giftvoucherstotal', 'number', array(
-                'read_only' => true,
+                'attr'=>array('tabindex'=>-1,'readonly' => true,),
+                'precision' => 2
             ))
             ->add('parkingtotal', 'number', array(
-                'read_only' => true,
+                'attr'=>array('tabindex'=>-1,'readonly' => true,),
+                'precision' => 2
             ))
-            ->add('completeprofit', 'number')
+            ->add('completeprofit', 'number', array(
+                'attr'=>array('tabindex'=>-1,'readonly' => true,),
+                'precision' => 2
+            ))
             ->add('othersales', 'number')
             ->add('parking', 'text',array(
                 'label'     => false,
@@ -79,9 +121,65 @@ class ReceptionType extends AbstractType
                     'hidden'    => 'true'
                 )
             ))
+            ->add('voorgeschoten', 'text',array(
+                'label'     => false,
+                'attr'      => array(
+                    'hidden'    => 'true'
+                )
+            ))
+            ->add('voorgeschotentotal', 'number', array(
+                'attr'=>array('tabindex'=>-1,'readonly' => true,),
+                'precision' => 2
+            ))
+            ->add('ontvangen', 'number',array(
+                'attr'=>array('tabindex'=>-1,'readonly' => true,),
+                'precision' => 2
+            ))
+            ->add('kasverschil', 'number', array(
+                'attr'=>array('tabindex'=>-1, 'readonly' => true,),
+                'precision' => 2
+            ))
+            ->add('userdag', 'entity', array(
+                'class' => 'Manage\AdminBundle\Entity\Worker',
+                'query_builder' => function(WorkerRepository $repository) {
+                    return $repository->createQueryBuilder('a')
+                        ->select('a')
+                        ->where('a.position = \'Receptie\'')
+                        ->andWhere('a.isactive = \'1\' ')
+                        ->addOrderBy('a.name');
+                },
+                'required' => false
+            ))
+            ->add('useravond', 'entity', array(
+                'class' => 'Manage\AdminBundle\Entity\Worker',
+                'query_builder' => function(WorkerRepository $repository) {
+                    return $repository->createQueryBuilder('a')
+                        ->select('a')
+                        ->where('a.position = \'Receptie\'')
+                        ->andWhere('a.isactive = \'1\' ')
+                        ->addOrderBy('a.name');
+                },
+                'required' => false
+            ))
+            
+            ->add('updated', 'date',array(
+                'widget' => 'single_text',
+            'attr'=>array(
+                'hidden'=>true,
+            )))
+            ->add('finished', null ,array(
+                'attr' => array(
+                    'hidden'=>true,
+                )))
+            ->add('time', 'time', array(
+                'input'  => 'datetime',
+                'widget' => 'single_text',
+            ))
         ;
     }
-    
+
+
+
     /**
      * @param OptionsResolverInterface $resolver
      */
@@ -97,7 +195,7 @@ class ReceptionType extends AbstractType
      */
     public function getName()
     {
-        return 'manage_restaurantbundle_reception';
+        return 'adminbundle_reception';
     }    
     
 }
