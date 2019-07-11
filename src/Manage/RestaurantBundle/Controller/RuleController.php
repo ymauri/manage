@@ -886,12 +886,12 @@ class RuleController extends Controller
      "__v": 0,
      "lastUpdatedAt": "2017-10-01T16:13:25.711Z",
      "status": "inquiry",
-     "checkIn": "2020-04-07T12:00:00.000Z",
-     "checkOut": "2020-04-08T07:00:00.000Z",
+     "checkIn": "2019-10-02T12:00:00.000Z",
+     "checkOut": "2019-10-03T07:00:00.000Z",
      "nightsCount": 1,
      "guestsCount": 2,
-     "checkInDateLocalized": "2020-04-07",
-     "checkOutDateLocalized": "2020-04-08",
+     "checkInDateLocalized": "2019-10-02",
+     "checkOutDateLocalized": "2019-10-03",
      "guestId": "5c4f5c9ef5963b00332a8b71",
      "listingId": "58a5dffa3798420400c8e691",
      "accountId": "563e0b6a08a2710e00057b82",
@@ -958,7 +958,7 @@ class RuleController extends Controller
    },
    "event": "reservation.new"
  }';
-        $ch = curl_init("http://log.towerleisure.nl/rule/executehook/");
+        $ch = curl_init("http://test.log.towerleisure.nl/rule/executehook/");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, ($data));

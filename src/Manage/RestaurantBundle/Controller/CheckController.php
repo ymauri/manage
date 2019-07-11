@@ -134,9 +134,9 @@ class CheckController extends Controller {
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
             $data = $request->get('data');
-            $from = $to = '';
-            $listing = $listingnumber = $listingtype = array();
-            $isnumber = false;
+            $from = '';
+            $to = '';
+            $listing = array();
             $response = new JsonResponse();
             
             foreach ($data as $current){
@@ -149,38 +149,16 @@ class CheckController extends Controller {
                         $dated = new \DateTime($current['value']);
                          $to = $dated->format('Y-m-d');
                         break;
-                    case 'listing-number':
-                         $listingnumber[] = $current['value'];
+                    case 'listing':
+                         $listing[] = $current['value'];
                         break;
-                    case "listing-type":
-                        $listingtype[] = $current['value'];
-                        break;
-                    case "listing-type":
-                        $listingtype[] = $current['value'];
-                        break;
-                    case "typeof":
-                        $isnumber = $current['value'] == 1 ? false : true;
-                        break;
+                        
                 }
             }
             
             //hacer consulta guesty
             $api = new ApiGuesty();
             $result = array();
-            //Buscar los listings en BD
-            if (!$isnumber){
-                $listingobjs = $this->getDoctrine()->getManager()->getRepository("RestaurantBundle:Listing")->findAll();
-                foreach ($listingobjs as $obj){
-                    foreach ($listingtype as $type){
-                        if ($obj->isType($type)){
-                            $listing[] = $obj->getIdguesty();
-                        }
-                    }
-                }
-            }
-            else{
-                $listing = $listingnumber;
-            }
             foreach ($listing as $current){
                 $dataguesty = $api->getListingCalendar($current, $from, $to);
                 //var_dump($dataguesty);die;

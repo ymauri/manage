@@ -271,6 +271,9 @@ class DefaultController extends Controller {
         }
         $em->flush();
         echo 'done';
+
+
+
         die;
     }
 

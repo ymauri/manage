@@ -1,18 +1,18 @@
 {% extends 'AdminBundle::frame.html.twig' %}
 {% block title %} Pricing {% endblock %}
 {% block body %}
-    <div class="portlet">
-        <div class="portlet-title">
-            <div class="caption">
-                <i class="icon-check"></i> Pricing
-            </div>
-
-            <div class="tools">
-
-            </div>
+<div class="portlet">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-check"></i> Pricing
         </div>
-        <div class="portlet box blue-hoki">
-            <div class="portlet-title">
+
+        <div class="tools">
+            
+        </div>
+    </div>
+            <div class="portlet box blue-hoki">
+               <div class="portlet-title">
                 <div class="caption">
                     <i class="fa fa-search"></i>View
                 </div>
@@ -23,54 +23,23 @@
             </div>
             <div class="portlet-body form">
                 <fieldset>
-                    <form id="filter-pricing" class="" action="{{ path('pricing-filter') }}">
+                    <form id="filter-pricing" class="form-horizontal" action="{{path('pricing-filter')}}">
                         <div class="row">
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="form-group col-md-3">
-                                        <label>From</label>
-                                        <input type="text" id="from" name="from" readonly="readonly" required="required"
-                                               class="form-control datepicker" data-provide="datepicker"
-                                               data-date-format="dd-mm-yyyy" style="display: inline"
-                                               data-date-start-date="+0d">
-                                    </div>
-                                    <div class=" form-group col-md-3">
-                                        <label>To</label>
-                                        <input type="text" id="to" name="to" readonly="readonly" required="required"
-                                               class="form-control datepicker" data-provide="datepicker"
-                                               data-date-format="dd-mm-yyyy" style="display: inline"
-                                               data-date-start-date="+0d">
-                                    </div>
-                                </div>
-                                <div class="row">
+                            <div class="col-md-8">
                                 <div class="form-group col-md-6">
-                                    <div id="restaurantbundle_rule_bytype" class=" radio-list"><input type="radio" id="restaurantbundle_rule_bytype_0" name="typeof" required="required" value="1" checked="checked"><label for="restaurantbundle_rule_bytype_0" class="required">By Listing Tag</label><input type="radio" id="restaurantbundle_rule_bytype_1" name="typeof" required="required" value="0"><label for="restaurantbundle_rule_bytype_1" class="required">By Listing Number</label></div>
-                                    <div class="by-listing-number">
-                                        <label>Listing number</label>
-                                        <select multiple id="listing-number" name="listing-number" class="form-control">
-                                            {% for var in listings %}
-                                                {# temporalmente voy a usar como ID el number del dpto#}
-                                                <option value="{{ var.idguesty }}">{{ var.number }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="by-listing-tag">
-                                        <label>Listing tag</label>
-                                        <select multiple id="listing-type" name="listing-type" class="form-control">
-                                            <option value="Studio">Studio</option>
-                                            <option value="Apartment">Apartment</option>
-                                        </select>
-                                    </div>
-
-
+                                    <label>From</label>
+                                    <input type="text" id="from" name="from" readonly="readonly" required="required" class="form-control datepicker" data-provide="datepicker" data-date-format="dd-mm-yyyy" style="display: inline" data-date-start-date="+0d" >
+                                </div>
+                                <div class=" form-group col-md-6">
+                                    <label>To</label>
+                                    <input type="text" id="to" name="to" readonly="readonly" required="required" class="form-control datepicker" data-provide="datepicker" data-date-format="dd-mm-yyyy" style="display: inline" data-date-start-date="+0d" >
                                 </div>
 
-                                <div class=" col-md-12">
-                                    <br/>
+                                <div class="form-group col-md-12">
                                     <label class="control-label">Weekday</label>
                                     <div class="col-md-12">
                                         <div class="checkbox-list">
-                                            <label style="margin-left: 3px" class="checkbox-inline">
+                                            <label class="checkbox-inline">
                                                 <input type="checkbox" name="1"> Maandag</label>
                                             <label class="checkbox-inline">
                                                 <input type="checkbox" name="2"> Dinsdag</label>
@@ -78,10 +47,10 @@
                                                 <input type="checkbox" name="3"> Woensdag </label>
                                             <label class="checkbox-inline">
                                                 <input type="checkbox" name="4"> Donderdag </label>
-                                            <!-- </div>
+                                       </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <div class="checkbox-list">-->
+                                        <div class="checkbox-list">
                                             <label class="checkbox-inline">
                                                 <input type="checkbox" name="5"> Vrijdag </label>
                                             <label class="checkbox-inline">
@@ -91,165 +60,127 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                </div>
-                                <div class="row">
-                                    <br/><br/>
-                                    <div class="col-md-12 ">
-                                        <button type='submit' class="btn save-filter blue-hoki pull-left">Filter</button>
-                                    </div>
-                                </div>
-                                <hr >
-
-                            </div>
                             </div>
 
+                            <div class="form-group col-md-4">
+                                <label>Listing</label>
+                                <select multiple id="listing" name="listing" class="form-control">
+                                    {% for var in listings%}
+                                        {# temporalmente voy a usar como ID el number del dpto#}
+                                        <option value="{{var.idguesty}}">{{var.details}}</option>
+                                    {% endfor %}
+                                </select>
 
-                    </form>
+                            </div>
+                        </div>
 
+                <div class="col-md-12 ">
+                    <button type = 'submit' class="btn save-filter blue-hoki pull-right" >Filter</button>
+
+                </div>
+                </form>
                 </fieldset>
-                <fieldset class="data-for-update">
+                    <fieldset class="data-for-update">
+                        
+                    </fieldset>
+                    <fieldset  style="border:none; padding: 20px 0;">  <div class="col-md-2 col-md-offset-4"> <button type = "submit" hidden="hidden" class="btn update-price blue-hoki" style="display:none"  >Update price in Guesty</button> </div> </fieldset>
 
-                </fieldset>
-                <fieldset style="border:none; padding: 20px 0;">
-                    <div class="col-md-2 col-md-offset-4">
-                        <button type="submit" hidden="hidden" class="btn update-price blue-hoki" style="display:none">
-                            Update price in Guesty
-                        </button>
-                    </div>
-                </fieldset>
-
-
-            </div>
+               
+         </div>
         </div>
-    </div>
-    <script>
-        $(document).ready(function () {
-            $('select[multiple="multiple"], select[multiple]').select2();
-            $('#restaurantbundle_rule_bytype_0').trigger("click");
-        })
-        $('#restaurantbundle_rule_bytype_0').click(function(){
-            if ($(this).is(':checked')){
-                $('.by-listing-tag').show();
-                $('.by-listing-number').hide();
-            }
-        })
-        $('#restaurantbundle_rule_bytype_1').click(function(){
-            if ($(this).is(':checked')){
-                $('.by-listing-tag').hide();
-                $('.by-listing-number').show();
-            }
-        })
-
-        $('.update-price').on({
-            click: function (e) {
-                e.preventDefault()
-                array_to_send = new Object()
-                $('.data-for-update').find('form').each(function (index, form) {
-                    array_to_send[index] = $(form).serializeArray()
-                })
-                Metronic.startPageLoading();
-                $.post('{{ path('pricing-update') }}', {'data': array_to_send}, function (response) {
-
-                    if (response.status == 200) {
-                        $('.alert-success').text('Success!');
-                        $('.alert-success').show()
-                        setTimeout(function () {
-                            $('.alert-success').hide(300)
-                        }, 4400)
-                    } else {
-                        $('.alert-error').text('Error!');
-                        $('.alert-error').show()
-                        setTimeout(function () {
-                            $('.alert-error').hide(300)
-                        }, 4400)
-                    }
-                    Metronic.stopPageLoading();
-
-                })
-            }
-        })
-        $('.save-filter').click(function (e) {
+        </div>
+<script>
+    
+   $('.update-price').on({
+        click: function(e){
             e.preventDefault()
-
-            //Todos los campos deben estar llenos
-            if ($('#from').val() == '' || $('#to').val() == '' || ($("#restaurantbundle_rule_bytype_1").is(":checked") && $('#listing-number').val() === null) || ($("#restaurantbundle_rule_bytype_0").is(":checked") && $('#listing-type').val() === null)) {
-                alert('You must complete all fields.');
-                return false
-            }
+             array_to_send = new Object()
+             $('.data-for-update').find('form').each(function(index, form){
+                   array_to_send[index] = $(form).serializeArray()
+               })
             Metronic.startPageLoading();
-            //Comparar las fechas para que una sea mayor o igual que la otra
-            array_to_send = $('#filter-pricing').serializeArray()
-            $.post('{{ path('pricing-filter') }}', {'data': array_to_send}, function (response) {
-               // output = '';
-                output = '<form class="bulk-form form-horizontal"><div><label class="control-label pull-left" style="margin-right: 10px;">Write the same price for selected calendar.</label> <input class="form-control col-md-2 input-sm bulk" type="number" style="max-width:80px" onkeyup=" $(\'input.bulk\').val($(this).val()); $(\'input.data\').val($(this).val())" ></div> </form><br/><br/>';
+           $.post('{{path('pricing-update')}}', {'data':array_to_send}, function(response){
 
-                for (var i = 0; i < response.length; i++) {
-                    output += (drawtable(response[i]))
-                }
-                output += '<form class="bulk-form form-horizontal"><div><label class="control-label pull-left" style="margin-right: 10px;">Write the same price for selected calendar.</label> <input class="form-control col-md-2 input-sm bulk" type="number" style="max-width:80px" onkeyup="$(\'input.bulk\').val($(this).val()); $(\'input.data\').val($(this).val())"></div> </form><br/><br/>';
+               if(response.status == 200){
+                   $('.alert-success').text('Success!');
+                   $('.alert-success').show()
+                   setTimeout(function () {
+                       $('.alert-success').hide(300)
+                   }, 4400)
+               } else {
+                   $('.alert-error').text('Error!');
+                   $('.alert-error').show()
+                   setTimeout(function () {
+                       $('.alert-error').hide(300)
+                   }, 4400)
+               }
+               Metronic.stopPageLoading();
 
-                $('.data-for-update').html(output);
-                $('.update-price').show()
-                Metronic.stopPageLoading();
-            })
+           })
+        }
+    })
+    $('.save-filter').click(function(e){
+        e.preventDefault()
 
+        //Todos los campos deben estar llenos
+        if ($('#from').val()=='' || $('#to').val()=='' || $('#listing').val()=='' || $('#listing').val() == null ){
+           alert('You must complete all fields.');
+          return false
+        }
+        Metronic.startPageLoading();
+        //Comparar las fechas para que una sea mayor o igual que la otra
+        array_to_send = $('#filter-pricing').serializeArray()
+        $.post('{{path('pricing-filter')}}', {'data':array_to_send}, function(response){
+            output = '';
+            
+            for(var i = 0; i < response.length; i++){
+               output+=(drawtable (response[i]))
+            }
+            
+            $('.data-for-update').html(output);
+            $('.update-price').show()
+            Metronic.stopPageLoading();
         })
-        function drawtable(data) {
-            global = '<h4>Listing ' + data.listing + '</h4>'
-            global += '<form class="update-form"><div class="table-scrollable">\n\
+
+    })
+    function drawtable(data){
+        global = '<h4>Listing '+ data.listing+'</h4>'
+        global += '<form class="update-form"><div class="table-scrollable">\n\
         <table class="table table-bordered table-hover">\n\
             <thead><tr><th>Date</th><th>Price</th><th>Original Price</th><th>Note</th></tr> </thead>\n\
-            <tbody>' + gettbody(data.data, data.idguesty) + '</tbody>\n\
+            <tbody>'+gettbody(data.data, data.idguesty )+'</tbody>\n\
          </table></div></form>'
-            return global + '<br/>';
-        }
-
-        function gettbody(data, listing) {
-            //alert(data.toString())
-            result = ""
-            form = parseQuery($('#filter-pricing').serialize());
-            console.log(form)
-            ischeckweek = false;
-            $("input[type='checkbox']").each(function(){
-                if ($(this).is(":checked")){
-                    ischeckweek = true;
+        return global+'<br/>';
+    }
+    
+    function gettbody(data, listing){
+        //alert(data.toString())
+        result = ""
+        form = parseQuery($('#filter-pricing').serialize());
+        for(var i = 0; i < data.length; i++){
+                fecha = new Date(data[i]["date"].replace('-', '/'));
+            console.log(fecha.getDay())
+            Object.keys(form).forEach( function( indice) {
+                if (indice == fecha.getDay()){
+                    if (data[i]['status'] == 'available')
+                        result += '<tr><td>'+data[i]["date"]+'</td><td><input class="form-control col-md-2 input-sm" type="number" name="priceplus'+data[i]["date"]+'plus'+listing+'" style="max-width:80px" ></td><td>'+data[i]["price"]+'</td><td>'+data[i]["note"]+'</td></tr>'
+                    else
+                        result += '<tr><td>'+data[i]["date"]+'</td><td style="color: red">'+data[i]['status']+'</td><td>'+data[i]["price"]+'</td><td>'+data[i]["note"]+'</td></tr>'
                 }
             })
-            for (var i = 0; i < data.length; i++) {
-                fecha = new Date(data[i]["date"].replace('-', '/'));
-                //console.log(fecha.getDay())
-                iscoincidence = false;
-                Object.keys(form).forEach(function (indice) {
-                    if (indice == fecha.getDay()) {
-                        iscoincidence = true;
-                        if (data[i]['status'] == 'available')
-                            result += '<tr><td>' + data[i]["date"] + '</td><td><input class="form-control col-md-2 input-sm data" type="number" name="priceplus' + data[i]["date"] + 'plus' + listing + '" style="max-width:80px" ></td><td>' + data[i]["price"] + '</td><td>' + (data[i]["note"] === undefined  ? "" : data[i]["note"]) + '</td></tr>'
-                        else
-                            result += '<tr><td>' + data[i]["date"] + '</td><td style="color: red">' + data[i]['status'] + '</td><td>' + data[i]["price"] + '</td><td>' + (data[i]["note"] === undefined  ? "" : data[i]["note"]) + '</td></tr>'
-                    }
-                })
-                if ( !iscoincidence && !ischeckweek){
-                    if (data[i]['status'] == 'available')
-                        result += '<tr><td>' + data[i]["date"] + '</td><td><input class="form-control col-md-2 input-sm data" type="number" name="priceplus' + data[i]["date"] + 'plus' + listing + '" style="max-width:80px" ></td><td>' + data[i]["price"] + '</td><td>' + (data[i]["note"] === undefined  ? "" : data[i]["note"]) + '</td></tr>'
-                    else
-                        result += '<tr><td>' + data[i]["date"] + '</td><td style="color: red">' + data[i]['status'] + '</td><td>' + data[i]["price"] + '</td><td>' + (data[i]["note"] === undefined  ? "" : data[i]["note"]) + '</td></tr>'
-                }
-            }
-            return result;
         }
+        return result;
+       }
 
-        function parseQuery(queryString) {
-            var query = {};
-            var pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
-            for (var i = 0; i < pairs.length; i++) {
-                var pair = pairs[i].split('=');
-                query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
-            }
-            return query;
-        }
-
-        $(".bulk").on({"keyup": function(){ $("input.data").val($(this).val()) }})
-    </script>
+   function parseQuery(queryString) {
+       var query = {};
+       var pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
+       for (var i = 0; i < pairs.length; i++) {
+           var pair = pairs[i].split('=');
+           query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+       }
+       return query;
+   }
+</script>
 {% endblock %}
 

@@ -49,7 +49,7 @@
                                 {% if var.fromguesty %}
                                     {% for val in sources %}
                                         {% if var.checkin %}
-                                            {% if var.checkin.source | upper == val.guesty | upper %}
+                                            {% if var.checkin.source == val.guesty %}
                                                 <option name="{{ val.extrafield }}" value="{{val.id}}" {% if var.source and var.source.id == val.id %} selected = "selected" {% endif %}>{{val.details}}</option>
                                             {% endif  %}
                                         {% endif  %}

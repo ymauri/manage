@@ -16,30 +16,30 @@ class User implements UserInterface{
     * @ORM\Column(type="integer")
     * @ORM\GeneratedValue
     */
-    private $id;
+    protected $id;
 
     /** @ORM\Column(type="string", length=255) */
-    private $email;
+    protected $email;
 
     /** @ORM\Column(type="string", length=255) */
-    private $password;
+    protected $password;
 
     /** @ORM\Column(type="string", length=255) */
-    private $name;
+    protected $name;
 
     /** @ORM\Column(type="string", length=255) */
-    private $lastname;
+    protected $lastname;
 
     /** @ORM\Column(type="boolean") */
-    private $enable;
+    protected $enable;
 
     /** @ORM\Column(type="string", length=255) */
-    private $salt;
+    protected $salt;
 
     /** @ORM\ManyToOne(targetEntity="Role", inversedBy="users")
      *      
      */
-    private $role;
+    protected $role;
 
     public function __construct() {
         $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);

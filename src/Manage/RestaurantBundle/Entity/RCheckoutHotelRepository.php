@@ -22,7 +22,6 @@ class RCheckoutHotelRepository extends EntityRepository {
         //$consulta->setMaxResults(1);
         $checkin = $consulta->getResult();
         foreach ($checkin as $c){
-            var_dump($c);die;
             //if ($checkin[0] != null){
                 //Añadir las noches a la fecha del checkin
                 $fecha = $c->getHotel()->getDated();

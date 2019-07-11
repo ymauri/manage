@@ -270,12 +270,4 @@ class Listing {
     {
         $this->updatedat = $updatedat;
     }
-
-    public function isType($type){
-        foreach ($this->type as $item){
-            if ($item == $type)
-                return true;
-        }
-        return false;
-    }
 }

@@ -116,13 +116,13 @@
                 Metronic.startPageLoading();
                 $('.form-control').hide()
 
-                   /*if ($(this).hasClass('final-submit')) {
+                   if ($(this).hasClass('final-submit')) {
                         fecha = new Date();
                        mes = fecha.getMonth() + 1
                        mes = mes.toString().length == 1 ? '0' + mes.toString() : mes
                         $('#adminbundle_kasboek_finished').val(fecha.getFullYear()+'-'+mes+'-'+fecha.getDate())
                    }
-*/
+
                array_to_work = $('#form-basic-kasboek').clone()
                array_to_work.find('input.form-control').each(function(index, item) {
                    if (!$(item).hasClass('datepicker') && !$(item).hasClass('timepicker') || !$(item).hasClass('texto')){
@@ -148,11 +148,8 @@
                         Metronic.stopPageLoading();
                         $('.form-control').show();
                         if (response == 'true') {
-                            if (boton.hasClass('final-submit')) {
-                                $.post("{{ path("kasboek_finish", {'id':entity_basic.id}) }}")
-                                $('.alert-success').text('Success! The form is done.')
+                            if (boton.hasClass('final-submit'))
                                 $('.alert-success').text('Success! The email has been sent')
-                            }
                             else
                                 $('.alert-success').text('Success! The form has been modified.');
                             $('.alert-success').show()
@@ -288,7 +285,6 @@
 
      $('#adminbundle_kasboek_dated').on({
          'change':function(){
-
              Metronic.startPageLoading()
              $.post("{{ path('kasboek_change_date', {'id':entity_basic.id}) }}", {'newdate':$('#adminbundle_kasboek_dated').val()}, function(e){
                  if (e == 'true') window.location = window.location

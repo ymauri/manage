@@ -100,7 +100,7 @@
                                                         <select disabled="disabled" style="background: white; border: none; height: 23px;">
                                                             <option></option>
 
-                                                            {% for val in listing %}
+                                                            {% for val in listing%}
                                                                 <option value="{{val.id}}" {% if var.listing.id == val.id %} selected = "selected"{% endif %}>{{val.details}}</option>
                                                             {% endfor  %}
                                                         </select>

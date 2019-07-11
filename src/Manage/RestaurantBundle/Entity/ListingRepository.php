@@ -12,9 +12,4 @@ class ListingRepository extends EntityRepository {
             ->getResult();
     }
 
-    public function findAll()
-    {
-        return $this->findBy( array(), array('priority' => 'ASC'));
-    }
-
 }
