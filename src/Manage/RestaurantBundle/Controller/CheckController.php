@@ -193,7 +193,7 @@ class CheckController extends Controller {
                 foreach ($listing as $item){
                     if ($item['value'] != "" && $item['value'] != null){
                         $name = explode('plus',$item['name']);
-                        $res[] = $api->setListingCalendar(array("listings"=>$name[2], "from"=>$name[1], "to"=>$name[1],  "price"=>$item['value'], "note"=>"Updated from log.towerleisure.nl"));
+                        $res[] = $api->setListingCalendar(array("listings"=>$name[2], "from"=>$name[1], "to"=>$name[1],  "price"=>$item['value']));
                     }
                 }
             }
