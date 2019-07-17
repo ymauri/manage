@@ -59,6 +59,13 @@ class ListingCalendar {
      */
     private $rule;
 
+
+    /**
+     *
+     * @ORM\Column(name="applied", type="boolean")
+     */
+    private $applied = false;
+
     public function getId() {
         return $this->id;
     }
@@ -121,5 +128,15 @@ class ListingCalendar {
     public function setRule($rule)
     {
         $this->rule = $rule;
+    }
+
+    public function getApplied()
+    {
+        return $this->applied;
+    }
+
+    public function setApplied($applied)
+    {
+        $this->applied = $applied;
     }
 }

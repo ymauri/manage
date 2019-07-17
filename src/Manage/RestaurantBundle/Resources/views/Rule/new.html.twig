@@ -35,10 +35,10 @@
                                 <h5>Please, select when the rule will be excecuted. The form below changes according to the type of rule.</h5>
                                 <p>
                                 <div class=" form-group">
-                                    {{form_widget(form.typeofrule, {'attr':{
+                                    {{form_widget(form.ishook, {'attr':{
                                         'class' :'check-list',
                                     }})}}
-                                    {{form_errors(form.typeofrule)}}
+                                    {{form_errors(form.ishook)}}
                                 </div>
                                 </p>
                             </div>
@@ -279,15 +279,15 @@
 
         $('#restaurantbundle_rule_cond').trigger('change');
 
-        $('#restaurantbundle_rule_typeofrule_0').trigger('click')
+        $('#restaurantbundle_rule_ishook_0').trigger('click')
 
-        $('#restaurantbundle_rule_typeofrule_1').click(function(){
+        $('#restaurantbundle_rule_ishook_1').click(function(){
             if ($(this).is(':checked')){
                 $('.hide-on-hook').hide();
                 $('.hide-on-cronjob').show();
             }
         })
-        $('#restaurantbundle_rule_typeofrule_0').click(function(){
+        $('#restaurantbundle_rule_ishook_0').click(function(){
             if ($(this).is(':checked')){
                 $('.hide-on-hook').show();
                 $('.hide-on-cronjob').hide();

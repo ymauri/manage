@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints\DateTime;
 class RuleController extends Controller
 {
     /**
-     * Listado de reglas
+     * Listado de reglas ordenado por la prioridad
      *
      * @Route("/rule/", name="rule_admin")
      * @Method("GET")
@@ -31,8 +31,6 @@ class RuleController extends Controller
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER') {
-
-
             $em = $this->getDoctrine()->getManager();
             $rules = $em->getRepository('RestaurantBundle:Rule')->findBy(array(), array('priority' => 'ASC'));
             return $this->render('RestaurantBundle:Rule:index.html.twig', array('rules' => $rules));
@@ -52,11 +50,9 @@ class RuleController extends Controller
         if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('RestaurantBundle:Rule')->find($id);
-
             if (!$entity) {
                 return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
             }
-
             $form = $this->createForm(new RuleType(), $entity, array(
                 'action' => $this->generateUrl('rule_edit', array('id' => $entity->getId())),
                 'method' => 'PUT',
@@ -84,22 +80,16 @@ class RuleController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
-
             $entity = $em->getRepository('RestaurantBundle:Rule')->find($id);
-
             if (!$entity) {
                 return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
-
             }
-
             $form = $this->createForm(new RuleType(), $entity, array(
                 'action' => $this->generateUrl('rule_edit', array('id' => $entity->getId())),
                 'method' => 'PUT',
             ));
-
             $form->add('submit', 'submit', array('label' => 'Save', 'attr' => array('class' => 'btn btn-primary')));
             $form->handleRequest($request);
-
             if ($form->isValid()) {
                 //Actualizar los valores de máximos y mínimos para los deptos de las reglas.
                 $listings = $em->getRepository('RestaurantBundle:Listing')->findAll();
@@ -119,7 +109,6 @@ class RuleController extends Controller
                 $this->addFlash('success', 'Success! The Rule has been changed.');
                 return $this->redirect($this->generateUrl('rule_admin', array('id' => $id)));
             }
-
             return array(
                 'entity' => $entity,
                 '$form' => $form->createView(),
@@ -152,7 +141,6 @@ class RuleController extends Controller
                 'form' => $form->createView(),
                 'listings' => $em->getRepository('RestaurantBundle:Listing')->findAll()));
         }
-
     }
 
     /**
@@ -203,12 +191,10 @@ class RuleController extends Controller
             if (!$entity) {
                 return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
             }
-
             if ($request->get('priority') > 0) {
                 $entity->setPriority((integer)$request->get('priority'));
                 $em->flush();
             }
-
             $this->addFlash('success', 'Success! The Rule has been updated.');
 
             return $this->redirect($this->generateUrl('rule_admin'));
@@ -232,7 +218,7 @@ class RuleController extends Controller
         $rules = $em->getRepository('RestaurantBundle:Rule')->findBy(array('active' => true), array('priority' => "ASC"));
         foreach ($rules as $activerule) {
             //Ejecutar Reglas de tipo "Tarea programada"
-            if (!$activerule->getTypeofrule()) {
+            if (!$activerule->getIshook()) {
                 $method = $activerule->getMethod();
                 $this->$method($activerule);
             } else {
@@ -255,19 +241,40 @@ class RuleController extends Controller
     //TODO Modificar comportamiento para que el usuario pueda escoger el hook al que se subordina la regla que está creando.
     public function excecuteHookRulesAction(Request $request)
     {
-        //phpinfo();die();
         $em = $this->getDoctrine()->getManager();
         //Buscar las reglas activas ordenadas por la prioridad (reglas de tipo hook)
-        $rules = $em->getRepository('RestaurantBundle:Rule')->findBy(array('active' => true, 'typeofrule' => true), array('priority' => "ASC"));
+        $rules = $em->getRepository('RestaurantBundle:Rule')->findBy(array('active' => true, 'ishook' => true), array('priority' => "ASC"));
         foreach ($rules as $activerule) {
             $method = $activerule->getMethod();
             $peticion = (array)json_decode($request->getContent());
             $reservation = (array)($peticion['reservation']);
             $this->$method($activerule, $reservation);
-            echo ($activerule->getId() ."   ". date('H:i:s') . ' end');
+            echo($activerule->getId() . "   " . date('H:i:s') . ' end');
         }
         die;
     }
+
+    /**
+     * Acción subscrita al hook reservation.update de Guesty.
+     *
+     * @Route("/rule/executhookback/", name="rule_execute_hook_back")
+     * @Method("POST")
+     * @Template()
+     *
+     */
+    public function excecuteHookRulesBackAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        //Volver atrás la regla aplicada.
+        // Cada vez que haya una reserva cancelada.
+        //Buscar si los calendarios de los días implicados fueron modificados por una regla.
+        //Tomar el ID de la regla y realizar la operación contraria. O sea si la regla sumó, entonces hay que reatr.
+        //Para cancelar debo validar que se cumpla también las condiciones de la regla, pero en sentido inverso.
+        //Por ejemplo si la regla dice "Subir el precio si hay menos de 18 vacío"
+        //Entonces yo debo hacer lo contrario y eso sería: "Bajar el precio si hay más de 18"
+        die;
+    }
+
 
     /**
      * Ejecutar el el hook de reservation.new pendiente, cuyas reservas están almacenadas en base de datos.
@@ -278,52 +285,49 @@ class RuleController extends Controller
     private function executePendingHook($rule)
     {
         $em = $this->getDoctrine()->getManager();
+        $pending = null;
         switch ($rule->getMethod()) {
             case 'changepricenow':
                 //Fechas en las que se debe aplicar la regla.
                 $dates = $em->getRepository("RestaurantBundle:ListingCalendar")->getDates($rule->getId());
-                //var_dump($dates);die;
                 foreach ($dates as $date) {
                     //Buscar la cantidad de reservas disponibles en esa fecha
-                    $reservations = $em->getRepository("RestaurantBundle:ListingCalendar")->findBy(array("checkin"=>new \DateTime($date), "rule"=>$rule->getId()));
+                    $reservations = $em->getRepository("RestaurantBundle:ListingCalendar")->findBy(array("checkin" => new \DateTime($date), "rule" => $rule->getId()));
                     //Verificar el día de la semana
                     //Si está marcado el día de la semana || Si está en blanco el campo || si el array está vacío
-                    if ((!is_null($rule->getDayweek()) && count((array)$rule->getDayweek()) > 0) || (is_null($rule->getDayweek()) || count((array)$rule->getDayweek()) == 0)) {
-                        $days = (array)$rule->getDayweek();
-                        foreach ($days as $day) {
-                            $fecha = new \DateTime($date);
-                            //Si la fecha coincide con el día de la semana marcado en la regla entonces validar el resto.
-                            if ($fecha->format('w') == $day) {
-                                $pending = null;
-                                //Si la regla aplica por tipos de departamentos
-                                // Buscar los deartamentos del tipo correspondiente
-                                if ($rule->getBytype()) {
-                                    $pending = $em->getRepository("RestaurantBundle:ListingCalendar")->getListingsByTypeDate($rule->getId(), $date, $rule->getTypeofapartment());
-                                } else {
-                                    //Si la regla es por depto, entonces buscar los deptos correspondientes
-                                    $pending = $em->getRepository("RestaurantBundle:ListingCalendar")->getListingsByGuestyDate($rule->getId(), $date, $rule->getApartments());
-                                }
-                                switch ($rule->getCond()) {
-                                    case 'listing_available_more':
-                                        if (count($reservations) >= $rule->getConditionvalue()) {
-                                            $this->dopendingchangepricenow($rule, $pending);
-                                        }
-                                        break;
-                                    case 'listing_available_less':
-                                        echo "Pendientes: ".count($reservations)."    Condicion: ".$rule->getConditionvalue()."<br/><br/>";
-                                        if (count($reservations) <= $rule->getConditionvalue()) {
-                                            $this->dopendingchangepricenow($rule, $pending);
-                                        }
-                                        break;
-                                    case 'none_condition':
-                                        $this->dopendingchangepricenow($rule, $pending);
-                                        break;
+                    if ($rule->hasWeekDates($date)) {
+                        //Si la regla aplica por tipos de departamentos
+                        // Buscar los deartamentos del tipo correspondiente
+                        if ($rule->getBytype()) {
+                            $pending = $em->getRepository("RestaurantBundle:ListingCalendar")->getListingsByTypeDate($rule->getId(), $date, $rule->getTypeofapartment());
+                        } else {
+                            //Si la regla es por depto, entonces buscar los deptos correspondientes
+                            $pending = $em->getRepository("RestaurantBundle:ListingCalendar")->getListingsByGuestyDate($rule->getId(), $date, $rule->getApartments());
+                        }
+                        //break;
+                        switch ($rule->getCond()) {
+                            case 'listing_available_more':
+                                if (count($reservations) >= $rule->getConditionvalue()) {
+                                    $this->dopendingchangepricenow($rule, $pending);
                                 }
                                 break;
-                            }
+                            case 'listing_available_less':
+                                echo "Pendientes: " . count($reservations) . "    Condicion: " . $rule->getConditionvalue() . "<br/><br/>";
+                                if (count($reservations) <= $rule->getConditionvalue()) {
+                                    $this->dopendingchangepricenow($rule, $pending);
+                                }
+                                break;
+                            case 'none_condition':
+                                $this->dopendingchangepricenow($rule, $pending);
+                                break;
                         }
                     }
                 }
+
+                foreach ($pending as $calendar)
+                    $em->remove($calendar);
+                //Elminar los calenadrios comprometidos
+                $em->flush();
                 break;
         }
     }
@@ -335,112 +339,71 @@ class RuleController extends Controller
      * */
     private function changepricenow($rule, $reservation = null)
     {
-
         $em = $this->getDoctrine()->getManager();
         $api = new ApiGuesty();
         $listings = $em->getRepository('RestaurantBundle:Listing')->findAll();
         //Si la regla es de tipo cronJob
-        if (!$rule->getTypeofrule()) {
+        if (!$rule->getIshook()) {
             //Validar el tiempo en el que se ejecuta la regla
-            $now = new \DateTime('now');
-            $only_has_begin = $only_has_ends = $has_range = $dayweek = false;
-
-            //Verificar si tiene solo una fecha de inicio
-            if ((!is_null($rule->getBegin()) && is_null($rule->getEnds())) && ($now >= $rule->getBegin())) {
-                $only_has_begin = true;
-            }
-
-            //Verificar si tiene solo fecha de fin
-            if ((!is_null($rule->getEnds()) && is_null($rule->getBegin()) && ($now <= $rule->getEnds()))) {
-                $only_has_ends = true;
-            }
-
-            //Verificar si hay rango de fecha
-            if ((!is_null($rule->getEnds()) && !is_null($rule->getBegin())) && ($now >= $rule->getBegin() && $now <= $rule->getEnds())) {
-                $has_range = true;
-            }
-
-            //Verificar si hay días de la semana
-            if (!is_null($rule->getDayweek()) && count((array)$rule->getDayweek()) > 0){
-                $days = (array)$rule->getDayweek();
-                foreach ($days as $day){
-                    if ($now->format('w') == $day){
-                        $dayweek = true;
-                        break;
-                    }
-                }
-            }
-
-            if ($dayweek || is_null($rule->getDayweek()) || count((array)$rule->getDayweek()) == 0){
-                //Si los campos de los dias son null o alguna las variables de control es true entonces se ejecuta la regla
-                if ((is_null($rule->getEnds()) && is_null($rule->getBegin())) || $has_range || $only_has_begin || $only_has_ends) {
-                    //Si el campo tiempo es null entonces la regla se ejecuta al inicio del dia.
-                    $time = is_null($rule->getTime()) ? new \DateTime($now->format('d-m-Y') . ' 00:02') : $rule->getTime();
-                    //si han pasado no mas de 3 minutos && el ahora es mayor que la hora de la regla
-                    //echo $now->format('H:i:s').'--------'.$time->format('H:i:s');die;
-                    if (strtotime($now->format('H:i:s')) - strtotime($time->format('H:i:s')) > 0 && strtotime($now->format('H:i:s')) - strtotime($time->format('H:i:s')) < 180) {
-                        //Evaluar los tipos de condiciones que pueda tener la regla.
-                        switch ($rule->getCond()) {
-                            case 'listing_available_more':
-                                $listingcalendar = $this->getListingCalendar($rule, $listings);
-                                $conditionvalue = 0;
-                                $listings_obj = array();
-                                $reallistingcalendar = array();
-                                foreach ($listingcalendar as $listing) {
-                                    if ($listing['status'] == 200) {
-                                        if ($listing['result'][0]['status'] == Nomenclator::LISTING_AVAILABLE) {
-                                            $conditionvalue++;
-                                            //$listings_obj[$listing['result'][0]['listingId']] = $em->getRepository('RestaurantBundle:Listing')->findOneBy(array('idguesty'=>$listing['result'][0]['listingId']));
-                                            //Pedir el listing a guesty
-                                            $listings_obj[$listing['result'][0]['listingId']] = $api->listingtag($listing['result'][0]['listingId']);
-                                            $reallistingcalendar[] = $listing;
-                                        }
-                                    }
+            if ($rule->hasWeekDates() && ($rule->hasOnlyBeginingDate() || $rule->hasOnlyEndingDate() || $rule->hasRangeDate()) && $rule->canExecuteNow()) {
+                switch ($rule->getCond()) {
+                    case 'listing_available_more':
+                        $listingcalendar = $this->getListingCalendar($rule, $listings);
+                        $conditionvalue = 0;
+                        $listings_obj = array();
+                        $reallistingcalendar = array();
+                        foreach ($listingcalendar as $listing) {
+                            if ($listing['status'] == 200) {
+                                if ($listing['result'][0]['status'] == Nomenclator::LISTING_AVAILABLE) {
+                                    $conditionvalue++;
+                                    //$listings_obj[$listing['result'][0]['listingId']] = $em->getRepository('RestaurantBundle:Listing')->findOneBy(array('idguesty'=>$listing['result'][0]['listingId']));
+                                    //Pedir el listing a guesty
+                                    $listings_obj[$listing['result'][0]['listingId']] = $api->listingtag($listing['result'][0]['listingId']);
+                                    $reallistingcalendar[] = $listing;
                                 }
-                                //var_dump($listings_obj);die;
-                                if ($rule->getConditionvalue() <= $conditionvalue) {
-                                    $this->dochangepricenow($rule, $reallistingcalendar, $listings_obj);
-                                }
-                                break;
-                            case 'listing_available_less':
-                                $listingcalendar = $this->getListingCalendar($rule, $listings);
-                                $conditionvalue = 0;
-                                $listings_obj = array();
-                                $reallistingcalendar = array();
-                                foreach ($listingcalendar as $listing) {
-                                    if ($listing['status'] == 200) {
-                                        if ($listing['result'][0]['status'] == Nomenclator::LISTING_AVAILABLE) {
-                                            $conditionvalue++;
-                                            //$listings_obj[$listing['result'][0]['listingId']] = $em->getRepository('RestaurantBundle:Listing')->findOneBy(array('idguesty'=>$listing['result'][0]['listingId']));
-                                            //Pedir el listing a guesty
-                                            $listings_obj[$listing['result'][0]['listingId']] = $api->listingtag($listing['result'][0]['listingId']);
-                                            $reallistingcalendar[] = $listing;
-                                        }
-                                    }
-                                }
-                                if ($rule->getConditionvalue() >= $conditionvalue) {
-                                    $this->dochangepricenow($rule, $reallistingcalendar, $listings_obj);
-                                }
-                                break;
-                            case 'none_condition':
-                                $listingcalendar = $this->getListingCalendar($rule, $listings);
-                                $listings_obj = array();
-                                $reallistingcalendar = array();
-                                foreach ($listingcalendar as $listing) {
-                                    if ($listing['status'] == 200) {
-                                        if ($listing['result'][0]['status'] == Nomenclator::LISTING_AVAILABLE) {
-                                            //Pedir el listing a guesty
-                                            $listings_obj[$listing['result'][0]['listingId']] = $api->listingtag($listing['result'][0]['listingId']);
-                                            $reallistingcalendar[] = $listing;
-
-                                        }
-                                    }
-                                }
-                                $this->dochangepricenow($rule, $reallistingcalendar, $listings_obj);
-                                break;
+                            }
                         }
-                    }
+                        //var_dump($listings_obj);die;
+                        if ($rule->getConditionvalue() <= $conditionvalue) {
+                            $this->dochangepricenow($rule, $reallistingcalendar, $listings_obj);
+                        }
+                        break;
+                    case 'listing_available_less':
+                        $listingcalendar = $this->getListingCalendar($rule, $listings);
+                        $conditionvalue = 0;
+                        $listings_obj = array();
+                        $reallistingcalendar = array();
+                        foreach ($listingcalendar as $listing) {
+                            if ($listing['status'] == 200) {
+                                if ($listing['result'][0]['status'] == Nomenclator::LISTING_AVAILABLE) {
+                                    $conditionvalue++;
+                                    //$listings_obj[$listing['result'][0]['listingId']] = $em->getRepository('RestaurantBundle:Listing')->findOneBy(array('idguesty'=>$listing['result'][0]['listingId']));
+                                    //Pedir el listing a guesty
+                                    $listings_obj[$listing['result'][0]['listingId']] = $api->listingtag($listing['result'][0]['listingId']);
+                                    $reallistingcalendar[] = $listing;
+                                }
+                            }
+                        }
+                        if ($rule->getConditionvalue() >= $conditionvalue) {
+                            $this->dochangepricenow($rule, $reallistingcalendar, $listings_obj);
+                        }
+                        break;
+                    case 'none_condition':
+                        $listingcalendar = $this->getListingCalendar($rule, $listings);
+                        $listings_obj = array();
+                        $reallistingcalendar = array();
+                        foreach ($listingcalendar as $listing) {
+                            if ($listing['status'] == 200) {
+                                if ($listing['result'][0]['status'] == Nomenclator::LISTING_AVAILABLE) {
+                                    //Pedir el listing a guesty
+                                    $listings_obj[$listing['result'][0]['listingId']] = $api->listingtag($listing['result'][0]['listingId']);
+                                    $reallistingcalendar[] = $listing;
 
+                                }
+                            }
+                        }
+                        $this->dochangepricenow($rule, $reallistingcalendar, $listings_obj);
+                        break;
                 }
             }
 
@@ -450,31 +413,11 @@ class RuleController extends Controller
             $checkout = new\DateTime($reservation['checkOut']);
             //Para que solo tome en cuenta la cantidad de noches y no tome el día del chekout
             $checkout = $checkout->modify("-1 day");
-            $only_has_begin = $only_has_ends = $has_range = $dayweek = false;
-
-            /*//Verificar si tiene solo una fecha de inicio
-            if ((!is_null($rule->getBegin()) && is_null($rule->getEnds())) && ($checkin >= $rule->getBegin())) {
-                $only_has_begin = true;
-            }
-
-            //Verificar si tiene solo fecha de fin
-            if ((!is_null($rule->getEnds()) && is_null($rule->getBegin()) && ($checkin <= $rule->getEnds()))) {
-                $only_has_ends = true;
-            }
-
-            //Verificar si hay rango de fecha
-            if ((!is_null($rule->getEnds()) && !is_null($rule->getBegin())) && ($checkin >= $rule->getBegin() && $checkin <= $rule->getEnds())) {
-                $has_range = true;
-            }*/
-            
-            //Si los campos de los dias son null o alguna las variables de control es true entonces se ejecuta la regla
-            //if ((is_null($rule->getEnds()) && is_null($rule->getBegin())) || $has_range || $only_has_begin || $only_has_ends) {
-            //Validar si los la reserva es en una fecha mayor al campo "startingfrom"
             $dias = is_null($rule->getStartingfrom()) ? 0 : $rule->getStartingfrom();
-            $starting = new \DateTime("today + ".$dias." days");
-            if (strtotime($checkin->format('Y-m-d')) > strtotime($starting->format('Y-m-d')) ){
+            $starting = new \DateTime("today + " . $dias . " days");
+            if (strtotime($checkin->format('Y-m-d')) > strtotime($starting->format('Y-m-d'))) {
                 //Iterar por cada departamento para almacenar el listado de disponibilidad
-                $dif = strtotime($checkout->format('Y-m-d')) - strtotime($checkin->format('Y-m-d'));
+                //$dif = strtotime($checkout->format('Y-m-d')) - strtotime($checkin->format('Y-m-d'));
                 $id_listings = array();
                 foreach ($listings as $i => $list) {
                     $guesty_calendar = $api->getListingCalendar($list->getIdguesty(), $checkin->format('Y-m-d'), $checkout->format('Y-m-d'));
@@ -489,6 +432,7 @@ class RuleController extends Controller
                                 $calendarlist->setStatus($calendar['status']);
                                 $calendarlist->setPrice($calendar['price']);
                                 $calendarlist->setListing($calendar['listingId']);
+                                $calendarlist->setApplied(false);
                                 $calendarlist->setRule($rule);
                                 $em->persist($calendarlist);
                             } else if (!is_null($obj)) {
@@ -502,7 +446,6 @@ class RuleController extends Controller
         }
     }
 
-
     /**
      * Este es el método que aplica que cambio sobre el departamento en Guety.
      * Solamente se usa para las reglas de tipo Tarea Programada.
@@ -514,73 +457,35 @@ class RuleController extends Controller
     public function dochangepricenow($rule, $calendarlist, $listingobjs = array())
     {
         try {
-
             $api = new ApiGuesty();
             $em = $this->getDoctrine()->getManager();
             //Evaluar los tipos de condiciones que pueda tener la regla.
-            switch ($rule->getAction()) {
-                case 'listing_change_price':
-                    $dptos = '';
-                    //Por cada uno de los listings
-                    foreach ($calendarlist as $listing) {
-                        if ($listing['status'] == 200) {
-                            $listing_obj = $listingobjs[$listing['result'][0]['listingId']];
-                            $listingmaxmin = $rule->getPricesbylisting();
-                            $prices = $listingmaxmin[$listing_obj['result']['_id']];
-                            $max = $prices['max'];
-                            $min = $prices['min'];
-
-                            $api = new ApiGuesty();
-                            $newprice = ($rule->getUnit() == 'euro') ? $rule->getActionvalue() : ((double)$listing['result'][0]['price'] * $rule->getActionvalue()) / 100;
+            foreach ($calendarlist as $listing) {
+                if ($listing['status'] == 200) {
+                    $listing_obj = $listingobjs[$listing['result'][0]['listingId']];
+                    $listingmaxmin = $rule->getPricesbylisting();
+                    $prices = $listingmaxmin[$listing_obj['result']['_id']];
+                    $max = $prices['max'];
+                    $min = $prices['min'];
+                    $newprice = ($rule->getUnit() == 'euro') ? $rule->getActionvalue() : ((double)$listing['result'][0]['price'] * $rule->getActionvalue()) / 100;
+                    $fecha = (!is_null($rule) && !is_null($rule->getDaysahead())) ? new \DateTime('today + ' . $rule->getDaysahead() . ' days') : new \DateTime();
+                    switch ($rule->getAction()) {
+                        case 'listing_change_price':
                             if ($newprice > $max) $newprice = $max;
                             if ($newprice < $min) $newprice = $min;
-                            $fecha = (!is_null($rule) && !is_null($rule->getDaysahead())) ? new \DateTime('today + ' . $rule->getDaysahead() . ' days') : new \DateTime();
-                            $result = $api->setListingCalendar(array("listings" => $listing_obj['result']['_id'], 'from' => $fecha->format('Y-m-d'), "to" => $fecha->format('Y-m-d'), "price" => (integer)$newprice, "note" => $listing['result'][0]['note'] . " (Rule)"));
-                            echo ' ' . $listing_obj['result']['title'] . ' (response: ' . $result['status'] . '); </br></br>';
-                        }
+                            break;
+                        case 'listing_lower_price':
+                            $newprice = ((integer)($listing['result'][0]['price'] - $newprice) <= $min) ? (integer)$min : (integer)($listing['result'][0]['price'] - $newprice);
+                            break;
+                        case 'listing_raise_price':
+                            $newprice = ($listing['result'][0]['price'] + $newprice >= $max) ? (integer)$max : (integer)($listing['result'][0]['price'] + $newprice);
+                            break;
                     }
-                    break;
-                case 'listing_lower_price':
+                    $result = $api->setListingCalendar(array("listings" => $listing_obj['result']['_id'], 'from' => $fecha->format('Y-m-d'), "to" => $fecha->format('Y-m-d'), "price" => (integer)$newprice, "note" => $listing['result'][0]['note'] . " (Rule)"));
+                    echo ' ' . $listing_obj['result']['title'] . ' (response: ' . $result['status'] . '); </br></br>';
 
-                    foreach ($calendarlist as $listing) {
-                        if ($listing['status'] == 200) {
-                            $listing_obj = $listingobjs[$listing['result'][0]['listingId']];
-                            $ruletypes = $rule->getTypeofapartment();
-                            $listingmaxmin = $rule->getPricesbylisting();
-                            $prices = $listingmaxmin[$listing_obj['result']['_id']];
-                            $min = $prices['min'];
-                            if ((count($ruletypes) > 0) || is_null($ruletypes) || $ruletypes[0] == '') {
-                                $api = new ApiGuesty();
-                                $newprice = ($rule->getUnit() == 'euro') ? $rule->getActionvalue() : ((double)$listing['result'][0]['price'] * $rule->getActionvalue()) / 100;
-                                $newprice = ((integer)($listing['result'][0]['price'] - $newprice) <= $min) ? (integer)$min : (integer)($listing['result'][0]['price'] - $newprice);
-                                $fecha = (!is_null($rule) && !is_null($rule->getDaysahead())) ? new \DateTime('today + ' . $rule->getDaysahead() . ' days') : new \DateTime();
-                                $result = $api->setListingCalendar(array("listings" => $listing_obj['result']['_id'], "from" => $fecha->format('Y-m-d'), "to" => $fecha->format('Y-m-d'), "price" => $newprice, "note" => $listing['result'][0]['note'] . " (Rule) "));
-                                echo ' ' . $listing_obj['result']['title'] . ' (response: ' . $api->getStatus($result['status']) . '); </br></br>';
+                }
 
-                            }
-                        }
-                    }
-                    break;
-                case 'listing_raise_price':
-                    foreach ($calendarlist as $listing) {
-                        if ($listing['status'] == 200) {
-                            $listing_obj = $listingobjs[$listing['result'][0]['listingId']];
-                            $ruletypes = $rule->getTypeofapartment();
-                            $listingmaxmin = $rule->getPricesbylisting();
-                            $prices = $listingmaxmin[$listing_obj['result']['_id']];
-                            $max = $prices['max'];
-
-                            if ((count($ruletypes) > 0) || is_null($ruletypes) || count($ruletypes) == 0) {
-                                $api = new ApiGuesty();
-                                $newprice = ($rule->getUnit() == 'euro') ? $rule->getActionvalue() : ((double)$listing['result'][0]['price'] * $rule->getActionvalue()) / 100;
-                                $newprice = ($listing['result'][0]['price'] + $newprice >= $max) ? (integer)$max : (integer)($listing['result'][0]['price'] + $newprice);
-                                $fecha = (!is_null($rule) && !is_null($rule->getDaysahead())) ? new \DateTime('today + ' . $rule->getDaysahead() . ' days') : new \DateTime();
-                                $result = $api->setListingCalendar(array("listings" => $listing_obj['result']['_id'], "from" => $fecha->format('Y-m-d'), "to" => $fecha->format('Y-m-d'), "price" => $newprice, "note" => $listing['result'][0]['note'] . " (Rule) "));
-                                echo ' ' . $listing_obj['result']['title'] . ' (response: ' . $api->getStatus($result['status']) . '); </br></br>';
-                            }
-                        }
-                    }
-                    break;
             }
         } catch (Exception $e) {
             echo $e;
@@ -597,120 +502,79 @@ class RuleController extends Controller
      * */
     public function dopendingchangepricenow($rule, $calendarlist)
     {
+        $em = $this->getDoctrine()->getManager();
         try {
             $api = new ApiGuesty();
-            $em = $this->getDoctrine()->getManager();
             $data = array();
             foreach ($calendarlist as $listing) {
                 //Buscar si ya se ha ejecutado esta regla en el listing
                 $rulelog = $em->getRepository("RestaurantBundle:RuleLog")->findOneBy(array("rule" => $rule->getId(), "checkin" => $listing->getCheckin(), 'listing' => $listing->getListing()));
                 //Buscar si este listing aun está vacío
-                $current_calendar = $api->getListingCalendar($listing->getListing(), $listing->getCheckin()->format('Y-m-d'), $listing->getCheckin()->format('Y-m-d') );
-                if ($current_calendar['status'] == 200 && $current_calendar['result'][0]['status'] == Nomenclator::LISTING_AVAILABLE && is_null($rulelog)) {
-                    //Obtener los valores de máximos y mínimos para cada uno de los deptos implicados en la regla.
-                    $listingmaxmin = $rule->getPricesbylisting();
-                    $prices = $listingmaxmin[$listing->getListing()];
-                    $max = $prices['max'];
-                    $min = $prices['min'];
-                    //Verificar cuál es la acción que se va a realizar en la regla.
-                    switch ($rule->getAction()) {
-                        case 'listing_change_price':
-                            $newprice = ($rule->getUnit() == 'euro') ? round($rule->getActionvalue(), 2) : (integer)(($listing->getPrice() * $rule->getActionvalue()) / 100);
-                            if ($newprice > $max) $newprice = $max;
-                            if ($newprice < $min) $newprice = $min;
-                            $result = $api->setListingCalendar(array("listings" => $listing->getListing(), 'from' => $listing > getCheckin()->format('Y-m-d'), "to" => $listing > getCheckin()->format('Y-m-d'), "price" => (integer)$newprice, "note" => "Hook"));
-                            //Salvar la traza de la ejecución del la regla
-                            if ($result['status'] == 200) {
-                                $log = new RuleLog();
-                                $log->setCheckin($listing->getCheckin());
-                                $log->setRule($rule);
-                                $log->setListing($listing->getListing());
-                                $em->persist($log);
-                                $em->flush();
-                            }
-                            $data[] = array(
-                                "listing"   => $listing->getListing(),
-                                "price"     => $newprice,
-                                "oldprice"  => $listing->getPrice(),
-                                "status"    => $result['status']
-                            );
-                            echo ' (response: ' . $result['status'] . '); </br></br>';
-                            break;
-                        case 'listing_lower_price':
-                            $newprice = ($rule->getUnit() == 'euro') ? (integer)($rule->getActionvalue()) : (integer)(($listing->getPrice() * $rule->getActionvalue()) / 100);
-                            $newprice = (($listing['result'][0]['price'] - $newprice) <= $min) ? (integer)$min : (integer)($listing->getPrice() - $newprice);
-                            $result = $api->setListingCalendar(array("listings" => $listing->getListing(), "from" => $listing->getCheckin()->format('Y-m-d'), "to" => $listing->getCheckin()->format('Y-m-d'), "price" => (integer)$newprice, "note" => "Hook"));
-                            //Salvar la traza de la ejecución del la regla
-                            if ($result['status'] == 200) {
-                                $log = new RuleLog();
-                                $log->setCheckin($listing->getCheckin());
-                                $log->setRule($rule);
-                                $log->setListing($listing->getListing());
-                                $em->persist($log);
-                                $em->flush();
-                            }
-                            $data[] = array(
-                                "listing"   => $listing->getListing(),
-                                "price"     => $newprice,
-                                "oldprice"  => $listing->getPrice(),
-                                "status"    => $result['status']
-                            );
-                            echo ' (response: ' . $api->getStatus($result['status']) . '); </br></br>';
-                            break;
-                        case 'listing_raise_price':
-                            $newprice = ($rule->getUnit() == 'euro') ? round($rule->getActionvalue(), 2) : (integer)(($listing->getPrice() * $rule->getActionvalue()) / 100);
-                            $newprice = ($listing->getPrice() + $newprice >= $max) ? $max : $listing->getPrice() + $newprice;
-                            $result = $api->setListingCalendar(array("listings" => $listing->getListing(), "from" => $listing->getCheckin()->format('Y-m-d'), "to" => $listing->getCheckin()->format('Y-m-d'), "price" => $newprice, "note" => " Hook "));
-                            //Salvar la traza de la ejecución del la regla
-                            if ($result['status'] == 200) {
-                                $log = new RuleLog();
-                                $log->setCheckin($listing->getCheckin());
-                                $log->setRule($rule);
-                                $log->setListing($listing->getListing());
-                                $em->persist($log);
-                                $em->flush();
-                            }
-                            $data[] = array(
-                                "listing"   => $listing->getListing(),
-                                "price"     => $newprice,
-                                "oldprice"  => $listing->getPrice(),
-                                "status"    => $result['status']
-                            );
-                            echo ' (response: ' . $api->getStatus($result['status']) . '); </br></br>';
-                            break;
-                    }
+                if (is_null($rulelog)) {
+                    $current_calendar = $api->getListingCalendar($listing->getListing(), $listing->getCheckin()->format('Y-m-d'), $listing->getCheckin()->format('Y-m-d'));
+                    if ($current_calendar['status'] == 200 && $current_calendar['result'][0]['status'] == Nomenclator::LISTING_AVAILABLE) {
+                        //Obtener los valores de máximos y mínimos para cada uno de los deptos implicados en la regla.
+                        $listingmaxmin = $rule->getPricesbylisting();
+                        $prices = $listingmaxmin[$listing->getListing()];
+                        $max = $prices['max'];
+                        $min = $prices['min'];
+                        $newprice = ($rule->getUnit() == 'euro') ? (integer)($rule->getActionvalue()) : (integer)(($listing->getPrice() * $rule->getActionvalue()) / 100);
+                        //Verificar cuál es la acción que se va a realizar en la regla.
+                        switch ($rule->getAction()) {
+                            case 'listing_change_price':
+                                if ($newprice > $max) $newprice = $max;
+                                if ($newprice < $min) $newprice = $min;
+                                break;
+                            case 'listing_lower_price':
+                                $newprice = (($listing['result'][0]['price'] - $newprice) <= $min) ? (integer)$min : (integer)($listing->getPrice() - $newprice);
 
+                            case 'listing_raise_price':
+                                $newprice = ($listing->getPrice() + $newprice >= $max) ? $max : $listing->getPrice() + $newprice;
+                                break;
+
+                        }
+                        $result = $api->setListingCalendar(array("listings" => $listing->getListing(), 'from' => $listing->getCheckin()->format('Y-m-d'), "to" => $listing->getCheckin()->format('Y-m-d'), "price" => (integer)$newprice, "note" => "Hook"));
+                        //Salvar la traza de la ejecución del la regla
+                        if ($result['status'] == 200) {
+                            $log = new RuleLog();
+                            $log->setCheckin($listing->getCheckin());
+                            $log->setRule($rule);
+                            $log->setListing($listing->getListing());
+                            $em->persist($log);
+                            $listing->setApplied(true);
+                            $em->flush();
+
+                        }
+                        $name = $this->getDoctrine()->getRepository("RestaurantBundle:Listing")->findOneBy(array('idguesty' => $listing->getListing()));
+                        $data[] = array(
+                            "date" => $listing->getCheckin()->format('Y-m-d'),
+                            "listing" => $name->getNumber(),
+                            "price" => $newprice,
+                            "oldprice" => $listing->getPrice(),
+                            "status" => $result['status']
+                        );
+                        echo ' (response: ' . $result['status'] . '); </br></br>';
+                    }
                 }
 
             }
-            $this->sendMail($data, $rule);
-
+            $notifier = $em->getRepository('AdminBundle:Notifier')->findOneBy(array('form' => 'Rules'));
+            $mails_array = str_replace(";",',', $notifier->getMails());
+            $mail_customer = (new \Swift_Message("Rule execution"))
+                ->setBody($this->renderView('RestaurantBundle:Rule:notifyrule.html.twig', array(
+                    'data' => $data,
+                    "rule" => $rule
+                )), "text/html");
+            $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
+            $cabeceras .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+            $cabeceras .= "From: The Penthouse <info@log.towerleisure.nl>" . "\r\n";
+            mail($mails_array, "Rule execution", $mail_customer->getBody(), $cabeceras);
         } catch (Exception $e) {
             echo $e;
             die;
         }
     }
 
-    /**
-     * Enviar correo de notificación ante la ejecución de una regla de tipo hook
-     */
-
-     private function sendMail($data, $rule){
-         $em = $this->getDoctrine()->getManager();
-         $notifier = $em->getRepository('AdminBundle:Notifier')->findOneBy(array('form' => 'Rules'));
-         $mails_array = explode(';', $notifier->getMails());
-         $mail_customer = \Swift_Message::newInstance()
-             ->setFrom('info@log.towerleisure.nl')
-             ->setTo($mails_array)
-             ->setSubject("Rule execution")
-             ->setBody($this->renderView('RestaurantBundle:Rule:notifyrule.html.twig', array(
-                 'data' => $data,
-                 "rule" => $rule
-             )))
-             ->setContentType("text/html");
-         $this->get('mailer')->send($mail_customer);
-
-     }
     /**
      * Obtener el listado de los calendarios implicados en la regla.
      * En este método se verifica si la selección de departamentos es por tipo o por depto en específico.
@@ -780,7 +644,6 @@ class RuleController extends Controller
 
             if (!$entity) {
                 return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
-
             }
 
             try {
@@ -788,8 +651,6 @@ class RuleController extends Controller
                 $em->flush();
                 $this->addFlash('success', 'Success! The rule has been removed.');
                 return $this->redirect($this->generateUrl('rule_admin'));
-
-
             } catch (\Exception $ex) {
                 return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
             }
@@ -818,7 +679,6 @@ class RuleController extends Controller
      * */
     private function blackList($request)
     {
-
         $peticion = (array)json_decode($request->getContent());
         $reservation = (array)($peticion['reservation']);
         $api = new ApiGuesty();
@@ -836,16 +696,14 @@ class RuleController extends Controller
                 if (!is_null($email) && $element->getEmail() == $email) {
                     $currentis = true;
                     $control = $element->getDetails();
-                }
-                else if (!is_null($name)){
-                    similar_text($element->getName(), $name, $percent);
-                    if ($percent > 50){
+                } else if (!is_null($name)) {
+                    $coincidencia = levenshtein(strtolower($element->getName()), strtolower($name));
+                    if ($coincidencia < 4) {
                         $currentis = true;
                         $control = $element->getDetails();
                     }
                 }
             }
-            //if (true){
             if ($currentis) {
                 $listing = $em->getRepository("RestaurantBundle:Listing")->findOneBy(array("idguesty" => $reservation["listingId"]));
                 $notifier = $em->getRepository('AdminBundle:Notifier')->findOneBy(array('form' => 'Rules'));
@@ -886,12 +744,12 @@ class RuleController extends Controller
      "__v": 0,
      "lastUpdatedAt": "2017-10-01T16:13:25.711Z",
      "status": "inquiry",
-     "checkIn": "2019-10-02T12:00:00.000Z",
-     "checkOut": "2019-10-03T07:00:00.000Z",
+     "checkIn": "2019-12-02T12:00:00.000Z",
+     "checkOut": "2019-12-03T07:00:00.000Z",
      "nightsCount": 1,
      "guestsCount": 2,
-     "checkInDateLocalized": "2019-10-02",
-     "checkOutDateLocalized": "2019-10-03",
+     "checkInDateLocalized": "2019-12-02",
+     "checkOutDateLocalized": "2019-12-03",
      "guestId": "5c4f5c9ef5963b00332a8b71",
      "listingId": "58a5dffa3798420400c8e691",
      "accountId": "563e0b6a08a2710e00057b82",
@@ -958,7 +816,7 @@ class RuleController extends Controller
    },
    "event": "reservation.new"
  }';
-        $ch = curl_init("http://test.log.towerleisure.nl/rule/executehook/");
+        $ch = curl_init("http://log.towerleisure.nl/rule/executehook/");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, ($data));

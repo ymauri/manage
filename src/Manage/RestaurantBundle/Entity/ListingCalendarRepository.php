@@ -3,7 +3,7 @@
 namespace Manage\RestaurantBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
-
+use Manage\RestaurantBundle\Entity\Rule;
 class ListingCalendarRepository extends EntityRepository {
 
     /*
@@ -26,7 +26,7 @@ class ListingCalendarRepository extends EntityRepository {
         $listings = $consulta->getResult();
         $final = array();
         foreach ($listings as $listing) {
-            if ($types[0]==""){
+            if (count($types) == 0 || $types[0]==""){
                 $final[] = $listing[0];
             }else{
                 //Verificar el tipo de listing
@@ -38,8 +38,7 @@ class ListingCalendarRepository extends EntityRepository {
                 }
             }
         }
-        return $final ;
-
+        return $final;
     }
 
     /*
@@ -68,8 +67,9 @@ class ListingCalendarRepository extends EntityRepository {
      * Obtener las fechas del calendario que se afectan en la ejecucion de ua regla.
      * */
     public function getDates($rule){
-        $consulta = $this->getEntityManager()->createQuery('SELECT DISTINCT (c.checkin) checkin FROM RestaurantBundle:ListingCalendar c WHERE c.rule = :rule ');
+        $consulta = $this->getEntityManager()->createQuery('SELECT DISTINCT (c.checkin) checkin FROM RestaurantBundle:ListingCalendar c WHERE c.rule = :rule AND c.applied = :applied');
         $consulta->setParameter('rule', $rule);
+        $consulta->setParameter('applied', false);
         $data = $consulta->getResult();
         $final = array();
         foreach ($data as $d){

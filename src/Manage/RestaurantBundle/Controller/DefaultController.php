@@ -73,7 +73,7 @@ class DefaultController extends Controller {
                         $checkin->setUpdatedat(new \DateTime(date('Y-m-d h:m:s')));
                         $em->persist($checkin);
                         $em->flush();
-                        $log->alert(' Checkin created. ID:'.$current['_id']. ' Listing: '. $current['listing']['title']);
+                        //$log->alert(' Checkin created. ID:'.$current['_id']. ' Listing: '. $current['listing']['title']);
                     }
                 }
                 else{
@@ -111,7 +111,7 @@ class DefaultController extends Controller {
                             $savedcheckin->setUpdatedat(new \DateTime(date('Y-m-d h:m:s')));
                             $em->persist($savedcheckin);
                             $em->flush();
-                            $log->alert(' Checkin updated. ID:'.$current['_id']. ' Listing: '. $current['listing']['title']);
+                            //$log->alert(' Checkin updated. ID:'.$current['_id']. ' Listing: '. $current['listing']['title']);
 
 
                     }
@@ -144,7 +144,7 @@ class DefaultController extends Controller {
                             $checkout->setUpdatedat(new \DateTime(date('Y-m-d h:m:s')));
                             $em->persist($checkout);
                             $em->flush();
-                            $log->alert(' Checkout created. ID:' . $current['_id'] . ' Listing: ' . $current['listing']['title']);
+                            //$log->alert(' Checkout created. ID:' . $current['_id'] . ' Listing: ' . $current['listing']['title']);
 
                     }
                 }
@@ -166,14 +166,14 @@ class DefaultController extends Controller {
                             $savedcheckout->setUpdatedat(new \DateTime(date('Y-m-d h:m:s')));
                             $em->persist($savedcheckout);
                             $em->flush();
-                            $log->alert(' Checkout updated. ID:'.$current['_id']. ' Listing: '. $current['listing']['title']);
+                            //$log->alert(' Checkout updated. ID:'.$current['_id']. ' Listing: '. $current['listing']['title']);
 
                     }
                 }
             }
 
         }
-        else $log->alert('No data recovered');
+        //else $log->alert('No data recovered');
         die;
     }
 

@@ -175,7 +175,7 @@ class RuleType extends AbstractType
             ->add('priority', 'number', array(
                 'required'    => true,
             ))
-            ->add('typeofrule', 'choice', array(
+            ->add('ishook', 'choice', array(
                 'choices' => array(
                     '0' => 'At a specific date/time',
                     '1' => 'When a guesty event occurs',

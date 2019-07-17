@@ -43,7 +43,7 @@
                            <tr>
                                <th style="text-align: center;">{{ item.priority }}</th>
                                <td>  {{ item.name }}</td>
-                               <td>  {% if item.typeofrule %} Hook {% else %} Cron job {% endif %}</td>
+                               <td>  {% if item.ishook %} Hook {% else %} Cron job {% endif %}</td>
                                <td class="hidden-xs"> {{ item.action | replace ("_", " ") | capitalize }}</td>
                                <td class="hidden-xs"> {{ item.actionvalue }} {% if  item.unit == "euro" %}(€) {% else %} (%) {% endif %}</td>
                                <td style="text-align: center;">{% if item.active %} <span class="label label-info"> Active</span> {% else %}  <span class="label label-warning"> Non active</span>  {% endif %} </td>

@@ -148,9 +148,9 @@ class Rule {
 
     /**
      * @var boolean
-     * @ORM\Column(name="typeofrule", type="boolean")
+     * @ORM\Column(name="ishook", type="boolean")
      */
-    private $typeofrule;
+    private $ishook;
 
     /**
      * @var integer
@@ -367,14 +367,14 @@ class Rule {
         $this->priority = $priority;
     }
 
-    public function getTypeofrule()
+    public function getIshook()
     {
-        return $this->typeofrule;
+        return $this->ishook;
     }
 
-    public function setTypeofrule($typeofrule)
+    public function setIshook($ishook)
     {
-        $this->typeofrule = $typeofrule;
+        $this->ishook = $ishook;
     }
 
     public function getStartingfrom()
@@ -386,4 +386,79 @@ class Rule {
     {
         $this->startingfrom = $startingfrom;
     }
+
+    /**
+     * Verificar si tiene solo una fecha de inicio
+     *
+     * */
+    public function hasOnlyBeginingDate(){
+        $now = new \DateTime('now');
+        if (((!is_null($this->getBegin()) && is_null($this->getEnds())) && ($now >= $this->getBegin())) || is_null($this->getBegin())) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * Verificar si tiene solo fecha de fin
+    */
+    public function hasOnlyEndingDate(){
+        $now = new \DateTime('now');
+        if (((!is_null($this->getEnds()) && is_null($this->getBegin()) && ($now <= $this->getEnds()))) || is_null($this->getEnds()) ) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * Verificar si hay rango de fechas
+     */
+    public function hasRangeDate(){
+        $now = new \DateTime('now');
+        if (((!is_null($this->getEnds()) && !is_null($this->getBegin())) && ($now >= $this->getBegin() && $now <= $this->getEnds())) || (is_null($this->getEnds()) && is_null($this->getBegin()))) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * Verificar días de la semana
+     * @param \DateTime $date
+     * @return bool
+     */
+    public function hasWeekDates($date = null){
+        $now = is_null($date) ? new \DateTime('now') : new \DateTime($date);
+        if (!is_null($this->getDayweek()) && count((array)$this->getDayweek()) > 0){
+            $days = (array)$this->getDayweek();
+            foreach ($days as $day){
+                if ($now->format('w') == $day){
+                    return true;
+                }
+            }
+            return false;
+        }
+        if (is_null($this->getDayweek()) || count((array)$this->getDayweek()) == 0)
+            return true;
+        return false;
+
+    }
+
+    /**
+     * Saber si la regla está en tiempo para ser ejecutada
+     * 3 minutos
+     *
+     */
+    public function canExecuteNow()
+    {
+        $now = new \DateTime('now');
+        $time = is_null($this->getTime()) ? new \DateTime($now->format('d-m-Y') . ' 00:02') : $this->getTime();
+        if (strtotime($now->format('H:i:s')) - strtotime($time->format('H:i:s')) > 0 && strtotime($now->format('H:i:s')) - strtotime($time->format('H:i:s')) < 180) {
+            return true;
+        }
+        return false;
+    }
+
 }

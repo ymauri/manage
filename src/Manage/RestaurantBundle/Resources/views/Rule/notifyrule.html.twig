@@ -40,7 +40,7 @@
                                         {{ rule.name }} ({{ rule.details }})<br>
                                     </p>
                                     <!-- begin articles -->
-                                    <table style="padding: 0 60px">
+                                    <table style="padding: 0">
 
                                         <tbody style="">
 
@@ -50,7 +50,9 @@
                                                 {% for item in data %}
                                                  <tr>
                                                      <td ><b>Listing {{ item.listing }}</b></td>
-                                                     <td ></td>
+                                                 </tr>
+                                                <tr>
+                                                     <td ><b>Date {{ item.date }}</b></td>
                                                  </tr>
                                                  <tr>
                                                      <td >Price: &euro; {{ item.oldprice }}</td>
