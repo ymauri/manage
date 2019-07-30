@@ -244,10 +244,10 @@ class RuleController extends Controller
         $em = $this->getDoctrine()->getManager();
         //Buscar las reglas activas ordenadas por la prioridad (reglas de tipo hook)
         $rules = $em->getRepository('RestaurantBundle:Rule')->findBy(array('active' => true, 'ishook' => true), array('priority' => "ASC"));
+        $peticion = (array)json_decode($request->getContent());
+        $reservation = (array)($peticion['reservation']);
         foreach ($rules as $activerule) {
             $method = $activerule->getMethod();
-            $peticion = (array)json_decode($request->getContent());
-            $reservation = (array)($peticion['reservation']);
             $this->$method($activerule, $reservation);
             echo($activerule->getId() . "   " . date('H:i:s') . ' end');
         }
@@ -257,22 +257,72 @@ class RuleController extends Controller
     /**
      * Acción subscrita al hook reservation.update de Guesty.
      *
-     * @Route("/rule/executhookback/", name="rule_execute_hook_back")
+     * @Route("/hook/rollback/", name="rule_rollback")
      * @Method("POST")
      * @Template()
      *
      */
-    public function excecuteHookRulesBackAction(Request $request)
+    public function ruleRollbackAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        //Volver atrás la regla aplicada.
-        // Cada vez que haya una reserva cancelada.
-        //Buscar si los calendarios de los días implicados fueron modificados por una regla.
-        //Tomar el ID de la regla y realizar la operación contraria. O sea si la regla sumó, entonces hay que reatr.
-        //Para cancelar debo validar que se cumpla también las condiciones de la regla, pero en sentido inverso.
-        //Por ejemplo si la regla dice "Subir el precio si hay menos de 18 vacío"
-        //Entonces yo debo hacer lo contrario y eso sería: "Bajar el precio si hay más de 18"
+        $peticion = (array)json_decode($request->getContent());
+        $reservation = (array)($peticion['reservation']);
+        $api = new ApiGuesty();
+        //Si el estado de la reserva es cancelado entonces hacer las acciones.
+        if ($reservation['status'] == Nomenclator::LISTING_CANCELED){
+            $checkin = new\DateTime($reservation['checkIn']);
+            $listings = $em->getRepository("RestaurantBundle:Listing")->findAll();
+            //Para que solo tome en cuenta la cantidad de noches y no tome el día del chekout
+            for ($i = 1; ($i<=$reservation['nightsCount']); $i++){
+                $ruleslog = $em->getRepository("RestaurantBundle:RuleLog")->getRuleApplied($checkin);
+                //Si se aplicó alguna modificación en ese día, entonces encontrar qué regla se aplicó.
+                if (!is_null($ruleslog) && count($ruleslog) > 0){
+                    foreach ($ruleslog as $id => $rule) {
+                        $calenadrios = array();
+                        foreach ($listings as $listing){
+                            $listingcalendar = $api->getListingCalendar($listing->getIdguesty(), $checkin->format('Y-m-d'), $checkin->format('Y-m-d'));
+                            if ($listingcalendar['status'] == 200 && count($listingcalendar['result']) > 0 && $listingcalendar['result'][0]['status'] == Nomenclator::LISTING_AVAILABLE) {
+                                $calenadrios[$listingcalendar['result'][0]['listingId']] = $listingcalendar['result'][0];
+                            }
+                        }
+                        //Invertir las condiciones bajo las cuales se ejecuta la regla
+                        switch ($rule[0]->getRule()->getCond()){
+                            case "listing_available_less":
+                                echo "listing_available_less <br/>";
+                                if (! count($calenadrios) <= $rule[0]->getRule()->getConditionvalue()){
+                                    $this->rollBackRule($rule, $calenadrios);
+                                }
+                                break;
+                            case "listing_available_more":
+                                if (! count($calenadrios) >= $rule[0]->getRule()->getConditionvalue()){
+                                    $this->rollBackRule($rule, $calenadrios);
+                                }
+                                break;
+                            case "none_condition":
+                                    $this->rollBackRule($rule, $calenadrios);
+                                break;
+                        }
+                    }
+                }
+                $checkin = $checkin->add(new \DateInterval('P0Y0M1DT0H0M0S'));
+            }
+        }
         die;
+    }
+
+    private function rollBackRule($rulelogs, $calendarios){
+        $api = new ApiGuesty();
+        $em = $this->getDoctrine()->getManager();
+        foreach ($rulelogs as $rulelog){
+            $calendar = $calendarios[$rulelog->getListing()];
+            //print_r(array("listings" => $calendar['listingId'], 'from' => $rulelog->getCheckin()->format('Y-m-d'), "to" => $rulelog->getCheckin()->format('Y-m-d'), /*"price" => (integer)$rulelog->getOldprice(),*/ "note" => "RollBack"));
+
+            $result = $api->setListingCalendar(array("listings" => $calendar['listingId'], 'from' => $rulelog->getCheckin()->format('Y-m-d'), "to" => $rulelog->getCheckin()->format('Y-m-d'), /*"price" => (integer)$rulelog->getOldprice(),*/ "note" => "RollBack"));
+            if ($result['status'] == 200){
+                $em->remove($rulelog);
+            }
+        }
+        $em->flush();
     }
 
 
@@ -342,10 +392,11 @@ class RuleController extends Controller
         $em = $this->getDoctrine()->getManager();
         $api = new ApiGuesty();
         $listings = $em->getRepository('RestaurantBundle:Listing')->findAll();
+        $fecha = !is_null($rule->getDaysahead()) ? new \DateTime('today + ' . $rule->getDaysahead() . ' days') : new \DateTime();
         //Si la regla es de tipo cronJob
         if (!$rule->getIshook()) {
             //Validar el tiempo en el que se ejecuta la regla
-            if ($rule->hasWeekDates() && ($rule->hasOnlyBeginingDate() || $rule->hasOnlyEndingDate() || $rule->hasRangeDate()) && $rule->canExecuteNow()) {
+            if ($rule->hasWeekDates($fecha) && ($rule->hasOnlyBeginingDate() || $rule->hasOnlyEndingDate() || $rule->hasRangeDate()) && $rule->canExecuteNow()) {
                 switch ($rule->getCond()) {
                     case 'listing_available_more':
                         $listingcalendar = $this->getListingCalendar($rule, $listings);
@@ -540,6 +591,7 @@ class RuleController extends Controller
                             $log->setCheckin($listing->getCheckin());
                             $log->setRule($rule);
                             $log->setListing($listing->getListing());
+                            $log->setOldprice($listing->getPrice());
                             $em->persist($log);
                             $listing->setApplied(true);
                             $em->flush();
@@ -697,12 +749,17 @@ class RuleController extends Controller
                     $currentis = true;
                     $control = $element->getDetails();
                 } else if (!is_null($name)) {
-                    $coincidencia = levenshtein(strtolower($element->getName()), strtolower($name));
-                    if ($coincidencia < 4) {
-                        $currentis = true;
-                        $control = $element->getDetails();
+                    $nameparts = explode($name, " ");
+                    foreach ($name as $part){
+                        $coincidencia = strpos(strtolower($element->getName()), strtolower($name));
+                        if ($coincidencia !== false) {
+                            $currentis = true;
+                            $control = $element->getDetails();
+                            break;
+                        }
                     }
                 }
+                if ($coincidencia) break;
             }
             if ($currentis) {
                 $listing = $em->getRepository("RestaurantBundle:Listing")->findOneBy(array("idguesty" => $reservation["listingId"]));
@@ -737,93 +794,274 @@ class RuleController extends Controller
      *
      */
     public function hookTestAction()
-    {
-        //phpinfo();die;
-        $data = '{
-   "reservation": {
-     "__v": 0,
-     "lastUpdatedAt": "2017-10-01T16:13:25.711Z",
-     "status": "inquiry",
-     "checkIn": "2019-12-02T12:00:00.000Z",
-     "checkOut": "2019-12-03T07:00:00.000Z",
-     "nightsCount": 1,
-     "guestsCount": 2,
-     "checkInDateLocalized": "2019-12-02",
-     "checkOutDateLocalized": "2019-12-03",
-     "guestId": "5c4f5c9ef5963b00332a8b71",
-     "listingId": "58a5dffa3798420400c8e691",
-     "accountId": "563e0b6a08a2710e00057b82",
-     "source": "Manual",
-     "isReturningGuest": true,
-     "_id": "59d11425af06e3100095e9fe",
-     "customFields": [],
-     "confirmedPreBookings": [],
-     "log": [],
-     "pendingTasks": [],
-     "review": {
-       "shouldReview": true
-     },
-     "money": {
-       "ownerRevenue": 3123.9,
-       "commissionIncTax": 347.1,
-       "commissionTax": 0,
-       "commissionTaxPercentage": 0,
-       "commission": 347.1,
-       "commissionFormula": "net_income*0.1",
-       "netIncome": 3471,
-       "netIncomeFormula": "host_payout",
-       "isFullyPaid": false,
-       "balanceDue": 3471,
-       "paymentsDue": 0,
-       "totalPaid": 0,
-       "totalRefunded": 0,
-       "currency": "EUR",
-       "fareAccommodation": 3436,
-       "fareCleaning": 35,
-       "hostPayout": 3471,
-       "subTotalPrice": 3471,
-       "hostPayoutUsd": 4101.842934040806,
-       "autoPaymentsPolicy": [],
-       "payments": [],
-       "invoiceItems": [
-         {
-           "title": "Accommodation fare",
-           "amount": 3436,
-           "currency": "EUR",
-           "isLocked": true,
-           "_id": "59d11425af06e3100095e9ff"
-         },
-         {
-           "title": "Cleaning fee",
-           "amount": 35,
-           "currency": "EUR",
-           "isLocked": true,
-           "_id": "59d11425af06e3100095ea00"
-         }
-       ]
-     },
-     "integration": {
-       "_id": "5784a3cc64ce9c0e00ecaf1e",
-       "platform": "manual",
-       "limitations": {
-         "availableStatuses": [
+   {
+       //phpinfo();die;
+       $data = '{
+       "reservation": {
+    "_id": "59d0ba61b57d3b04004255e2",
+    "lastUpdatedAt": "2019-07-20T15:57:25.426Z",
+    "daysInAdvance": 29,
+    "listingId": "58a5dffa3798420400c8e691",
+    "accountId": "563e0b6a08a2710e00057b82",
+    "guestId": "5967610932d1ee1000574c9c",
+    "status": "created",
+    "confirmationCode": "RU-rAwXPp",
+    "checkInDateLocalized": "2019-12-16",
+    "checkOutDateLocalized": "2019-12-17",
+    "guestsCount": 2,
+    "source": "Manual",
+    "checkIn": "2019-12-16T13:00:00.000Z",
+    "checkOut": "2019-12-17T08:00:00.000Z",
+    "nightsCount": 1,
+    "confirmedAt": "2017-07-20T09:50:25.372Z",
+    "__v": 1,
+    "customFields": [],
+    "confirmedPreBookings": [],
+    "log": [
+      {
+        "event": "Booking was Canceled successfully",
+        "_id": "59d0ba61b57d3b04004255e4",
+        "changes": [
 
-         ]
-       }
-     },
-     "createdAt": "2017-10-01T16:13:25.699Z",
-     "id": "59d11425af06e3100095e9fe"
-   },
-   "event": "reservation.new"
- }';
-        $ch = curl_init("http://log.towerleisure.nl/rule/executehook/");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, ($data));
-        $response = curl_exec($ch);
-        var_dump($response);
-        die;
-    }
+        ],
+        "at": "2019-07-20T09:50:25.499Z"
+      }
+    ],
+    "pendingTasks": [],
+    "review": {
+      "shouldReview": true
+    },
+    "money": {
+      "currency": "EUR",
+      "hostPayout": 35,
+      "guestTotalPrice": 1,
+      "alreadyPaid": 0,
+      "fareAccommodation": -34,
+      "fareCleaning": 35,
+      "ownerRevenue": 31.5,
+      "commissionIncTax": 3.5,
+      "commissionTax": 0,
+      "commissionTaxPercentage": 0,
+      "commission": 3.5,
+      "commissionFormula": "net_income*0.1",
+      "netIncome": 35,
+      "netIncomeFormula": "host_payout",
+      "isFullyPaid": false,
+      "balanceDue": 35,
+      "paymentsDue": 35,
+      "totalPaid": 0,
+      "totalRefunded": 0,
+      "subTotalPrice": 35,
+      "hostPayoutUsd": 1.1817467398561814,
+      "autoPaymentsPolicy": [
+        {
+          "chargeType": "REST_OF_PAYMENT",
+          "amount": 0,
+          "useGuestCard": true,
+          "_id": "59aebb10edad8d0f00d6954c",
+          "scheduleTo": {
+            "reservationEvent": "CHECK_OUT",
+            "timeRelation": {
+              "relation": "AT",
+              "unit": "HOURS",
+              "amount": 1
+            }
+          }
+        }
+      ],
+      "payments": [
+        {
+          "policyItemId": "59aebaf3edad8d0f00d68f55",
+          "shouldBePaidAt": "2017-10-30T13:00:00.000Z",
+          "currency": "EUR",
+          "amount": 10.5,
+          "paymentMethodId": "589894a91d756b9c47ce1e87",
+          "_id": "59d0ba61b57d3b04004255e6",
+          "receiptTargets": [],
+          "attempts": [],
+          "createdAt": "2017-10-01T09:50:25.783Z",
+          "refunds": [],
+          "status": "PENDING"
+        },
+        {
+          "policyItemId": "59aebb10edad8d0f00d6954c",
+          "shouldBePaidAt": "2017-10-31T08:00:00.000Z",
+          "currency": "EUR",
+          "amount": 24.5,
+          "paymentMethodId": "589894a91d756b9c47ce1e87",
+          "_id": "59d0ba61b57d3b04004255e5",
+          "receiptTargets": [],
+          "attempts": [],
+          "createdAt": "2017-10-01T09:50:25.782Z",
+          "refunds": [],
+          "status": "PENDING"
+        }
+      ],
+      "invoiceItems": [
+        {
+          "title": "Cleaning fee",
+          "amount": 35,
+          "currency": "EUR",
+          "isLocked": true,
+          "_id": "59d0ba61b57d3b04004255e3"
+        }
+      ]
+    },
+    "integration": {
+      "_id": "596b6f5aa6bd32100050be2a",
+      "platform": "rentalsUnited",
+      "rentalsUnited": {
+        "id": 134019397,
+        "listingId": 1491473,
+        "channelReservationId": null
+      },
+      "limitations": {
+        "availableStatuses": [
+
+        ]
+      }
+    },
+    "createdAt": "2017-10-01T09:50:25.380Z",
+    "id": "59d0ba61b57d3b04004255e2"
+  },
+  "reservationBefore": {
+    "_id": "59d0ba61b57d3b04004255e2",
+    "lastUpdatedAt": "2017-10-01T14:50:28.254Z",
+    "daysInAdvance": 29,
+    "accountId": "563e0b6a08a2710e00057b82",
+    "listingId": "59ac245d27cb310f0017afe3",
+    "guestId": "5967610932d1ee1000574c9c",
+    "status": "confirmed",
+    "confirmationCode": "RU-rAwXPp",
+    "checkInDateLocalized": "2017-10-30",
+    "checkOutDateLocalized": "2017-10-31",
+    "guestsCount": 2,
+    "source": "Manual",
+    "checkIn": "2017-10-30T13:00:00.000Z",
+    "checkOut": "2017-10-31T08:00:00.000Z",
+    "nightsCount": 1,
+    "confirmedAt": "2017-10-01T09:50:25.372Z",
+    "customFields": [],
+    "confirmedPreBookings": [],
+    "log": [
+      {
+        "event": "Booking was confirmed successfully",
+        "_id": "59d0ba61b57d3b04004255e4",
+        "changes": [
+
+        ],
+        "at": "2017-10-01T09:50:25.499Z"
+      }
+    ],
+    "pendingTasks": [],
+    "review": {
+      "shouldReview": true
+    },
+    "money": {
+      "currency": "EUR",
+      "hostPayout": 35,
+      "guestTotalPrice": 1,
+      "alreadyPaid": 0,
+      "fareAccommodation": -34,
+      "fareCleaning": 35,
+      "ownerRevenue": 31.5,
+      "commissionIncTax": 3.5,
+      "commissionTax": 0,
+      "commissionTaxPercentage": 0,
+      "commission": 3.5,
+      "commissionFormula": "net_income*0.1",
+      "netIncome": 35,
+      "netIncomeFormula": "host_payout",
+      "isFullyPaid": false,
+      "balanceDue": 35,
+      "paymentsDue": 35,
+      "totalPaid": 0,
+      "totalRefunded": 0,
+      "subTotalPrice": 35,
+      "hostPayoutUsd": 1.1817467398561814,
+      "autoPaymentsPolicy": [
+        {
+          "chargeType": "REST_OF_PAYMENT",
+          "amount": 0,
+          "useGuestCard": true,
+          "_id": "59aebb10edad8d0f00d6954c",
+          "scheduleTo": {
+            "reservationEvent": "CHECK_OUT",
+            "timeRelation": {
+              "relation": "AT",
+              "unit": "HOURS",
+              "amount": 1
+            }
+          }
+        }
+      ],
+      "payments": [
+        {
+          "policyItemId": "59aebaf3edad8d0f00d68f55",
+          "shouldBePaidAt": "2017-10-30T13:00:00.000Z",
+          "currency": "EUR",
+          "amount": 10.5,
+          "paymentMethodId": "589894a91d756b9c47ce1e87",
+          "_id": "59d0ba61b57d3b04004255e6",
+          "receiptTargets": [
+
+          ],
+          "attempts": [],
+          "createdAt": "2017-10-01T09:50:25.783Z",
+          "refunds": [],
+          "status": "PENDING"
+        },
+        {
+          "policyItemId": "59aebb10edad8d0f00d6954c",
+          "shouldBePaidAt": "2017-10-31T08:00:00.000Z",
+          "currency": "EUR",
+          "amount": 24.5,
+          "paymentMethodId": "589894a91d756b9c47ce1e87",
+          "_id": "59d0ba61b57d3b04004255e5",
+          "receiptTargets": [],
+          "attempts": [],
+          "createdAt": "2017-10-01T09:50:25.782Z",
+          "refunds": [],
+          "status": "PENDING"
+        }
+      ],
+      "invoiceItems": [
+        {
+          "title": "Cleaning fee",
+          "amount": 35,
+          "currency": "EUR",
+          "isLocked": true,
+          "_id": "59d0ba61b57d3b04004255e3"
+        }
+      ]
+    },
+    "integration": {
+      "_id": "596b6f5aa6bd32100050be2a",
+      "platform": "rentalsUnited",
+      "rentalsUnited": {
+        "id": 134019397,
+        "listingId": 1491473,
+        "channelReservationId": null
+      },
+      "limitations": {
+        "availableStatuses": [
+
+        ]
+      }
+    },
+    "createdAt": "2017-10-01T09:50:25.380Z",
+    "id": "59d0ba61b57d3b04004255e2"
+  },
+  "event": "reservation.updated"
+}';
+       $ch = curl_init("http://test.log.towerleisure.nl/hook/rollback/");
+       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+       curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+       curl_setopt($ch, CURLOPT_POSTFIELDS, ($data));
+       $response = curl_exec($ch);
+       var_dump($response);
+       die;
+   }
 
     /**
      * Incluir un nuevo hook en Guesty
@@ -835,7 +1073,7 @@ class RuleController extends Controller
     public function hookCreateAction()
     {
         $api = new ApiGuesty();
-        $result = $api->createHook("http://test.log.towerleisure.nl/cleaning/updatelisting/", array('listing.updated'));
+        $result = $api->createHook("http://log.towerleisure.nl/hook/rollback/", array('reservation.updated'));
         var_dump($result);
         die;
     }
@@ -850,7 +1088,7 @@ class RuleController extends Controller
     public function hookUpdateAction()
     {
         $api = new ApiGuesty();
-        $result = $api->updateHook("58a5d7f18687ec10007b02c4", 'http://test.log.towerleisure.nl/cleanness/updatelisting', array('reservation.new'));
+        $result = $api->updateHook("5d3554611e97b9001e96b015", 'http://log.towerleisure.nl/hook/rollback/', array('reservation.updated'));
         var_dump($result);
         die;
     }

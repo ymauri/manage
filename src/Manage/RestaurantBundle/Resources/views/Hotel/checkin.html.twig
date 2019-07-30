@@ -575,7 +575,7 @@
                 ctr = (value - {{ entity_basic.nightslimit }})
                 calc = 0
                 if (ctr <= 0) calc = value * {{ entity_basic.tax }} * numeral($('#guests-' + number).val()).value()
-                else calc = ({{ entity_basic.nightslimit }} * {{ entity_basic.tax }} * numeral($('#guests-' + number).val()).value()) + (ctr * numeral($('#guests-' + number).val()).value())
+                else calc = (numeral($('#guests-' + number).val()).value() * {{ entity_basic.nightslimit }} * {{ entity_basic.tax }} )
                 $('#toer-' + number).val(numeral(calc).format('0.0,'))
                 total = 0
                 $('input[name="toer"]').each(function(index, value) {
@@ -622,8 +622,9 @@
         tmp = $(this).attr('id').split('-')
         field = tmp[0]
         number = tmp[1]
-
-        calc = numeral($('#nights-'+number).val()).value() * parseFloat({{ entity_basic.tax }}) * $(this).val()
+        calc = 0;
+        if ($('#nights-'+number).val() <= {{ entity_basic.nightslimit }} ) calc = $('#nights-'+number).val() * {{ entity_basic.tax }} * $(this).val()
+        else calc = $(this).val() * {{ entity_basic.nightslimit }} * {{ entity_basic.tax }}
         $('#toer-' + number).val(numeral(calc).format('0.0,'))
         total = 0
         $('input[name="toer"]').each(function(index, value) {

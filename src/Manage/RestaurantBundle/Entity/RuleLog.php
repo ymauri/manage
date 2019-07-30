@@ -10,7 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
  * RuleLog
  * @ORM\Table()
  * @ORM\Entity()
- *
+ * @ORM\Entity(repositoryClass="Manage\RestaurantBundle\Entity\RuleLogRepository")
  */
 class RuleLog {
 
@@ -40,6 +40,13 @@ class RuleLog {
      * @ORM\Column(name="listing", type="string")
      */
     private $listing;
+
+    /**
+     * @var integer
+     * @ORM\Column(name="oldprice", type="integer", nullable=true)
+     */
+    private $oldprice;
+
 
     public function getId() {
         return $this->id;
@@ -73,5 +80,15 @@ class RuleLog {
     public function setListing($listing)
     {
         $this->listing = $listing;
+    }
+
+    public function getOldprice()
+    {
+        return $this->oldprice;
+    }
+
+    public function setOldprice($oldprice)
+    {
+        $this->oldprice = $oldprice;
     }
 }
