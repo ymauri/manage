@@ -1,0 +1,87 @@
+
+<div class="table-toolbar">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="btn-group">
+
+            </div>
+        </div>
+        <div class="col-md-6">
+            <!--<button id="add_new_furniture" class="btn green-haze pull-right">
+                Add New <i class="fa fa-plus"></i>
+            </button>-->
+        </div>
+    </div>
+</div>
+<table class="table table-striped table-bordered table-hover " id="table_content">
+    <thead>
+    <tr>
+        <th class="table-checkbox">
+            <input type="checkbox" class="group-checkable" data-set="#table_content .checkboxes"/>
+        </th>
+        <th>
+            Name
+        </th>
+        <th class="hidden-xs">
+            Code
+        </th>
+        <th>
+            Tags
+        </th>
+        <th class="hidden-xs">
+            Actions
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    {% set price = 0 %}
+    {% set quantity = 0 %}
+    {% for entity in entities %}
+        <tr>
+            <td>
+                <input name="checkboxes[]" type="checkbox" class="checkboxes" value="{{ entity.id }}"/>
+            </td>
+            <td>
+                <a href="{{ path('furniture_show', { 'id': entity.id }) }}" style="text-decoration: none;">
+                <strong>{{ entity.name }}</strong>
+                <p><b>Qty: </b>{{ entity.quantity }} | <b>€ </b>{{ (entity.quantity * entity.price) | number_format(2 , ',', '.')  }} </p>
+                </a>
+            </td>
+            <td class="hidden-xs">
+                {{ entity.serialnumber }}
+            </td>
+            <td>
+                {% for tag in entity.tags  %}
+                    <span class="label label-sm label-default"> {{ tag }} </span> &nbsp;
+                {% endfor %}
+            </td>
+            <td class="hidden-xs">
+                <div class="btn-group dropdown ">
+                    <button class="btn blue-hoki btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+                        Actions  <i class="fa fa-angle-down"></i>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="{{ path('furniture_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-search"></span>View</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('furniture_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span>Edit</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('furniture_delete', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-remove"></span>Delete</a>
+                        </li>
+
+
+                    </ul>
+                </div>
+            </td>
+        </tr>
+        {% set quantity = quantity + (entity.quantity) %}
+        {% set price = price + (entity.quantity * entity.price) %}
+    {% endfor %}
+    </tbody>
+    </table>
+<script>
+
+     $('#folder_name').parent('.caption').append("<p class='info_extra' style='font-size:14px; margin-top:5px;'><b>Qty: </b>{{ quantity }} | <b>€ </b>{{ (price) | number_format(2 , ',', '.')  }} </p>")
+</script>
