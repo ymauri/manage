@@ -1,0 +1,87 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title %} List Issues {% endblock %}
+{% block body %}
+    <div class="portlet">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-list"></i>Issues
+            </div>
+            <div class="tools">
+                <a href="{{ path('reportissue_new') }}" class=" blue">
+                    <i class="fa fa-plus"></i> Create new
+                </a>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Location<br/>Date <br/>Reporter</th>
+                    <th class="hidden-xs">Description</th>
+                    <th>Image</th>
+                    <th class="hidden-xs">Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for reportIssue in reportIssues %}
+                    <tr {% if reportIssue.status == 'Wachten' %} class="active" {% endif %}>
+                        <td>
+                            <a href="{{ path('reportissue_show', { 'id': reportIssue.id }) }}">
+                                <b>{{ reportIssue.location }}</b> <br/>
+                                {% if reportIssue.dated %}{{ reportIssue.dated|date('Y-m-d') }}{% endif %} &nbsp;
+                                {% if reportIssue.reportedat %}{{ reportIssue.reportedat|date('H:i') }}{% endif %}<br/>
+                                <i>{{ reportIssue.reporter }}</i>
+                            </a>
+                        </td>
+                        <td class="hidden-xs">
+                            <a href="{{ path('reportissue_show', { 'id': reportIssue.id }) }}">
+
+                                <i class="fa  {% if reportIssue.priority == 'Normaal' %} {% elseif reportIssue.priority == 'Laag' %} {% else %} fa-arrow-up{% endif %}"
+                                   style="color: #7c1212;"></i>
+                                {{ reportIssue.details }}
+                            </a>
+                        </td>
+
+                        <td><a href="{{ path('reportissue_show', { 'id': reportIssue.id }) }}">
+                                {% if reportIssue.pathimage %} <img
+                                    src="{{ asset('uploads/images/reportissue/' ~ reportIssue.pathimage) }}"
+                                    style="width: 80px;">{% endif %}
+                            </a>
+                        </td>
+
+                        <td class="hidden-xs">
+                            {% if reportIssue.status == 'Wachten' %}
+                                <p>In behandeling</p>
+                            {% elseif reportIssue.status == 'Open' %}
+                                <p>Open</p>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group dropdown ">
+                                <button class="btn blue-hoki btn-xs dropdown-toggle" type="button"
+                                        data-toggle="dropdown">
+                                    Actions <i class="fa fa-angle-down"></i>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="{{ path('reportissue_show', { 'id': reportIssue.id }) }}"><span
+                                                    class="glyphicon glyphicon-search"></span>View</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('reportissue_edit', { 'id': reportIssue.id }) }}"><span
+                                                    class="glyphicon glyphicon-pencil"></span>Edit</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+{% endblock %}
