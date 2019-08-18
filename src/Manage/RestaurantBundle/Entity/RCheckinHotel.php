@@ -14,7 +14,7 @@ use Manage\RestaurantBundle\Entity\Source;
  *
  * @ORM\Table()
  * @ORM\Entity()
- * @ORM\Entity(repositoryClass="Manage\RestaurantBundle\Entity\RCheckinHotelRepository")
+ * @ORM\Entity(repositoryClass="Manage\RestaurantBundle\Repository\RCheckinHotelRepository")
  * 
  */
 class RCheckinHotel {

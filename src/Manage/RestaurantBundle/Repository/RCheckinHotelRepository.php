@@ -1,6 +1,6 @@
 <?php
 
-namespace Manage\RestaurantBundle\Entity;
+namespace Manage\RestaurantBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Manage\RestaurantBundle\Entity\Checkin;

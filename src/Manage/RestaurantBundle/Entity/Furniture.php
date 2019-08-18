@@ -6,12 +6,16 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-
+use Doctrine\Common\Collections\ArrayCollection;
+use Manage\RestaurantBundle\Entity\Tag;
+use Doctrine\ORM\Mapping\JoinTable;
+use Doctrine\ORM\Mapping\JoinColumn;
 /**
  * Furniture
  *
  * @ORM\Table()
- * @ORM\Entity()
+ * @ORM\Entity() 
+ * @ORM\Entity(repositoryClass="Manage\RestaurantBundle\Repository\FurnitureRepository")
  */
 class Furniture {
 
@@ -23,14 +27,14 @@ class Furniture {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
+
     /**
      * @var string
      *
      * @ORM\Column(name="details", type="text")
      */
     private $details;
-    
+
     /**
      * @var string
      * @ORM\Column(name="name", type="string")
@@ -49,7 +53,7 @@ class Furniture {
 
     /**
      *
-     * @ORM\Column(name="serialnumber", type="string")
+     * @ORM\Column(name="serialnumber", type="string", nullable=true)
      */
     private $serialnumber;
 
@@ -61,9 +65,39 @@ class Furniture {
 
     /**
      * @var object
-     *  @ORM\ManyToOne(targetEntity="Manage\RestaurantBundle\Entity\Listing")
+     * @ORM\ManyToOne(targetEntity="Manage\RestaurantBundle\Entity\Folder")
+     * @ORM\JoinColumn(name="folder_id", onDelete="CASCADE")
      */
-    private $location;
+    private $folder;
+
+    /**
+     *
+     * @ORM\Column(name="quantity", type="integer")
+     */
+    private $quantity;
+
+    /**
+     *
+     * @ORM\Column(name="price", type="float")
+     */
+    private $price;
+
+    /**
+     *
+     * @ORM\Column(name="totalvalue", type="float")
+     */
+    private $totalvalue;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Tag", inversedBy="furnitures")
+     * @ORM\JoinTable(name="RFurnitureTags")
+     */
+    private $tags;
+
+    /**
+     * @ORM\Column(name="pathfolder", type="string", nullable=true)
+     */
+    private $pathfolder;
 
 
     public function getId() {
@@ -133,13 +167,65 @@ class Furniture {
         return $this;
     }
 
-    public function getLocation() {
-        return $this->location;
+    public function getFolder() {
+        return $this->folder;
     }
 
-    public function setLocation($location) {
-        $this->location = $location;
+    public function setFolder($folder) {
+        $this->folder = $folder;
         return $this;
+    }
+
+    public function setPrice($price)
+    {
+        $this->price = $price;
+    }
+
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+    }
+
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    public function setTotalvalue($totalvalue)
+    {
+        $this->totalvalue = $totalvalue;
+    }
+
+    public function getTotalvalue()
+    {
+        return $this->totalvalue;
+    }
+
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
+    }
+
+    public function getPathfolder()
+    {
+        return $this->pathfolder;
+    }
+
+    public function setPathfolder($pathfolder)
+    {
+        if ($pathfolder === "" || is_null($pathfolder))
+            $this->pathfolder = '/'.$this->folder->getId().'/';
+        else $this->pathfolder = $pathfolder;
     }
 
     public function __toString(){

@@ -10,7 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
  * RuleLog
  * @ORM\Table()
  * @ORM\Entity()
- * @ORM\Entity(repositoryClass="Manage\RestaurantBundle\Entity\RuleLogRepository")
+ * @ORM\Entity(repositoryClass="Manage\RestaurantBundle\Repository\RuleLogRepository")
  */
 class RuleLog {
 

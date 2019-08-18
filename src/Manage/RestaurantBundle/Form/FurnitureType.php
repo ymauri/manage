@@ -7,6 +7,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Manage\AdminBundle\Entity\Status;
 use Manage\RestaurantBundle\Entity\Listing;
+use Manage\RestaurantBundle\Repository\FolderRepository;
+use Manage\RestaurantBundle\Entity\Folder;
+use Manage\RestaurantBundle\Entity\Tag;
+use Manage\RestaurantBundle\Repository\TagRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class FurnitureType extends AbstractType
 {
@@ -16,33 +21,31 @@ class FurnitureType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+       // $tags = Mana TagRepository();
         $builder
             ->add('details')
             ->add('name')
-            ->add('serialnumber')
+            ->add('serialnumber', 'textarea')
             ->add('status')
-            ->add('location')
-           /* ->add('status', 'entity', array(
-                'class' => 'Manage\AdminBundle\Entity\Status',
-                'query_builder' => function(StatusRepository $repository) {
-                    return $repository->createQueryBuilder('b')
-                        ->select('b')
-                        ->addOrderBy('b.name');
+            ->add('folder', 'entity', array(
+                'class' => 'Manage\RestaurantBundle\Entity\Folder',
+                'query_builder' => function(FolderRepository $repository) {
+                    return $repository->createQueryBuilder('f')
+                        ->select('f')
+                        ->addOrderBy('f.details');
                 },
-                'required' => false
-            ))*/
+                'required' => false,
+            ))
 
+            ->add('quantity')
+            ->add('price')
+            ->add('totalvalue')
+            ->add('tags',EntityType::class, array(
+                'class' => 'RestaurantBundle:Tag',
+                'required' => false,
+                'multiple' => true
+            ))
             ->add('image', 'file', array('required' => false))
-
-           /* ->add('location', 'entity', array(
-                'class' => 'Manage\RestaurantBundle\Entity\Listing',
-                'query_builder' => function(ListingRepository $repository) {
-                    return $repository->createQueryBuilder('c')
-                        ->select('c')
-                        ->addOrderBy('c.name');
-                },
-                'required' => false
-            ))*/
         ;
     }
     

@@ -13,7 +13,7 @@ use Manage\RestaurantBundle\Entity\Hotel;
  *
  * @ORM\Table()
  * @ORM\Entity()
- * @ORM\Entity(repositoryClass="Manage\RestaurantBundle\Entity\RCheckoutHotelRepository")
+ * @ORM\Entity(repositoryClass="Manage\RestaurantBundle\Repository\RCheckoutHotelRepository")
  */
 class RCheckoutHotel {
     /**

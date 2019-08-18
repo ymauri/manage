@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  *
  * @ORM\Table()
  * @ORM\Entity()
- * @ORM\Entity(repositoryClass="Manage\RestaurantBundle\Entity\ListingRepository")
+ * @ORM\Entity(repositoryClass="Manage\RestaurantBundle\Repository\ListingRepository")
  */
 class Listing {
 

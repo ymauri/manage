@@ -430,8 +430,7 @@ class Rule {
      * @return bool
      */
     public function hasWeekDates($date = null){
-        $date = is_object($date) ? $date : new \DateTime($date);
-        $now = is_null($date) ? new \DateTime('now') : $date;
+        $now = is_null($date) ? new \DateTime('now') : (is_object($date) ? $date : new \DateTime($date));
         if (!is_null($this->getDayweek()) && count((array)$this->getDayweek()) > 0){
             $days = (array)$this->getDayweek();
             foreach ($days as $day){

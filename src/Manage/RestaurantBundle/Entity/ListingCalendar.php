@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
  * ListingCalendar
  * @ORM\Table()
  * @ORM\Entity()
- * @ORM\Entity(repositoryClass="Manage\RestaurantBundle\Entity\ListingCalendarRepository")
+ * @ORM\Entity(repositoryClass="Manage\RestaurantBundle\Repository\ListingCalendarRepository")
  *
  */
 class ListingCalendar {

@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
  *
  * @ORM\Table()
  * @ORM\Entity()
- * @ORM\Entity(repositoryClass="Manage\RestaurantBundle\Entity\ReceptionVoucherRepository")
+ * @ORM\Entity(repositoryClass="Manage\RestaurantBundle\Repository\ReceptionVoucherRepository")
  */
 class ReceptionVoucher {
 
