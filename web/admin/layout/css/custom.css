@@ -442,3 +442,7 @@ label[for="adminbundle_service_voucherstotal"]{
 .ready-for-change{
     min-width: 130px !important;
 }
+
+.accordion .panel-default{
+    border: none !important;
+}

@@ -3970,7 +3970,7 @@ Default table
 .table > tfoot > tr > th.active,
 .table > tfoot > tr.active > td,
 .table > tfoot > tr.active > th {
-  background-color: #a6c8e6;
+  background-color: #a6c8e654;
   color: #2c5285;
 }
 
@@ -4060,8 +4060,8 @@ Responsive & Scrollable Tables
 ***/
 .table-scrollable {
   width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
+  /*overflow-x: auto;
+  overflow-y: hidden;*/
   border: 1px solid #dddddd;
   margin: 10px 0 !important;
 }

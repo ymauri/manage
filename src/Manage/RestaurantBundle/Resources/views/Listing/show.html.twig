@@ -34,6 +34,11 @@
              <form class="container-fluid form-horizontal " >
                 <div class="form-body">
                     <div class="col-md-3 thumbnail" style="height: 200px; display: block; margin-right: 20px;">
+
+                        <div hidden="hidden" style="display: none;">
+
+                            {{form_widget(delete_form.type)}}
+                        </div>
                         {% if entity.pathimage %}
                             <img src="{{  asset('uploads/images/listing/' ~ entity.pathimage)  }}" alt="Without image" style="height: 100%;">
                         {% else %}

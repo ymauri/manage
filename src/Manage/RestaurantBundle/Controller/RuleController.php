@@ -317,7 +317,7 @@ class RuleController extends Controller
             $calendar = $calendarios[$rulelog->getListing()];
             //print_r(array("listings" => $calendar['listingId'], 'from' => $rulelog->getCheckin()->format('Y-m-d'), "to" => $rulelog->getCheckin()->format('Y-m-d'), /*"price" => (integer)$rulelog->getOldprice(),*/ "note" => "RollBack"));
 
-            $result = $api->setListingCalendar(array("listings" => $calendar['listingId'], 'from' => $rulelog->getCheckin()->format('Y-m-d'), "to" => $rulelog->getCheckin()->format('Y-m-d'), /*"price" => (integer)$rulelog->getOldprice(),*/ "note" => "RollBack"));
+            $result = $api->setListingCalendar(array("listings" => $calendar['listingId'], 'from' => $rulelog->getCheckin()->format('Y-m-d'), "to" => $rulelog->getCheckin()->format('Y-m-d'), "price" => (integer)$rulelog->getOldprice(), "note" => "RollBack"));
             if ($result['status'] == 200){
                 $em->remove($rulelog);
             }
@@ -610,17 +610,19 @@ class RuleController extends Controller
                 }
 
             }
-            $notifier = $em->getRepository('AdminBundle:Notifier')->findOneBy(array('form' => 'Rules'));
-            $mails_array = str_replace(";",',', $notifier->getMails());
-            $mail_customer = (new \Swift_Message("Rule execution"))
-                ->setBody($this->renderView('RestaurantBundle:Rule:notifyrule.html.twig', array(
-                    'data' => $data,
-                    "rule" => $rule
-                )), "text/html");
-            $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
-            $cabeceras .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-            $cabeceras .= "From: The Penthouse <info@log.towerleisure.nl>" . "\r\n";
-            mail($mails_array, "Rule execution", $mail_customer->getBody(), $cabeceras);
+            if (count($data) > 0){
+                $notifier = $em->getRepository('AdminBundle:Notifier')->findOneBy(array('form' => 'Rules'));
+                $mails_array = str_replace(";",',', $notifier->getMails());
+                $mail_customer = (new \Swift_Message("Rule execution"))
+                    ->setBody($this->renderView('RestaurantBundle:Rule:notifyrule.html.twig', array(
+                        'data' => $data,
+                        "rule" => $rule
+                    )), "text/html");
+                $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
+                $cabeceras .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+                $cabeceras .= "From: The Penthouse <info@log.towerleisure.nl>" . "\r\n";
+                mail($mails_array, "Rule execution", $mail_customer->getBody(), $cabeceras);
+            }
         } catch (Exception $e) {
             echo $e;
             die;

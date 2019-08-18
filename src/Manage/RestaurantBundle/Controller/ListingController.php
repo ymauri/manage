@@ -130,11 +130,11 @@ class ListingController extends Controller {
                 return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
             }
             $deleteForm = $this->createEditForm($entity);
-            $furniture = $em->getRepository('RestaurantBundle:Furniture')->findBy(array('location'=>$entity->getId()));
+            //$furniture = $em->getRepository('RestaurantBundle:Furniture')->findBy(array('location'=>$entity->getId()));
             return array(
                 'entity' => $entity,
                 'delete_form' => $deleteForm->createView(),
-                'furnitures' => $furniture,
+                'furnitures' => null,
             );
         }
         else{
@@ -163,12 +163,12 @@ class ListingController extends Controller {
 
             $editForm = $this->createEditForm($entity);
             $deleteForm = $this->createDeleteForm($id);
-            $furniture = $em->getRepository('RestaurantBundle:Furniture')->findBy(array('location'=>$entity->getId()));
+           // $furniture = $em->getRepository('RestaurantBundle:Furniture')->findBy(array('location'=>$entity->getId()));
 
             return array(
                 'entity' => $entity,
                 'edit_form' => $editForm->createView(),
-                'furnitures' => $furniture,
+                'furnitures' => null,//$furniture,
                 'delete_form' => $deleteForm->createView(),
             );
         }
@@ -274,7 +274,7 @@ class ListingController extends Controller {
             if (!$entity) {
                 return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
             }
-            if ($entity->getPathimage() != '') unlink($this->container->getParameter('images.furniture').'/'.$entity->getPathimage());
+            //if ($entity->getPathimage() != '') unlink($this->container->getParameter('images.furniture').'/'.$entity->getPathimage());
             $em->remove($entity);
             $em->flush();
             $this->addFlash('success', 'Success! The listing has been removed.');
