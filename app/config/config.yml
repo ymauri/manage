@@ -34,6 +34,7 @@ twig:
         decimals: 2
         decimal_point: ','
         thousands_separator: '.'
+
 # Doctrine Configuration
 doctrine:
     dbal:
@@ -72,8 +73,8 @@ monolog:
             path:     '%kernel.logs_dir%/guesty.log'
 
 
-
 parameters:
     images.listing: "%kernel.root_dir%/../web/uploads/images/listing"
     images.furniture: "%kernel.root_dir%/../web/uploads/images/furniture"
+    images.reportissue: "%kernel.root_dir%/../web/uploads/images/reportissue"
 
