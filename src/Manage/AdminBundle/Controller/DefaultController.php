@@ -24,6 +24,10 @@ class DefaultController extends Controller {
         if ( $user->getRole() == 'ROLE_BASIC') {
             return $this->redirect($this->generateUrl('cleaning', array('date' => date('d-m-Y'))));
         }
+        if ( $user->getRole() == 'ROLE_REPORTER') {
+            return $this->redirect($this->generateUrl('reportissue_index'));
+        }
+
         $em = $this->getDoctrine()->getManager();
         $recepties = $em->getRepository('RestaurantBundle:Reception')->findBy(array('updated'=>new\DateTime()));
         $hotels = $em->getRepository('RestaurantBundle:Hotel')->findBy(array('updated'=>new\DateTime()));

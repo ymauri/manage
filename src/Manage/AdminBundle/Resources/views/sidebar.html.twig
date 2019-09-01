@@ -117,25 +117,41 @@
                         <span class="title">Furnishings</span></a>
                 </li>
                 <li>
-                <a href="{{ path('reportissue_index') }}">
+
+                <a href="javascript:;">
                     <i class="icon-energy"></i>
-                    <span class="title">Report Issue</span></a>
+                    <span class="title"> Report Issue</span>
+                    <span class="arrow"></span>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a href="{{ path('reportissue_index') }}"> Issues </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('reportplanning_index') }}"> Planning </a>
+                    </li>
+                </ul>
                 </li>
 
             {% endif %}
+                {% if app.user.role == "ROLE_REPORTER" %}
+
             <li>
-                {% if app.user.role == "ROLE_BASIC" %}
+                <a href="{{ path('reportissue_index') }}">
+                    <i class="icon-folder"></i>
+                    <span class="title">Report Issue</span></a>
+            </li>
+                {% elseif app.user.role == "ROLE_BASIC" %}
+                    <li>
+
                     <a href={{ path('cleaning', {'date': 'today' | date('d-m-Y')}) }}>
                         <i class="icon-bell"></i>
                         <span class="title">Cleaning</span>
                     </a>
+                    </li>
 
-                <li>
-                <a href="{{ path('ReportIssue') }}">
-                    <i class="icon-folder"></i>
-                    <span class="title">Report Issue</span></a>
-                </li>
                 {% else %}
+                    <li>
                     <a href="javascript:;">
                         <i class="icon-bell"></i>
                         <span class="title"> Cleaning</span>
@@ -152,8 +168,12 @@
                             <a href="{{ path('cleaning_summary', {'month': 'today' | date('m-Y')}) }}"> Summary </a>
                         </li>
                     </ul>
+                    </li>
+
                 {% endif %}
             </li>
+            {% if app.user.role == 'ROLE_MANAGER' or app.user.role == 'ROLE_SUPERADMIN' or app.user.role == 'ROLE_RECEPTION' %}
+
             <li class="last">
                 <a href="javascript:;">
                     <i class="icon-note"></i>
@@ -214,7 +234,7 @@
                 </ul>
             </li>
             <!-- BEGIN FRONTEND THEME LINKS -->
-
+{% endif %}
 
         </ul>
         <!-- END SIDEBAR MENU -->
