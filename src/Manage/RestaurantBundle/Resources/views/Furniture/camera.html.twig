@@ -1,0 +1,418 @@
+{% extends 'AdminBundle::frame.html.twig' %}
+{% block title %} Furniture {% endblock %}
+{% block body %}
+    <br/>
+    <div class="row">
+        <div class="col-md-4 col-sm-12">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-folder "></i>
+                        <span class="caption-subject ">Folders</span>
+                    </div>
+                        <div class="tools">
+                            <a href="" class="collapse">
+                            </a>
+                        </div>
+                </div>
+                <div class="portlet-body" style="overflow: hidden">
+                    <div class="row">
+                        <div id="tree_4" class="tree-demo" style="zoom:1.3;">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 col-sm-12">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-folder "></i>
+                        <span class="caption-subject " id="folder_name">Furnitures</span>
+                    </div>
+                    <div class="actions" hidden="hidden" style="display: none;">
+                        <a id="add_new_furniture" class="btn btn-sm btn-default easy-pie-chart-reload pull-right" href="javascript:;">
+                            <i class="fa fa-plus"></i> Add new </a>
+                        <a href="#modal_tree"  class=" btn btn-sm btn-default " data-toggle="modal" id="move_to" >
+                            <i class="fa fa-arrows"></i> Move </a>
+                    </div>
+                </div>
+                <div id="table_result" class="portlet-body">
+                    <i>Select at least one folder to find out its furnitures.</i>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="{{ asset('global/plugins/jstree/dist/jstree.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('admin/pages/scripts/ui-tree.js') }}" type="text/javascript"></script>
+    <script type="text/javascript" src="{{ asset('global/plugins/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
+    <script>
+        var UITree = function () {
+            var ajaxTree = function () {
+
+                $("#tree_4").jstree({
+                    'core': {
+                        "themes" : {
+                            "responsive": true,
+                            'dots':false
+                        },
+
+                        "check_callback" : true,
+                        'data': {{ tree | raw }}
+                    },
+                    "types": {
+                        "default": {
+                            "icon": "fa fa-folder icon-lg icon-state-success"
+                        },
+                        "file": {
+                            "icon": "fa fa-folder icon-lg icon-state-success"
+                        }
+                    },
+                    "state": {"key": "demo3"},
+                    "plugins": ["contextmenu", "state", "types"],
+                    "contextmenu": {
+                        "items": function (node) {
+                            return {
+                                "Create": {
+                                    "separator_before": false,
+                                    "separator_after": false,
+                                    "label": "Create Folder",
+                                    "action": function (data) {
+                                        var inst = $.jstree.reference(data.reference),
+                                                obj = inst.create_node(data.reference);
+                                        inst.edit(obj);
+                                    }
+                                },
+                                "Rename": {
+                                    "separator_before": false,
+                                    "separator_after": false,
+                                    "label": "Rename",
+                                    "action": function (data) {
+                                        var inst = $.jstree.reference(data.reference),
+                                                obj = inst.get_node(data.reference);
+                                        inst.edit(obj)
+                                    }
+                                },
+                                "Remove": {
+                                    "separator_before": false,
+                                    "separator_after": false,
+                                    "label": "Remove",
+                                    "action": function (data) {
+                                        var inst = $.jstree.reference(data.reference),
+                                                obj = inst.get_node(data.reference);
+                                        inst.delete_node(obj)
+                                    }
+                                }
+                            };
+                        }
+                    }
+                }).on("rename_node.jstree", function (e, data) {
+                    $.ajax({
+                        url: "{{ path('furniture_editnode') }}",
+                        type: 'GET',
+                        data: {
+                            "name": data.text,
+                            "id": data.node.id,
+                            "old": data.node.old,
+                            "parent": data.node.parent
+                        },
+                        success: function (result) {
+                            $('#tree_4').jstree(true).refresh();
+                            window.location = "{{ path('furniture') }}"
+
+                        }
+                    });
+                }).on("delete_node.jstree", function (e, data) {
+                    $.ajax({
+                        url: "{{ path('furniture_deletenode') }}",
+                        type: 'GET',
+                        data: {
+                            "id": data.node.id,
+                            "parent": data.node.parent,
+                        },
+                        success: function (result) {
+                            $('#tree_4').jstree(true).refresh();
+                            window.location = "{{ path('furniture') }}"
+                        }
+                    });
+                });
+            }
+            return {
+                //main function to initiate the module
+                init: function () {
+                    //contextualMenu();
+                    ajaxTree();
+                }
+            };
+        }();
+        UITree.init();
+
+        $("#tree_4").bind("select_node.jstree", function(event, data) {
+            $.ajax({
+                url: "{{ path('furniture_tablecontent') }}",
+                type: 'GET',
+                data: {
+                    "id": data.node.id,
+                },
+                success: function (result) {
+                    $('#folder_name').parent('.caption').children(".info_extra").remove();
+                    $("#table_result").html(result).ready(function(){
+                        $('.actions').show();
+                        $('body').find("#add_new_furniture").on('click',function(){
+                            if (isNaN(data.node.id))
+                               console.log('debe seleccionar una carpeta')
+                            else
+                                window.location = "{{ path('furniture') }}new/"+data.node.id
+
+                        })
+                        var TableManaged = function () {
+                            var initTable1 = function () {
+
+                                var table = $('#table_content');
+
+                                // begin first table
+                                table.dataTable({
+                                    "columns": [{
+                                        "orderable": false
+                                    }, {
+                                        "orderable": true
+                                    }, {
+                                        "orderable": true
+                                    }, {
+                                        "orderable": false
+                                    }, {
+                                        "orderable": false
+                                    }],
+                                    "lengthMenu": [
+                                        [15, 25, 50, -1],
+                                        [15, 25, 50, "All"] // change per page values here
+                                    ],
+                                    // set the initial value
+                                    "pageLength": 15,
+                                    "pagingType": "bootstrap_full_number",
+                                    "language": {
+                                        "lengthMenu": "  _MENU_ records",
+                                        "paginate": {
+                                            "previous": "Prev",
+                                            "next": "Next",
+                                            "last": "Last",
+                                            "first": "First"
+                                        }
+                                    },
+                                    "columnDefs": [{  // set default column settings
+                                        'orderable': true,
+                                        //'targets': [0]
+                                    }, {
+                                        "searchable": true,
+                                        //"targets": [0]
+                                    }],
+                                    "order": [
+                                        [1, "asc"]
+                                    ] // set first column as a default sort by asc
+                                });
+
+                                var tableWrapper = jQuery('#table_result');
+
+                                table.find('.group-checkable').change(function () {
+                                    var set = jQuery(this).attr("data-set");
+                                    var checked = jQuery(this).is(":checked");
+                                    jQuery(set).each(function () {
+                                        if (checked) {
+                                            $(this).prop("checked", "checked");
+                                            $(this).parents('tr').addClass("active");
+                                        } else {
+                                            $(this).prop("checked", "");
+                                            $(this).parents('tr').removeClass("active");
+                                        }
+                                    });
+                                });
+
+                                table.on('change', 'tbody tr .checkboxes', function () {
+                                    $(this).parents('tr').toggleClass("active");
+                                });
+
+                                tableWrapper.find('.dataTables_length select').addClass("form-control input-xsmall input-inline"); // modify table per page dropdown
+                            }
+                            return {
+                                //main function to initiate the module
+                                init: function () {
+                                    if (!jQuery().dataTable) {
+                                        return;
+                                    }
+                                    initTable1();
+                                }
+                            };
+
+                        }();
+                        TableManaged.init()
+                        $(".dataTables_filter").addClass("pull-right").append('&nbsp;&nbsp;<i class=" fa fa-qrcode fa-lg" style="zoom:1.3;" onclick="findbyqr()"></i>')
+                        $("#table_content_paginate").addClass("pull-right")
+                        $("#folder_name").text(data.node.text)
+                    });
+                }
+            });
+        });
+
+    </script>
+
+
+    <div id="modal_tree" class="modal fade" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Select one folder</h4>
+                </div>
+                <div class="modal-body" style="overflow: hidden;">
+                    <div id="tree_move_to" class="tree-demo"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="accept_move_to" type="button" class="btn blue-hoki"><i class="fa fa-check"></i> Move</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="modal_find" class="modal fade" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Scan QR</h4>
+                </div>
+                <div class="modal-body" style="overflow: hidden;">
+                    <div class="row form-group">
+                        <label>Scan from WebCam:</label>
+                        <div>
+                            <b>Device has camera: </b>
+                            <span id="cam-has-camera"></span>
+                            <br>
+                            <video muted id="qr-video" style="width: 100%"></video>
+                        </div>
+
+                        <select id="inversion-mode-select" hidden="hidden">
+                            <option value="original">Scan original (dark QR code on bright background)</option>
+                        </select>
+                        <b>Detected QR code: </b>
+                        <span id="cam-qr-result">None</span>
+                        <br>
+                        <b>Last detected at: </b>
+                        <span id="cam-qr-result-timestamp"></span>
+                    </div>
+                    <hr>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="accept_move_to" type="button" class="btn blue-hoki"><i class="fa fa-check"></i> Move</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        $('#accept_move_to').click(function(response) {
+            parent = $('#tree_move_to').find(".jstree-clicked").first().parent("li").attr('id')
+            childrens = new Object()
+            $('.checkboxes').each(function(index, val){
+                if ($(val).is(':checked')){
+                    childrens[index] = $(val).val()
+                }
+            })
+            if (!isNaN(parent) ){
+                $.post("{{ path("furniture_move") }}", {"parent": parent, 'childrens': childrens}, function(response){
+                    window.location = "{{ path("furniture") }}"
+                })
+            }
+            else {
+                bootbox.dialog({
+                    message: "You must select an item from the list and a folder",
+                    title: "Information",
+                    buttons: {
+                        main: {
+                            label: "Accept",
+                            className: ""
+                        }
+                    }
+                });
+
+            }
+        })
+
+        var handleSample2 = function () {
+            $('#tree_move_to').jstree({
+                'plugins': ["checkbox", "types"],
+                'core': {
+                    "themes" : {
+                        "responsive": true,
+                        'dots':false
+                    },
+                    'data': {{ tree | raw }}
+                },
+                "types" : {
+                    "default" : {
+                        "icon" : "fa fa-folder icon-lg icon-state-success"
+                    },
+                }
+            });
+        }
+        handleSample2();
+
+        function findbyqr(){
+            $('#modal_find').show()
+        }
+    </script>
+
+    <script type="module">
+        import QrScanner from "{{ asset('js/qr/qr-scanner.min.js') }}";
+        QrScanner.WORKER_PATH = '{{ asset("js/qr/qr-scanner-worker.min.js") }}';
+
+        const video = document.getElementById('qr-video');
+        const camHasCamera = document.getElementById('cam-has-camera');
+        const camQrResult = document.getElementById('cam-qr-result');
+        const camQrResultTimestamp = document.getElementById('cam-qr-result-timestamp');
+        const fileSelector = document.getElementById('file-selector');
+        const fileQrResult = document.getElementById('file-qr-result');
+
+        function setResult(label, result) {
+            label.textContent = result;
+                document.getElementById('input[type="search"]').value = result
+
+            camQrResultTimestamp.textContent = new Date().toString();
+            label.style.color = 'teal';
+            clearTimeout(label.highlightTimeout);
+            label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 100);
+        }
+
+        // ####### Web Cam Scanning #######
+
+        QrScanner.hasCamera().then(hasCamera => camHasCamera.textContent = hasCamera);
+
+        const scanner = new QrScanner(video, result => setResult(camQrResult, result));
+        scanner.start();
+
+        document.getElementById('inversion-mode-select').addEventListener('change', event => {
+            scanner.setInversionMode(event.target.value);
+        });
+
+        // ####### File Scanning #######
+
+        fileSelector.addEventListener('change', event => {
+            const file = fileSelector.files[0];
+            if (!file) {
+                return;
+            }
+            QrScanner.scanImage(file)
+                    .then(result => setResult(fileQrResult, result))
+                    .catch(e => setResult(fileQrResult, e || 'No QR code found.'));
+        });
+
+    </script>
+{% endblock %}
