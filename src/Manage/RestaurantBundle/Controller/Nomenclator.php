@@ -45,4 +45,10 @@ class Nomenclator {
     const LISTING_CHECKEDOUT = 'checkedOut';
     const LISTING_WORKING = 'working';
     const LISTING_LONGSTAY = 'longStay';
+
+    const  PLANNING_WEEKLY = 'weekly';
+    const  PLANNING_MONTHLY = 'monthly';
+    const  PLANNING_QUATERLY = 'quarterly';
+    const  PLANNING_BIANNUAL = 'biannual';
+    const  PLANNING_YEARLY = 'yearly';
 }

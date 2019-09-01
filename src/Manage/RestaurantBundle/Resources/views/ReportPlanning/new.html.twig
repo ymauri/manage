@@ -4,10 +4,10 @@
     <div class="portlet">
         <div class="portlet-title">
             <div class="caption">
-                <i class="icon-energy"></i>New Issue
+                <i class="icon-energy"></i>New Report Planning
             </div>
             <div class="tools">
-                <a href="{{ path('reportissue_index') }}" class=" blue">
+                <a href="{{ path('reportplanning_index') }}" class=" blue">
                     <i class="fa fa-list-alt"></i> List
                 </a>
             </div>
@@ -28,42 +28,50 @@
                         {{ form_errors(form) }}
                     </div>
                 {% endif %}
-                <form class="container-fluid form-horizontal" action="{{ path('reportissue_new') }}"
+                <form class="container-fluid form-horizontal" action="{{ path('reportplanning_new') }}"
                       method="POST" {{ form_enctype(form) }} novalidate>
                     <div class="form-body">
-
                         <div class="col-md-5">
+
+                        <div class="row form-group">
+                            {{ form_label(form.details,'Description',{'attr':{
+                                'class' :' control-label',
+                            }}) }}
+                            {{ form_widget(form.details, {'attr':{
+                                'class' :'input-sm pull-right form-control'
+                            }}) }}
+                            {{ form_errors(form.details) }}
+                        </div>
+
+                        <div class="row form-group">
+                            {{ form_label(form.frequency,'Frequency',{'attr':{
+                                'class' :' control-label',
+                            }}) }}
+                            {{ form_widget(form.frequency, {'attr':{
+                                'class' :'input-sm pull-right form-control'
+                            }}) }}
+                            {{ form_errors(form.frequency) }}
+                        </div>
+
+                        <div class="row form-group">
+                            {{ form_label(form.priority,'Priority',{'attr':{
+                                'class' :' control-label',
+                            }}) }}
+                            {{ form_widget(form.priority, {'attr':{
+                                'class' :'input-sm pull-right form-control'
+                            }}) }}
+                            {{ form_errors(form.priority) }}
+                        </div>
                             <div class="row form-group">
-                                {{ form_label(form.dated,'Date',{'attr':{
-                                    'class' :' control-label',
-                                }}) }}
-                                {{ form_widget(form.dated, {'attr':{
-                                    'class' :'input-sm pull-right form-control',
-                                    'value' : 'now' | date('Y-m-d')
-                                }}) }}
-                                {{ form_errors(form.dated) }}
-                            </div>
-                            <div class="row form-group">
-                                {{ form_label(form.reportedat,'Time',{'attr':{
-                                    'class' :' control-label',
-                                }}) }}
-                                {{ form_widget(form.reportedat, {'attr':{
-                                    'class' :'input-sm pull-right form-control',
-                                    'value' : 'now' | date('H:i'),
-                                    'readonly' : 'readonly'
-                                }}) }}
-                                {{ form_errors(form.reportedat) }}
-                            </div>
-                            <div class="row form-group">
-                                <label for="location">Select a Location</label>
-                                <select id="location" class="form-control input-sm select2">
+                                <label for="folder">Select a Location</label>
+                                <select id="folder" class="form-control input-sm select2">
                                     <option>Select...</option>
                                     {% for place in places %}
                                         <optgroup label="{{ place.details }}">
                                             <option value="{{ place.id }}">{{ place.details }}</option>
-                                            {% if locations[place.id] %}
-                                                {% for location in locations[place.id] %}
-                                                    <option value="{{ location.id }}">{{ location.details }}</option>
+                                            {% if folders[place.id] %}
+                                                {% for folder in folders[place.id] %}
+                                                    <option value="{{ folder.id }}">{{ folder.details }}</option>
                                                 {% endfor %}
                                             {% endif %}
                                         </optgroup>
@@ -76,47 +84,18 @@
                                     </select>
                             </div>
                             <div class="row form-group">
-                                {{ form_label(form.details,'Description',{'attr':{
-                                    'class' :' control-label',
-                                }}) }}
-                                {{ form_widget(form.details, {'attr':{
-                                    'class' :'input-sm pull-right form-control'
-                                }}) }}
-                                {{ form_errors(form.details) }}
-                            </div>
-                            <div class="row form-group">
                                 {{ form_label(form.image,'Image',{'attr':{
                                     'class' :' control-label',
                                 }}) }}
                                 {{ form_widget(form.image, {'attr':{
                                     'class' :'',
-                                    'capture': "camera",
                                     'accept' :'image/*'
                                 }}) }}
                                 {{ form_errors(form.image) }}
                             </div>
-                            <div class="row form-group">
-                                {{ form_label(form.priority,'Prioriteit',{'attr':{
-                                    'class' :' control-label',
-                                }}) }}
-                                {{ form_widget(form.priority, {'attr':{
-                                    'class' :'input-sm form-control'
-                                }}) }}
-                                {{ form_errors(form.priority) }}
-                            </div>
-
-                            <div class="row form-group">
-                                {{ form_label(form.reporter,'Reporter',{'attr':{
-                                    'class' :' control-label',
-                                }}) }}
-                                {{ form_widget(form.reporter, {'attr':{
-                                    'class' :'input-sm pull-right form-control',
-                                }}) }}
-                                {{ form_errors(form.reporter) }}
-                            </div>
                             <br><br>
                             <div class="form-group">
-                                <button type="submit" id="restaurantbundle_reportissue_submit" name="restaurantbundle_reportissue[submit]" class="btn btn-primary">Create</button>
+                                <button type="submit" id="restaurantbundle_reportplanning_submit" name="restaurantbundle_reportplanning[submit]" class="btn btn-primary">Create</button>
 
                             </div>
                             <br><br>
@@ -134,8 +113,8 @@
         function updateValue(id){
             $("#report_issue_furniture").val(id)
         }
-        $('#location').change(function () {
-            $.post("{{ path('reportissue_getfurnitures') }}", {'id':$(this).val()}, function(response){
+        $('#folder').change(function () {
+            $.post("{{ path('reportplanning_getfurnitures') }}", {'id':$(this).val()}, function(response){
                 option = '<select id="furniture" class="form-control input-sm select2" onchange="updateValue($(this).val())"><option>Select ...</option>';
                 for (var item in response){
                     option += '<option value="'+item+'">'+response[item]+'</option>'
@@ -144,7 +123,7 @@
                 $("#select_furniture select").remove()
                 $("#select_furniture").append(option)
             })
-            $("#report_issue_location").val($(this).val())
+            $("#report_planning_folder").val($(this).val())
         })
     </script>
 {% endblock %}

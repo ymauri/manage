@@ -7,7 +7,7 @@
                 <i class="icon-energy"></i>Edit Issue
             </div>
             <div class="tools">
-                <a href="{{ path('reportissue_index') }}" class=" blue">
+                <a href="{{ path('reportplanning_index') }}" class=" blue">
                     <i class="fa fa-list-alt"></i> List
                 </a>
             </div>
@@ -23,106 +23,93 @@
                 </div>
             </div>
             <div class="portlet-body form">
-                {% if form_errors(edit_form) %}
+                {% if form_errors(form) %}
                     <div class="form-errors alert alert-danger">
-                        {{ form_errors(edit_form) }}
+                        {{ form_errors(form) }}
                     </div>
                 {% endif %}
-                <form class="container-fluid form-horizontal" action="{{ path('reportissue_edit', {"id":reportIssue.id}) }}"
-                      method="POST" {{ form_enctype(edit_form) }} novalidate>
+                <form class="container-fluid form-horizontal" action="{{ path('reportplanning_edit', {"id":reportPlanning.id}) }}"
+                      method="POST" {{ form_enctype(form) }} novalidate>
                     <div class="form-body">
+                        <div class="form-body">
+                            <div class="col-md-5">
 
-                        <div class="col-md-5">
-                            <div class="row form-group">
-                                {{ form_label(edit_form.dated,'Date',{'attr':{
-                                    'class' :' control-label',
-                                }}) }}
-                                {{ form_widget(edit_form.dated, {'attr':{
-                                    'class' :'input-sm pull-right form-control',
-                                    'value' : 'now' | date('Y-m-d')
-                                }}) }}
-                                {{ form_errors(edit_form.dated) }}
-                            </div>
-                            <div class="row form-group">
-                                {{ form_label(edit_form.reportedat,'Time',{'attr':{
-                                    'class' :' control-label',
-                                }}) }}
-                                {{ form_widget(edit_form.reportedat, {'attr':{
-                                    'class' :'input-sm pull-right form-control',
-                                    'value' : 'now' | date('H:i'),
-                                    'readonly' : 'readonly'
-                                }}) }}
-                                {{ form_errors(edit_form.reportedat) }}
-                            </div>
-                            <div class="row form-group">
-                                <label for="location">Select a Location</label>
-                                <select id="location" class="form-control input-sm select2">
-                                    <option>Select...</option>
-                                    {% for place in places %}
-                                        <optgroup label="{{ place.details }}">
-                                            <option value="{{ place.id }}">{{ place.details }}</option>
-                                            {% if locations[place.id] %}
-                                                {% for location in locations[place.id] %}
-                                                    <option value="{{ location.id }}" {% if location.id == reportIssue.location.id %} selected="selected"{% endif %}>{{ location.details }}</option>
-                                                {% endfor %}
-                                            {% endif %}
-                                        </optgroup>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="row form-group" id="select_furniture">
-                                <label for="furniture">Select a Furniture</label>
-                                <select id="furniture" class="form-control input-sm select2">
-                                </select>
-                            </div>
-                            <div class="row form-group">
-                                {{ form_label(edit_form.details,'Description',{'attr':{
-                                    'class' :' control-label',
-                                }}) }}
-                                {{ form_widget(edit_form.details, {'attr':{
-                                    'class' :'input-sm pull-right form-control'
-                                }}) }}
-                                {{ form_errors(edit_form.details) }}
-                            </div>
-                            <div class="row form-group">
-                                {{ form_label(edit_form.image,'Image',{'attr':{
-                                    'class' :' control-label',
-                                }}) }}
-                                {{ form_widget(edit_form.image, {'attr':{
-                                    'class' :'',
-                                    'capture': "camera",
-                                    'accept' :'image/*'
-                                }}) }}
-                                {{ form_errors(edit_form.image) }}
-                            </div>
-                            <div class="row form-group">
-                                {{ form_label(edit_form.priority,'Prioriteit',{'attr':{
-                                    'class' :' control-label',
-                                }}) }}
-                                {{ form_widget(edit_form.priority, {'attr':{
-                                    'class' :'input-sm form-control'
-                                }}) }}
-                                {{ form_errors(edit_form.priority) }}
-                            </div>
+                                <div class="row form-group">
+                                    {{ form_label(form.details,'Description',{'attr':{
+                                        'class' :' control-label',
+                                    }}) }}
+                                    {{ form_widget(form.details, {'attr':{
+                                        'class' :'input-sm pull-right form-control'
+                                    }}) }}
+                                    {{ form_errors(form.details) }}
+                                </div>
 
-                            <div class="row form-group">
-                                {{ form_label(edit_form.reporter,'Reporter',{'attr':{
-                                    'class' :' control-label',
-                                }}) }}
-                                {{ form_widget(edit_form.reporter, {'attr':{
-                                    'class' :'input-sm pull-right form-control',
-                                }}) }}
-                                {{ form_errors(edit_form.reporter) }}
-                            </div>
-                            <br><br>
-                            <div class="form-group">
-                                <button type="submit" id="restaurantbundle_reportissue_submit" name="restaurantbundle_reportissue[submit]" class="btn btn-primary">Update</button>
+                                <div class="row form-group">
+                                    {{ form_label(form.frequency,'Frequency',{'attr':{
+                                        'class' :' control-label',
+                                    }}) }}
+                                    {{ form_widget(form.frequency, {'attr':{
+                                        'class' :'input-sm pull-right form-control'
+                                    }}) }}
+                                    {{ form_errors(form.frequency) }}
+                                </div>
 
-                            </div>
-                            <br><br>
+                                <div class="row form-group">
+                                    {{ form_label(form.priority,'Priority',{'attr':{
+                                        'class' :' control-label',
+                                    }}) }}
+                                    {{ form_widget(form.priority, {'attr':{
+                                        'class' :'input-sm pull-right form-control'
+                                    }}) }}
+                                    {{ form_errors(form.priority) }}
+                                </div>
+                                <div class="row form-group">
+                                    <label for="folder">Select a Location</label>
+                                    <select id="folder" class="form-control input-sm select2">
+                                        <option>Select...</option>
+                                        {% for place in places %}
+                                            <optgroup label="{{ place.details }}">
+                                                <option value="{{ place.id }}">{{ place.details }}</option>
+                                                {% if folders[place.id] %}
+                                                    {% for folder in folders[place.id] %}
+                                                        <option value="{{ folder.id }}" {% if reportPlanning.folder.id == folder.id %} selected="selected"{% endif %}>{{ folder.details }}</option>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </optgroup>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="row form-group" id="select_furniture">
+                                    <label for="furniture">Select a Furniture</label>
+                                    <select id="furniture" class="form-control input-sm select2">
+                                    </select>
+                                </div>
+                                <div class="row form-group">
+                                    {{ form_label(form.image,'Image',{'attr':{
+                                        'class' :' control-label',
+                                    }}) }}
+                                    {{ form_widget(form.image, {'attr':{
+                                        'class' :'',
+                                        'accept' :'image/*'
+                                    }}) }}
+                                    {{ form_errors(form.image) }}
+                                </div>
+                                <br><br>
+                                <div class="form-group">
+                                    <button type="submit" id="restaurantbundle_reportplanning_submit" name="restaurantbundle_reportplanning[submit]" class="btn btn-primary">Update</button>
+                                </div>
+                                <br><br>
 
-                            <div class="row form-group " hidden="hidden" style="display: none">
-                                {{ form_rest(edit_form) }}
+                                <div class="row form-group " hidden="hidden" style="display: none">
+                                    {{ form_rest(form) }}
+                                </div>
+                            </div>
+                            <div class="col-md-7">
+                                {% if reportPlanning.pathimage %}
+                                    <img class="img-thumbnail" src="{{ asset('uploads/images/reportplanning/' ~ reportPlanning.pathimage) }}" />
+                                {% else %}
+                                    <img  class="img-thumbnail"  src="{{ asset('img/noimage.jpg') }}" alt="Without image" >
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -133,11 +120,13 @@
 
     <script>
 
+        $('#folder').val($('#report_planning_folder').val())
+
         function updateValue(id, current){
-            $("#report_issue_furniture").val(id)
+            $("#report_planning_furniture").val(id)
         }
-        $('#location').change(function () {
-            $.post("{{ path('reportissue_getfurnitures') }}", {'id':$(this).val()}, function(response){
+        $('select#folder').change(function () {
+            $.post("{{ path('reportplanning_getfurnitures') }}", {'id':$(this).val()}, function(response){
                 option = '<select id="furniture" class="form-control input-sm select2" onchange="updateValue($(this).val(), $(this))"><option>Select ...</option>';
                 for (var item in response){
                     option += '<option value="'+item+'" >'+response[item]+'</option>'
@@ -147,15 +136,14 @@
                 $("#select_furniture").append(option)
 
             })
-            $("#report_issue_location").val($(this).val())
+            $("#report_planning_folder").val($(this).val())
 
         })
 
-        $('#location').trigger('change')
+        $('select#folder').trigger('change');
         setTimeout(function(){
             $('#furniture').ready(function () {
-                $('#furniture option[value='+ $("#report_issue_furniture").val() +']').attr('selected','selected');
-
+                $('#furniture').val($("#report_planning_furniture").val());
             })
 
         }, 1000)

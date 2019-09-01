@@ -7,14 +7,16 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 use Doctrine\ORM\Mapping\JoinColumn;
+use Manage\RestaurantBundle\Controller\Nomenclator;
 
 /**
- * ReportIssue
+ * ReportPlanning
  *
- * @ORM\Table(name="resport_issue")
- * @ORM\Entity(repositoryClass="Manage\RestaurantBundle\Repository\ReportIssueRepository")
+ * @ORM\Table()
+ * @ORM\Entity()
+ *
  */
-class ReportIssue
+class ReportPlanning
 {
     /**
      * @var int
@@ -26,33 +28,22 @@ class ReportIssue
     private $id;
 
     /**
-     * @var \DateTime
+     * @var string
      *
-     * @ORM\Column(name="dated", type="date")
+     * @ORM\ManyToOne(targetEntity="Furniture")
+     * @ORM\JoinColumn(name="furniture_id", referencedColumnName="id", nullable=true)
      */
-    private $dated;
+    private $furniture;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="reportedat", type="time")
-     */
-    private $reportedat;
 
     /**
      * @var string
      *
      * @ORM\ManyToOne(targetEntity="Folder")
+     * @ORM\JoinColumn(name="folder_id", referencedColumnName="id", nullable=true)
      */
-    private $location;
+    private $folder;
 
-   /**
-     * @var string
-     *
-     * @ORM\ManyToOne(targetEntity="Furniture")
-    *  @ORM\JoinColumn(name="furniture_id", referencedColumnName="id", nullable=true)
-     */
-    private $furniture;
 
     /**
      * @var string
@@ -80,13 +71,6 @@ class ReportIssue
      */
     private $priority;
 
-    /**
-     * @var string
-     *
-     * @ORM\ManyToOne(targetEntity="Manage\AdminBundle\Entity\Worker")
-     */
-    private $reporter;
-
 
     /**
      * @var string
@@ -95,84 +79,33 @@ class ReportIssue
      */
     private $status = "Open";
 
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="frequency", type="string", length=255)
+     */
+    private $frequency;
+
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated", type="date", nullable=true)
+     */
+    private $updated;
+
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set dated
-     *
-     * @param \DateTime $dated
-     * @return ResportIssue
-     */
-    public function setDated($dated)
-    {
-        $this->dated = $dated;
-
-        return $this;
-    }
-
-    /**
-     * Get dated
-     *
-     * @return \DateTime 
-     */
-    public function getDated()
-    {
-        return $this->dated;
-    }
-
-    /**
-     * Set reportedat
-     *
-     * @param \DateTime $reportedat
-     * @return ResportIssue
-     */
-    public function setReportedat($reportedat)
-    {
-        $this->reportedat = $reportedat;
-
-        return $this;
-    }
-
-    /**
-     * Get reportedat
-     *
-     * @return \DateTime 
-     */
-    public function getReportedat()
-    {
-        return $this->reportedat;
-    }
-
-    /**
-     * Set location
-     *
-     * @param string $location
-     * @return ResportIssue
-     */
-    public function setLocation($location)
-    {
-        $this->location = $location;
-
-        return $this;
-    }
-
-    /**
-     * Get location
-     *
-     * @return string 
-     */
-    public function getLocation()
-    {
-        return $this->location;
-    }
 
     /**
      * Set details
@@ -190,7 +123,7 @@ class ReportIssue
     /**
      * Get details
      *
-     * @return string 
+     * @return string
      */
     public function getDetails()
     {
@@ -213,7 +146,7 @@ class ReportIssue
     /**
      * Get image
      *
-     * @return string 
+     * @return string
      */
     public function getImage()
     {
@@ -236,7 +169,7 @@ class ReportIssue
     /**
      * Get priority
      *
-     * @return string 
+     * @return string
      */
     public function getPriority()
     {
@@ -259,7 +192,7 @@ class ReportIssue
     /**
      * Get reporter
      *
-     * @return string 
+     * @return string
      */
     public function getReporter()
     {
@@ -276,11 +209,12 @@ class ReportIssue
         $this->pathimage = $pathimage;
     }
 
-    public function uploadImage($destiny){
+    public function uploadImage($destiny)
+    {
         if (null === $this->image) {
             return;
         }
-        $nombreArchivoFoto = uniqid().'.jpg';
+        $nombreArchivoFoto = uniqid() . '.jpg';
         $this->image->move($destiny, $nombreArchivoFoto);
         $this->setPathimage($nombreArchivoFoto);
     }
@@ -303,5 +237,62 @@ class ReportIssue
     public function setFurniture($furniture)
     {
         $this->furniture = $furniture;
+    }
+
+    public function getFrequency()
+    {
+        return $this->frequency;
+    }
+
+    public function setFrequency($frequency)
+    {
+        $this->frequency = $frequency;
+    }
+
+    public function getFolder()
+    {
+        return $this->folder;
+    }
+
+    public function setFolder($folder)
+    {
+        $this->folder = $folder;
+    }
+
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
+    }
+
+    public function canApplyToday(){
+        $today = new \DateTime();
+        switch ($this->frequency) {
+            case Nomenclator::PLANNING_WEEKLY:
+                //Si hoy es lunes entonces crear
+                if (/*$today->format('w') == 1 &&*/ (is_null($this->updated) || $this->getUpdated()->diff($today)->d >= 7))
+                    return true;
+            case Nomenclator::PLANNING_MONTHLY:
+                //Si hoy es 1 de cualquier mes entonces cerar
+                if (/*$today->format('d') == 1 &&*/ (is_null($this->updated) || $this->getUpdated()->diff($today)->m >= 1))
+                    return true;
+            case Nomenclator::PLANNING_QUATERLY:
+                //Si hoy es 1 de enero, abril, julio u octubre, entonces crear
+                if (/*$today->format('d') == 1 && ($today->format('n') == 1 || $today->format('n') == 4 || $today->format('n') == 7 || $today->format('n') == 10) &&*/ (is_null($this->updated) || $this->getUpdated()->diff($today)->m >= 3))
+                    return true;
+            case Nomenclator::PLANNING_BIANNUAL:
+                //Si hoy es 1 de enero o julio, entonces crear
+                if (/*$today->format('d') == 1 && ($today->format('n') == 1 || $today->format('n') == 7) &&*/ (is_null($this->updated) || $this->getUpdated()->diff($today)->m >= 6))
+                    return true;
+            case Nomenclator::PLANNING_YEARLY:
+                //Si ho yes 1 de enero entonces crear
+                if (/*$today->format('d') == 1 && $today->format('n') == 1 && */(is_null($this->updated) || $this->getUpdated()->diff($today)->y >= 1))
+                    return true;
+        }
+        return false;
     }
 }

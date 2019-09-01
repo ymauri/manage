@@ -19,6 +19,10 @@
         </div>
     </div>
     <div class="row margin-bottom-30">
+
+        <div class="col-md-6">
+            <img class="img-thumbnail" src="{{ asset('uploads/images/reportissue/' ~ reportIssue.pathimage) }}" />
+        </div>
         <div class="col-md-6">
             <h4><b>{{ reportIssue.location }}</b></h4>
             <h4>{{ reportIssue.furniture }}</h4>
@@ -28,11 +32,15 @@
                     <i class="fa fa-calendar"></i> <b>Date:</b> {% if reportIssue.dated %}{{ reportIssue.dated|date('Y-m-d') }}{% endif %}
                 </li>
                 <li>
-                    <i class="fa fa-clock-o"></i> <b>Time:</b> {% if reportIssue.reportedat %}{{ reportIssue.reportedat|date('H:s') }}{% endif %}
+                    <i class="fa fa-clock-o"></i> <b>Time:</b> {% if reportIssue.reportedat %}{{ reportIssue.reportedat|date('H:i') }}{% endif %}
                 </li>
                 <li>
-                    <i class="fa fa-user"></i> <b>Name:</b> {{ reportIssue.reporter }}                </li>
-                <li>
+                    {% if reportIssue.reporter  %}
+                    <i class="fa fa-user"></i> <b>Name:</b> {{ reportIssue.reporter }}
+                    {% else %}
+                    <i class="fa fa-user"></i> <b>Report Planning</b>
+                    {% endif %}
+                </li>
             </ul>
             <br/>
 
@@ -54,9 +62,6 @@
                 {% endif %}
             </form>
             <br/>
-        </div>
-        <div class="col-md-6">
-            <img class="img-thumbnail" src="{{ asset('uploads/images/reportissue/' ~ reportIssue.pathimage) }}" />
         </div>
     </div>
 </div>

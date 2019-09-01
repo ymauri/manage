@@ -26,13 +26,16 @@ class ReportIssueController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $reportIssues = $em->getRepository('RestaurantBundle:ReportIssue')->getListActiveIssue();
-
-        return $this->render('RestaurantBundle:ReportIssue:index.html.twig', array(
-            'reportIssues' => $reportIssues,
-        ));
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_RECEPTION' || $user->getRole() == 'ROLE_REPORTER') {
+            $em = $this->getDoctrine()->getManager();
+            $reportIssues = $em->getRepository('RestaurantBundle:ReportIssue')->getListActiveIssue();
+            return $this->render('RestaurantBundle:ReportIssue:index.html.twig', array(
+                'reportIssues' => $reportIssues,
+            ));
+        } else {
+            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+        }
     }
 
     /**
@@ -43,33 +46,40 @@ class ReportIssueController extends Controller
      */
     public function newAction(Request $request)
     {
-        $reportIssue = new ReportIssue();
-        $form = $this->createForm('Manage\RestaurantBundle\Form\ReportIssueType', $reportIssue);
-        $form->handleRequest($request);
-       // var_dump($form->getData());die;
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_RECEPTION' || $user->getRole() == 'ROLE_REPORTER') {
+
+            $reportIssue = new ReportIssue();
+            $form = $this->createForm('Manage\RestaurantBundle\Form\ReportIssueType', $reportIssue);
+            $form->handleRequest($request);
+            // var_dump($form->getData());die;
 
 
-        if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->isSubmitted() && $form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $reportIssue->uploadImage($this->container->getParameter('images.reportissue'));
+
+                $em->persist($reportIssue);
+                $em->flush();
+
+                return $this->redirectToRoute('reportissue_show', array('id' => $reportIssue->getId()));
+            }
             $em = $this->getDoctrine()->getManager();
-            $reportIssue->uploadImage($this->container->getParameter('images.reportissue'));
-
-            $em->persist($reportIssue);
-            $em->flush();
-
-            return $this->redirectToRoute('reportissue_show', array('id' => $reportIssue->getId()));
+            $places = $em->getRepository("RestaurantBundle:Folder")->findBy(array('issheet' => 0, 'isroot' => 0), array('details' => 'ASC'));
+            $locations = array();
+            foreach ($places as $place) {
+                $locations[$place->getId()] = $em->getRepository("RestaurantBundle:Folder")->getChildrensNodes($place->getId());
+            }
+            return $this->render('RestaurantBundle:ReportIssue:new.html.twig', array(
+                'reportIssue' => $reportIssue,
+                'form' => $form->createView(),
+                'places' => $places,
+                'locations' => $locations,
+            ));
+        } else {
+            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
-        $em = $this->getDoctrine()->getManager();
-        $places = $em->getRepository("RestaurantBundle:Folder")->findBy(array('issheet'=>0));
-        $locations = array();
-        foreach ($places as $place){
-            $locations[$place->getId()] = $em->getRepository("RestaurantBundle:Folder")->getChildrensNodes($place->getId());
-        }
-        return $this->render('RestaurantBundle:ReportIssue:new.html.twig', array(
-            'reportIssue' => $reportIssue,
-            'form' => $form->createView(),
-            'places' => $places,
-            'locations' => $locations,
-        ));
+
     }
 
     /**
@@ -80,12 +90,19 @@ class ReportIssueController extends Controller
      */
     public function showAction(ReportIssue $reportIssue)
     {
-        $deleteForm = $this->createDeleteForm($reportIssue);
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_RECEPTION' || $user->getRole() == 'ROLE_REPORTER') {
 
-        return $this->render('RestaurantBundle:ReportIssue:show.html.twig', array(
-            'reportIssue' => $reportIssue,
-            'delete_form' => $deleteForm->createView(),
-        ));
+            $deleteForm = $this->createDeleteForm($reportIssue);
+
+            return $this->render('RestaurantBundle:ReportIssue:show.html.twig', array(
+                'reportIssue' => $reportIssue,
+                'delete_form' => $deleteForm->createView(),
+            ));
+        } else {
+            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+        }
+
     }
 
     /**
@@ -96,33 +113,39 @@ class ReportIssueController extends Controller
      */
     public function editAction(Request $request, ReportIssue $reportIssue)
     {
-        $deleteForm = $this->createDeleteForm($reportIssue);
-        $editForm = $this->createForm('Manage\RestaurantBundle\Form\ReportIssueType', $reportIssue);
-        $editForm->handleRequest($request);
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_RECEPTION' || $user->getRole() == 'ROLE_REPORTER') {
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $deleteForm = $this->createDeleteForm($reportIssue);
+            $editForm = $this->createForm('Manage\RestaurantBundle\Form\ReportIssueType', $reportIssue);
+            $editForm->handleRequest($request);
+
+            if ($editForm->isSubmitted() && $editForm->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $reportIssue->uploadImage($this->container->getParameter('images.reportissue'));
+                $em->persist($reportIssue);
+                $em->flush();
+
+                return $this->redirectToRoute('reportissue_index');
+            }
+
             $em = $this->getDoctrine()->getManager();
-            $reportIssue->uploadImage($this->container->getParameter('images.reportissue'));
-            $em->persist($reportIssue);
-            $em->flush();
+            $places = $em->getRepository("RestaurantBundle:Folder")->findBy(array('issheet' => 0, 'isroot' => 0), array('details' => 'ASC'));
+            $locations = array();
+            foreach ($places as $place) {
+                $locations[$place->getId()] = $em->getRepository("RestaurantBundle:Folder")->getChildrensNodes($place->getId());
+            }
 
-            return $this->redirectToRoute('reportissue_index');
+            return $this->render('RestaurantBundle:ReportIssue:edit.html.twig', array(
+                'reportIssue' => $reportIssue,
+                'edit_form' => $editForm->createView(),
+                'delete_form' => $deleteForm->createView(),
+                'places' => $places,
+                'locations' => $locations,
+            ));
+        } else {
+            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
-
-        $em = $this->getDoctrine()->getManager();
-        $places = $em->getRepository("RestaurantBundle:Folder")->findBy(array('issheet'=>0));
-        $locations = array();
-        foreach ($places as $place){
-            $locations[$place->getId()] = $em->getRepository("RestaurantBundle:Folder")->getChildrensNodes($place->getId());
-        }
-
-        return $this->render('RestaurantBundle:ReportIssue:edit.html.twig', array(
-            'reportIssue' => $reportIssue,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-            'places' => $places,
-            'locations' => $locations,
-        ));
     }
 
     /**
@@ -133,16 +156,22 @@ class ReportIssueController extends Controller
      */
     public function deleteAction(Request $request, ReportIssue $reportIssue)
     {
-        $form = $this->createDeleteForm($reportIssue);
-        $form->handleRequest($request);
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_RECEPTION' || $user->getRole() == 'ROLE_REPORTER') {
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($reportIssue);
-            $em->flush();
+            $form = $this->createDeleteForm($reportIssue);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($reportIssue);
+                $em->flush();
+            }
+
+            return $this->redirectToRoute('reportissue_index');
+        } else {
+            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
-
-        return $this->redirectToRoute('reportissue_index');
     }
 
     /**
@@ -157,20 +186,20 @@ class ReportIssueController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('reportissue_delete', array('id' => $reportIssue->getId())))
             ->setMethod('DELETE')
-            ->getForm()
-        ;
+            ->getForm();
     }
 
     /**
      * @Route("/changestatus/{id}", name="reportissue_changestatus")
      * @Method("POST")
      * */
-    
-    public function changeStatusAction(Request $request, $id){
+
+    public function changeStatusAction(Request $request, $id)
+    {
         $status = $request->get('status');
         $em = $this->getDoctrine()->getManager();
         $issue = $em->getRepository("RestaurantBundle:ReportIssue")->find($id);
-        if (!is_null($issue)){
+        if (!is_null($issue)) {
             $issue->setStatus($status);
             $em->persist($issue);
             $em->flush();
@@ -184,13 +213,20 @@ class ReportIssueController extends Controller
      * @Method("POST")
      * */
 
-    public function getFurnituresAction(Request $request){
+    public function getFurnituresAction(Request $request)
+    {
         $id = $request->get('id');
         $em = $this->getDoctrine()->getManager();
-        $result = $em->getRepository("RestaurantBundle:Folder")->getChildrensFurnitures($id);
+        $result = $em->getRepository("RestaurantBundle:Folder")->getChildrensReportFurnitures($id);
         $furnitures = array();
-        foreach ($result as $item){
-            $furnitures[$item->getId()] = $item->getName();
+        foreach ($result as $item) {
+            $tags = $item->getTags();
+            foreach ($tags as $tag) {
+                if ($tag->getId() == 23) {
+                    $furnitures[$item->getId()] = $item->getName();
+                    break;
+                }
+            }
         }
         $response = new JsonResponse();
         $response->setData($furnitures);

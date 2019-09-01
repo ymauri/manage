@@ -191,6 +191,9 @@ class CleaningController extends Controller
                 $em->flush();
             }
         }
+        else {
+            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+        }
         return $this->render('RestaurantBundle:Cleaning:cleaningindex.html.twig', array(
             'cleanfirst' => $cleanfirst,
             'cleanlater' => $cleanlater,

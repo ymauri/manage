@@ -39,17 +39,16 @@
                                 }}) }}
                                 {{ form_widget(edit_form.dated, {'attr':{
                                     'class' :'input-sm pull-right form-control',
-                                    'value' : 'now' | date('Y-m-d')
                                 }}) }}
                                 {{ form_errors(edit_form.dated) }}
                             </div>
+
                             <div class="row form-group">
                                 {{ form_label(edit_form.reportedat,'Time',{'attr':{
                                     'class' :' control-label',
                                 }}) }}
                                 {{ form_widget(edit_form.reportedat, {'attr':{
                                     'class' :'input-sm pull-right form-control',
-                                    'value' : 'now' | date('H:i'),
                                     'readonly' : 'readonly'
                                 }}) }}
                                 {{ form_errors(edit_form.reportedat) }}
@@ -90,7 +89,6 @@
                                 }}) }}
                                 {{ form_widget(edit_form.image, {'attr':{
                                     'class' :'',
-                                    'capture': "camera",
                                     'accept' :'image/*'
                                 }}) }}
                                 {{ form_errors(edit_form.image) }}
@@ -104,7 +102,7 @@
                                 }}) }}
                                 {{ form_errors(edit_form.priority) }}
                             </div>
-
+                            {% if reportIssue.reporter %}
                             <div class="row form-group">
                                 {{ form_label(edit_form.reporter,'Reporter',{'attr':{
                                     'class' :' control-label',
@@ -114,6 +112,21 @@
                                 }}) }}
                                 {{ form_errors(edit_form.reporter) }}
                             </div>
+                                {% else %}
+                                    <div class="row form-group" hidden="hidden">
+                                        {{ form_label(edit_form.reporter,'Reporter',{'attr':{
+                                            'class' :' control-label',
+                                        }}) }}
+                                        {{ form_widget(edit_form.reporter, {'attr':{
+                                            'class' :'input-sm pull-right form-control',
+                                            'disabled':"disabled"
+                                        }}) }}
+                                        {{ form_errors(edit_form.reporter) }}
+                                    </div>
+
+                            <div class="row form-group">
+                                <b>Report Planning</b></div>
+                            {% endif %}
                             <br><br>
                             <div class="form-group">
                                 <button type="submit" id="restaurantbundle_reportissue_submit" name="restaurantbundle_reportissue[submit]" class="btn btn-primary">Update</button>
@@ -125,6 +138,14 @@
                                 {{ form_rest(edit_form) }}
                             </div>
                         </div>
+
+                        <div class="col-md-7">
+                            {% if reportIssue.pathimage %}
+                                <img class="img-thumbnail" src="{{ asset('uploads/images/reportissue/' ~ reportIssue.pathimage) }}" />
+                            {% else %}
+                                <img  class="img-thumbnail"  src="{{ asset('img/noimage.jpg') }}" alt="Without image" >
+                            {% endif %}
+                        </div>
                     </div>
                 </form>
             </div>
@@ -132,6 +153,7 @@
     </div>
 
     <script>
+        $('#location').val($('#report_issue_location').val())
 
         function updateValue(id, current){
             $("#report_issue_furniture").val(id)
@@ -154,8 +176,7 @@
         $('#location').trigger('change')
         setTimeout(function(){
             $('#furniture').ready(function () {
-                $('#furniture option[value='+ $("#report_issue_furniture").val() +']').attr('selected','selected');
-
+                $('#furniture').val($("#report_issue_furniture").val());
             })
 
         }, 1000)

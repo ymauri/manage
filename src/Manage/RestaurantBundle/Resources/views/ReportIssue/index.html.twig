@@ -20,7 +20,7 @@
                     <th class="hidden-xs">Description</th>
                     <th>Image</th>
                     <th class="hidden-xs">Status</th>
-                    <th>Actions</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -58,22 +58,9 @@
                             {% endif %}
                         </td>
                         <td>
-                            <div class="btn-group dropdown ">
-                                <button class="btn blue-hoki btn-xs dropdown-toggle" type="button"
-                                        data-toggle="dropdown">
-                                    Actions <i class="fa fa-angle-down"></i>
-                                </button>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li>
-                                        <a href="{{ path('reportissue_show', { 'id': reportIssue.id }) }}"><span
-                                                    class="glyphicon glyphicon-search"></span>View</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('reportissue_edit', { 'id': reportIssue.id }) }}"><span
-                                                    class="glyphicon glyphicon-pencil"></span>Edit</a>
-                                    </li>
-                                </ul>
-                            </div>
+                            <a href="{{ path('reportissue_edit', { 'id': reportIssue.id }) }}">
+                                <button type="button" class="btn blue-hoki btn-sm">Edit</button>
+
                         </td>
                     </tr>
                 {% endfor %}

@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping\JoinColumn;
 /**
  * ReportIssue
  *
- * @ORM\Table(name="resport_issue")
+ * @ORM\Table(name="ReportIssue")
  * @ORM\Entity(repositoryClass="Manage\RestaurantBundle\Repository\ReportIssueRepository")
  */
 class ReportIssue

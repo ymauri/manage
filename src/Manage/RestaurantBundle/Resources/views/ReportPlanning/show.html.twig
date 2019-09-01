@@ -1,62 +1,52 @@
 {% extends 'AdminBundle::frame.html.twig' %}
-{% block title %} Edit Issue {% endblock %}
+{% block title %} View Report Planning {% endblock %}
 {% block body %}
 <div class="portlet">
     <div class="portlet-title">
         <div class="caption">
-            <i class="icon-energy"></i>Issue Details
+            <i class="icon-energy"></i>Report Planning Details
         </div>
         <div class="tools">
-            <a href="{{path('reportissue_index')}}" class=" blue">
+            <a href="{{path('reportplanning_index')}}" class=" blue">
                 <i class="fa fa-list"></i> List
             </a>
-            <a href="{{path('reportissue_edit', {'id':reportIssue.id})}}" class=" blue">
+            <a href="{{path('reportplanning_edit', {'id':reportPlanning.id})}}" class=" blue">
                 <i class="fa fa-pencil"></i> Edit
             </a>
-            <a href="{{path('reportissue_new')}}" class=" blue">
+            <a href="{{path('reportplanning_new')}}" class=" blue">
                 <i class="fa fa-plus"></i> Create new
             </a>
         </div>
     </div>
     <div class="row margin-bottom-30">
+
         <div class="col-md-6">
-            <h4><b>{{ reportIssue.location }}</b></h4>
-            <h4>{{ reportIssue.furniture }}</h4>
+            {% if reportPlanning.pathimage %}
+                <img class="img-thumbnail" src="{{ asset('uploads/images/reportplanning/' ~ reportPlanning.pathimage) }}" />
+            {% else %}
+                <img  class="img-thumbnail"  src="{{ asset('img/noimage.jpg') }}" alt="Without image" >
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <h4><b>{{ reportPlanning.folder }}</b></h4>
+            <h4>{{ reportPlanning.furniture }}</h4>
             <br/>
             <ul class="list-unstyled margin-top-10 margin-bottom-10">
                 <li>
-                    <i class="fa fa-calendar"></i> <b>Date:</b> {% if reportIssue.dated %}{{ reportIssue.dated|date('Y-m-d') }}{% endif %}
+                    <i class="fa fa-calendar"></i> <b>Frequency:</b> {{ reportPlanning.frequency | upper }}
                 </li>
-                <li>
-                    <i class="fa fa-clock-o"></i> <b>Time:</b> {% if reportIssue.reportedat %}{{ reportIssue.reportedat|date('H:s') }}{% endif %}
-                </li>
-                <li>
-                    <i class="fa fa-user"></i> <b>Name:</b> {{ reportIssue.reporter }}                </li>
-                <li>
             </ul>
             <br/>
 
             <!-- Blockquotes -->
             <blockquote class="hero">
                 <p>
-                    {{ reportIssue.details }}
+                    {{ reportPlanning.details }}
                 </p>
-                <small>{{ reportIssue.priority }}</small>
+                <small>{{ reportPlanning.priority }}</small>
             </blockquote>
             <br/>
-            <form method="post" action="{{ path('reportissue_changestatus', {"id":reportIssue.id}) }}" class="change-status">
-                <input type="hidden" value="{{ reportIssue.status }}" name="status">
-                {% if reportIssue.status == 'Open' %}
-                    <button type="button" class="btn btn-primary" value="Wachten">Wachten</button>
-                    <button type="button" class="btn btn-success" value="Afgerond">Afgerond</button>
-                {% elseif reportIssue.status == 'Wachten'  %}
-                    <button type="button" class="btn btn-success" value="Afgerond">Afgerond</button>
-                {% endif %}
-            </form>
             <br/>
-        </div>
-        <div class="col-md-6">
-            <img class="img-thumbnail" src="{{ asset('uploads/images/reportissue/' ~ reportIssue.pathimage) }}" />
         </div>
     </div>
 </div>

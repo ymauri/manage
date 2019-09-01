@@ -34,4 +34,15 @@ class FolderRepository extends EntityRepository {
         }
     }
 
+
+    public function getChildrensReportFurnitures($parent){
+        $folder = $this->getEntityManager()->createQuery('SELECT f FROM RestaurantBundle:Folder f WHERE f.id = :id')->setParameter("id",$parent)->getResult();
+        if ($folder[0]->getIsroot()){
+            return $this->getEntityManager()->createQuery('SELECT f FROM RestaurantBundle:Furniture f WHERE f.pathfolder like :parent')->setParameter("parent",'%/'.$parent.'/%')->getResult();
+        }
+        else{
+            return $this->getEntityManager()->createQuery('SELECT f FROM RestaurantBundle:Furniture f WHERE f.folder = :parent ')->setParameter("parent", $parent)->getResult();
+        }
+    }
+
 }

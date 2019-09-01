@@ -108,9 +108,6 @@
                             <div class="row form-group">
                                 <label>Scan from WebCam:</label>
                                 <div>
-                                    <b>Device has camera: </b>
-                                    <span id="cam-has-camera"></span>
-                                    <br>
                                     <video muted id="qr-video" style="width: 100%"></video>
                                 </div>
 
@@ -120,8 +117,6 @@
                                 <b>Detected QR code: </b>
                                 <span id="cam-qr-result">None</span>
                                 <br>
-                                <b>Last detected at: </b>
-                                <span id="cam-qr-result-timestamp"></span>
                             </div>
                             <hr>
                             <div class="row form-group" hidden="hidden">
@@ -152,7 +147,6 @@
                                 }}) }}
                                 {{ form_widget(form.image, {'attr':{
                                     'class' :'',
-                                    'capture': "camera",
                                     'accept' :'image/*'
                                 }}) }}
                                 {{ form_errors(form.image) }}
@@ -259,15 +253,11 @@
         QrScanner.WORKER_PATH = '{{ asset("js/qr/qr-scanner-worker.min.js") }}';
 
         const video = document.getElementById('qr-video');
-        const camHasCamera = document.getElementById('cam-has-camera');
         const camQrResult = document.getElementById('cam-qr-result');
-        const camQrResultTimestamp = document.getElementById('cam-qr-result-timestamp');
-        const fileSelector = document.getElementById('file-selector');
-        const fileQrResult = document.getElementById('file-qr-result');
 
         function setResult(label, result) {
             label.textContent = result;
-            var qrs= []
+            /*var qrs= []
             if (document.getElementById('restaurantbundle_furniture_serialnumber').value)
                 qrs = document.getElementById('restaurantbundle_furniture_serialnumber').value.split(" QR: ")
 
@@ -280,36 +270,16 @@
             }
             if (!alredy )
                 document.getElementById('restaurantbundle_furniture_serialnumber').value += " QR: "+result
-
-            camQrResultTimestamp.textContent = new Date().toString();
+*/
+            document.getElementById('restaurantbundle_furniture_serialnumber').value = result
             label.style.color = 'teal';
-            clearTimeout(label.highlightTimeout);
-            label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 100);
         }
-
-        // ####### Web Cam Scanning #######
-
         QrScanner.hasCamera().then(hasCamera => camHasCamera.textContent = hasCamera);
-
         const scanner = new QrScanner(video, result => setResult(camQrResult, result));
         scanner.start();
-
         document.getElementById('inversion-mode-select').addEventListener('change', event => {
             scanner.setInversionMode(event.target.value);
         });
-
-        // ####### File Scanning #######
-
-        fileSelector.addEventListener('change', event => {
-            const file = fileSelector.files[0];
-            if (!file) {
-                return;
-            }
-            QrScanner.scanImage(file)
-                    .then(result => setResult(fileQrResult, result))
-                    .catch(e => setResult(fileQrResult, e || 'No QR code found.'));
-        });
-
     </script>
 {% endblock %}
 

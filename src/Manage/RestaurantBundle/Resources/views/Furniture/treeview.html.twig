@@ -3,6 +3,7 @@
 {% block body %}
     <br/>
     <div class="row">
+        <input type="hidden" id="qr_result" onkeyup="updateFinder($(this))">
         <div class="col-md-4 col-sm-12">
             <div class="portlet light bordered">
                 <div class="portlet-title">
@@ -249,7 +250,10 @@
 
                         }();
                         TableManaged.init()
-                        $(".dataTables_filter").addClass("pull-right")
+                        $(".dataTables_filter").addClass("pull-right").append('&nbsp;&nbsp;<a href="#modal_find" id="link_find_qr" data-toggle="modal"><i class=" fa fa-qrcode fa-lg" style="zoom:1.3; cursor: pointer; text-decoration: none;"></i></a>')
+                        $('.dataTables_filter a#link_find_qr').bind('click', function(event, data){
+
+                        })
                         $("#table_content_paginate").addClass("pull-right")
                         $("#folder_name").text(data.node.text)
                     });
@@ -278,6 +282,35 @@
         </div>
     </div>
 
+
+    <div id="modal_find" class="modal fade" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Scan QR</h4>
+                </div>
+                <div class="modal-body" style="overflow: hidden;">
+                    <div class="row" style="padding: 5px 20px;">
+                        <label>Scan from WebCam:</label>
+                        <div>
+                            <video muted id="qr-video" style="width: 100%;" ></video>
+                        </div>
+
+                        <select id="inversion-mode-select" hidden="hidden">
+                            <option value="original">Scan original (dark QR code on bright background)</option>
+                        </select>
+                        <b>Detected QR code: </b>
+                        <span id="cam-qr-result">None</span>
+                        <br/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         $('#accept_move_to').click(function(response) {
@@ -326,5 +359,39 @@
             });
         }
         handleSample2();
+
+        function updateFinder(obj){
+            $('input[type="search"]').val(obj.val()).trigger('keyup')
+            $('.close').trigger('click')
+        }
     </script>
+
+    <script type="module">
+        import QrScanner from "{{ asset('js/qr/qr-scanner.min.js') }}";
+        QrScanner.WORKER_PATH = '{{ asset("js/qr/qr-scanner-worker.min.js") }}';
+
+        const video = document.getElementById('qr-video');
+        const camHasCamera = document.getElementById('cam-has-camera');
+        const camQrResult = document.getElementById('cam-qr-result');
+        const camQrResultTimestamp = document.getElementById('cam-qr-result-timestamp');
+        const fileQrResult = document.getElementById('file-qr-result');
+
+        function setResult(label, result) {
+            label.textContent = result;
+            document.getElementById('qr_result').value = result;
+            document.getElementById('qr_result').dispatchEvent(new Event('keyup'));
+            //$('input[type="search"]').val('TPH0456').trigger('keyup')
+
+            camQrResultTimestamp.textContent = new Date().toString();
+            label.style.color = 'teal';
+            clearTimeout(label.highlightTimeout);
+            label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 100);
+        }
+        QrScanner.hasCamera().then(hasCamera => camHasCamera.textContent = hasCamera);
+        const scanner = new QrScanner(video, result => setResult(camQrResult, result));
+        scanner.start();
+
+    </script>
+
+
 {% endblock %}

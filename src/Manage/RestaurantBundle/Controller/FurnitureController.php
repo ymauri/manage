@@ -90,13 +90,14 @@ class FurnitureController extends Controller {
         $result = "/".$folder;
         $em = $this->getDoctrine()->getManager();
         $object = $em->getRepository("RestaurantBundle:RFolderFolder")->findOneBy(array('child'=>$folder));
-        if ($object->getFather()->getIsroot()){
+        if (!is_null($object) && $object->getFather()->getIsroot()){
             $result = $result.'/'.$object->getFather()->getId().'/';
             return $result;
         }
-        else {
+        else if (!is_null($object)){
             return $result.$this->generatePathFolder($object->getFather()->getId());
         }
+        return '';
     }
 
     private function getChildTree($parent){
@@ -500,6 +501,42 @@ class FurnitureController extends Controller {
         $this->addFlash('success', 'Success! The furniture has been moved to '.$parent->getDetails());
 
         return $json;
+    }
+
+    /**
+     *
+     * @Route("/furniture/setimages/", name="furniture_setimages")
+     * @Method("GET")
+     *
+     */
+
+    public function setImagesAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        $furnitures = $em->getRepository("RestaurantBundle:Furniture")->findAll();
+
+        foreach ($furnitures as $furniture){
+            if (substr($furniture->getPathimage(), 0, 4) === 'http') {
+
+                $contextoEnvoltura = array(
+                    "ssl" => array(
+                        "verify_peer" => false,
+                        "verify_peer_name" => false,
+                    ),
+                );
+                $name = md5(uniqid()).'.jpeg';
+                copy
+                (
+                    $furniture->getPathimage()
+                    , $this->container->getParameter('images.furniture')."/".$name
+                    , stream_context_create($contextoEnvoltura)
+                );
+                $furniture->setPathimage($name);
+                $em->persist($furniture);
+                echo $furniture->getId()."<br/>";
+            }
+        }
+        $em->flush();
+        die;
     }
 
 }

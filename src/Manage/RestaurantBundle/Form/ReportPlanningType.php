@@ -8,8 +8,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Manage\AdminBundle\Entity\WorkerRepository;
 use Manage\RestaurantBundle\Repository\FolderRepository;
+use Manage\RestaurantBundle\Controller\Nomenclator;
 
-class ReportIssueType extends AbstractType
+class ReportPlanningType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -18,22 +19,8 @@ class ReportIssueType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('dated', 'date', array(
-                'widget' => 'single_text',
-                'attr' => array(
-                    'readonly' => true,)))
-            ->add('reportedat', 'time', array(
-                'widget' => 'single_text',
-                'required' => false,
-                'attr' => array(
-                    'readonly' => true,
-
-                )
-            ))
             ->add('details')
-            ->add('location')
-            ->add('furniture')
-            ->add('image', 'file')
+            ->add('folder')
             ->add('priority', "choice", array(
                 'choices' => array(
                     'Normaal' => 'Normaal',
@@ -42,16 +29,17 @@ class ReportIssueType extends AbstractType
                 ),
                 'required' => true
             ))
-            ->add('reporter', 'entity', array(
-                'class' => 'Manage\AdminBundle\Entity\Worker',
-                'query_builder' => function (WorkerRepository $repository) {
-                    return $repository->createQueryBuilder('b')
-                        ->select('b')
-                        ->where('b.isactive = \'1\' ')
-                        ->addOrderBy('b.name');
-                },
-                'required' => true,
-                'multiple' => false
+            ->add('furniture')
+            ->add('image', 'file')
+            ->add('frequency', "choice", array(
+                'choices' => array(
+                    Nomenclator::PLANNING_WEEKLY => ucwords(Nomenclator::PLANNING_WEEKLY),
+                    Nomenclator::PLANNING_MONTHLY => ucwords(Nomenclator::PLANNING_MONTHLY),
+                    Nomenclator::PLANNING_QUATERLY => ucwords(Nomenclator::PLANNING_QUATERLY),
+                    Nomenclator::PLANNING_BIANNUAL => ucwords(Nomenclator::PLANNING_BIANNUAL),
+                    Nomenclator::PLANNING_YEARLY => ucwords(Nomenclator::PLANNING_YEARLY),
+                ),
+                'required' => true
             ));
     }
 
@@ -61,7 +49,7 @@ class ReportIssueType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Manage\RestaurantBundle\Entity\ReportIssue'
+            'data_class' => 'Manage\RestaurantBundle\Entity\ReportPlanning'
         ));
     }
 }
