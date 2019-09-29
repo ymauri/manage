@@ -222,7 +222,7 @@ div#adminbundle_beginbill_hascash label{
 }
 
 .actions{
-    width: 180px;
+    width: 238px;
 }
 
 .counter{
@@ -362,6 +362,16 @@ label[for="adminbundle_service_voucherstotal"]{
         max-width: 12%;
         display: inline-block;
     }
+
+    video {
+        max-width: 225px ;
+        width: 225px ;
+    }
+
+    img.thumbnail {
+        width: 225px;
+        max-width: 225px ;
+    }
 }
 
 #restaurantbundle_rule_bytype label, #restaurantbundle_rule_dayweek label, #restaurantbundle_rule_typeofrule label, #restaurantbundle_cleaningextra_dayweek label {
@@ -445,4 +455,14 @@ label[for="adminbundle_service_voucherstotal"]{
 
 .accordion .panel-default{
     border: none !important;
+}
+
+
+#scanner div video {
+    width: 100%;
+    max-width: 100% !important;
+}
+
+.dataTables_filter label{
+    float: unset !important;
 }
