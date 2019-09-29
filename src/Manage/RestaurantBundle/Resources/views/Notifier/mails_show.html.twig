@@ -1,0 +1,57 @@
+{% extends 'RestaurantBundle::frame.html.twig' %}
+{% block title %} Show mail {% endblock %}
+{% block body %}
+<div class="portlet">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon icon-envelope"></i>Notifiers
+        </div>
+        <div class="tools">
+
+            <a href="{{path('notifier_mails')}}" class=" blue">
+                <i class="fa fa-list-alt"></i> List
+            </a>
+        </div>
+    </div>
+<div class="portlet box blue-hoki">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="fa fa-search"></i>Mail
+        </div>
+        <div class="tools">
+            <a href="javascript:;" class="collapse">
+            </a>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        {% if form_errors(show_form) %}
+            <div class="alert alert-danger display-hide" style="display: block;">
+                <button class="close" data-close="alert"></button>
+                <span>  {{form_errors(show_form)}} </span>
+            </div>
+        {% endif %}
+        <form class="container-fluid form-horizontal " >
+            <div class="form-body col-md-12">
+                <div class="row form-group ">
+                    <label class=" control-label"> <b>Sent to:</b> {{ entity.notifier.mails }}</label>
+                </div>
+                <div class="row form-group ">
+                    <label class=" control-label"> <b>Date:</b> {{ entity.date | date('d-m-Y H:i:s') }}</label>
+                </div>
+                <div class="row form-group ">
+                    <label class=" control-label"> <b>Subject:</b> {{ entity.subject }}</label>
+                </div>
+                <div class="row form-group ">
+                <label class=" control-label"> <b>Content:</b></label>
+                <iframe  srcdoc="{{ entity.body }}" class="col-md-12" style="width: 100%;height:340px;margin: 10px auto;border:1px solid #999999; padding: 0;">
+
+                </iframe>
+                </div>
+
+                </div>
+        </form>
+    </div>
+</div>
+</div>
+
+{% endblock %}
