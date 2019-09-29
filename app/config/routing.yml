@@ -1,9 +1,8 @@
-admin:
-    resource: "@AdminBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
 restaurant:
     resource: "@RestaurantBundle/Controller/"
     type:     annotation
     prefix: /
+    schemes: [http]
+
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"

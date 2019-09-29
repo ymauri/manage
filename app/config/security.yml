@@ -3,17 +3,31 @@
 security:
     
     encoders:
-        Manage\AdminBundle\Entity\User: {algorithm: sha512, encode_as_base64: true, iterations: 10}
+        FOS\UserBundle\Model\UserInterface: sha512
+        #Manage\AdminBundle\Entity\User: {algorithm: sha512, encode_as_base64: true, iterations: 10}
    
     role_hierarchy:
-        ROLE_SUPERADMIN:      [ROLE_ADMIN]
-        ROLE_MANAGER:         [ROLE_SUPERADMIN, ROLE_ADMIN]
+        ROLE_CLEANING:    [ROLE_CLEANING_LIST]
+        ROLE_MAINTENANCE: [ROLE_CLEANING, ROLE_MAINTENANCE_LIST, ROLE_MAINTENANCE_EDIT]
+        ROLE_SERVICE:     [ROLE_CLEANING, ROLE_LONGSTAY_EDIT, ROLE_MAINTENANCE, ROLE_MAINTENANCE_PLANNING, ROLE_INVENTORY_SHOW, ROLE_INVENTORY_EDIT]
+        ROLE_RECEPTION:   [ROLE_CLEANING, ROLE_LONGSTAY_EDIT, ROLE_HOTEL_FORM, ROLE_MAINTENANCE_LIST]
+        ROLE_SUPER_ADMIN: [ROLE_USER_ADMIN, ROLE_FORMS_SETTINGS, ROLE_GUESTY, ROLE_HOTEL_KASBOEK, ROLE_RECEPTION, ROLE_SERVICE]
         
     providers:
-        email:
-            entity: {class: Manage\AdminBundle\Entity\User, property: email}
+        fos_userbundle:
+            id: fos_user.user_provider.username
+        #email:
+            #entity: {class: Manage\AdminBundle\Entity\User, property: email}
    
-    firewalls:     
+    firewalls:
+        main:
+            pattern: ^/
+            form_login:
+                provider: fos_userbundle
+                csrf_provider: form.csrf_provider
+            logout:       true
+            anonymous:    true
+
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
@@ -58,23 +72,27 @@ security:
             security: false
 
 
-        admin:
-            pattern:  ^/*
-            provider: email
-            form_login:
-                login_path: login
-                check_path: login_check
-                default_target_path: home    
-            logout:
-                path: logout
-                target: login
-            
+#        admin:
+#            pattern:  ^/*
+#            provider: email
+#            form_login:
+#                login_path: login
+#                check_path: login_check
+#                default_target_path: home
+#            logout:
+#                path: logout
+#                target: login
+#
     access_control:
-
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}
-        - { path: ^/guesty/*, roles: IS_AUTHENTICATED_ANONYMOUSLY}
-        - { path: ^/rule/hook/*, roles: IS_AUTHENTICATED_ANONYMOUSLY}
-        - { path: ^/rule/execute, roles: IS_AUTHENTICATED_ANONYMOUSLY}
-        - { path: ^/hook/*, roles: IS_AUTHENTICATED_ANONYMOUSLY}
-        - { path: ^/*, roles: ROLE_MANAGER}
-        
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http}
+        - { path: ^/command, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/guesty/*, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http}
+        - { path: ^/rule/hook/*, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http}
+        - { path: ^/rule/execute, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http}
+        - { path: ^/hook/*, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http}
+        - { path: ^/reportplanning/createissue/, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http}
+        - { path: ^/reportissue/new, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http}
+        - { path: ^/reportissue, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http}
+        - { path: ^/*, roles: ROLE_USER, requires_channel: http}

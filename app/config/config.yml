@@ -4,6 +4,8 @@ imports:
     - { resource: services.yml }
 
 framework:
+    profiler:
+        enabled: false
     #esi:             ~
     #translator:      { fallbacks: ["%locale%"] }
     secret:          "%secret%"
@@ -16,8 +18,8 @@ framework:
     templating:
         engines: ['twig']
         #assets_base_urls: http://localhost:5803/web/
-        #assets_base_urls: http://log.towerleisure.nl/web/
-    default_locale:  "nl"
+        assets_base_urls: http://test.log.towerleisure.nl/web/
+    default_locale:  "en"
     trusted_hosts:   ~
     trusted_proxies: ~
     session:
@@ -77,4 +79,12 @@ parameters:
     images.listing: "%kernel.root_dir%/../web/uploads/images/listing"
     images.furniture: "%kernel.root_dir%/../web/uploads/images/furniture"
     images.reportissue: "%kernel.root_dir%/../web/uploads/images/reportissue"
+    images.reportplanning: "%kernel.root_dir%/../web/uploads/images/reportplanning"
 
+fos_user:
+    db_driver: orm # otros valores válidos son 'mongodb', 'couchdb' and 'propel' depende de que gestor utilices
+    firewall_name: main # Es el firewall configurado en el archivo security.yml en el paso 4
+    user_class: Manage\RestaurantBundle\Entity\User # Es el usuario de tu aplicación creado en el paso 3 y la introducción
+    from_email:
+        address: "noreply@yourcompany.com"
+        sender_name: "No Reply"
