@@ -1481,7 +1481,6 @@ div.tagsinput {
   min-height: 35px;
   height: auto !important;
   margin: 0;
-  padding: 5px 5px 0px 5px;
   overflow: auto;
 }
 
@@ -1496,7 +1495,6 @@ div.tagsinput span.tag {
 
 div.tagsinput input {
   padding: 3px 6px;
-  width: 75px !important;
 }
 
 div.tagsinput span.tag a {
