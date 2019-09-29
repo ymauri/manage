@@ -1,4 +1,4 @@
-{% extends 'AdminBundle::frame.html.twig' %}
+{% extends 'RestaurantBundle::frame.html.twig' %}
 {% block title %} Edit Issue {% endblock %}
 {% block body %}
     <div class="portlet">
@@ -45,6 +45,24 @@
                                 </div>
 
                                 <div class="row form-group">
+                                    {{ form_label(form.begins,'From',{'attr':{
+                                        'class' :' control-label',
+                                    }}) }}
+                                    {{ form_widget(form.begins, {'attr':{
+                                        'class' :'input-sm pull-right form-control',
+                                    }}) }}
+                                    {{ form_errors(form.begins) }}
+                                </div>
+                                <div class="row form-group">
+                                    {{ form_label(form.ends,'To',{'attr':{
+                                        'class' :' control-label',
+                                    }}) }}
+                                    {{ form_widget(form.ends, {'attr':{
+                                        'class' :'input-sm pull-right form-control',
+                                    }}) }}
+                                    {{ form_errors(form.ends) }}
+                                </div>
+                                <div class="row form-group">
                                     {{ form_label(form.frequency,'Frequency',{'attr':{
                                         'class' :' control-label',
                                     }}) }}
@@ -72,15 +90,17 @@
                                                 <option value="{{ place.id }}">{{ place.details }}</option>
                                                 {% if folders[place.id] %}
                                                     {% for folder in folders[place.id] %}
+                                                        {% if reportPlanning.folder %}
                                                         <option value="{{ folder.id }}" {% if reportPlanning.folder.id == folder.id %} selected="selected"{% endif %}>{{ folder.details }}</option>
-                                                    {% endfor %}
+                                                        {% endif %}
+                                                        {% endfor %}
                                                 {% endif %}
                                             </optgroup>
                                         {% endfor %}
                                     </select>
                                 </div>
                                 <div class="row form-group" id="select_furniture">
-                                    <label for="furniture">Select a Furniture</label>
+                                    <label for="furniture">Select from Inventory</label>
                                     <select id="furniture" class="form-control input-sm select2">
                                     </select>
                                 </div>

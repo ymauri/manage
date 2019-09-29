@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Manage\AdminBundle\Entity\WorkerRepository;
+use Manage\RestaurantBundle\Entity\WorkerRepository;
 use Manage\RestaurantBundle\Repository\FolderRepository;
 use Manage\RestaurantBundle\Controller\Nomenclator;
 
@@ -19,7 +19,7 @@ class ReportPlanningType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('details')
+            ->add('details', 'textarea', array('required' => true))
             ->add('folder')
             ->add('priority', "choice", array(
                 'choices' => array(
@@ -30,7 +30,22 @@ class ReportPlanningType extends AbstractType
                 'required' => true
             ))
             ->add('furniture')
-            ->add('image', 'file')
+            ->add('begins', 'date', array('widget' => 'single_text',
+                'format' => 'dd-MM-yyyy',
+                'attr' => array(
+                    'class' => 'form-control datepicker',
+                    'data-provide' => 'datepicker',
+                    'readonly' => true,
+                    'data-date-format' => 'dd-mm-yyyy',)))
+            ->add('ends', 'date', array('widget' => 'single_text',
+                'format' => 'dd-MM-yyyy',
+                'attr' => array(
+                    'class' => 'form-control datepicker',
+                    'data-provide' => 'datepicker',
+                    'readonly' => true,
+                    'data-date-format' => 'dd-mm-yyyy',)))
+            ->add('pathimage', 'hidden')
+            ->add('image', 'file', array('required'=>false))
             ->add('frequency', "choice", array(
                 'choices' => array(
                     Nomenclator::PLANNING_WEEKLY => ucwords(Nomenclator::PLANNING_WEEKLY),

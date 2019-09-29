@@ -13,8 +13,9 @@ use Manage\RestaurantBundle\Entity\KasboekHotelForms;
 use Manage\RestaurantBundle\Form\KasboekHotelType;
 use Manage\RestaurantBundle\Form\KasboekHotelFloatType;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Manage\AdminBundle\Entity\RNotifierForm;
+use Manage\RestaurantBundle\Entity\RNotifierForm;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 
 /**
@@ -27,13 +28,10 @@ class KasboekHotelController extends Controller {
     /**
      *
      * @Route("/new/", name="kasboekhotel_new")
+     * @Security("is_granted('ROLE_HOTEL_KASBOEK')")
      * @Template()
      */
     public function newAction() {
-        $user=$this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole()!='ROLE_SUPERADMIN' && $user->getRole()!='ROLE_MANAGER'){
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
         $entity_basic = new KasboekHotel();
         $entity_basic->setDated(new \DateTime());
         $entity_basic->setUpdated(new \DateTime());
@@ -67,13 +65,10 @@ class KasboekHotelController extends Controller {
      *
      * @Route("/date/{date}/", name="kasboekhotel")
      * @Method("GET")
+     * @Security("is_granted('ROLE_HOTEL_KASBOEK')")
      * @Template()
      */
     public function indexAction($date) {
-        $user=$this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole()!='ROLE_SUPERADMIN' && $user->getRole()!='ROLE_MANAGER'){
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
         $partes = explode('-', $date);
         $date = $partes[1].'-'.$partes[0];
 
@@ -82,7 +77,7 @@ class KasboekHotelController extends Controller {
         $consulta = $em->createQuery('SELECT r FROM RestaurantBundle:KasboekHotel r WHERE r.dated >= \''.$date.'-01\' AND r.dated <= \''.$date.'-31\' ORDER BY r.dated DESC');
         $entities = $consulta->getResult();
 
-        $consulta = $em->createQuery('SELECT r.form, count(r.id) AS cantidad FROM AdminBundle:RNotifierForm r JOIN r.notifier n WHERE n.form LIKE \'KasboekHotel\' GROUP BY r.form');
+        $consulta = $em->createQuery('SELECT r.form, count(r.id) AS cantidad FROM RestaurantBundle:RNotifierForm r JOIN r.notifier n WHERE n.form LIKE \'KasboekHotel\' GROUP BY r.form');
         $notifier = $consulta->getResult();
         //var_dump($notifier);die;
         $result = array();
@@ -105,21 +100,16 @@ class KasboekHotelController extends Controller {
      * Finds and displays a KasboekHotel entity.
      *
      * @Route("/{id}/", name="kasboekhotel_show")
+     * @Security("is_granted('ROLE_HOTEL_KASBOEK')")
      * @Method("GET")
      * @Template()
      */
     public function showAction($id) {
-        $user=$this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole()!='ROLE_SUPERADMIN' && $user->getRole()!='ROLE_MANAGER'){
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $user=$this->get('security.token_storage')->getToken()->getUser();
-
         $entity_basic = $em->getRepository('RestaurantBundle:KasboekHotel')->find($id);
         if (!$entity_basic) {
-            return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
+            return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
         }
 
         $form_basic = $this->createForm(new KasboekHotelType(), $entity_basic);
@@ -142,24 +132,21 @@ class KasboekHotelController extends Controller {
 
     /**
      * Finds and displays a KasboekHotel entity.
-     *
+     * @Security("is_granted('ROLE_HOTEL_KASBOEK')")
      * @Route("/{id}/delete/", name="kasboekhotel_delete")
      * @Template()
      */
     public function deleteAction($id) {
-        $user=$this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole()=='ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole()=='ROLE_RECEPTION') {
-
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('RestaurantBundle:KasboekHotel')->find($id);
             $user = $this->get('security.token_storage')->getToken()->getUser();
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
             }
             $now = new \DateTime('now');
             //echo  $entity_basic->getUpdated()->diff($now)->d ; die;
             //if (strtotime($olddate->format('d-m-Y')) > strtotime($entity_basic->getUpdated()->format('d-m-Y')) && $user->getRole() != 'ROLE_SUPERADMIN') {
-            if (($entity->getUpdated()->diff($now)->d >= 2) && ($user->getRole() != 'ROLE_SUPERADMIN')) {
+            if (($entity->getUpdated()->diff($now)->d >= 2) && (!$this->isGranted('ROLE_SUPER_ADMIN'))) {
                 $this->addFlash('error', 'Error! This form can not be removed.');
                 return $this->redirect($this->generateUrl('kasboekhotel', array('date' => date('m-Y'))));
             }
@@ -172,22 +159,17 @@ class KasboekHotelController extends Controller {
                 $em->remove($entity);
                 $em->flush();
             } catch (\Exception $ex) {
-                return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
+                return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
             }
             $this->addFlash('success', 'Success! The form has been removed.');
             return $this->redirect($this->generateUrl('kasboekhotel', array('date' => date('m-Y'))));
-        }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
     }
 
     /**
+     * @Security("is_granted('ROLE_HOTEL_KASBOEK')")
      * @Route("/{id}/edit/", name="kasboekhotel_edit")
      */
     public function editAction($id) {
-        $user=$this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole()!='ROLE_SUPERADMIN' && $user->getRole()!='ROLE_MANAGER'){
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $user=$this->get('security.token_storage')->getToken()->getUser();
@@ -195,14 +177,14 @@ class KasboekHotelController extends Controller {
         $entity_basic = $em->getRepository('RestaurantBundle:KasboekHotel')->find($id);
 
         if (!$entity_basic) {
-            return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
+            return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
         }
 
             //{% if 'today - 3 day' | date('d-m-Y') < entity.updated | date('d-m-Y') %}
         $now = new \DateTime('now');
 
         //if (strtotime($olddate->format('d-m-Y')) > strtotime($entity_basic->getUpdated()->format('d-m-Y')) && $user->getRole()!='ROLE_SUPERADMIN' && $user->getRole()!='ROLE_MANAGER'){
-        if (($entity_basic->getUpdated()->diff($now)->d >= 2) && ($user->getRole() != 'ROLE_SUPERADMIN')) {
+        if (($entity_basic->getUpdated()->diff($now)->d >= 2) && ($this->isGranted('ROLE_SUPER_ADMIN'))) {
             $this->addFlash('error', 'Error! This form can not be modified.');
             return $this->redirect($this->generateUrl('kasboekhotel', array('date'=>date('m-Y'))));
         }
@@ -439,7 +421,7 @@ class KasboekHotelController extends Controller {
         $em = $this->getDoctrine()->getManager();
 
         //Crear el notificador para este formulario.
-        $notifier = $em->getRepository('AdminBundle:Notifier')->findOneBy(array('form'=>'KasboekHotel'));
+        $notifier = $em->getRepository('RestaurantBundle:Notifier')->findOneBy(array('form'=>'KasboekHotel'));
         $entity_basic = $em->getRepository('RestaurantBundle:KasboekHotel')->findOneBy(array('id'=>$id));
         $fecha = $entity_basic->getDated()->format('Y-m-d');
         $fecha_array = explode('-', $fecha);
@@ -512,18 +494,14 @@ class KasboekHotelController extends Controller {
 
     /**
      * Displays a form to edit an existing KasboekParking entity.
-     *
+     * @Security("is_granted('ROLE_HOTEL_KASBOEK')")
      * @Route("/{id}/mail/", name="kasboekhotel_mail")
      */
     public function mailAction($id){
-        $user=$this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole()!='ROLE_SUPERADMIN' && $user->getRole()!='ROLE_MANAGER' ){
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
         try{
             $this->sendMail($id);
         } catch (\Exception $ex) {
-            return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
+            return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
         }
         $em = $this->getDoctrine()->getManager();
         $entity_basic = $em->getRepository('RestaurantBundle:KasboekHotel')->findOneBy(array('id'=>$id));
@@ -534,12 +512,13 @@ class KasboekHotelController extends Controller {
 
     /**
      *
+     * @Security("is_granted('ROLE_HOTEL_KASBOEK')")
      * @Route("/kasboekhotelchangedate/{id}/", name="kasboekhotel_change_date")
      */
     public function kasboekhotelchangedateAction($id) {
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRole()!='ROLE_SUPERADMIN' && $user->getRole()!='ROLE_MANAGER'){
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
         $request = $this->getRequest();
         $response = new JsonResponse();
@@ -567,6 +546,7 @@ class KasboekHotelController extends Controller {
 
     /**
      * @Route("/{id}/finish/", name="kasboekhotel_finish")
+     * @Security("is_granted('ROLE_HOTEL_KASBOEK')")
      * @Template()
      */
     public function finishAction($id) {

@@ -1,4 +1,4 @@
-{% extends 'AdminBundle::frame.html.twig' %}
+{% extends 'RestaurantBundle::frame.html.twig' %}
 {% block title %} Edit Issue {% endblock %}
 {% block body %}
     <div class="portlet">
@@ -62,7 +62,9 @@
                                             <option value="{{ place.id }}">{{ place.details }}</option>
                                             {% if locations[place.id] %}
                                                 {% for location in locations[place.id] %}
+                                                {% if reportIssue.location %}
                                                     <option value="{{ location.id }}" {% if location.id == reportIssue.location.id %} selected="selected"{% endif %}>{{ location.details }}</option>
+                                                {% endif %}
                                                 {% endfor %}
                                             {% endif %}
                                         </optgroup>
@@ -130,7 +132,9 @@
                             <br><br>
                             <div class="form-group">
                                 <button type="submit" id="restaurantbundle_reportissue_submit" name="restaurantbundle_reportissue[submit]" class="btn btn-primary">Update</button>
-
+                                {% if reportIssue.status == 'Open'%}
+                                    <button type="button" class="btn btn-success btn-change-status" value="Afgerond">Afgerond</button>
+                                {% endif %}
                             </div>
                             <br><br>
 
@@ -145,8 +149,12 @@
                             {% else %}
                                 <img  class="img-thumbnail"  src="{{ asset('img/noimage.jpg') }}" alt="Without image" >
                             {% endif %}
+                            <br/><br/>
                         </div>
                     </div>
+                </form>
+                <form hidden="hidden" method="post" action="{{ path('reportissue_changestatus', {"id":reportIssue.id}) }}" class="change-status">
+                    <input type="hidden" value="{{ reportIssue.status }}" name="status">
                 </form>
             </div>
         </div>
@@ -154,7 +162,10 @@
 
     <script>
         $('#location').val($('#report_issue_location').val())
-
+        $('.btn-change-status').click(function(){
+            $(".change-status input[name='status']").val($(this).val());
+            $('.change-status').submit();
+        })
         function updateValue(id, current){
             $("#report_issue_furniture").val(id)
         }

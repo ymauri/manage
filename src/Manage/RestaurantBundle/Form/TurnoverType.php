@@ -5,8 +5,8 @@ namespace Manage\RestaurantBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Manage\AdminBundle\Entity\WorkerRepository;
-use Manage\AdminBundle\Entity\Worker;
+use Manage\RestaurantBundle\Entity\WorkerRepository;
+use Manage\RestaurantBundle\Entity\Worker;
 
 class TurnoverType extends AbstractType
 {
@@ -33,7 +33,7 @@ class TurnoverType extends AbstractType
                     'data-date-format' => 'dd-mm-yyyy',
                 )))
             ->add('chief', 'entity', array(
-                'class' => 'Manage\AdminBundle\Entity\Worker',
+                'class' => 'Manage\RestaurantBundle\Entity\Worker',
                 'query_builder' => function(WorkerRepository $repository) {
                     return $repository->createQueryBuilder('a')
                         ->select('a')

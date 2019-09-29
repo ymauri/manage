@@ -11,6 +11,7 @@ use Manage\RestaurantBundle\Entity\ReportPlanning;
 use Manage\RestaurantBundle\Form\ReportPlanningType;
 use Manage\RestaurantBundle\Entity\Folder;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * ReportPlanning controller.
@@ -23,37 +24,29 @@ class ReportPlanningController extends Controller
      * Lists all ReportPlanning entities.
      *
      * @Route("/", name="reportplanning_index")
+     * @Security("is_granted('ROLE_MAINTENANCE_PLANNING')")
      * @Method("GET")
      */
     public function indexAction()
     {
-
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_RECEPTION') {
-
-            $em = $this->getDoctrine()->getManager();
+     $em = $this->getDoctrine()->getManager();
 
             $reportPlannings = $em->getRepository('RestaurantBundle:ReportPlanning')->findAll();
 
             return $this->render('RestaurantBundle:ReportPlanning:index.html.twig', array(
                 'reportPlannings' => $reportPlannings,
             ));
-        } else {
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
      * Creates a new ReportPlanning entity.
      *
      * @Route("/new", name="reportplanning_new")
+     * @Security("is_granted('ROLE_MAINTENANCE_PLANNING')")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_RECEPTION') {
-
             $reportPlanning = new ReportPlanning();
             $form = $this->createForm('Manage\RestaurantBundle\Form\ReportPlanningType', $reportPlanning);
             $form->handleRequest($request);
@@ -81,40 +74,31 @@ class ReportPlanningController extends Controller
                 'places' => $places,
                 'folders' => $folders,
             ));
-        } else {
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
      * Finds and displays a ReportPlanning entity.
      *
      * @Route("/{id}", name="reportplanning_show")
+     * @Security("is_granted('ROLE_MAINTENANCE_PLANNING')")
      * @Method("GET")
      */
     public function showAction(ReportPlanning $reportPlanning)
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_RECEPTION') {
-
             return $this->render('RestaurantBundle:ReportPlanning:show.html.twig', array(
                 'reportPlanning' => $reportPlanning,
             ));
-        } else {
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
      * Displays a form to edit an existing ReportPlanning entity.
      *
      * @Route("/{id}/edit", name="reportplanning_edit")
+     * @Security("is_granted('ROLE_MAINTENANCE_PLANNING')")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, ReportPlanning $reportPlanning)
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_RECEPTION') {
 
             $editForm = $this->createForm('Manage\RestaurantBundle\Form\ReportPlanningType', $reportPlanning);
             $editForm->handleRequest($request);
@@ -141,22 +125,17 @@ class ReportPlanningController extends Controller
                 'places' => $places,
                 'folders' => $locations,
             ));
-        } else {
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
      * Deletes a ReportPlanning entity.
      *
      * @Route("/{id}/delete", name="reportplanning_delete")
+     * @Security("is_granted('ROLE_MAINTENANCE_PLANNING')")
      * @Method("GET")
      */
     public function deleteAction($id)
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_RECEPTION') {
-
             $em = $this->getDoctrine()->getManager();
             $reportPlanning = $em->getRepository("RestaurantBundle:ReportPlanning")->find($id);
             if (!is_null($reportPlanning)) {
@@ -166,20 +145,16 @@ class ReportPlanningController extends Controller
             } else $this->addFlash('error', "Error! Report Planning not found.");
 
             return $this->redirectToRoute('reportplanning_index');
-        } else {
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
      * @Route("/changestatus/{id}", name="reportplanning_changestatus")
+     * @Security("is_granted('ROLE_MAINTENANCE_PLANNING')")
      * @Method("POST")
      * */
 
     public function changeStatusAction(Request $request, $id)
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_RECEPTION') {
 
             $status = $request->get('status');
             $em = $this->getDoctrine()->getManager();
@@ -191,13 +166,11 @@ class ReportPlanningController extends Controller
             }
             $this->addFlash('success', 'Success! The Report Planning has been updated.');
             return $this->redirectToRoute('reportplanning_index');
-        } else {
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
      * @Route("/getfurnitures/", name="reportplanning_getfurnitures")
+     * @Security("is_granted('ROLE_MAINTENANCE_PLANNING')")
      * @Method("POST")
      * */
 

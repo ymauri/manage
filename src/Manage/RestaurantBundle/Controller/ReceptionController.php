@@ -2,7 +2,7 @@
 
 namespace Manage\RestaurantBundle\Controller;
 
-use Manage\AdminBundle\Entity\RNotifierForm;
+use Manage\RestaurantBundle\Entity\RNotifierForm;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -74,7 +74,7 @@ class ReceptionController extends Controller {
         return $this->redirect($this->generateUrl('reception_edit', array('id' => $entity_basic->getId())));
         }
         else{
-            return $this->render('AdminBundle:Exception:error403.html.twig');
+            return $this->render('RestaurantBundle:Exception:error403.html.twig');
 
         }
     }
@@ -133,7 +133,7 @@ class ReceptionController extends Controller {
         $consulta = $em->createQuery('SELECT r FROM RestaurantBundle:Reception r WHERE r.dated >= \''.$date.'-01\' AND r.dated <= \''.$date.'-31\' ORDER BY r.dated DESC');
         $entities = $consulta->getResult();
 
-        $consulta = $em->createQuery('SELECT r.form, count(r.id) AS cantidad FROM AdminBundle:RNotifierForm r JOIN r.notifier n WHERE n.form LIKE \'Reception\' GROUP BY r.form');
+        $consulta = $em->createQuery('SELECT r.form, count(r.id) AS cantidad FROM RestaurantBundle:RNotifierForm r JOIN r.notifier n WHERE n.form LIKE \'Reception\' GROUP BY r.form');
         $notifier = $consulta->getResult();
         //var_dump($notifier);die;
         $result = array();
@@ -150,7 +150,7 @@ class ReceptionController extends Controller {
             'notifier' => $result,
         );
         }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
+        return $this->render('RestaurantBundle:Exception:error403.html.twig');
 
     }
 
@@ -170,7 +170,7 @@ class ReceptionController extends Controller {
 
             $entity_basic = $em->getRepository('RestaurantBundle:Reception')->find($id);
             if (!$entity_basic) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
             }
             $form_basic = $this->createForm(new ReceptionType(), $entity_basic);
             $form_bill = $this->createForm(new BillType(), $entity_basic->getBill());
@@ -186,7 +186,7 @@ class ReceptionController extends Controller {
                 'show' => TRUE,
             ));
         }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
+        return $this->render('RestaurantBundle:Exception:error403.html.twig');
 
     }
 
@@ -204,7 +204,7 @@ class ReceptionController extends Controller {
         if ($user->getRole()=='ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole()=='ROLE_RECEPTION') {
 
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
             }
             $now = new \DateTime('now');
             //echo  $entity_basic->getUpdated()->diff($now)->d ; die;
@@ -220,12 +220,12 @@ class ReceptionController extends Controller {
                 $em->remove($entity);
                 $em->flush();
             } catch (\Exception $ex) {
-                return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
+                return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
             }
             $this->addFlash('success', 'Success! The form has been removed.');
             return $this->redirect($this->generateUrl('reception', array('date' => date('m-Y'))));
         }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
+        return $this->render('RestaurantBundle:Exception:error403.html.twig');
 
     }
 
@@ -244,7 +244,7 @@ class ReceptionController extends Controller {
 
             $entity_basic = $em->getRepository('RestaurantBundle:Reception')->find($id);
             if (!$entity_basic) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
             }
             //{% if 'today - 3 day' | date('d-m-Y') < entity.updated | date('d-m-Y') %}
             $olddate = new \DateTime('today - 1 day');
@@ -272,7 +272,7 @@ class ReceptionController extends Controller {
                     $entity_basic->setBeginbill($this->validateFormBegin($entity_basic->getBeginbill()));
                     $entity_basic->setBill($this->validateFormBill($entity_basic->getBill()));
                     $entity_basic->setCard($this->validateFormCard($entity_basic->getCard()));
-                    $not = $em->getRepository('AdminBundle:RNotifierForm')->findOneBy(array('form' => $entity_basic->getId()));
+                    $not = $em->getRepository('RestaurantBundle:RNotifierForm')->findOneBy(array('form' => $entity_basic->getId()));
                     if (!is_null($entity_basic->getFinished())) {
                         $entity_basic->setFinished(new \DateTime());
                         $this->sendMail($id);
@@ -300,7 +300,7 @@ class ReceptionController extends Controller {
                 ));
             }
         }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
+        return $this->render('RestaurantBundle:Exception:error403.html.twig');
 
     }
 
@@ -323,7 +323,7 @@ class ReceptionController extends Controller {
     private function sendMail($id){
         $em = $this->getDoctrine()->getManager();
         //Crear el notificador para este formulario.
-        $notifier = $em->getRepository('AdminBundle:Notifier')->findOneBy(array('form'=>'Reception'));
+        $notifier = $em->getRepository('RestaurantBundle:Notifier')->findOneBy(array('form'=>'Reception'));
         $entity_basic = $em->getRepository('RestaurantBundle:Reception')->findOneBy(array('id'=>$id));
         $mails_array = explode(';',$notifier->getMails());
         $mail_customer = \Swift_Message::newInstance()
@@ -391,7 +391,7 @@ class ReceptionController extends Controller {
             try {
                 $this->sendMail($id);
             } catch (\Exception $ex) {
-                return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
+                return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
             }
             $em = $this->getDoctrine()->getManager();
             $entity_basic = $em->getRepository('RestaurantBundle:CashClosure')->findOneBy(array('id' => $id));
@@ -399,7 +399,7 @@ class ReceptionController extends Controller {
             $this->addFlash('success', 'Success! The form has been sent.');
             return $this->redirect($this->generateUrl('reception', array('date' => date('m-Y'))));
         }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
+        return $this->render('RestaurantBundle:Exception:error403.html.twig');
 
     }
 }

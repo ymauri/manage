@@ -36,7 +36,7 @@ class ReceptionVoucherController extends Controller {
             );
         }
         else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
     }
 
@@ -77,7 +77,7 @@ class ReceptionVoucherController extends Controller {
             );
         }
         else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
     }
 
@@ -118,7 +118,7 @@ class ReceptionVoucherController extends Controller {
             );
         }
         else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
     }
 
@@ -137,7 +137,7 @@ class ReceptionVoucherController extends Controller {
             $entity = $em->getRepository('RestaurantBundle:ReceptionVoucher')->find($id);
 
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
 
             }
 
@@ -149,7 +149,7 @@ class ReceptionVoucherController extends Controller {
             );
         }
         else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
     }
 
@@ -168,7 +168,7 @@ class ReceptionVoucherController extends Controller {
             $entity = $em->getRepository('RestaurantBundle:ReceptionVoucher')->find($id);
 
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
 
             }
 
@@ -182,7 +182,7 @@ class ReceptionVoucherController extends Controller {
             );
         }
         else{
-                return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+                return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
             }
     }
 
@@ -218,7 +218,7 @@ class ReceptionVoucherController extends Controller {
             $entity = $em->getRepository('RestaurantBundle:ReceptionVoucher')->find($id);
 
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
 
             }
 
@@ -251,7 +251,7 @@ class ReceptionVoucherController extends Controller {
             );
         }
         else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
     }
 
@@ -268,7 +268,7 @@ class ReceptionVoucherController extends Controller {
             $entity = $em->getRepository('RestaurantBundle:ReceptionVoucher')->find($id);
 
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
 
             }
 
@@ -278,7 +278,7 @@ class ReceptionVoucherController extends Controller {
             return $this->redirect($this->generateUrl('receptionvoucher'));
         }
         else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
     }
 

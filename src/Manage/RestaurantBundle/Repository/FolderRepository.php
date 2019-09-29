@@ -34,10 +34,31 @@ class FolderRepository extends EntityRepository {
         }
     }
 
+    public function getChildrensFurnituresFull($parent){
+            return $this->getEntityManager()->createQuery('SELECT f FROM RestaurantBundle:Furniture f WHERE f.pathfolder like :parent')->setParameter("parent",'%/'.$parent.'/%')->getResult();
+    }
+
+    public function getStatisticsChildrens($parent){
+        $folder = $this->getEntityManager()->createQuery('SELECT f FROM RestaurantBundle:Folder f WHERE f.id = :id')->setParameter("id",$parent)->getResult();
+        $quantity = $total = 0;
+        $result = array();
+        //if ($folder[0]->getIsroot()){
+            $result = $this->getEntityManager()->createQuery('SELECT f FROM RestaurantBundle:Furniture f WHERE f.pathfolder like :parent')->setParameter("parent",'%/'.$parent.'/%')->getResult();
+        //}
+        //else{
+          //  $result = $this->getEntityManager()->createQuery('SELECT f FROM RestaurantBundle:Furniture f WHERE f.folder = :parent')->setParameter("parent", $parent)->getResult();
+        //}
+        foreach ($result as $item){
+            $quantity += $item->getQuantity();
+            $total += $item->getTotalvalue();
+        }
+        return array('quantity'=>$quantity, 'total'=>$total);
+    }
+
 
     public function getChildrensReportFurnitures($parent){
         $folder = $this->getEntityManager()->createQuery('SELECT f FROM RestaurantBundle:Folder f WHERE f.id = :id')->setParameter("id",$parent)->getResult();
-        if ($folder[0]->getIsroot()){
+        if (count($folder) > 0 && $folder[0]->getIsroot()){
             return $this->getEntityManager()->createQuery('SELECT f FROM RestaurantBundle:Furniture f WHERE f.pathfolder like :parent')->setParameter("parent",'%/'.$parent.'/%')->getResult();
         }
         else{

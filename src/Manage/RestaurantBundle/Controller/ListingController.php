@@ -36,7 +36,7 @@ class ListingController extends Controller {
             );
         }
         else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
     }
 
@@ -69,7 +69,7 @@ class ListingController extends Controller {
             );
         }
         else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
     }
 
@@ -110,7 +110,7 @@ class ListingController extends Controller {
             );
         }
         else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
     }
 
@@ -127,7 +127,7 @@ class ListingController extends Controller {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('RestaurantBundle:Listing')->find($id);
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
             }
             $deleteForm = $this->createEditForm($entity);
             //$furniture = $em->getRepository('RestaurantBundle:Furniture')->findBy(array('location'=>$entity->getId()));
@@ -138,7 +138,7 @@ class ListingController extends Controller {
             );
         }
         else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
     }
 
@@ -157,7 +157,7 @@ class ListingController extends Controller {
             $entity = $em->getRepository('RestaurantBundle:Listing')->find($id);
 
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
 
             }
 
@@ -173,7 +173,7 @@ class ListingController extends Controller {
             );
         }
         else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
     }
 
@@ -210,7 +210,7 @@ class ListingController extends Controller {
             $entity = $em->getRepository('RestaurantBundle:Listing')->find($id);
 
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
 
             }
 
@@ -236,7 +236,7 @@ class ListingController extends Controller {
                         $arraylistings[$listing->getIdguesty()]['max'] = $listing->getMaxprice();
                     }
                     $rule->setPricesbylisting($arraylistings);
-                    $settings = $em->getRepository('AdminBundle:Parameters')->getFieldsRules();
+                    $settings = $em->getRepository('RestaurantBundle:Parameters')->getFieldsRules();
                     $arraysettings = array();
                     foreach ($settings as $setting){
                         $arraysettings[$setting->getVariable()] = $setting->getValue();
@@ -256,7 +256,7 @@ class ListingController extends Controller {
             );
         }
         else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
     }
 
@@ -272,7 +272,7 @@ class ListingController extends Controller {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('RestaurantBundle:Listing')->find($id);
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
             }
             //if ($entity->getPathimage() != '') unlink($this->container->getParameter('images.furniture').'/'.$entity->getPathimage());
             $em->remove($entity);
@@ -282,7 +282,7 @@ class ListingController extends Controller {
             return $this->redirect($this->generateUrl('listing'));
         }
         else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
     }
 
@@ -314,7 +314,7 @@ class ListingController extends Controller {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('RestaurantBundle:Listing')->find($id);
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
             }
 
             if ($request->get('priority') > 0){
@@ -327,7 +327,7 @@ class ListingController extends Controller {
             return $this->redirect($this->generateUrl('listing'));
         }
         else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
     }
 }

@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Manage\AdminBundle\Entity\WorkerRepository;
+use Manage\RestaurantBundle\Entity\WorkerRepository;
 use Manage\RestaurantBundle\Repository\FolderRepository;
 
 class ReportIssueType extends AbstractType
@@ -33,7 +33,7 @@ class ReportIssueType extends AbstractType
             ->add('details')
             ->add('location')
             ->add('furniture')
-            ->add('image', 'file')
+            ->add('image', 'file', array('required'=>false))
             ->add('priority', "choice", array(
                 'choices' => array(
                     'Normaal' => 'Normaal',
@@ -43,7 +43,7 @@ class ReportIssueType extends AbstractType
                 'required' => true
             ))
             ->add('reporter', 'entity', array(
-                'class' => 'Manage\AdminBundle\Entity\Worker',
+                'class' => 'Manage\RestaurantBundle\Entity\Worker',
                 'query_builder' => function (WorkerRepository $repository) {
                     return $repository->createQueryBuilder('b')
                         ->select('b')

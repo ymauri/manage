@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Manage\RestaurantBundle\Entity\Source;
 use Manage\RestaurantBundle\Form\SourceType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * Source controller.
@@ -21,12 +22,11 @@ class SourceController extends Controller {
      * Lists all Source entities.
      *
      * @Route("/", name="source")
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Method("GET")
      * @Template()
      */
     public function indexAction() {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
 
             $entities = $em->getRepository('RestaurantBundle:Source')->findAll();
@@ -34,10 +34,6 @@ class SourceController extends Controller {
             return array(
                 'entities' => $entities,
             );
-        }
-        else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
@@ -45,11 +41,10 @@ class SourceController extends Controller {
      *
      * @Route("/", name="source_create")
      * @Method("POST")
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Template("RestaurantBundle:Source:edit.html.twig")
      */
     public function createAction(Request $request) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $entity = new Source();
             $form = $this->createCreateForm($entity);
             $form->handleRequest($request);
@@ -66,10 +61,6 @@ class SourceController extends Controller {
                 'entity' => $entity,
                 'form' => $form->createView(),
             );
-        }
-        else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
@@ -96,12 +87,11 @@ class SourceController extends Controller {
      * Displays a form to create a new Source entity.
      *
      * @Route("/new/", name="source_new")
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Method("GET")
      * @Template()
      */
     public function newAction() {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $entity = new Source();
             $form = $this->createCreateForm($entity);
 
@@ -109,10 +99,6 @@ class SourceController extends Controller {
                 'entity' => $entity,
                 'form' => $form->createView(),
             );
-        }
-        else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
@@ -120,17 +106,16 @@ class SourceController extends Controller {
      *
      * @Route("/{id}/", name="source_show")
      * @Method("GET")
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Template()
      */
     public function showAction($id) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
 
             $entity = $em->getRepository('RestaurantBundle:Source')->find($id);
 
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
             }
 
             $deleteForm = $this->createEditForm($entity);
@@ -139,28 +124,23 @@ class SourceController extends Controller {
                 'entity' => $entity,
                 'delete_form' => $deleteForm->createView(),
             );
-        }
-        else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
      * Displays a form to edit an existing Source entity.
      *
      * @Route("/{id}/edit/", name="source_edit")
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Method("GET")
      * @Template()
      */
     public function editAction($id) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
 
             $entity = $em->getRepository('RestaurantBundle:Source')->find($id);
 
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
 
             }
 
@@ -172,10 +152,6 @@ class SourceController extends Controller {
                 'edit_form' => $editForm->createView(),
                 'delete_form' => $deleteForm->createView(),
             );
-        }
-        else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
@@ -203,17 +179,16 @@ class SourceController extends Controller {
      *
      * @Route("/{id}/", name="source_update")
      * @Method("PUT")
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Template("RestaurantBundle:Source:edit.html.twig")
      */
     public function updateAction(Request $request, $id) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
 
             $entity = $em->getRepository('RestaurantBundle:Source')->find($id);
 
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
 
             }
 
@@ -232,25 +207,20 @@ class SourceController extends Controller {
                 'edit_form' => $editForm->createView(),
                 'delete_form' => $deleteForm->createView(),
             );
-        }
-        else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
      * Deletes a Source entity.
      *
      * @Route("/{id}/delete/", name="source_delete")
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Method("GET")
      */
     public function deleteAction($id) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('RestaurantBundle:Source')->find($id);
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
 
             }
 
@@ -259,10 +229,6 @@ class SourceController extends Controller {
             $this->addFlash('success', 'Success! The source has been removed.');
 
             return $this->redirect($this->generateUrl('source'));
-        }
-        else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**

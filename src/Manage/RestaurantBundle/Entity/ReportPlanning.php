@@ -60,7 +60,7 @@ class ReportPlanning
     /**
      * @var string
      *
-     * @ORM\Column(name="pathimage", type="string", length=255)
+     * @ORM\Column(name="pathimage", type="string", length=255, nullable=true)
      */
     private $pathimage;
 
@@ -94,6 +94,21 @@ class ReportPlanning
      * @ORM\Column(name="updated", type="date", nullable=true)
      */
     private $updated;
+
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="begins", type="date", nullable=true)
+     */
+    private $begins;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="ends", type="date", nullable=true)
+     */
+    private $ends;
 
 
     /**
@@ -271,28 +286,51 @@ class ReportPlanning
 
     public function canApplyToday(){
         $today = new \DateTime();
-        switch ($this->frequency) {
-            case Nomenclator::PLANNING_WEEKLY:
-                //Si hoy es lunes entonces crear
-                if (/*$today->format('w') == 1 &&*/ (is_null($this->updated) || $this->getUpdated()->diff($today)->d >= 7))
-                    return true;
-            case Nomenclator::PLANNING_MONTHLY:
-                //Si hoy es 1 de cualquier mes entonces cerar
-                if (/*$today->format('d') == 1 &&*/ (is_null($this->updated) || $this->getUpdated()->diff($today)->m >= 1))
-                    return true;
-            case Nomenclator::PLANNING_QUATERLY:
-                //Si hoy es 1 de enero, abril, julio u octubre, entonces crear
-                if (/*$today->format('d') == 1 && ($today->format('n') == 1 || $today->format('n') == 4 || $today->format('n') == 7 || $today->format('n') == 10) &&*/ (is_null($this->updated) || $this->getUpdated()->diff($today)->m >= 3))
-                    return true;
-            case Nomenclator::PLANNING_BIANNUAL:
-                //Si hoy es 1 de enero o julio, entonces crear
-                if (/*$today->format('d') == 1 && ($today->format('n') == 1 || $today->format('n') == 7) &&*/ (is_null($this->updated) || $this->getUpdated()->diff($today)->m >= 6))
-                    return true;
-            case Nomenclator::PLANNING_YEARLY:
-                //Si ho yes 1 de enero entonces crear
-                if (/*$today->format('d') == 1 && $today->format('n') == 1 && */(is_null($this->updated) || $this->getUpdated()->diff($today)->y >= 1))
-                    return true;
+        if ($today >= $this->getBegins() && $today <= $this->getEnds() ){
+            switch ($this->frequency) {
+                case Nomenclator::PLANNING_WEEKLY:
+                    //Si hoy es lunes entonces crear
+                    if (/*$today->format('w') == 1 &&*/ (is_null($this->updated) || $this->getUpdated()->diff($today)->d >= 7))
+                        return true;
+                case Nomenclator::PLANNING_MONTHLY:
+                    //Si hoy es 1 de cualquier mes entonces cerar
+                    if (/*$today->format('d') == 1 &&*/ (is_null($this->updated) || $this->getUpdated()->diff($today)->m >= 1))
+                        return true;
+                case Nomenclator::PLANNING_QUATERLY:
+                    //Si hoy es 1 de enero, abril, julio u octubre, entonces crear
+                    if (/*$today->format('d') == 1 && ($today->format('n') == 1 || $today->format('n') == 4 || $today->format('n') == 7 || $today->format('n') == 10) &&*/ (is_null($this->updated) || $this->getUpdated()->diff($today)->m >= 3))
+                        return true;
+                case Nomenclator::PLANNING_BIANNUAL:
+                    //Si hoy es 1 de enero o julio, entonces crear
+                    if (/*$today->format('d') == 1 && ($today->format('n') == 1 || $today->format('n') == 7) &&*/ (is_null($this->updated) || $this->getUpdated()->diff($today)->m >= 6))
+                        return true;
+                case Nomenclator::PLANNING_YEARLY:
+                    //Si ho yes 1 de enero entonces crear
+                    if (/*$today->format('d') == 1 && $today->format('n') == 1 && */(is_null($this->updated) || $this->getUpdated()->diff($today)->y >= 1))
+                        return true;
+            }
         }
+
         return false;
+    }
+
+    public function getBegins()
+    {
+        return $this->begins;
+    }
+
+    public function setBegins($begins)
+    {
+        $this->begins = $begins;
+    }
+
+    public function getEnds()
+    {
+        return $this->ends;
+    }
+
+    public function setEnds($ends)
+    {
+        $this->ends = $ends;
     }
 }

@@ -1,4 +1,4 @@
-{% extends 'AdminBundle::frame.html.twig' %}
+{% extends 'RestaurantBundle::frame.html.twig' %}
 {% block title %} List Issues {% endblock %}
 {% block body %}
     <div class="portlet">
@@ -12,39 +12,45 @@
                 </a>
             </div>
         </div>
-        <div class="table-responsive">
-            <table class="table table-hover">
+        <div class="">
+            <table class="table table-hover" id="dataissue">
                 <thead>
-                <tr>
-                    <th>Location<br/>Date <br/>Reporter</th>
-                    <th class="hidden-xs">Description</th>
-                    <th>Image</th>
-                    <th class="hidden-xs">Status</th>
-                    <th></th>
-                </tr>
+                    <tr>
+                        <th>Location</th>
+                        <th>Date</th>
+                        <th class="hidden-xs">Description</th>
+                        <th class="hidden-xs">Image</th>
+                        <th class="hidden-xs">Status</th>
+                        {% if is_granted('ROLE_MAINTENANCE_EDIT') %}
+                        <th></th>
+                        {% endif %}
+                    </tr>
                 </thead>
                 <tbody>
                 {% for reportIssue in reportIssues %}
-                    <tr {% if reportIssue.status == 'Wachten' %} class="active" {% endif %}>
+                    {% if (reportIssue.status != 'Afgerond') or (is_granted('ROLE_SUPER_ADMIN')) %}
+                    <tr {% if reportIssue.status == 'Wachten' %} class="alert-info" {% endif %}>
                         <td>
-                            <a href="{{ path('reportissue_show', { 'id': reportIssue.id }) }}">
+                            <a href="{% if is_granted('ROLE_MAINTENANCE_EDIT') %}{{ path('reportissue_show', { 'id': reportIssue.id }) }}{% else %}#{% endif %}">
                                 <b>{{ reportIssue.location }}</b> <br/>
-                                {% if reportIssue.dated %}{{ reportIssue.dated|date('Y-m-d') }}{% endif %} &nbsp;
-                                {% if reportIssue.reportedat %}{{ reportIssue.reportedat|date('H:i') }}{% endif %}<br/>
                                 <i>{{ reportIssue.reporter }}</i>
                             </a>
                         </td>
+                        <td>
+                            {% if reportIssue.dated %}{{ reportIssue.dated|date('Y-m-d') }}{% endif %} &nbsp;
+                            {% if reportIssue.reportedat %}{{ reportIssue.reportedat|date('H:i') }}{% endif %}<br/>
+                        </td>
                         <td class="hidden-xs">
-                            <a href="{{ path('reportissue_show', { 'id': reportIssue.id }) }}">
-
+                            <a href="{% if is_granted('ROLE_MAINTENANCE_EDIT') %}{{ path('reportissue_show', { 'id': reportIssue.id }) }}{% else %}#{% endif %}">
                                 <i class="fa  {% if reportIssue.priority == 'Normaal' %} {% elseif reportIssue.priority == 'Laag' %} {% else %} fa-arrow-up{% endif %}"
                                    style="color: #7c1212;"></i>
                                 {{ reportIssue.details }}
                             </a>
                         </td>
 
-                        <td><a href="{{ path('reportissue_show', { 'id': reportIssue.id }) }}">
-                                {% if reportIssue.pathimage %} <img
+                        <td>
+                            <a href="{% if is_granted('ROLE_MAINTENANCE_EDIT') %}{{ path('reportissue_show', { 'id': reportIssue.id }) }}{% else %}#{% endif %}">
+                                {% if reportIssue.pathimage %}<img
                                     src="{{ asset('uploads/images/reportissue/' ~ reportIssue.pathimage) }}"
                                     style="width: 80px;">{% endif %}
                             </a>
@@ -55,20 +61,85 @@
                                 <p>In behandeling</p>
                             {% elseif reportIssue.status == 'Open' %}
                                 <p>Open</p>
+                            {% else %}
+                                <p>Afgerond</p>
                             {% endif %}
                         </td>
+                        {% if is_granted('ROLE_MAINTENANCE_EDIT') %}
                         <td>
                             <a href="{{ path('reportissue_edit', { 'id': reportIssue.id }) }}">
                                 <button type="button" class="btn blue-hoki btn-sm">Edit</button>
-
+                            </a>
                         </td>
+                        {% endif %}
                     </tr>
+                {% endif %}
                 {% endfor %}
                 </tbody>
             </table>
         </div>
 
     </div>
+    <script type="text/javascript" src="{{ asset('global/plugins/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
+
+    <script>
+
+        var initTable = function () {
+
+            var table = $('#dataissue');
+
+            // begin first table
+            table.dataTable({
+                "columns": [{
+                    "orderable": true
+                }, {
+                    "orderable": true
+                }, {
+                    "orderable": true
+                }, {
+                    "orderable": false
+                }, {
+                    "orderable": true
+                }{% if is_granted('ROLE_MAINTENANCE_EDIT') %}
+                    , {
+                    "orderable": true
+                }{% endif %}],
+                "lengthMenu": [
+                    [25, 35, 50, -1],
+                    [25, 35, 50, "All"] // change per page values here
+                ],
+                // set the initial value
+                "pageLength": 15,
+                "pagingType": "bootstrap_full_number",
+                "language": {
+                    "lengthMenu": "  _MENU_ records",
+                    "paginate": {
+                        "previous":"Prev",
+                        "next": "Next",
+                        "last": "Last",
+                        "first": "First"
+                    }
+                },
+                "columnDefs": [{  // set default column settings
+                    'orderable': false,
+                    'targets': [0]
+                }, {
+                    "searchable": true,
+                    "targets": [0]
+                }],
+                "order": [
+                    [1, "asc"]
+                ] // set first column as a default sort by asc
+            });
+
+            var tableWrapper = jQuery('#dataissue_wrapper');
+
+        }
+
+
+        initTable();
+    </script>
 
 
 {% endblock %}

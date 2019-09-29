@@ -5,7 +5,7 @@ namespace Manage\RestaurantBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Manage\AdminBundle\Entity\Status;
+use Manage\RestaurantBundle\Entity\Status;
 use Manage\RestaurantBundle\Entity\Listing;
 use Manage\RestaurantBundle\Repository\FolderRepository;
 use Manage\RestaurantBundle\Entity\Folder;
@@ -23,9 +23,9 @@ class FurnitureType extends AbstractType
     {
        // $tags = Mana TagRepository();
         $builder
-            ->add('details')
-            ->add('name')
-            ->add('serialnumber', 'textarea')
+            ->add('details', 'textarea', array('required' => false))
+            ->add('name', 'text', array('required' => true))
+            ->add('serialnumber', 'text', array('required' => true))
             ->add('status')
             ->add('folder', 'entity', array(
                 'class' => 'Manage\RestaurantBundle\Entity\Folder',
@@ -37,15 +37,19 @@ class FurnitureType extends AbstractType
                 'required' => false,
             ))
 
-            ->add('quantity')
-            ->add('price')
-            ->add('totalvalue')
+            ->add('quantity', 'number', array('required' => false))
+            ->add('price','number', array('required' => false))
+            ->add('totalvalue', 'number', array('required' => false))
             ->add('tags',EntityType::class, array(
                 'class' => 'RestaurantBundle:Tag',
+                'query_builder' => function (TagRepository $er) {
+                    return $er->createQueryBuilder('u')
+                        ->orderBy('u.name', 'ASC');
+                },
                 'required' => false,
                 'multiple' => true
             ))
-            ->add('image', 'file', array('required' => false))
+            ->add('image', 'file')
         ;
     }
     

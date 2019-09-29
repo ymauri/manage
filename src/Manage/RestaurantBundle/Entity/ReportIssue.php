@@ -69,7 +69,7 @@ class ReportIssue
     /**
      * @var string
      *
-     * @ORM\Column(name="pathimage", type="string", length=255)
+     * @ORM\Column(name="pathimage", type="string", length=255, nullable=true)
      */
     private $pathimage;
 
@@ -83,7 +83,7 @@ class ReportIssue
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Manage\AdminBundle\Entity\Worker")
+     * @ORM\ManyToOne(targetEntity="Manage\RestaurantBundle\Entity\Worker")
      */
     private $reporter;
 

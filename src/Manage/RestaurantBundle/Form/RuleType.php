@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Manage\AdminBundle\Entity\Status;
+use Manage\RestaurantBundle\Entity\Status;
 use Manage\RestaurantBundle\Entity\Listing;
 use Manage\RestaurantBundle\Entity\ListingRepository;
 use Manage\RestaurantBundle\Controller\Nomenclator;

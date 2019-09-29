@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Manage\RestaurantBundle\Entity\ReceptionParking;
 use Manage\RestaurantBundle\Form\ReceptionParkingType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * ReceptionParking controller.
@@ -21,12 +22,11 @@ class ReceptionParkingController extends Controller {
      * Lists all ReceptionParking entities.
      *
      * @Route("/", name="receptionparking")
+     * @Security("is_granted('ROLE_FORMS_SETTINGS')")
      * @Method("GET")
      * @Template()
      */
     public function indexAction() {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
 
             $entities = $em->getRepository('RestaurantBundle:ReceptionParking')->findAll();
@@ -34,22 +34,18 @@ class ReceptionParkingController extends Controller {
             return array(
                 'entities' => $entities,
             );
-        }
-        else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
+
     }
 
     /**
      * Creates a new ReceptionParking entity.
      *
+     * @Security("is_granted('ROLE_FORMS_SETTINGS')")
      * @Route("/", name="receptionparking_create")
      * @Method("POST")
      * @Template("RestaurantBundle:ReceptionParking:edit.html.twig")
      */
     public function createAction(Request $request) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $entity = new ReceptionParking();
 
             $form = $this->createCreateForm($entity);
@@ -67,10 +63,6 @@ class ReceptionParkingController extends Controller {
                 'entity' => $entity,
                 'form' => $form->createView(),
             );
-        }
-        else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
@@ -95,12 +87,11 @@ class ReceptionParkingController extends Controller {
      * Displays a form to create a new ReceptionParking entity.
      *
      * @Route("/new/", name="receptionparking_new")
+     * @Security("is_granted('ROLE_FORMS_SETTINGS')")
      * @Method("GET")
      * @Template()
      */
     public function newAction() {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $entity = new ReceptionParking();
             $form = $this->createCreateForm($entity);
 
@@ -108,28 +99,23 @@ class ReceptionParkingController extends Controller {
                 'entity' => $entity,
                 'form' => $form->createView(),
             );
-        }
-        else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
      * Finds and displays a ReceptionParking entity.
      *
      * @Route("/{id}/", name="receptionparking_show")
+     * @Security("is_granted('ROLE_FORMS_SETTINGS')")
      * @Method("GET")
      * @Template()
      */
     public function showAction($id) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
 
             $entity = $em->getRepository('RestaurantBundle:ReceptionParking')->find($id);
 
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
 
             }
 
@@ -139,28 +125,23 @@ class ReceptionParkingController extends Controller {
                 'entity' => $entity,
                 'delete_form' => $deleteForm->createView(),
             );
-        }
-        else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
      * Displays a form to edit an existing ReceptionParking entity.
      *
      * @Route("/{id}/edit/", name="receptionparking_edit")
+     * @Security("is_granted('ROLE_FORMS_SETTINGS')")
      * @Method("GET")
      * @Template()
      */
     public function editAction($id) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
 
             $entity = $em->getRepository('RestaurantBundle:ReceptionParking')->find($id);
 
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
 
             }
 
@@ -172,10 +153,6 @@ class ReceptionParkingController extends Controller {
                 'edit_form' => $editForm->createView(),
                 'delete_form' => $deleteForm->createView(),
             );
-        }
-        else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
@@ -200,18 +177,17 @@ class ReceptionParkingController extends Controller {
      * Edits an existing ReceptionParking entity.
      *
      * @Route("/{id}/", name="receptionparking_update")
+     * @Security("is_granted('ROLE_FORMS_SETTINGS')")
      * @Method("PUT")
      * @Template("RestaurantBundle:ReceptionParking:edit.html.twig")
      */
     public function updateAction(Request $request, $id) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
 
             $entity = $em->getRepository('RestaurantBundle:ReceptionParking')->find($id);
 
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
 
             }
 
@@ -230,25 +206,20 @@ class ReceptionParkingController extends Controller {
                 'edit_form' => $editForm->createView(),
                 'delete_form' => $deleteForm->createView(),
             );
-        }
-        else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
      * Deletes a ReceptionParking entity.
      *
      * @Route("/{id}/delete/", name="receptionparking_delete")
+     * @Security("is_granted('ROLE_FORMS_SETTINGS')")
      * @Method("GET")
      */
     public function deleteAction($id) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('RestaurantBundle:ReceptionParking')->find($id);
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
 
             }
 
@@ -256,10 +227,6 @@ class ReceptionParkingController extends Controller {
             $em->flush();
             $this->addFlash('success', 'Success! The parking has been deleted.');
             return $this->redirect($this->generateUrl('receptionparking'));
-        }
-        else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**

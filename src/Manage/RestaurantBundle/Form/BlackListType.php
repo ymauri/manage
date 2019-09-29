@@ -12,7 +12,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Manage\RestaurantBundle\Entity\Listing;
-use Manage\RestaurantBundle\Entity\ListingRepository;
+use Manage\RestaurantBundle\Repository\ListingRepository;
 
 class BlackListType extends AbstractType
 {

@@ -1,4 +1,4 @@
-{% extends 'AdminBundle::frame.html.twig' %}
+{% extends 'RestaurantBundle::frame.html.twig' %}
 {% block title %} New Issue {% endblock %}
 {% block body %}
     <div class="portlet">
@@ -29,7 +29,7 @@
                     </div>
                 {% endif %}
                 <form class="container-fluid form-horizontal" action="{{ path('reportissue_new') }}"
-                      method="POST" {{ form_enctype(form) }} novalidate>
+                      method="POST" {{ form_enctype(form) }}>
                     <div class="form-body">
 
                         <div class="col-md-5">

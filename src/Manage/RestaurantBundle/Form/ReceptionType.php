@@ -6,8 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use Manage\AdminBundle\Entity\WorkerRepository;
-use Manage\AdminBundle\Entity\Worker;
+use Manage\RestaurantBundle\Entity\WorkerRepository;
+use Manage\RestaurantBundle\Entity\Worker;
 
 class ReceptionType extends AbstractType
 {
@@ -140,7 +140,7 @@ class ReceptionType extends AbstractType
                 'precision' => 2
             ))
             ->add('userdag', 'entity', array(
-                'class' => 'Manage\AdminBundle\Entity\Worker',
+                'class' => 'Manage\RestaurantBundle\Entity\Worker',
                 'query_builder' => function(WorkerRepository $repository) {
                     return $repository->createQueryBuilder('a')
                         ->select('a')
@@ -151,7 +151,7 @@ class ReceptionType extends AbstractType
                 'required' => false
             ))
             ->add('useravond', 'entity', array(
-                'class' => 'Manage\AdminBundle\Entity\Worker',
+                'class' => 'Manage\RestaurantBundle\Entity\Worker',
                 'query_builder' => function(WorkerRepository $repository) {
                     return $repository->createQueryBuilder('a')
                         ->select('a')

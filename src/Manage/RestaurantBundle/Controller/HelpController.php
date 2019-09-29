@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Manage\RestaurantBundle\Entity\Help;
 use Manage\RestaurantBundle\Form\HelpType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * Help controller.
@@ -21,12 +22,11 @@ class HelpController extends Controller {
      * Lists all Help entities.
      *
      * @Route("/", name="help")
+     * @Security("is_granted('ROLE_FORMS_SETTINGS')")
      * @Method("GET")
      * @Template()
      */
     public function indexAction() {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $entities = $this->getDoctrine()->getRepository('RestaurantBundle:Help')->createQueryBuilder('h')
                 ->select('h.form')
                 ->distinct()
@@ -35,20 +35,15 @@ class HelpController extends Controller {
             return array(
                 'entities' => $entities->getResult(),
             );
-        }
-        else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
+
     }
 
       /**
      * Lists all Help entities.
-     *
+     * @Security("is_granted('ROLE_FORMS_SETTINGS')")
      * @Route("/edit/{form}", name="help_edit")
      */
     public function editAction(Request $request) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $form = $request->get('form');
             $em = $this->getDoctrine()->getManager();
             $result = $em->getRepository('RestaurantBundle:Help')->findBy(array('form'=>$form));
@@ -76,10 +71,7 @@ class HelpController extends Controller {
             return $this->render('RestaurantBundle:Help:'.$form.'.html.twig', array(
                 'form' => $entities,
             ));
-        }
-        else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
+
     }
 
 

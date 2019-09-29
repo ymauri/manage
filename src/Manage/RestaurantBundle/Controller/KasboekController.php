@@ -26,7 +26,7 @@ use Manage\RestaurantBundle\Form\KasboekKasType;
 use Manage\RestaurantBundle\Form\KasboekOutType;
 use Manage\RestaurantBundle\Form\KasboekSalarissenType;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Manage\AdminBundle\Entity\RNotifierForm;
+use Manage\RestaurantBundle\Entity\RNotifierForm;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 
@@ -45,7 +45,7 @@ class KasboekController extends Controller {
     public function newAction() {
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRole()!='ROLE_SUPERADMIN' && $user->getRole()!='ROLE_MANAGER' ){
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
         $entity_basic = new Kasboek();
         $entity_basic->setDated(new \DateTime());
@@ -119,7 +119,7 @@ class KasboekController extends Controller {
     public function indexAction($date) {
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRole()!='ROLE_SUPERADMIN' && $user->getRole()!='ROLE_MANAGER'){
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
 
         $partes = explode('-', $date);
@@ -130,7 +130,7 @@ class KasboekController extends Controller {
         $consulta = $em->createQuery('SELECT r FROM RestaurantBundle:Kasboek r WHERE r.dated >= \''.$date.'-01\' AND r.dated <= \''.$date.'-31\' ORDER BY r.dated DESC');
         $entities = $consulta->getResult();
 
-        $consulta = $em->createQuery('SELECT r.form, count(r.id) AS cantidad FROM AdminBundle:RNotifierForm r JOIN r.notifier n WHERE n.form LIKE \'Kasboek\' GROUP BY r.form');
+        $consulta = $em->createQuery('SELECT r.form, count(r.id) AS cantidad FROM RestaurantBundle:RNotifierForm r JOIN r.notifier n WHERE n.form LIKE \'Kasboek\' GROUP BY r.form');
         $notifier = $consulta->getResult();
         //var_dump($notifier);die;
         $result = array();
@@ -159,7 +159,7 @@ class KasboekController extends Controller {
     public function showAction($id) {
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRole()!='ROLE_SUPERADMIN' && $user->getRole()!='ROLE_MANAGER'){
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
          $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -167,7 +167,7 @@ class KasboekController extends Controller {
 
         $entity_basic = $em->getRepository('RestaurantBundle:Kasboek')->find($id);
         if (!$entity_basic) {
-            return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
+            return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
         }
         
         $form_basic = $this->createForm(new KasboekType(), $entity_basic);
@@ -222,13 +222,13 @@ class KasboekController extends Controller {
     public function deleteAction($id) {
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRole()!='ROLE_SUPERADMIN' && $user->getRole()!='ROLE_MANAGER'){
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('RestaurantBundle:Kasboek')->find($id);
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if (!$entity) {
-            return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
+            return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
         }
         $now = new \DateTime('now');
         //echo  $entity_basic->getUpdated()->diff($now)->d ; die;
@@ -254,7 +254,7 @@ class KasboekController extends Controller {
             $em->remove($entity);
             $em->flush();
         } catch (\Exception $ex) {
-            return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
+            return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
         }
         $this->addFlash('success', 'Success! The form has been removed.');
         return $this->redirect($this->generateUrl('kasboek', array('date'=>date('m-Y'))));
@@ -266,7 +266,7 @@ class KasboekController extends Controller {
     public function editAction($id) {
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRole()!='ROLE_SUPERADMIN' && $user->getRole()!='ROLE_MANAGER'){
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -274,7 +274,7 @@ class KasboekController extends Controller {
 
         $entity_basic = $em->getRepository('RestaurantBundle:Kasboek')->find($id);
         if (!$entity_basic) {
-            return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
+            return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
         }
             //{% if 'today - 3 day' | date('d-m-Y') < entity.updated | date('d-m-Y') %}
         $olddate = new \DateTime('today - 3 day');
@@ -314,7 +314,7 @@ class KasboekController extends Controller {
 
                     $entity_basic->setUpdated(new \DateTime());
                    
-                    /*$not = $em->getRepository('AdminBundle:RNotifierForm')->findOneBy(array('form'=>$entity_basic->getId()));
+                    /*$not = $em->getRepository('RestaurantBundle:RNotifierForm')->findOneBy(array('form'=>$entity_basic->getId()));
                     if (!is_null($entity_basic->getFinished()) ){
                         $entity_basic->setFinished(new \DateTime());
                         if (is_null($not)) $this->sendMail($id);
@@ -581,7 +581,7 @@ class KasboekController extends Controller {
     private function sendMail($id){
         $em = $this->getDoctrine()->getManager();
         //Crear el notificador para este formulario.
-        $notifier = $em->getRepository('AdminBundle:Notifier')->findOneBy(array('form'=>'Kasboek'));
+        $notifier = $em->getRepository('RestaurantBundle:Notifier')->findOneBy(array('form'=>'Kasboek'));
         $entity_basic = $em->getRepository('RestaurantBundle:Kasboek')->findOneBy(array('id'=>$id));
 
         $fecha = $entity_basic->getDated()->format('Y-m-d');
@@ -664,12 +664,12 @@ class KasboekController extends Controller {
     public function mailAction($id){
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRole()!='ROLE_SUPERADMIN' && $user->getRole()!='ROLE_MANAGER'){
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
         try{
             $this->sendMail($id);
         } catch (\Exception $ex) {
-            return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
+            return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
         }
         $em = $this->getDoctrine()->getManager();
         $entity_basic = $em->getRepository('RestaurantBundle:Kasboek')->findOneBy(array('id'=>$id));
@@ -685,7 +685,7 @@ class KasboekController extends Controller {
     public function kasboekchangedateAction($id, Request $request) {
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRole()!='ROLE_SUPERADMIN' && $user->getRole()!='ROLE_MANAGER'){
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
 
         $response = new JsonResponse();
@@ -722,7 +722,7 @@ class KasboekController extends Controller {
     public function kasboekTurnAction($id){
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRole()!='ROLE_SUPERADMIN' && $user->getRole()!='ROLE_MANAGER'){
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -757,7 +757,7 @@ class KasboekController extends Controller {
         $entity_basic = $em->getRepository('RestaurantBundle:Kasboek')->find($id);
         if ($entity_basic){
             $entity_basic->setFinished(new \DateTime());
-            $not = $em->getRepository('AdminBundle:RNotifierForm')->findOneBy(array('form'=>$entity_basic->getId()));
+            $not = $em->getRepository('RestaurantBundle:RNotifierForm')->findOneBy(array('form'=>$entity_basic->getId()));
             if (is_null($not)) $this->sendMail($id);
             $em->flush();
         }

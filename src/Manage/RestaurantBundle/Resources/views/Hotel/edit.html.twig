@@ -1,4 +1,4 @@
-{% extends 'AdminBundle::frame.html.twig' %}
+{% extends 'RestaurantBundle::frame.html.twig' %}
 {% block title%} Hotel{% endblock %}    
 {% block body %}
     <script>numeral.locale('nl-nl');</script>
@@ -10,6 +10,9 @@
             <div class="tools">
                 <a href="{{path('hotel', {'date': 'today' | date('m-Y')})}}" class=" blue">
                     <i class="fa fa-list-alt"></i> List
+                </a>
+                <a href="{{path('hotel_allpdf', {'id': entity_basic.id})}}" target="_blank" class=" blue">
+                    <i class="fa fa-external-link"></i> Print
                 </a>
             </div>
         </div>
@@ -72,7 +75,7 @@
                             {% endif %}
 
                         </script>
-                            {% if canceled %}
+                            {% if canceled | length %}
                             <fieldset class="hotel-basic">
                             <div class="alert alert-success col-md-12" style="margin-bottom: 0px">
                                 {% for item in canceled %}
@@ -363,7 +366,9 @@
             a = numeral($('#totalcontanten').val()).value() + numeral($('#totalccv').val()).value()
             $('#totalont').val(numeral(a).format('0.0,'))
             b = numeral($('#totalont').val()).value() - numeral($('#totaldag').val()).value() - numeral($('#saldoborg').val()).value()
-            $('#kasver').val(numeral(b).format('0.0,'))
+            //console.log (isNaN(b))
+            $('#kasver').val(parseFloat(b).toFixed(2))
+            //$('#kasver').val(numeral(b).format('0.0,'))
         }
 
         {% if not show %}

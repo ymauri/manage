@@ -9,9 +9,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Manage\RestaurantBundle\Entity\Log;
-use Manage\AdminBundle\Entity\WorkerRepository;
+use Manage\RestaurantBundle\Entity\WorkerRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Manage\AdminBundle\Entity\RNotifierForm;
+use Manage\RestaurantBundle\Entity\RNotifierForm;
 
 /**
  * Log controller.
@@ -36,7 +36,7 @@ class LogController extends Controller {
             $em = $this->getDoctrine()->getManager();
             $consulta = $em->createQuery('SELECT r FROM RestaurantBundle:Log r WHERE r.dated >= \'' . $date . '-01\' AND r.dated <= \'' . $date . '-31\' ORDER BY r.dated DESC');
             $entities = $consulta->getResult();
-            $consulta = $em->createQuery('SELECT r.form, count(r.id) AS cantidad FROM AdminBundle:RNotifierForm r JOIN r.notifier n WHERE n.form LIKE \'Log\' GROUP BY r.form');
+            $consulta = $em->createQuery('SELECT r.form, count(r.id) AS cantidad FROM RestaurantBundle:RNotifierForm r JOIN r.notifier n WHERE n.form LIKE \'Log\' GROUP BY r.form');
             $notifier = $consulta->getResult();
             $result = array();
             foreach ($entities as $entity) {
@@ -52,7 +52,7 @@ class LogController extends Controller {
                 'notifier' => $result,
             );
         }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
+        return $this->render('RestaurantBundle:Exception:error403.html.twig');
 
     }
 
@@ -74,13 +74,13 @@ class LogController extends Controller {
             $em->flush();
             return $this->redirect($this->generateUrl('log_edit', array('id' => $entity_log->getId())));
         }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
+        return $this->render('RestaurantBundle:Exception:error403.html.twig');
 
     }
     
     private function getUsers() {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('AdminBundle:User')->findAll();
+        $entities = $em->getRepository('RestaurantBundle:User')->findAll();
         $result = array();
         foreach ($entities as $item) {
             $result[] = array(
@@ -106,18 +106,18 @@ class LogController extends Controller {
             $em = $this->getDoctrine()->getManager();
             $entity_basic = $em->getRepository('RestaurantBundle:Log')->find($id);
             if (!$entity_basic) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
             }
 
             return $this->render('RestaurantBundle:Log:edit.html.twig', array(
                 'entity_basic' => $entity_basic,
-                'list_chef' => $em->getRepository('AdminBundle:Worker')->getChefs(),
-                'list_manager' => $em->getRepository('AdminBundle:Worker')->getManagers(),
-                'list_recepties' => $em->getRepository('AdminBundle:Worker')->getRecepties(),
+                'list_chef' => $em->getRepository('RestaurantBundle:Worker')->getChefs(),
+                'list_manager' => $em->getRepository('RestaurantBundle:Worker')->getManagers(),
+                'list_recepties' => $em->getRepository('RestaurantBundle:Worker')->getRecepties(),
                 'show' => TRUE,
             ));
         }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
+        return $this->render('RestaurantBundle:Exception:error403.html.twig');
 
     }
 
@@ -134,7 +134,7 @@ class LogController extends Controller {
         $user = $this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER') {
             if (!$entity_basic) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
             }
             $olddate = new \DateTime('today - 1 day');
             $now = new \DateTime('now');
@@ -155,23 +155,23 @@ class LogController extends Controller {
                                 $entity_basic->setDated(new \DateTime($item['value']));
                                 break;
                             case 'chef':
-                                $worker = $item['value'] != null ? $em->getRepository('AdminBundle:Worker')->find($item['value']) : null;
+                                $worker = $item['value'] != null ? $em->getRepository('RestaurantBundle:Worker')->find($item['value']) : null;
                                 if ($worker != null) $entity_basic->setChef($worker);
                                 break;
                             case 'managerdag':
-                                $worker = $item['value'] != null ? $em->getRepository('AdminBundle:Worker')->find($item['value']) : null;
+                                $worker = $item['value'] != null ? $em->getRepository('RestaurantBundle:Worker')->find($item['value']) : null;
                                 if ($worker != null) $entity_basic->setManagerdag($worker);
                                 break;
                             case 'manageravond':
-                                $worker = $item['value'] != null ? $em->getRepository('AdminBundle:Worker')->find($item['value']) : null;
+                                $worker = $item['value'] != null ? $em->getRepository('RestaurantBundle:Worker')->find($item['value']) : null;
                                 if ($worker != null) $entity_basic->setManageravond($worker);
                                 break;
                             case 'receptiedag':
-                                $worker = $item['value'] != null ? $em->getRepository('AdminBundle:Worker')->find($item['value']) : null;
+                                $worker = $item['value'] != null ? $em->getRepository('RestaurantBundle:Worker')->find($item['value']) : null;
                                 if ($worker != null) $entity_basic->setReceptiedag($worker);
                                 break;
                             case 'receptieavond':
-                                $worker = $item['value'] != null ? $em->getRepository('AdminBundle:Worker')->find($item['value']) : null;
+                                $worker = $item['value'] != null ? $em->getRepository('RestaurantBundle:Worker')->find($item['value']) : null;
                                 if ($worker != null) $entity_basic->setReceptieavond($worker);
                                 break;
                             case 'closetime':
@@ -204,14 +204,14 @@ class LogController extends Controller {
             } else {
                 return $this->render('RestaurantBundle:Log:edit.html.twig', array(
                     'entity_basic' => $entity_basic,
-                    'list_chef' => $em->getRepository('AdminBundle:Worker')->getChefs(),
-                    'list_manager' => $em->getRepository('AdminBundle:Worker')->getManagers(),
-                    'list_recepties' => $em->getRepository('AdminBundle:Worker')->getRecepties(),
+                    'list_chef' => $em->getRepository('RestaurantBundle:Worker')->getChefs(),
+                    'list_manager' => $em->getRepository('RestaurantBundle:Worker')->getManagers(),
+                    'list_recepties' => $em->getRepository('RestaurantBundle:Worker')->getRecepties(),
                     'show' => FALSE,
                 ));
             }
         }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
+        return $this->render('RestaurantBundle:Exception:error403.html.twig');
 
     }
 
@@ -242,7 +242,7 @@ class LogController extends Controller {
 
             return $this->redirect($this->generateUrl('log', array('date' => date('m-Y'))));
         }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
+        return $this->render('RestaurantBundle:Exception:error403.html.twig');
 
     }
 
@@ -250,7 +250,7 @@ class LogController extends Controller {
         $em = $this->getDoctrine()->getManager();
 
         //Crear el notificador para este formulario.
-        $notifier = $em->getRepository('AdminBundle:Notifier')->findOneBy(array('form'=>'Log'));
+        $notifier = $em->getRepository('RestaurantBundle:Notifier')->findOneBy(array('form'=>'Log'));
         $entity_basic = $em->getRepository('RestaurantBundle:Log')->findOneBy(array('id'=>$id));
         $mails_array = explode(';',$notifier->getMails());
         $mail_customer = \Swift_Message::newInstance()
@@ -311,13 +311,13 @@ class LogController extends Controller {
             try {
                 $this->sendMail($id);
             } catch (\Exception $ex) {
-                return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
+                return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
             }
             $this->addFlash('success', 'Success! The form has been sent.');
             return $this->redirect($this->generateUrl('log', array('date' => date('m-Y'))));
         }
 
-        return $this->render('AdminBundle:Exception:error403.html.twig');
+        return $this->render('RestaurantBundle:Exception:error403.html.twig');
 
     }
     

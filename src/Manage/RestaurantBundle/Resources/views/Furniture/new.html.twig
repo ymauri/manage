@@ -1,11 +1,6 @@
-{% extends 'AdminBundle::frame.html.twig' %}
+{% extends 'RestaurantBundle::frame.html.twig' %}
 {% block title %} New Furniture {% endblock %}
 {% block body %}
-    <style>
-        canvas {
-            display: none;
-        }
-    </style>
     <div class="portlet">
         <div class="portlet-title">
             <div class="caption">
@@ -99,26 +94,12 @@
                                     'class' :' control-label',
                                 }}) }}
                                 {{ form_widget(form.serialnumber, {'attr':{
-                                    'class' :'input-sm pull-right form-control',
+                                    'class' :'form-control col-md-12 qrs tags',
                                 }}) }}
                                 {{ form_errors(form.serialnumber) }}
+                                <br/>
+                                <a href="#modal-scan" role="button" class="btn btn-xs grey" data-toggle="modal">Scan</a>
                             </div>
-                            <hr>
-
-                            <div class="row form-group">
-                                <label>Scan from WebCam:</label>
-                                <div>
-                                    <video muted id="qr-video" style="width: 100%"></video>
-                                </div>
-
-                                <select id="inversion-mode-select" hidden="hidden">
-                                    <option value="original">Scan original (dark QR code on bright background)</option>
-                                </select>
-                                <b>Detected QR code: </b>
-                                <span id="cam-qr-result">None</span>
-                                <br>
-                            </div>
-                            <hr>
                             <div class="row form-group" hidden="hidden">
                                 {{ form_label(form.status,'Status',{'attr':{
                                     'class' :' control-label',
@@ -139,7 +120,7 @@
                             </div>
 
                             <div class="row form-group thumbnail" style=" border: none; ">
-                                <img src="{{ asset('img/noimage.jpg') }}" alt="Without image" style="height: 100%;">
+                                <img src="{{ asset('img/noimage.jpg') }}" alt="Without image" style="height: 250px;">
                             </div>
                             <div class="row form-group">
                                 {{ form_label(form.image,'Image',{'attr':{
@@ -147,7 +128,7 @@
                                 }}) }}
                                 {{ form_widget(form.image, {'attr':{
                                     'class' :'',
-                                    'accept' :'image/*'
+                                    'accept' :'image/*',
                                 }}) }}
                                 {{ form_errors(form.image) }}
                             </div>
@@ -161,9 +142,39 @@
             </div>
         </div>
     </div>
+
+
+    <div id="modal-scan" class="modal fade" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Scan QR</h4>
+                </div>
+                <div class="modal-body" style="overflow: hidden;">
+                    <div class="row" style="padding: 5px 20px;">
+                        <label>Scan from WebCam:</label>
+                        <div class="qrscanner" id="scanner">
+                        </div>
+                        <br/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="{{ asset('js/qr/jsqrscanner.nocache.js')}}"></script>
+
     <script>
         $(document).ready(function () {
-            $('select[multiple="multiple"], select[multiple]').select2();
+            $('#restaurantbundle_furniture_serialnumber').tagsInput({
+            });
+            $('select[multiple="multiple"], select[multiple]').select2({
+                minimumResultsForSearch: -1
+            });
             $('div').on('keypress','.real', function(evt){
                 evt = (evt) ? evt : window.event;
                 var charCode = (evt.which) ? evt.which : evt.keyCode;
@@ -201,12 +212,15 @@
             $('form button[type="submit"]').click(function(e){
                 e.preventDefault();
                 original = $('form').find('#restaurantbundle_furniture_totalvalue').val()
-                console.log(original)
                 $('form').find('#restaurantbundle_furniture_totalvalue').val(original.split(',').join(''))
-
                 original = $('form').find('#restaurantbundle_furniture_price').val()
                 $('form').find('#restaurantbundle_furniture_price').val(original.split(',').join(''))
-                $('form').submit()
+                if ($('.entero').val().trim().length ==0
+                    || $('.real').val().trim().length == 0){
+                    return false;
+                } else {
+                    $('form').submit()
+                }
             })
             $('input').trigger('blur')
 
@@ -240,46 +254,50 @@
 
         $('#restaurantbundle_furniture_quantity, #restaurantbundle_furniture_price').on(
             'keyup', function(){
-                    total = $('#restaurantbundle_furniture_quantity').val() * $('#restaurantbundle_furniture_price').val()
+                    total = numeral($('#restaurantbundle_furniture_quantity').val()).value() * numeral($('#restaurantbundle_furniture_price').val()).value()
                 $('#restaurantbundle_furniture_totalvalue').val(numeral(total).format('0.0,'))
         })
 
-
-
-    </script>
-
-    <script type="module">
-        import QrScanner from "{{ asset('js/qr/qr-scanner.min.js') }}";
-        QrScanner.WORKER_PATH = '{{ asset("js/qr/qr-scanner-worker.min.js") }}';
-
-        const video = document.getElementById('qr-video');
-        const camQrResult = document.getElementById('cam-qr-result');
-
-        function setResult(label, result) {
-            label.textContent = result;
-            /*var qrs= []
-            if (document.getElementById('restaurantbundle_furniture_serialnumber').value)
-                qrs = document.getElementById('restaurantbundle_furniture_serialnumber').value.split(" QR: ")
-
-            var alredy = false;
-            for (var i=0; i < qrs.length; i++ ){
-                if (qrs[i].trim() == result.trim()){
-                    alredy = true;
-                    break;
+        function onQRCodeScanned(scannedText)
+        {
+            var scannedTextMemo = document.getElementById("restaurantbundle_furniture_serialnumber_tag");
+            if(scannedTextMemo)
+            {
+                var isequal = false;
+                parts = scannedTextMemo.value.split(",");
+                console.log(parts)
+                for (var i = 0; i < parts.length; i++){
+                    if (parts[i] == scannedText){
+                        isequal = true
+                        $('.close').trigger('click');
+                    }
                 }
+                if (!isequal) {
+                    scannedTextMemo.value = scannedText;
+                }
+                $('.close').trigger('click');
+                $('#restaurantbundle_furniture_serialnumber_tag').trigger({
+                    type: 'keypress',
+                    which: 13
+                });
             }
-            if (!alredy )
-                document.getElementById('restaurantbundle_furniture_serialnumber').value += " QR: "+result
-*/
-            document.getElementById('restaurantbundle_furniture_serialnumber').value = result
-            label.style.color = 'teal';
         }
-        QrScanner.hasCamera().then(hasCamera => camHasCamera.textContent = hasCamera);
-        const scanner = new QrScanner(video, result => setResult(camQrResult, result));
-        scanner.start();
-        document.getElementById('inversion-mode-select').addEventListener('change', event => {
-            scanner.setInversionMode(event.target.value);
-        });
+
+        //this function will be called when JsQRScanner is ready to use
+        function JsQRScannerReady()
+        {
+            //create a new scanner passing to it a callback function that will be invoked when
+            //the scanner succesfully scan a QR code
+            var jbScanner = new JsQRScanner(onQRCodeScanned);
+            //reduce the size of analyzed images to increase performance on mobile devices
+            jbScanner.setSnapImageMaxSize(300);
+            var scannerParentElement = document.getElementById("scanner");
+            if(scannerParentElement)
+            {
+                //append the jbScanner to an existing DOM element
+                jbScanner.appendTo(scannerParentElement);
+            }
+        }
     </script>
 {% endblock %}
 

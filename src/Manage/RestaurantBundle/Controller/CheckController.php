@@ -12,21 +12,18 @@ use Symfony\Component\Validator\Constraints\DateTime;
 use Manage\RestaurantBundle\Controller\ApiGuesty;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class CheckController extends Controller {
 
 
     /**
-     *
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Route("/checkin/date/{date}/", name="checkin")
      * @Method("GET")
      * @Template()
      */
     public function checkinAction($date) {
-        $user=$this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole()!='ROLE_SUPERADMIN'){
-            return $this->render('AdminBundle:Exception:error403.html.twig');
-        }
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('RestaurantBundle:Checkin')->findBy(array('date'=>new \DateTime($date), 'status'=>'confirmed'));
 
@@ -46,13 +43,10 @@ class CheckController extends Controller {
      *
      * @Route("/checkin/{id}/", name="checkin_show")
      * @Method("GET")
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Template()
      */
     public function checkinShowAction($id) {
-        $user=$this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole()!='ROLE_SUPERADMIN'){
-            return $this->render('AdminBundle:Exception:error403.html.twig');
-        }
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('RestaurantBundle:Checkin')->findOneBy(array('id'=>$id));
         $listing = $em->getRepository('RestaurantBundle:Listing')->findOneBy(array('id'=>$entity->getListing()));
@@ -65,14 +59,11 @@ class CheckController extends Controller {
     /**
      *
      * @Route("/checkout/date/{date}/", name="checkout")
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Method("GET")
      * @Template()
      */
     public function checkoutAction($date) {
-        $user=$this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole()!='ROLE_SUPERADMIN'){
-            return $this->render('AdminBundle:Exception:error403.html.twig');
-        }
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('RestaurantBundle:Checkout')->findBy(array('date'=>new \DateTime($date),'status'=>'confirmed'));
 
@@ -85,14 +76,11 @@ class CheckController extends Controller {
     /**
      *
      * @Route("/checkout/{id}/", name="checkout_show")
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Method("GET")
      * @Template()
      */
     public function checkoutShowAction($id) {
-        $user=$this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole()!='ROLE_SUPERADMIN'){
-            return $this->render('AdminBundle:Exception:error403.html.twig');
-        }
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('RestaurantBundle:Checkout')->findOneBy(array('id'=>$id));
         $listing = $em->getRepository('RestaurantBundle:Listing')->findOneBy(array('id'=>$entity->getListing()));
@@ -106,13 +94,10 @@ class CheckController extends Controller {
      *
      * @Route("/pricing/", name="pricing")
      * @Method("GET")
-     * @Template()
+       * @Security("is_granted('ROLE_GUESTY')")
+       * @Template()
      */
     public function pricingAction() {
-        $user=$this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole()!='ROLE_SUPERADMIN'){
-            return $this->render('AdminBundle:Exception:error403.html.twig');
-        }
         $em = $this->getDoctrine()->getManager();
         $listing = $em->getRepository('RestaurantBundle:Listing')->findAll();
         return $this->render('RestaurantBundle:Check:pricing.html.twig', array(
@@ -122,14 +107,15 @@ class CheckController extends Controller {
       /**
      *
      * @Route("/pricingfilter/", name="pricing-filter")
-     * @Method("POST")
+       * @Security("is_granted('ROLE_GUESTY')")
+       * @Method("POST")
      * @Template()
      */
     public function pricingFilterAction() {
         $em = $this->getDoctrine()->getManager();
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRole()!='ROLE_SUPERADMIN'){
-            return $this->render('AdminBundle:Exception:error403.html.twig');
+            return $this->render('RestaurantBundle:Exception:error403.html.twig');
         }
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
@@ -176,14 +162,11 @@ class CheckController extends Controller {
       /**
      *
      * @Route("/pricingupdate/", name="pricing-update")
-     * @Method("POST")
+       * @Security("is_granted('ROLE_GUESTY')")
+       * @Method("POST")
      * @Template()
      */
     public function pricingUpdateAction() {
-        $user=$this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole()!='ROLE_SUPERADMIN'){
-            return $this->render('AdminBundle:Exception:error403.html.twig');
-        }
         $request = $this->getRequest();
         $res = array();
         $api = new ApiGuesty();
@@ -209,14 +192,11 @@ class CheckController extends Controller {
     /**
      *
      * @Route("/autopricing/", name="autopricing")
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Method("GET")
      * @Template()
      */
     public function autopricingAction() {
-        $user=$this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole()!='ROLE_SUPERADMIN'){
-            return $this->render('AdminBundle:Exception:error403.html.twig');
-        }
         $em = $this->getDoctrine()->getManager();
         $listing = $em->getRepository('RestaurantBundle:Listing')->findAll();
         return $this->render('RestaurantBundle:Check:autopricing.html.twig', array(
@@ -227,14 +207,11 @@ class CheckController extends Controller {
     /**
      *
      * @Route("/autopricingupdate/", name="autopricing-update")
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Method("POST")
      * @Template()
      */
     public function autopricingUpdateAction() {
-        $user=$this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole()!='ROLE_SUPERADMIN'){
-            return $this->render('AdminBundle:Exception:error403.html.twig');
-        }
         $request = $this->getRequest();
         $res = array();
         $api = new ApiGuesty();
@@ -281,15 +258,14 @@ class CheckController extends Controller {
      *
      * @Route("/blacklist/", name="blacklist")
      * @Method("GET")
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Template()
      */
     public function blackListAction(Request $request){
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
             $limit = is_null($request->query->get('limit')) ? 30 : $request->query->get('limit');
             $offset = is_null($request->query->get('offset')) ? 0 : $request->query->get('offset');
-            //$entities = $em->getRepository('AdminBundle:RNotifierForm')->findBy(array('form'=>$id),array('date'=>'DESC'), $limit, $offset );
+            //$entities = $em->getRepository('RestaurantBundle:RNotifierForm')->findBy(array('form'=>$id),array('date'=>'DESC'), $limit, $offset );
             $entities = $em->getRepository('RestaurantBundle:BlackList')->findBy(array(),array('id'=>'ASC'), $limit, $offset);
             $finlista = $em->getRepository('RestaurantBundle:BlackList')->findBy(array(),array('id'=>'ASC'), 1, $offset + $limit );
 
@@ -300,10 +276,6 @@ class CheckController extends Controller {
                 'last' => count($finlista) == 0,
                 'first' => $offset == 0
             ));
-        }
-        else {
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
 
     }
 
@@ -312,22 +284,17 @@ class CheckController extends Controller {
      *
      * @Route("/blacklist/new/", name="blacklist_new")
      * @Method("GET")
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Template()
      */
     public function newBlacklistAction() {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $entity = new BlackList();
             $form = $this->createCreateForm($entity);
             return $this->render("RestaurantBundle:Check:blacklistnew.html.twig",array(
                 'entity' => $entity,
                 'form' => $form->createView(),
             ));
-        }
-        else {
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
-    }
+         }
     private function createCreateForm(BlackList $entity) {
         $form = $this->createForm(new BlackListType(), $entity, array(
             'action' => $this->generateUrl('blacklist_create'),
@@ -341,11 +308,10 @@ class CheckController extends Controller {
     /**
      *
      * @Route("/blacklist/", name="blacklist_create")
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Method("POST")
      */
     public function createBlackListAction(Request $request) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $entity = new BlackList();
             $form = $this->createCreateForm($entity);
             $form->handleRequest($request);
@@ -358,23 +324,21 @@ class CheckController extends Controller {
                     return $this->redirect($this->generateUrl('blacklist'));
                 }
             } catch (\Exception $ex) {
-                return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
+                return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
             }
             $this->addFlash('error', "Error!");
             return $this->render("RestaurantBundle:Check:blacklistnew.html.twig",array(
                 'entity' => $entity,
                 'form' => $form->createView(),
             ));
-        }
-        else {
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
+
     }
 
     /**
      * Displays a form to edit an existing User entity.
      *
      * @Route("/blacklist/{id}/edit/", name="blacklist_edit")
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Template()
      */
     public function editBlackListAction(Request $request, $id) {
@@ -382,11 +346,8 @@ class CheckController extends Controller {
         $entity = $em->getRepository('RestaurantBundle:BlackList')->find($id);
 
         if (!$entity) {
-            return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Client.'));
+            return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Client.'));
         }
-
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getId() == $id) {
 
             $form = $this->createForm(new BlackListType(), $entity, array(
                 'action' => $this->generateUrl('blacklist_edit', array('id' => $entity->getId())),
@@ -407,36 +368,28 @@ class CheckController extends Controller {
                 'entity' => $entity,
                 'form' => $form->createView(),
             ));
-
-        }
-        else {
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
      * Deletes a Worker entity.
      *
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Route("/blacklist/{id}/delete", name="blacklist_delete")
      */
     public function deleteBlackListAction(Request $request, $id)
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('RestaurantBundle:BlackList')->find($id);
 
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this element.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this element.'));
             }
 
             $em->remove($entity);
             $em->flush();
             $this->addFlash('success', 'Success! The element has been removed.');
             return $this->redirect($this->generateUrl('blacklist'));
-        } else {
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
+
 
     }
 

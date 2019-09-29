@@ -10,6 +10,7 @@ use Manage\RestaurantBundle\Entity\ReportIssue;
 use Manage\RestaurantBundle\Form\ReportIssueType;
 use Manage\RestaurantBundle\Entity\Folder;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * ReportIssue controller.
@@ -26,16 +27,11 @@ class ReportIssueController extends Controller
      */
     public function indexAction()
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_RECEPTION' || $user->getRole() == 'ROLE_REPORTER') {
             $em = $this->getDoctrine()->getManager();
-            $reportIssues = $em->getRepository('RestaurantBundle:ReportIssue')->getListActiveIssue();
+            $reportIssues = $em->getRepository('RestaurantBundle:ReportIssue')->findAll();
             return $this->render('RestaurantBundle:ReportIssue:index.html.twig', array(
                 'reportIssues' => $reportIssues,
             ));
-        } else {
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
@@ -46,9 +42,6 @@ class ReportIssueController extends Controller
      */
     public function newAction(Request $request)
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_RECEPTION' || $user->getRole() == 'ROLE_REPORTER') {
-
             $reportIssue = new ReportIssue();
             $form = $this->createForm('Manage\RestaurantBundle\Form\ReportIssueType', $reportIssue);
             $form->handleRequest($request);
@@ -61,8 +54,10 @@ class ReportIssueController extends Controller
 
                 $em->persist($reportIssue);
                 $em->flush();
-
-                return $this->redirectToRoute('reportissue_show', array('id' => $reportIssue->getId()));
+                if ($this->isGranted('ROLE_MAINTENANCE_EDIT')){
+                    return $this->redirectToRoute('reportissue_show', array('id' => $reportIssue->getId()));
+                }
+                return $this->redirectToRoute('reportissue_index');
             }
             $em = $this->getDoctrine()->getManager();
             $places = $em->getRepository("RestaurantBundle:Folder")->findBy(array('issheet' => 0, 'isroot' => 0), array('details' => 'ASC'));
@@ -76,46 +71,34 @@ class ReportIssueController extends Controller
                 'places' => $places,
                 'locations' => $locations,
             ));
-        } else {
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
-
     }
 
     /**
      * Finds and displays a ReportIssue entity.
      *
      * @Route("/{id}", name="reportissue_show")
+     * @Security("is_granted('ROLE_MAINTENANCE_EDIT')")
      * @Method("GET")
      */
     public function showAction(ReportIssue $reportIssue)
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_RECEPTION' || $user->getRole() == 'ROLE_REPORTER') {
-
             $deleteForm = $this->createDeleteForm($reportIssue);
 
             return $this->render('RestaurantBundle:ReportIssue:show.html.twig', array(
                 'reportIssue' => $reportIssue,
                 'delete_form' => $deleteForm->createView(),
             ));
-        } else {
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
-
     }
 
     /**
      * Displays a form to edit an existing ReportIssue entity.
      *
      * @Route("/{id}/edit", name="reportissue_edit")
+     * @Security("is_granted('ROLE_MAINTENANCE_EDIT')")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, ReportIssue $reportIssue)
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_RECEPTION' || $user->getRole() == 'ROLE_REPORTER') {
-
             $deleteForm = $this->createDeleteForm($reportIssue);
             $editForm = $this->createForm('Manage\RestaurantBundle\Form\ReportIssueType', $reportIssue);
             $editForm->handleRequest($request);
@@ -143,21 +126,17 @@ class ReportIssueController extends Controller
                 'places' => $places,
                 'locations' => $locations,
             ));
-        } else {
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
      * Deletes a ReportIssue entity.
      *
      * @Route("/{id}", name="reportissue_delete")
+     * @Security("is_granted('ROLE_MAINTENANCE_EDIT')")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, ReportIssue $reportIssue)
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_RECEPTION' || $user->getRole() == 'ROLE_REPORTER') {
 
             $form = $this->createDeleteForm($reportIssue);
             $form->handleRequest($request);
@@ -169,9 +148,6 @@ class ReportIssueController extends Controller
             }
 
             return $this->redirectToRoute('reportissue_index');
-        } else {
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
@@ -191,6 +167,7 @@ class ReportIssueController extends Controller
 
     /**
      * @Route("/changestatus/{id}", name="reportissue_changestatus")
+     * @Security("is_granted('ROLE_MAINTENANCE_EDIT')")
      * @Method("POST")
      * */
 
@@ -210,6 +187,7 @@ class ReportIssueController extends Controller
 
     /**
      * @Route("/getfurnitures/", name="reportissue_getfurnitures")
+     * @Security("is_granted('ROLE_MAINTENANCE_EDIT')")
      * @Method("POST")
      * */
 

@@ -107,13 +107,13 @@ class Log {
     
     /**
      * @var object
-     *  @ORM\ManyToOne(targetEntity="Manage\AdminBundle\Entity\Worker")
+     *  @ORM\ManyToOne(targetEntity="Manage\RestaurantBundle\Entity\Worker")
      */
     private $managerdag;
     
     /**
     * @var object
-    *  @ORM\ManyToOne(targetEntity="Manage\AdminBundle\Entity\Worker")
+    *  @ORM\ManyToOne(targetEntity="Manage\RestaurantBundle\Entity\Worker")
     */
     private $manageravond;
     
@@ -137,13 +137,13 @@ class Log {
     
         /**
      * @var object
-     *  @ORM\ManyToOne(targetEntity="Manage\AdminBundle\Entity\Worker")
+     *  @ORM\ManyToOne(targetEntity="Manage\RestaurantBundle\Entity\Worker")
      */
     private $receptiedag;
     
     /**
     * @var object
-    *  @ORM\ManyToOne(targetEntity="Manage\AdminBundle\Entity\Worker")
+    *  @ORM\ManyToOne(targetEntity="Manage\RestaurantBundle\Entity\Worker")
     */
     private $receptieavond;
     
@@ -185,7 +185,7 @@ class Log {
     
     /**
     * @var object
-    *  @ORM\ManyToOne(targetEntity="Manage\AdminBundle\Entity\Worker")
+    *  @ORM\ManyToOne(targetEntity="Manage\RestaurantBundle\Entity\Worker")
     */
     private $chef;
     

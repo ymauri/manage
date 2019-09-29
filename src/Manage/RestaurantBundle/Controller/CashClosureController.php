@@ -18,8 +18,8 @@ use Manage\RestaurantBundle\Form\BillType;
 use Manage\RestaurantBundle\Form\CardType;
 use Symfony\Component\BrowserKit\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Manage\AdminBundle\Entity\RNotifierForm;
-use Manage\AdminBundle\Entity\Parameters;
+use Manage\RestaurantBundle\Entity\RNotifierForm;
+use Manage\RestaurantBundle\Entity\Parameters;
 
 /**
  * CashClosure controller.
@@ -67,7 +67,7 @@ class CashClosureController extends Controller {
             $entity_basic->setCard($entity_card);
 
             $em = $this->getDoctrine()->getManager();
-            $iva = $em->getRepository('AdminBundle:Parameters')->getServiceIvaActive();
+            $iva = $em->getRepository('RestaurantBundle:Parameters')->getServiceIvaActive();
             $em->persist($entity_basic);
             $reception = $em->getRepository('RestaurantBundle:Reception')->findOneBy(array('dated' => $entity_basic->getDated()));
             if (!is_null($reception)) {
@@ -80,7 +80,7 @@ class CashClosureController extends Controller {
 
             return $this->redirect($this->generateUrl('cashclosure_edit', array('id' => $entity_basic->getId())));
         }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
+        return $this->render('RestaurantBundle:Exception:error403.html.twig');
 
     }
 
@@ -160,7 +160,7 @@ class CashClosureController extends Controller {
             $consulta = $em->createQuery('SELECT r FROM RestaurantBundle:CashClosure r WHERE r.dated >= \'' . $date . '-01\' AND r.dated <= \'' . $date . '-31\' ORDER BY r.dated DESC');
             $entities = $consulta->getResult();
 
-            $consulta = $em->createQuery('SELECT r.form, count(r.id) AS cantidad FROM AdminBundle:RNotifierForm r JOIN r.notifier n WHERE n.form LIKE \'Service\' GROUP BY r.form');
+            $consulta = $em->createQuery('SELECT r.form, count(r.id) AS cantidad FROM RestaurantBundle:RNotifierForm r JOIN r.notifier n WHERE n.form LIKE \'Service\' GROUP BY r.form');
             $notifier = $consulta->getResult();
             //var_dump($notifier);die;
             $result = array();
@@ -175,7 +175,7 @@ class CashClosureController extends Controller {
                 'entities' => $entities, 'notifier' => $result,
             ));
         }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
+        return $this->render('RestaurantBundle:Exception:error403.html.twig');
 
     }
 
@@ -193,7 +193,7 @@ class CashClosureController extends Controller {
 
             $entity_basic = $em->getRepository('RestaurantBundle:CashClosure')->find($id);
             if (!$entity_basic) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
             }
             $form_basic = $this->createForm(new CashClosureType(), $entity_basic);
             $form_total = $this->createForm(new CashClosureTotalType(), $entity_basic->getTotal());
@@ -211,7 +211,7 @@ class CashClosureController extends Controller {
                 'show' => TRUE,
             ));
         }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
+        return $this->render('RestaurantBundle:Exception:error403.html.twig');
 
     }
 
@@ -227,7 +227,7 @@ class CashClosureController extends Controller {
         $entity_basic = $em->getRepository('RestaurantBundle:CashClosure')->find($id);
         if ($entity_basic){
             $entity_basic->setFinished(new \DateTime());
-            $not = $em->getRepository('AdminBundle:RNotifierForm')->findOneBy(array('form'=>$entity_basic->getId()));
+            $not = $em->getRepository('RestaurantBundle:RNotifierForm')->findOneBy(array('form'=>$entity_basic->getId()));
             if (is_null($not)) $this->sendMail($id);
             $em->flush();
         }
@@ -251,7 +251,7 @@ class CashClosureController extends Controller {
 
             $entity_basic = $em->getRepository('RestaurantBundle:CashClosure')->find($id);
             if (!$entity_basic) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
             }
             $olddate = new \DateTime('today - 1 day');
             $now = new \DateTime('now');
@@ -294,7 +294,7 @@ class CashClosureController extends Controller {
                     $entity_basic->setBill($this->validateFormBill($entity_basic->getBill()));
                     $entity_basic->setBeginbill($this->validateFormBegin($entity_basic->getBeginbill()));
                     $entity_basic->setCard($this->validateFormCard($entity_basic->getCard()));
-                    $not = $em->getRepository('AdminBundle:RNotifierForm')->findOneBy(array('form' => $entity_basic->getId()));
+                    $not = $em->getRepository('RestaurantBundle:RNotifierForm')->findOneBy(array('form' => $entity_basic->getId()));
                     $reception = $em->getRepository('RestaurantBundle:Reception')->findOneBy(array('dated' => $entity_basic->getDated()));
                     if (!is_null($reception)) {
                         $entity_basic->setVoucherday($reception->getVdamount());
@@ -323,7 +323,7 @@ class CashClosureController extends Controller {
                 ));
             }
         }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
+        return $this->render('RestaurantBundle:Exception:error403.html.twig');
 
     }
 
@@ -339,7 +339,7 @@ class CashClosureController extends Controller {
         if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_SERVICE') {
 
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
             }
             $now = new \DateTime('now');
             //echo  $entity_basic->getUpdated()->diff($now)->d ; die;
@@ -356,12 +356,12 @@ class CashClosureController extends Controller {
                 $em->remove($entity);
                 $em->flush();
             } catch (\Exception $ex) {
-                return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
+                return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
             }
             $this->addFlash('success', 'Success! The form has been removed.');
             return $this->redirect($this->generateUrl('cashclosure', array('date' => date('m-Y'))));
         }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
+        return $this->render('RestaurantBundle:Exception:error403.html.twig');
 
     }
 
@@ -369,7 +369,7 @@ class CashClosureController extends Controller {
         $em = $this->getDoctrine()->getManager();
 
         //Crear el notificador para este formulario.
-        $notifier = $em->getRepository('AdminBundle:Notifier')->findOneBy(array('form'=>'Service'));
+        $notifier = $em->getRepository('RestaurantBundle:Notifier')->findOneBy(array('form'=>'Service'));
         $entity_basic = $em->getRepository('RestaurantBundle:CashClosure')->findOneBy(array('id'=>$id));
         $mails_array = explode(';',$notifier->getMails());
         $mail_customer = \Swift_Message::newInstance()
@@ -399,7 +399,7 @@ class CashClosureController extends Controller {
         $em->persist($mailer);
 
         // Extra
-        $lastmail = $em->getRepository('AdminBundle:RNotifierForm')->findOneBy(array('form'=>$entity_basic->getId(), 'to'=>$notifier->getExternals()), array('date'=>'DESC'));
+        $lastmail = $em->getRepository('RestaurantBundle:RNotifierForm')->findOneBy(array('form'=>$entity_basic->getId(), 'to'=>$notifier->getExternals()), array('date'=>'DESC'));
         //if (!is_null($notifier->getExternals()) && $lastmail != null && $entity_basic->getUpdated() > $lastmail->getDate()){
         if (!is_null($notifier->getExternals())){
             $mails_array = explode(';',$notifier->getExternals());
@@ -439,7 +439,7 @@ class CashClosureController extends Controller {
             try {
                 $this->sendMail($id);
             } catch (\Exception $ex) {
-                return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
+                return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
             }
             $em = $this->getDoctrine()->getManager();
             $entity_basic = $em->getRepository('RestaurantBundle:CashClosure')->findOneBy(array('id' => $id));
@@ -447,7 +447,7 @@ class CashClosureController extends Controller {
             $this->addFlash('success', 'Success! The form has been sent.');
             return $this->redirect($this->generateUrl('cashclosure', array('date' => $date)));
         }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
+        return $this->render('RestaurantBundle:Exception:error403.html.twig');
 
     }
 

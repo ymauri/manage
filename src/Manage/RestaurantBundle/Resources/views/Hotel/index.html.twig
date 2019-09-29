@@ -1,4 +1,4 @@
-{% extends 'AdminBundle::frame.html.twig' %}
+{% extends 'RestaurantBundle::frame.html.twig' %}
 {% block title%} Hotel {% endblock %}
 {% block body %}
         <div class="portlet">
@@ -92,7 +92,7 @@
                                                 <a href="{{ path('hotel_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-search"></span>View</a>
                                             </li>
                                             {% set updated = entity.updated | date('Y-m-d') %}
-                                            {% if ( date(updated).diff(date('now')).days < 2 ) or (app.user.role == 'ROLE_SUPERADMIN')  %}
+                                            {% if ( date(updated).diff(date('now')).days < 2 ) or (is_granted('ROLE_SUPER_ADMIN'))  %}
 
                                                 <li>
                                                     <a href="{{ path('hotel_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span>Edit</a>

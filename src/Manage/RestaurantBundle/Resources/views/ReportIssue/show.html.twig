@@ -1,4 +1,4 @@
-{% extends 'AdminBundle::frame.html.twig' %}
+{% extends 'RestaurantBundle::frame.html.twig' %}
 {% block title %} Edit Issue {% endblock %}
 {% block body %}
 <div class="portlet">
@@ -56,7 +56,9 @@
                 <input type="hidden" value="{{ reportIssue.status }}" name="status">
                 {% if reportIssue.status == 'Open' %}
                     <button type="button" class="btn btn-primary" value="Wachten">Wachten</button>
+                    {% if app.user.role != 'ROLE_REPORTER' %}
                     <button type="button" class="btn btn-success" value="Afgerond">Afgerond</button>
+                    {% endif %}
                 {% elseif reportIssue.status == 'Wachten'  %}
                     <button type="button" class="btn btn-success" value="Afgerond">Afgerond</button>
                 {% endif %}

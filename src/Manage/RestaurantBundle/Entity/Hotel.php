@@ -38,7 +38,7 @@ class Hotel {
     private $dated;
                  /**
      * @var object
-     *  @ORM\ManyToOne(targetEntity="Manage\AdminBundle\Entity\Worker")
+     *  @ORM\ManyToOne(targetEntity="Manage\RestaurantBundle\Entity\Worker")
      */
     private $userdoor;
 

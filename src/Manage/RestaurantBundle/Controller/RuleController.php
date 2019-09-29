@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Manage\RestaurantBundle\Controller\ApiGuesty;
 use Manage\RestaurantBundle\Entity\ListingCalendar;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class RuleController extends Controller
 {
@@ -24,34 +25,31 @@ class RuleController extends Controller
      * Listado de reglas ordenado por la prioridad
      *
      * @Route("/rule/", name="rule_admin")
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Method("GET")
      * @Template()
      */
     public function adminAction()
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER') {
             $em = $this->getDoctrine()->getManager();
             $rules = $em->getRepository('RestaurantBundle:Rule')->findBy(array(), array('priority' => 'ASC'));
             return $this->render('RestaurantBundle:Rule:index.html.twig', array('rules' => $rules));
-        } else return $this->render('AdminBundle:Exception:error403.html.twig');
     }
 
     /**
      * Editar Reglas
      *
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Route("/rule/{id}/edit", name="rule_edit")
      * @Method("GET")
      * @Template()
      */
     public function editAction($id)
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('RestaurantBundle:Rule')->find($id);
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
             }
             $form = $this->createForm(new RuleType(), $entity, array(
                 'action' => $this->generateUrl('rule_edit', array('id' => $entity->getId())),
@@ -63,26 +61,22 @@ class RuleController extends Controller
                 'entity' => $entity,
                 'form' => $form->createView(),
             );
-        } else {
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
      * Accion del formulario para salvar los datos editados.
      *
      * @Route("/rule/{id}", name="rule_update")
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Method("PUT")
      * @Template("RestaurantBundle:Rule:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('RestaurantBundle:Rule')->find($id);
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
             }
             $form = $this->createForm(new RuleType(), $entity, array(
                 'action' => $this->generateUrl('rule_edit', array('id' => $entity->getId())),
@@ -99,7 +93,7 @@ class RuleController extends Controller
                     $arraylistings[$listing->getIdguesty()]['max'] = $listing->getMaxprice();
                 }
                 $entity->setPricesbylisting($arraylistings);
-                $settings = $em->getRepository('AdminBundle:Parameters')->getFieldsRules();
+                $settings = $em->getRepository('RestaurantBundle:Parameters')->getFieldsRules();
                 $arraysettings = array();
                 foreach ($settings as $setting) {
                     $arraysettings[$setting->getVariable()] = $setting->getValue();
@@ -113,22 +107,18 @@ class RuleController extends Controller
                 'entity' => $entity,
                 '$form' => $form->createView(),
             );
-        } else {
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
      * Adicionar una regla
      *
      * @Route("/rule/new/", name="rule_new")
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Method("GET")
      * @Template()
      */
     public function newAction(Request $request)
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER') {
             $newrule = new Rule();
             $form = $this->createForm(new RuleType(), $newrule, array(
                 'action' => $this->generateUrl('rule_create'),
@@ -141,13 +131,14 @@ class RuleController extends Controller
                 'form' => $form->createView(),
                 'listings' => $em->getRepository('RestaurantBundle:Listing')->findAll()));
         }
-    }
+
 
     /**
      * Accion del formulario para salvar los datos de una nueva regla.
      *
      * @Route("/rule/", name="rule_create")
      * @Method("POST")
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Template("RestaurantBundle:Rule:edit.html.twig")
      */
     public function createAction(Request $request)
@@ -180,16 +171,15 @@ class RuleController extends Controller
     /**
      *
      * @Route("/{id}/priority/", name="rule_priority")
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Method("POST")
      */
     public function orderAction($id, Request $request)
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('RestaurantBundle:Rule')->find($id);
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
             }
             if ($request->get('priority') > 0) {
                 $entity->setPriority((integer)$request->get('priority'));
@@ -198,9 +188,6 @@ class RuleController extends Controller
             $this->addFlash('success', 'Success! The Rule has been updated.');
 
             return $this->redirect($this->generateUrl('rule_admin'));
-        } else {
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
     }
 
     /**
@@ -288,7 +275,6 @@ class RuleController extends Controller
                         //Invertir las condiciones bajo las cuales se ejecuta la regla
                         switch ($rule[0]->getRule()->getCond()){
                             case "listing_available_less":
-                                echo "listing_available_less <br/>";
                                 if (! count($calenadrios) <= $rule[0]->getRule()->getConditionvalue()){
                                     $this->rollBackRule($rule, $calenadrios);
                                 }
@@ -313,16 +299,37 @@ class RuleController extends Controller
     private function rollBackRule($rulelogs, $calendarios){
         $api = new ApiGuesty();
         $em = $this->getDoctrine()->getManager();
+        $final = array();
         foreach ($rulelogs as $rulelog){
             $calendar = $calendarios[$rulelog->getListing()];
-            //print_r(array("listings" => $calendar['listingId'], 'from' => $rulelog->getCheckin()->format('Y-m-d'), "to" => $rulelog->getCheckin()->format('Y-m-d'), /*"price" => (integer)$rulelog->getOldprice(),*/ "note" => "RollBack"));
-
             $result = $api->setListingCalendar(array("listings" => $calendar['listingId'], 'from' => $rulelog->getCheckin()->format('Y-m-d'), "to" => $rulelog->getCheckin()->format('Y-m-d'), "price" => (integer)$rulelog->getOldprice(), "note" => "RollBack"));
             if ($result['status'] == 200){
+
+                $listing = $em->getRepository('RestaurantBundle:Listing')->findOneBy(array('id_guesty'=>$calendar['listingId']));
+                $final[] = array(
+                    'date'      => $rulelog->getCheckin()->format('Y-m-d'),
+                    'listing'   => $listing->getNumber(),
+                    'price'     => $rulelog->getOldprice(),
+                    'status'    => $result['status'],
+                );
                 $em->remove($rulelog);
             }
         }
         $em->flush();
+        if (count($final) > 0){
+            $notifier = $em->getRepository('RestaurantBundle:Notifier')->findOneBy(array('form' => 'Rules'));
+            $mails_array = str_replace(";",',', $notifier->getMails());
+            $mail_customer = (new \Swift_Message("RollBack execution"))
+                ->setBody($this->renderView('RestaurantBundle:Rule:notifyrule.html.twig', array(
+                    'data' => $final,
+                    "rule" => $rulelog[0]->getRule(),
+                    'rollback' => true,
+                )), "text/html");
+            $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
+            $cabeceras .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+            $cabeceras .= "From: The Penthouse <info@log.towerleisure.nl>" . "\r\n";
+            mail($mails_array, "RollBack execution", $mail_customer->getBody(), $cabeceras);
+        }
     }
 
 
@@ -603,20 +610,20 @@ class RuleController extends Controller
                             "listing" => $name->getNumber(),
                             "price" => $newprice,
                             "oldprice" => $listing->getPrice(),
-                            "status" => $result['status']
+                            "status" => $result['status'],
                         );
                         echo ' (response: ' . $result['status'] . '); </br></br>';
                     }
                 }
-
             }
             if (count($data) > 0){
-                $notifier = $em->getRepository('AdminBundle:Notifier')->findOneBy(array('form' => 'Rules'));
+                $notifier = $em->getRepository('RestaurantBundle:Notifier')->findOneBy(array('form' => 'Rules'));
                 $mails_array = str_replace(";",',', $notifier->getMails());
                 $mail_customer = (new \Swift_Message("Rule execution"))
                     ->setBody($this->renderView('RestaurantBundle:Rule:notifyrule.html.twig', array(
                         'data' => $data,
-                        "rule" => $rule
+                        "rule" => $rule,
+                        'rollback' => false,
                     )), "text/html");
                 $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
                 $cabeceras .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
@@ -684,32 +691,29 @@ class RuleController extends Controller
     /**
      * Eliminar Reglas del sistema.
      *
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Route("/{id}/delete/", name="rule_delete")
      * @Method("GET")
      */
     public function deleteAction($id)
     {
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('RestaurantBundle:Rule')->find($id);
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
 
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('RestaurantBundle:Rule')->find($id);
-            $user = $this->get('security.token_storage')->getToken()->getUser();
-
-            if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
-            }
-
-            try {
-                $em->remove($entity);
-                $em->flush();
-                $this->addFlash('success', 'Success! The rule has been removed.');
-                return $this->redirect($this->generateUrl('rule_admin'));
-            } catch (\Exception $ex) {
-                return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
-            }
+        if (!$entity) {
+            return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
         }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
+
+        try {
+            $em->remove($entity);
+            $em->flush();
+            $this->addFlash('success', 'Success! The rule has been removed.');
+            return $this->redirect($this->generateUrl('rule_admin'));
+        } catch (\Exception $ex) {
+            return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
+        }
     }
 
 
@@ -765,7 +769,7 @@ class RuleController extends Controller
             }
             if ($currentis) {
                 $listing = $em->getRepository("RestaurantBundle:Listing")->findOneBy(array("idguesty" => $reservation["listingId"]));
-                $notifier = $em->getRepository('AdminBundle:Notifier')->findOneBy(array('form' => 'Rules'));
+                $notifier = $em->getRepository('RestaurantBundle:Notifier')->findOneBy(array('form' => 'Rules'));
                 $mails_array = explode(';', $notifier->getMails());
                 $mail_customer = \Swift_Message::newInstance()
                     ->setFrom('info@log.towerleisure.nl')
@@ -1090,7 +1094,7 @@ class RuleController extends Controller
     public function hookUpdateAction()
     {
         $api = new ApiGuesty();
-        $result = $api->updateHook("5d3554611e97b9001e96b015", 'http://log.towerleisure.nl/hook/rollback/', array('reservation.updated'));
+        $result = $api->updateHook("5c59189bfe2049001fee4b67", 'https://log.towerleisure.nl/rule/executehook/', array('reservation.new'));
         var_dump($result);
         die;
     }

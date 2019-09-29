@@ -12,6 +12,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\HttpFoundation\Request;
 use Manage\RestaurantBundle\Controller\ApiGuesty;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
+
 
 class DefaultController extends Controller {
 
@@ -73,7 +76,7 @@ class DefaultController extends Controller {
                         $checkin->setUpdatedat(new \DateTime(date('Y-m-d h:m:s')));
                         $em->persist($checkin);
                         $em->flush();
-                        //$log->alert(' Checkin created. ID:'.$current['_id']. ' Listing: '. $current['listing']['title']);
+                        $log->alert(' Checkin created. ID:'.$current['_id']. ' Listing: '. $current['listing']['title']);
                     }
                 }
                 else{
@@ -111,7 +114,7 @@ class DefaultController extends Controller {
                             $savedcheckin->setUpdatedat(new \DateTime(date('Y-m-d h:m:s')));
                             $em->persist($savedcheckin);
                             $em->flush();
-                            //$log->alert(' Checkin updated. ID:'.$current['_id']. ' Listing: '. $current['listing']['title']);
+                            $log->alert(' Checkin updated. ID:'.$current['_id']. ' Listing: '. $current['listing']['title']);
 
 
                     }
@@ -349,7 +352,7 @@ class DefaultController extends Controller {
     public function confirmphraseAction(Request $request) {
         $form = $request->get('external');
         $em = $this->getDoctrine()->getManager();
-        $conf = $em->getRepository('AdminBundle:Parameters')->findOneBy(array('variable'=>'phrase'));
+        $conf = $em->getRepository('RestaurantBundle:Parameters')->findOneBy(array('variable'=>'phrase'));
         if ($conf->getValue() == $request->get('phrase')){
            return $this->redirectToRoute('cleaning', array('date'=>date('d-m-Y')));
         }
@@ -474,8 +477,118 @@ class DefaultController extends Controller {
 
         //var_dump($result);die;
     }
+    /**
+     * Website main page.
+     *
+     * @Route("/", name="home")
+     * @Method("GET")
+     * @Template()
+     */
+    public function indexAction() {
+        $user=$this->get('security.token_storage')->getToken()->getUser();
+        //var_dump($this->isGranted('ROLE_CLEANING'));die;
 
-    
+        $em = $this->getDoctrine()->getManager();
+        $recepties = $em->getRepository('RestaurantBundle:Reception')->findBy(array('updated'=>new\DateTime()));
+        $hotels = $em->getRepository('RestaurantBundle:Hotel')->findBy(array('dated'=>new\DateTime()));
+        $skybars = $em->getRepository('RestaurantBundle:Skybar')->findBy(array('updated'=>new\DateTime()));
+        $services = $em->getRepository('RestaurantBundle:CashClosure')->findBy(array('updated'=>new\DateTime()));
+        $logs = $em->getRepository('RestaurantBundle:Log')->findBy(array('updated'=>new\DateTime()));
+        $turnovers = $em->getRepository('RestaurantBundle:Turnover')->findBy(array('updated'=>new\DateTime()));
+        $kasboeks = $em->getRepository('RestaurantBundle:Kasboek')->findBy(array('updated'=>new\DateTime()));
+        $kasboekshotel = $em->getRepository('RestaurantBundle:KasboekHotel')->findBy(array('updated'=>new\DateTime()));
+        return $this->render('RestaurantBundle:Default:index.html.twig', array(
+            'recepties' => $recepties,
+            'hotels'    => $hotels,
+            'skybars' => $skybars,
+            'service' => $services,
+            'logs' => $logs,
+            'turnovers' => $turnovers,
+            'kasboeks' => $kasboeks,
+            'kasboekshotel' => $kasboekshotel,
+        ));
+
+
+        /*if ( $user->getRole() == 'ROLE_RECEPTION') {
+            return $this->redirect($this->generateUrl('reception', array('date' => date('m-Y'))));
+        }
+
+        if ( $user->getRole() == 'ROLE_RESTAURANT') {
+            return $this->redirect($this->generateUrl('cashclosure', array('date' => date('m-Y'))));
+        }
+
+        if ( $user->getRole() == 'ROLE_HOTEL') {
+            return $this->redirect($this->generateUrl('hotel', array('date' => date('m-Y'))));
+        }
+
+        if ( $user->getRole() == 'ROLE_SKYBAR') {
+            return $this->redirect($this->generateUrl('skybar', array('date' => date('m-Y'))));
+        }*/
+    }
+
+
+
+    /**
+     *
+     * @Route("/parameters/", name="parameters")
+     * @Security("is_granted('ROLE_FORMS_SETTINGS')")
+     *
+     * @Template()
+     */
+    public function parametersAction() {
+        $em = $this->getDoctrine()->getManager();
+        return $this->render('RestaurantBundle:Default:parameters.html.twig', array(
+            'iva'       => $em->getRepository('RestaurantBundle:Parameters')->getFieldsIva(),
+            'hotel'     => $em->getRepository('RestaurantBundle:Parameters')->getFieldsHotel(),
+            'general'   => $em->getRepository('RestaurantBundle:Parameters')->getFieldsGeneral(),
+            'rules'   => $em->getRepository('RestaurantBundle:Parameters')->getFieldsRules(),
+        ));
+    }
+
+    /**
+     *
+     * @Route("/parameters/{type}/", name="parameters_update")
+     * @Security("is_granted('ROLE_FORMS_SETTINGS')")
+     *
+     * @Template()
+     */
+    public function parametersUpdateAction(Request $request, $type) {
+        $em = $this->getDoctrine()->getManager();
+        if ($type == 'iva'){
+            //actulaizar los datos de parameters
+        }
+        if ($type == 'hotel'){
+            $hotel = $em->getRepository('RestaurantBundle:Parameters')->getFieldsHotel();
+            foreach ($hotel as $item){
+                if ($item->getVariable() == 'parking_quantity')
+                    $item->setValue((integer)$request->get($item->getVariable()));
+                $item->setValue($request->get($item->getVariable()));
+            }
+            //$request->get('turism-taxes');
+        }
+
+        if ($type == 'general'){
+            $general = $em->getRepository('RestaurantBundle:Parameters')->getFieldsGeneral();
+            foreach ($general as $item){
+                $item->setValue($request->get($item->getVariable()));
+            }
+            //$request->get('turism-taxes');
+        }
+
+        if ($type == 'rules'){
+            $general = $em->getRepository('RestaurantBundle:Parameters')->getFieldsRules();
+            foreach ($general as $item){
+                $item->setValue($request->get($item->getVariable()));
+            }
+            //$request->get('turism-taxes');
+        }
+        $em->flush();
+        $this->addFlash('success', 'Success! Settings has been saved.');
+        return $this->redirect($this->generateUrl('parameters'));
+    }
+
+
+
 
 }
 

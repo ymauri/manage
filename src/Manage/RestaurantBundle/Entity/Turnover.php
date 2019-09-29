@@ -53,7 +53,7 @@ class Turnover {
     
     /**
      * @var object
-     *  @ORM\ManyToOne(targetEntity="Manage\AdminBundle\Entity\Worker")
+     *  @ORM\ManyToOne(targetEntity="Manage\RestaurantBundle\Entity\Worker")
      */
     private $chief;
     

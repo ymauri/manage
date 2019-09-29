@@ -32,10 +32,15 @@
                                 <td width="4" height="4" style="background:url(http://demo.artlance.ru/email/shadow-left-top.png) no-repeat 100% 0;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
                                 <td colspan="3" rowspan="3" bgcolor="#f0f2ea" style="padding:0 0 30px;">
                                     <!-- begin content -->
+                                    {% if not rollback %}
                                     <p style="margin:33px 30px 33px;; text-align:center; text-transform:uppercase; font-size:24px; line-height:30px; font-weight:bold; color:#484a42;">
                                         Rule Execution - Guesty Reservation<br>
                                     </p>
-
+                                    {% else %}
+                                    <p style="margin:33px 30px 33px;; text-align:center; text-transform:uppercase; font-size:24px; line-height:30px; font-weight:bold; color:#484a42;">
+                                        RollBack Execution<br>
+                                    </p>
+                                    {% endif %}
                                     <p style="margin:33px 30px 33px;; text-align:center; font-size:18px; line-height:25px; font-weight:normal; color:#484a42;">
                                         {{ rule.name }} ({{ rule.details }})<br>
                                     </p>
@@ -48,15 +53,26 @@
                                          <table style="padding: 0 60px;">
                                              <tbody>
                                                 {% for item in data %}
-                                                 <tr>
+                                                {% if not rollback %}
+
+                                                <tr>
                                                      <td ><b>Listing {{ item.listing }}</b></td>
                                                  </tr>
+                                                {% else %}
+
+                                                    <tr>
+                                                        <td ><b>Listing {{ listing }}</b></td>
+                                                    </tr>
+
+                                                {% endif %}
                                                 <tr>
                                                      <td ><b>Date {{ item.date }}</b></td>
                                                  </tr>
+                                                    {% if not rollback %}
                                                  <tr>
                                                      <td >Price: &euro; {{ item.oldprice }}</td>
                                                  </tr>
+                                                {% endif %}
                                                  <tr>
                                                      <td >Updated Price: &euro; {{ item.price }}</td>
                                                  </tr>

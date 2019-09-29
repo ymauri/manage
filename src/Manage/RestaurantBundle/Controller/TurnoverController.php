@@ -18,7 +18,7 @@ use Manage\RestaurantBundle\Form\TurnoverSkybarType;
 use Manage\RestaurantBundle\Form\TurnoverOmzetType;
 use Manage\RestaurantBundle\Form\TurnoverType;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Manage\AdminBundle\Entity\RNotifierForm;
+use Manage\RestaurantBundle\Entity\RNotifierForm;
 
 
 /**
@@ -36,7 +36,7 @@ class TurnoverController extends Controller {
     public function newAction() {
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRole()!='ROLE_SUPERADMIN'){
-            return $this->render('AdminBundle:Exception:error403.html.twig');
+            return $this->render('RestaurantBundle:Exception:error403.html.twig');
         }
         $entity_basic = new Turnover();
         $entity_basic->setDated(new \DateTime('today - 1 day'));
@@ -76,7 +76,7 @@ class TurnoverController extends Controller {
     public function indexAction($date) {
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRole()!='ROLE_SUPERADMIN'){
-            return $this->render('AdminBundle:Exception:error403.html.twig');
+            return $this->render('RestaurantBundle:Exception:error403.html.twig');
         }
         $partes = explode('-', $date);
         $date = $partes[1].'-'.$partes[0];
@@ -86,7 +86,7 @@ class TurnoverController extends Controller {
         $consulta = $em->createQuery('SELECT r FROM RestaurantBundle:Turnover r WHERE r.dated >= \''.$date.'-01\' AND r.dated <= \''.$date.'-31\' ORDER BY r.dated DESC');
         $entities = $consulta->getResult();
 
-        $consulta = $em->createQuery('SELECT r.form, count(r.id) AS cantidad FROM AdminBundle:RNotifierForm r JOIN r.notifier n WHERE n.form LIKE \'Turnover\' GROUP BY r.form');
+        $consulta = $em->createQuery('SELECT r.form, count(r.id) AS cantidad FROM RestaurantBundle:RNotifierForm r JOIN r.notifier n WHERE n.form LIKE \'Turnover\' GROUP BY r.form');
         $notifier = $consulta->getResult();
         //var_dump($notifier);die;
         $result = array();
@@ -115,13 +115,13 @@ class TurnoverController extends Controller {
     public function showAction($id) {
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRole()!='ROLE_SUPERADMIN'){
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
         $em = $this->getDoctrine()->getManager();
 
         $entity_basic = $em->getRepository('RestaurantBundle:Turnover')->find($id);
         if (!$entity_basic) {
-            return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
+            return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
         }
         $form_basic = $this->createForm(new TurnoverType(), $entity_basic);
         $form_reception = $this->createForm(new TurnoverReceptionType(), $entity_basic->getReception());
@@ -149,13 +149,13 @@ class TurnoverController extends Controller {
     public function deleteAction($id) {
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRole()!='ROLE_SUPERADMIN'){
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('RestaurantBundle:Turnover')->find($id);
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if (!$entity) {
-            return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
+            return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
         }
         $now = new \DateTime('now');
         //echo  $entity_basic->getUpdated()->diff($now)->d ; die;
@@ -169,7 +169,7 @@ class TurnoverController extends Controller {
             $em->remove($entity);
             $em->flush();
         } catch (\Exception $ex) {
-            return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
+            return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
         }
         $this->addFlash('success', 'Success! The form has been removed.');
         return $this->redirect($this->generateUrl('turnover', array('date'=>date('m-Y'))));
@@ -181,7 +181,7 @@ class TurnoverController extends Controller {
     public function editAction($id) {
         $user=$this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRole()!='ROLE_SUPERADMIN'){
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
+            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -189,7 +189,7 @@ class TurnoverController extends Controller {
 
         $entity_basic = $em->getRepository('RestaurantBundle:Turnover')->find($id);
         if (!$entity_basic) {
-            return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
+            return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
         }
             //{% if 'today - 3 day' | date('d-m-Y') < entity.updated | date('d-m-Y') %}
         $olddate = new \DateTime('today - 1 day');
@@ -217,7 +217,7 @@ class TurnoverController extends Controller {
                     $entity_basic = $this->updateCalculos($entity_basic);
                     $entity_basic->setUpdated(new \DateTime());
                    
-                    $not = $em->getRepository('AdminBundle:RNotifierForm')->findOneBy(array('form'=>$entity_basic->getId()));
+                    $not = $em->getRepository('RestaurantBundle:RNotifierForm')->findOneBy(array('form'=>$entity_basic->getId()));
                     if (!is_null($entity_basic->getFinished()) ){
                         $entity_basic->setFinished(new \DateTime());
                         if (is_null($not)) $this->sendMail($id);
@@ -486,7 +486,7 @@ class TurnoverController extends Controller {
     private function sendMail($id){
         $em = $this->getDoctrine()->getManager();
         //Crear el notificador para este formulario.
-        $notifier = $em->getRepository('AdminBundle:Notifier')->findOneBy(array('form'=>'Turnover'));
+        $notifier = $em->getRepository('RestaurantBundle:Notifier')->findOneBy(array('form'=>'Turnover'));
         $entity_basic = $em->getRepository('RestaurantBundle:Turnover')->findOneBy(array('id'=>$id));
         $mails_array = explode(';',$notifier->getMails());
         $mail_customer = \Swift_Message::newInstance()
@@ -543,7 +543,7 @@ class TurnoverController extends Controller {
         try{
             $this->sendMail($id);
         } catch (\Exception $ex) {
-            return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
+            return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
         }
         $em = $this->getDoctrine()->getManager();
         $entity_basic = $em->getRepository('RestaurantBundle:Turnover')->findOneBy(array('id'=>$id));

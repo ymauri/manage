@@ -31,7 +31,7 @@ class Furniture {
     /**
      * @var string
      *
-     * @ORM\Column(name="details", type="text")
+     * @ORM\Column(name="details", type="text", nullable=true)
      */
     private $details;
 
@@ -59,7 +59,7 @@ class Furniture {
 
     /**
      * @var object
-     *  @ORM\ManyToOne(targetEntity="Manage\AdminBundle\Entity\Status")
+     *  @ORM\ManyToOne(targetEntity="Manage\RestaurantBundle\Entity\Status")
      */
     private $status;
 
@@ -209,6 +209,15 @@ class Furniture {
     public function getTags()
     {
         return $this->tags;
+    }
+
+    public function getTagsArray()
+    {
+        $result = array();
+        foreach ($this->tags as $tag) {
+            $result[] = $tag->getName();
+        }
+        return $result;
     }
 
     public function setTags($tags)

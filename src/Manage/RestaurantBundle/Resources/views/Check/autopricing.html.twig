@@ -1,4 +1,4 @@
-{% extends 'AdminBundle::frame.html.twig' %}
+{% extends 'RestaurantBundle::frame.html.twig' %}
 {% block title %} Auto-Pricing {% endblock %}
 {% block body %}
 <div class="portlet">
@@ -63,15 +63,19 @@
                             <option value="lower">Lower price</option>
                             <option value="raise">Raise price</option>
                         </select>
+                            </p>
+                        <p>
                         <label>By</label>
-                        <input name="amount" class="form-control" type="number" style="max-width: 60px !important;">
-                        <select name="unit" class="form-control" style="max-width: 60px !important;">
+                            </p>
+                        <p>
+                        <input name="amount" class="form-control" type="number" style="display: inline; max-width: 60px !important;">
+                        <select name="unit" class="form-control" style="max-width: 60px !important; display: inline;">
                             <option value="%">%</option>
                             <option value="currency">€</option>
                         </select>
                         </p>
                     </div>
-                    <div class="row form-group col-md-12 gaps" hidden="hidden">
+                    <div class="form-group col-md-12 gaps" hidden="hidden">
                         <h5><b>Gaps definition</b></h5>
                         <p> <label>where gaps are a maximum of</label>
                             <select name="condition" class="form-control" style="max-width: 60px !important;">
@@ -85,8 +89,8 @@
                     </div>
 
                 </div>
-                <div class="row form-group col-md-3">
-                    <label style="min-height: 190px; vertical-align: -webkit-baseline-middle;">Listing</label>
+                <div class="form-group col-md-3">
+                    <label style="vertical-align: -webkit-baseline-middle;">Listing</label>
                     <select multiple id="listing" name="listing" class="form-control" style="min-height: 190px;">
                         {% for var in listings%}
                             {# temporalmente voy a usar como ID el number del dpto#}
@@ -95,8 +99,8 @@
                     </select>
                     
                 </div>
-                <div class="row form-group col-md-2">
-                    <button type = 'submit' class="btn save-filter blue-hoki" >Filter</button>
+                <div class="form-group col-md-2">
+                    <button type = 'submit' class="btn save-filter blue-hoki pull-right" >Filter</button>
 
                 </div>
                 </form>

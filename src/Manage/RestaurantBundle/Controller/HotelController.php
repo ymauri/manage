@@ -17,11 +17,15 @@ use Manage\RestaurantBundle\Entity\Card;
 use Manage\RestaurantBundle\Entity\HotelParking;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Manage\AdminBundle\Entity\RNotifierForm;
+use Manage\RestaurantBundle\Entity\RNotifierForm;
 use Manage\RestaurantBundle\Entity\Checkin;
 use Manage\RestaurantBundle\Entity\Checkout;
 use Manage\RestaurantBundle\Entity\Cleaning;
 use Manage\RestaurantBundle\Controller\Nomenclator;
+use Manage\RestaurantBundle\Components\fpdf\FPDF;
+use Manage\RestaurantBundle\Components\fpdi\Fpdi;
+use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * Hotel controller.
@@ -30,16 +34,18 @@ use Manage\RestaurantBundle\Controller\Nomenclator;
  */
 class HotelController extends Controller {
 
+    private $entity_basic;
+    private $em;
+
     /**
      * Lists all Listing entities.
      *
      * @Route("/date/{date}/", name="hotel")
      * @Method("GET")
+     * @Security("is_granted('ROLE_HOTEL_FORM')")
      * @Template()
      */
     public function indexAction($date) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_RECEPTION') {
 
             $partes = explode('-', $date);
             $date = $partes[1] . '-' . $partes[0];
@@ -47,7 +53,7 @@ class HotelController extends Controller {
             $em = $this->getDoctrine()->getManager();
             $consulta = $em->createQuery('SELECT r FROM RestaurantBundle:Hotel r WHERE r.dated >= \'' . $date . '-01\' AND r.dated <= \'' . $date . '-31\' ORDER BY r.dated DESC');
             $entities = $consulta->getResult();
-            $consulta = $em->createQuery('SELECT r.form, count(r.id) AS cantidad FROM AdminBundle:RNotifierForm r JOIN r.notifier n WHERE n.form LIKE \'Hotel\' GROUP BY r.form');
+            $consulta = $em->createQuery('SELECT r.form, count(r.id) AS cantidad FROM RestaurantBundle:RNotifierForm r JOIN r.notifier n WHERE n.form LIKE \'Hotel\' GROUP BY r.form');
             $notifier = $consulta->getResult();
             $result = array();
             foreach ($entities as $entity) {
@@ -62,9 +68,6 @@ class HotelController extends Controller {
                 'entities' => $entities,
                 'notifier' => $result,
             );
-        }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
-
     }
 
     /**
@@ -72,11 +75,10 @@ class HotelController extends Controller {
      *
      * @Route("/new/", name="hotel_new")
      * @Method("GET")
+     * @Security("is_granted('ROLE_HOTEL_FORM')")
      * @Template()
      */
     public function newAction() {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_RECEPTION') {
 
             $entity_hotel = new Hotel();
             $bill = new Bill();
@@ -86,14 +88,14 @@ class HotelController extends Controller {
             $entity_hotel->setDated(new \DateTime('today'));
             $entity_hotel->setUpdated(new \DateTime('today'));
             $em = $this->getDoctrine()->getManager();
-            $tax = $em->getRepository('AdminBundle:Parameters')->findOneBy(array('variable' => 'turism_taxes'));
+            $tax = $em->getRepository('RestaurantBundle:Parameters')->findOneBy(array('variable' => 'turism_taxes'));
             $entity_hotel->setTax((float)str_replace(",", ".", $tax->getValue()));
-            $parking = $em->getRepository('AdminBundle:Parameters')->findOneBy(array('variable' => 'parking_hotel'));
+            $parking = $em->getRepository('RestaurantBundle:Parameters')->findOneBy(array('variable' => 'parking_hotel'));
             $entity_hotel->setParking((float)str_replace(",", ".", $parking->getValue()));
-            $limit = $em->getRepository('AdminBundle:Parameters')->findOneBy(array('variable' => 'nights_limit_pay'));
-            $entity_hotel->setNightslimit($limit->getValue());
-            $amountparking = $em->getRepository('AdminBundle:Parameters')->findOneBy(array('variable' => 'parking_quantity'));
-            $entity_hotel->setAmmountparking($amountparking->getValue());
+            $limit = $em->getRepository('RestaurantBundle:Parameters')->findOneBy(array('variable' => 'nights_limit_pay'));
+            $entity_hotel->setNightslimit((integer)$limit->getValue());
+            $amountparking = $em->getRepository('RestaurantBundle:Parameters')->findOneBy(array('variable' => 'parking_quantity'));
+            $entity_hotel->setAmmountparking((float)$amountparking->getValue());
             $em->persist($entity_hotel);
             $em->flush();
             //Creando las relaciones a partir de lo que vino de Guesty
@@ -154,16 +156,14 @@ class HotelController extends Controller {
             //}
 
             return $this->redirect($this->generateUrl('hotel_edit', array('id' => $entity_hotel->getId())));
-        }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
 
     }
-    
+
     private function notifyBlacklist($blacklist, $id){
         $em = $this->getDoctrine()->getManager();
 
         //Crear el notificador para este formulario.
-       $notifier = $em->getRepository('AdminBundle:Notifier')->findOneBy(array('form'=>'Hotel'));
+       $notifier = $em->getRepository('RestaurantBundle:Notifier')->findOneBy(array('form'=>'Hotel'));
         $entity = $em->getRepository('RestaurantBundle:Hotel')->findOneBy(array('id'=>$id));
       $mails_array = explode(';',$notifier->getMails());
         $mail_customer = \Swift_Message::newInstance()
@@ -196,6 +196,7 @@ class HotelController extends Controller {
 
     /**
      * Displays a form to create a new Listing entity.
+     * @Security("is_granted('ROLE_HOTEL_FORM')")
      *
      * @Route("/hotelchangedate/{id}/", name="hotel_change_date")
      */
@@ -209,7 +210,7 @@ class HotelController extends Controller {
                 try {
                     $em = $this->getDoctrine()->getManager();
                     $entity_hotel = $em->getRepository('RestaurantBundle:Hotel')->findOneBy(array('id' => $id));
-                    
+
                     $entity_hotel->setDated(new \DateTime($request->get('date')));
                     $entity_hotel->setUpdated(new \DateTime('now'));
 
@@ -285,7 +286,7 @@ class HotelController extends Controller {
                 }
             }
         }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
+        return $this->render('RestaurantBundle:Exception:error403.html.twig');
 
     }
 
@@ -340,7 +341,7 @@ class HotelController extends Controller {
         return $result;
     }
 
-    //Obtener los apartamentos disponibles para las reservas 
+    //Obtener los apartamentos disponibles para las reservas
     private function getActiveListing() {
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('RestaurantBundle:Listing')->findBy(array('activeforrent'=>1));
@@ -356,7 +357,7 @@ class HotelController extends Controller {
 
     private function getUsers() {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('AdminBundle:Worker')->getRecepties();
+        $entities = $em->getRepository('RestaurantBundle:Worker')->getRecepties();
         $result = array();
         foreach ($entities as $item) {
             $result[] = array(
@@ -372,16 +373,15 @@ class HotelController extends Controller {
      *
      * @Route("/{id}/", name="hotel_show")
      * @Method("GET")
+     * @Security("is_granted('ROLE_HOTEL_FORM')")
      * @Template()
      */
     public function showAction($id) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_RECEPTION') {
 
             $em = $this->getDoctrine()->getManager();
             $entity_basic = $em->getRepository('RestaurantBundle:Hotel')->find($id);
             if (!$entity_basic) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
             }
             $canceled = $em->getRepository('RestaurantBundle:Checkin')->findBy(array('date' => $entity_basic->getDated(), 'status'=>'canceled'));
             $help = $em->getRepository('RestaurantBundle:Help')->findBy(array('form'=>'hotel'));
@@ -407,88 +407,75 @@ class HotelController extends Controller {
                 'help'=>$contenidos,
                 'show' => TRUE
             ));
-        }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
-
     }
 
     /**
      * Displays a form to edit an existing Listing entity.
      *
      * @Route("/{id}/edit/", name="hotel_edit")
+     * @Security("is_granted('ROLE_HOTEL_FORM')")
      * @Template()
      */
     public function editAction($id) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_RECEPTION') {
             $request = $this->getRequest();
-            $em = $this->getDoctrine()->getManager();
-            $entity_basic = $em->getRepository('RestaurantBundle:Hotel')->find($id);
-            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $this->em = $this->getDoctrine()->getManager();
+            $this->entity_basic = $this->em->getRepository('RestaurantBundle:Hotel')->find($id);
 
-            if (!$entity_basic) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
+            if (!$this->entity_basic) {
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
             }
             $now = new \DateTime('now');
-            //echo  $entity_basic->getUpdated()->diff($now)->d ; die;
-            //if (strtotime($olddate->format('d-m-Y')) > strtotime($entity_basic->getUpdated()->format('d-m-Y')) && $user->getRole() != 'ROLE_SUPERADMIN') {
-            if (($entity_basic->getUpdated()->diff($now)->d >= 2) && ($user->getRole() != 'ROLE_SUPERADMIN')) {
-            //if (($olddate->format('d-m-Y') == $entity_basic->getUpdated()->format('d-m-Y') && ($now->format('G') >= 8) || $entity_basic->getUpdated()->format('d-m-Y') != $now->format('d-m-Y') ) && ($user->getRole() != 'ROLE_SUPERADMIN' && $user->getRole() != 'ROLE_RECEPTION')) {
+            if (($this->entity_basic->getUpdated()->diff($now)->d >= 2) && (!$this->isGranted('ROLE_SUPER_ADMIN'))) {
                 $this->addFlash('error', 'Error! This form can not be modified.');
                 return $this->redirect($this->generateUrl('hotel', array('date' => date('m-Y'))));
             }
-
-            $entity_basic->setUpdated(new \DateTime('today'));
-            $result = $this->isBlackList($id);
+            
+            $this->entity_basic->setUpdated(new \DateTime('today'));
             if ($request->getMethod() == 'POST') {
                $data = $request->get('data');
                 $final = $request->get('final');
                 $response = new JsonResponse();
                 $visitedin = $visitedout = array();
-                $checkins = $em->getRepository("RestaurantBundle:RCheckinHotel")->findBy(array('hotel' =>$entity_basic->getId()));
-                $checkouts = $em->getRepository("RestaurantBundle:RCheckoutHotel")->findBy(array('hotel' =>$entity_basic->getId()));
+                $checkins = $this->em->getRepository("RestaurantBundle:RCheckinHotel")->findBy(array('hotel' =>$this->entity_basic->getId()));
+                $checkouts = $this->em->getRepository("RestaurantBundle:RCheckoutHotel")->findBy(array('hotel' =>$this->entity_basic->getId()));
                 foreach ($data as $key => $value) {
                     switch ($key) {
                         case 'form-basic-hotel':
-                            $entity_basic = $this->updateHotel($entity_basic, $value);
+                            $this->updateHotel($value);
                             break;
                         case 'form-total-hotel':
-                            $entity_basic = $this->updateHotel($entity_basic, $value);
+                            $this->updateHotel($value);
                             break;
                         case 'form-notifier-hotel':
-                            $entity_basic = $this->updateHotel($entity_basic, $value);
-                            break;
-                        case 'form-parking-hotel':
-                            $this->updateParkingHotel($entity_basic, $value);
+                            $this->updateHotel($value);
                             break;
                         case 'form-bills':
-                            $entity_basic = $this->updateBill($entity_basic, $value);
+                            $this->updateBill($value);
                             break;
                         case 'form-card':
-                            $entity_basic = $this->updateCard($entity_basic, $value);
+                            $this->updateCard($value);
                             //die;
                             break;
                         case 'form-final':
-                            $entity_basic = $this->updateFinal($entity_basic, $value);
+                            $this->updateFinal($value);
                             break;
                         default:
                             if (substr($key, 0, 12) == 'form-checkin') {
-                                $visitedin[] = $this->createCheckin($entity_basic, $value);
+                                $visitedin[] = $this->createCheckin($value);
                             }
                             if (substr($key, 0, 13) == 'form-checkout') {
-                                $visitedout[] = $this->createCheckout($entity_basic, $value);
+                                $visitedout[] = $this->createCheckout($value);
                             }
                             break;
                     }
+                    $this->em->flush();
                 }
-
-
                 try {
                     //Verificar si hay algún checkin que ha sido eliminado ()
                     //if (count($visitedin) < count($checkins)){
                         foreach ($checkins as $c){
                             if (!in_array($c->getId(), $visitedin)){
-                                $em->remove($c);
+                                $this->em->remove($c);
                             }
                         }
                     //}
@@ -496,24 +483,26 @@ class HotelController extends Controller {
                     //if (count($visitedout) < count($checkouts)){
                         foreach ($checkouts as $c){
                             if (!in_array($c->getId(), $visitedout)){
-                                $em->remove($c);
+                                $this->em->remove($c);
                             }
                         }
                     //}
-                    $em->flush();
-                    $entity_basic->setUpdated(new \DateTime('today'));
-                    $r = $this->isBlackList($entity_basic->getId());
-                    $em->flush();
-                    $this->updateCalculos($entity_basic);
+                    $this->em->flush();
+                    $this->entity_basic->setUpdated(new \DateTime('today'));
+                    //$r = $this->isBlackList($this->entity_basic->getId());
+                    $this->em->persist($this->entity_basic);
+                    $this->em->flush();
+                    $this->updateCalculos();
                     if ($final == 'true') {
                         if ($user->getRole() == 'ROLE_SUPERADMIN')
-                            $entity_basic->setName('true');
-                        $entity_basic->setFinished(new \DateTime('today'));
-                        $em->flush();
+                            $this->entity_basic->setName('true');
+                        $this->entity_basic->setFinished(new \DateTime('today'));
+                        $this->em->persist($this->entity_basic);
+                        $this->em->flush();
                         $this->sendMail($id);
                     }
                     $cleaning = array();
-                    $datacleaning = $em->getRepository("RestaurantBundle:Cleaning")->findBy(array('dated'=>$entity_basic->getDated()));
+                    $datacleaning = $this->em->getRepository("RestaurantBundle:Cleaning")->findBy(array('dated'=>$this->entity_basic->getDated()));
                     foreach ($datacleaning as $clean){
                         $cleaning[$clean->getListing()->getNumber()] = $clean->getStatus();
                     }
@@ -530,8 +519,8 @@ class HotelController extends Controller {
             else {
                 //Obtener los Departamentos cancelados sennalando los que deben ser cobrados
                 //Condicion de cobro: Cancelados con menos de 7 dias de diferencia de la reserva
-                $canceled = $em->getRepository('RestaurantBundle:Checkin')->findBy(array('date' => $entity_basic->getDated(), 'status'=>'canceled'));
-                $help = $em->getRepository('RestaurantBundle:Help')->findBy(array('form'=>'hotel'));
+                $canceled = $this->em->getRepository('RestaurantBundle:Checkin')->findBy(array('date' => $this->entity_basic->getDated(), 'status'=>'canceled'));
+                $help = $this->em->getRepository('RestaurantBundle:Help')->findBy(array('form'=>'hotel'));
                 $contenidos = array();
                 foreach ($help as $content){
                     $contenidos[$content->getField()] = array(
@@ -540,24 +529,21 @@ class HotelController extends Controller {
                     );
                 }
                 return $this->render('RestaurantBundle:Hotel:edit.html.twig', array(
-                    'entity_basic' => $entity_basic,
-                    'rcheckin' => $em->getRepository('RestaurantBundle:RCheckinHotel')->getOrderedCheckin($id),
-                    'rcheckout' => $em->getRepository('RestaurantBundle:RCheckoutHotel')->getOrderedCheckout($id),
-                    "cleaning"=> $em->getRepository("RestaurantBundle:Cleaning")->findBy(array('dated'=>$entity_basic->getDated())),
+                    'entity_basic' => $this->entity_basic,
+                    'rcheckin' => $this->em->getRepository('RestaurantBundle:RCheckinHotel')->getOrderedCheckin($id),
+                    'rcheckout' => $this->em->getRepository('RestaurantBundle:RCheckoutHotel')->getOrderedCheckout($id),
+                    "cleaning"=> $this->em->getRepository("RestaurantBundle:Cleaning")->findBy(array('dated'=>$this->entity_basic->getDated())),
                     'users' => $this->getUsers(),
                     //'checkout_guesty' => $this->getCheckout(),
                     //'checkin_guesty' => $this->getCheckin(),
                     'sources' => $this->getActiveSources(),
                     'listing' => $this->getActiveListing(),
-                    'parking' => $em->getRepository('RestaurantBundle:HotelParking')->findOneBy(array('hotel' => $entity_basic->getId())),
+                    //'parking' => $em->getRepository('RestaurantBundle:HotelParking')->findOneBy(array('hotel' => $this->entity_basic->getId())),
                     'canceled' => $canceled,
                     'help'=>$contenidos,
                     'show' => FALSE
                 ));
             }
-        }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
-
     }
 
     //Actualizar Parqueos
@@ -575,86 +561,82 @@ class HotelController extends Controller {
     }
 
     //Actualizar el objeto Hotel
-    private function updateHotel($entity_basic, $data) {
-        $em = $this->getDoctrine()->getManager();
-        try {
+    private function updateHotel($data) {
+
             foreach ($data as $value) {
                 switch ($value['name']) {
                     case 'dated':
-                        if ($entity_basic->getFinished() == null){
-                            $entity_basic->setDated(new \DateTime($value['value']));
+                        if ($this->entity_basic->getFinished() == null){
+                            $this->entity_basic->setDated(new \DateTime($value['value']));
                         }
                         break;
                     case 'totalover':
                         $current = str_replace('.', '', $value['value']);
                         $current = str_replace(',', '.', $current);
-                        $entity_basic->setTotalover($current);
+                        $this->entity_basic->setTotalover($current);
                         break;
                     case 'totalvoldan':
                         $current = str_replace('.', '', $value['value']);
                         $current = str_replace(',', '.', $current);
-                        $entity_basic->setTotalvoldan($current);
+                        $this->entity_basic->setTotalvoldan($current);
                         break;
                     case 'totaltoer':
                         $current = str_replace('.', '', $value['value']);
                         $current = str_replace(',', '.', $current);
-                        $entity_basic->setTotaltoer($current);
+                        $this->entity_basic->setTotaltoer($current);
                         break;
                     case 'totalborg':
                         $current = str_replace('.', '', $value['value']);
                         $current = str_replace(',', '.', $current);
-                        $entity_basic->setTotalborg($current);
+                        $this->entity_basic->setTotalborg($current);
                         break;
                     case 'totalretourborg':
                         $current = str_replace('.', '', $value['value']);
                         $current = str_replace(',', '.', $current);
-                        $entity_basic->setTotalretourborg($current);
+                        $this->entity_basic->setTotalretourborg($current);
                         break;
                     case 'totalparking':
                         $current = str_replace('.', '', $value['value']);
                         $current = str_replace(',', '.', $current);
-                        $entity_basic->setTotalparking($current);
+                        $this->entity_basic->setTotalparking($current);
                         break;
                     case 'totalextra':
                         $current = str_replace('.', '', $value['value']);
                         $current = str_replace(',', '.', $current);
-                        $entity_basic->setTotalextra($current);
+                        $this->entity_basic->setTotalextra($current);
                         break;
                     case 'totaldag':
                         $current = str_replace('.', '', $value['value']);
                         $current = str_replace(',', '.', $current);
-                        $entity_basic->setTotaldag($current);
+                        $this->entity_basic->setTotaldag($current);
                         break;
                     case 'userdoor':
-                        $user = $em->getRepository('AdminBundle:Worker')->find($value['value']);
-                        $entity_basic->setUserdoor($user);
+                        $user = $this->em->getRepository('RestaurantBundle:Worker')->find($value['value']);
+                        $this->entity_basic->setUserdoor($user);
                         break;
                     case 'notify':
-                        $entity_basic->setNotify($value['value']);
+                        $this->entity_basic->setNotify($value['value']);
                         break;
                     default:
                         break;
                 }
             }
-            $em->flush();
-            return $entity_basic;
-        } catch (\Exception $ex) {
-            return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
-        }
+            //$this->em->flush();
+            //return $entity_basic;
     }
 
     //Crear las relaciones entre el del checkin y el formulario
-    private function createCheckin($entity_basic, $data) {
-        $em = $this->getDoctrine()->getManager();
+    private function createCheckin($data) {
+        //$em = $this->getDoctrine()->getManager();
         $relation = new RCheckinHotel();
-        $relation->setHotel($entity_basic);
+        $relation->setHotel($this->entity_basic);
         if (isset($data[0]['name']) && $data[0]['name'] == 'id' && $data[0]['value'] > 0) {
-            $relation = $em->getRepository('RestaurantBundle:RCheckinHotel')->find($data[0]['value']);
+            $relation = $this->em->getRepository('RestaurantBundle:RCheckinHotel')->find($data[0]['value']);
         }
         else {
             foreach ($data as $value) {
                 if ($value['name'] == 'listing') {
-                    $checkin = $em->getRepository('RestaurantBundle:RCheckinHotel')->findOneBy(array('hotel'=>$entity_basic->getId(), 'listing'=>$value['value']));
+                    $checkin = $this->em->getRepository('RestaurantBundle:RCheckinHotel')->findOneBy(array('hotel'=>$this->entity_basic->getId(), 'listing'=>$value['value']));
                     if (!is_null($checkin) && is_null($checkin->getCheckin()) ){
                         $relation = $checkin;
                     }
@@ -665,11 +647,11 @@ class HotelController extends Controller {
             foreach ($data as $value) {
                 switch ($value['name']) {
                     case 'listing':
-                        $listing = $em->find('RestaurantBundle:Listing',$value['value']);
+                        $listing = $this->em->find('RestaurantBundle:Listing',$value['value']);
                         $relation->setListing($listing);
                         break;
                     case 'checkinid':
-                        $checkin = $em->find('RestaurantBundle:Checkin',$value['value']);
+                        $checkin = $this->em->find('RestaurantBundle:Checkin',$value['value']);
                         $relation->setCheckin($checkin);
                         break;
                     case 'name':
@@ -679,42 +661,42 @@ class HotelController extends Controller {
                         $relation->setDetails($value['value']);
                         break;
                     case 'source':
-                        $source = $em->getRepository('RestaurantBundle:Source')->find($value['value']);
+                        $source = $this->em->getRepository('RestaurantBundle:Source')->find($value['value']);
                         $relation->setSource($source);
                         break;
                     case 'betalen':
                         $current = str_replace('.', '', $value['value']);
                         $current = str_replace(',', '.', $current);
-                        $relation->setBetalen($current);
+                        $relation->setBetalen((float)$current);
                         break;
                     case 'totalbetalen':
                         $current = str_replace('.', '', $value['value']);
                         $current = str_replace(',', '.', $current);
-                        $relation->setTotalbetalen($current);
+                        $relation->setTotalbetalen((float)$current);
                         break;
                     case 'voldan':
                         $current = str_replace('.', '', $value['value']);
                         $current = str_replace(',', '.', $current);
-                        $relation->setVoldan($current);
+                        $relation->setVoldan((float)$current);
                         break;
                     case 'nights':
-                        $relation->setNights($value['value']);
+                        $relation->setNights((integer)$value['value']);
                         break;
                     case 'guests':
-                        $relation->setGuests($value['value']);
+                        $relation->setGuests((integer)$value['value']);
                         break;
                     case 'parkingdag':
                         $current = str_replace('.', '', $value['value']);
                         $current = str_replace(',', '.', $current);
-                        $relation->setParkingdag($current);
+                        $relation->setParkingdag((float)$current);
                         break;
                     case 'parking':
                         $current = str_replace('.', '', $value['value']);
                         $current = str_replace(',', '.', $current);
-                        $relation->setParking($current);
+                        $relation->setParking((float)$current);
                         break;
                     case 'latecheckin':
-                        $relation->setLatecheckin($value['value']);
+                        $relation->setLatecheckin((float)$value['value']);
                         break;
                     case 'details':
                         $relation->setDetails($value['value']);
@@ -731,7 +713,7 @@ class HotelController extends Controller {
                     case 'borg':
                         $current = str_replace('.', '', $value['value']);
                         $current = str_replace(',', '.', $current);
-                        $relation->setBorg($current);
+                        $relation->setBorg((float)$current);
                         break;
                     /*case 'sourceguesty':
                         $relation->setSourceguesty($value['value']);
@@ -757,28 +739,29 @@ class HotelController extends Controller {
                 $relation->setFromguesty(0);
             }
 
-            if (!is_null($relation->getListing())){
-                $em->persist($relation);
-            }
-            $em->flush();
+            //if (!is_null($relation->getListing())){
+              //  $this->em->persist($relation);
+            //}
+            $this->em->persist($relation);
+
             return $relation->getId();
-            
+
         } catch (\Exception $ex) {
-            return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
+            return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
         }
     }
     //Crear las relaciones entre el del checkout y el formulario
-    private function createCheckout($entity_basic, $data) {
-        $em = $this->getDoctrine()->getManager();
+    private function createCheckout($data) {
+        //$em = $this->getDoctrine()->getManager();
         $relation = new RCheckoutHotel();
-        $relation->setHotel($entity_basic);
+        $relation->setHotel($this->entity_basic);
         if (isset($data[0]['name']) && $data[0]['name'] == 'id' && $data[0]['value'] > 0) {
-            $relation = $em->getRepository('RestaurantBundle:RCheckoutHotel')->find($data[0]['value']);
+            $relation = $this->em->getRepository('RestaurantBundle:RCheckoutHotel')->find($data[0]['value']);
         }
         else {
             foreach ($data as $value) {
                 if ($value['name'] == 'listing') {
-                    $checkout = $em->getRepository('RestaurantBundle:RCheckoutHotel')->findOneBy(array('hotel'=>$entity_basic->getId(), 'listing'=>$value['value']));
+                    $checkout = $this->em->getRepository('RestaurantBundle:RCheckoutHotel')->findOneBy(array('hotel'=>$this->entity_basic->getId(), 'listing'=>$value['value']));
                     if (!is_null($checkout) && is_null($checkout->getCheckin()) ){
                         $relation = $checkout;
                     }
@@ -790,23 +773,23 @@ class HotelController extends Controller {
             foreach ($data as $current){
                 if (substr($current['name'], 0, 7) == 'listing'){
                     if ($current['value'] == '') return;
-                    $listing = $em->getRepository('RestaurantBundle:Listing')->find($current['value']);
+                    $listing = $this->em->getRepository('RestaurantBundle:Listing')->find($current['value']);
                     $relation->setListing($listing);
                 }
                 if (substr($current['name'], 0, 7) == 'details'){
                     $relation->setDetails($current['value']);
                 }
                 if (substr($current['name'], 0, 4) == 'borg'){
-                    $relation->setBorg($current['value']);
+                    $relation->setBorg((float)$current['value']);
                 }
                 if (substr($current['name'], 0, 7) == 'confirm') {
                     $confirm = true;
                 }
                 if ($current['name'] == 'fromguesty'){
-                    $relation->setFromguesty($current['value']);
+                    $relation->setFromguesty((integer)$current['value']);
                 }
                 if ($current['name'] == 'checkoutid'){
-                    $checkout = $em->getRepository('RestaurantBundle:Checkout')->find($current['value']);
+                    $checkout = $this->em->getRepository('RestaurantBundle:Checkout')->find($current['value']);
                     $relation->setCheckout($checkout);
                 }
                 if ($current['name'] == 'name'){
@@ -815,40 +798,36 @@ class HotelController extends Controller {
             }
             $checkoutdoneold = $relation->getCheckoutdone();
             $relation->setCheckoutdone($confirm);
-            $em->persist($relation);
-            $cleaning = $em->getRepository("RestaurantBundle:Cleaning")->findOneBy(array("dated"=>$relation->getDate(), "listing"=>$relation->getListing()));
+            $this->em->persist($relation);
+            $cleaning = $this->em->getRepository("RestaurantBundle:Cleaning")->findOneBy(array("dated"=>$relation->getDate(), "listing"=>$relation->getListing()));
             if (is_null($cleaning)){
                 $cleaning = new Cleaning();
                 $cleaning->setIsextra(false);
                 $cleaning->setListing($relation->getListing());
-                $cleaning->setDated($entity_basic->getDated());
+                $cleaning->setDated($this->entity_basic->getDated());
                 $cleaning->setStatus(Nomenclator::LISTING_DIRTY);
             }
             $cleaning->setCheckout($relation);
             $statusold = $cleaning->getStatus();
             if (!is_null($cleaning->getStatus()) && $cleaning->getStatus() != Nomenclator::LISTING_CLEAN && $cleaning->getStatus() != Nomenclator::LISTING_WORKING)
                 $cleaning->setStatus($confirm ? Nomenclator::LISTING_CHECKEDOUT : Nomenclator::LISTING_DIRTY);
-            $em->persist($cleaning);
+            $this->em->persist($cleaning);
             if ($statusold != $cleaning->getStatus() ){
                 $cleaninglog = new CleaningLog();
                 $cleaninglog->setStatus($cleaning->getStatus());
                 $cleaninglog->setCleaning($cleaning);
                 $cleaninglog->setUpdatedat(new \DateTime());
-                $em->persist($cleaninglog);
+                $this->em->persist($cleaninglog);
             }
-            $em->flush();
-
             return $relation->getId();
         } catch (\Exception $ex) {
-            return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
+            return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
         }
     }
 
     //Actualizar los datos del objeto Bill
-    private function updateBill($entity_basic, $data){
-        $em = $this->getDoctrine()->getManager();
-        $bill = $entity_basic->getBill();
-        //var_dump($data);die;
+    private function updateBill($data){
+        $bill = $this->entity_basic->getBill();
         try {
             foreach ($data as $value) {
                 $upper = strtoupper(substr($value['name'], 0, 1));
@@ -859,29 +838,23 @@ class HotelController extends Controller {
 
                         $current = str_replace('.', '', $value['value']);
                         $current = str_replace(',', '.', $current);
-                        $bill->$set_method($current);
+                        $bill->$set_method((float)$current);
                    }
                     else {
                         $current = str_replace('.', '', $value['value']);
-                        $bill->$set_method($current);
+                        $bill->$set_method((integer)$current);
                     }
                 //}
             }
-            $entity_basic->setBill($bill);
-
-            $em->flush();
-
-            return $entity_basic;
+            $this->entity_basic->setBill($bill);
         } catch (\Exception $ex) {
-            return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
+            return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
         }
     }
-    
+
     //Actualizar los datos del objeto Card
-    private function updateCard($entity_basic, $data){
-        $em = $this->getDoctrine()->getManager();
-        $card = $entity_basic->getCard();
-        //echo print_r(data); die;
+    private function updateCard( $data){
+        $card = $this->entity_basic->getCard();
         try {
             $ctrl = FALSE;
             foreach ($data as $value) {
@@ -891,23 +864,22 @@ class HotelController extends Controller {
                 $set_method = 'set'.$upper.$rest;
                 $current = str_replace('.', '', $value['value']);
                 $current = str_replace(',', '.', $current);
-                $card->$set_method($current);
+                $card->$set_method((float)$current);
             }
             if (!$ctrl) $card->setIscc(FALSE);
             //$em->flush();
             //var_dump($card);die;
-            $entity_basic->setCard($card);
-            $em->flush();
+            $this->entity_basic->setCard($card);
+       //     $this->em->flush();
 
-            return $entity_basic;
+            //return $entity_basic;
         } catch (\Exception $ex) {
-            return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
+            return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
         }
     }
-    
+
     //Actualizar los datos del formulario final
-    private function updateFinal($entity_basic, $data){
-        $em = $this->getDoctrine()->getManager();
+    private function updateFinal($data){
         try {
             foreach ($data as $value) {
                 $upper = strtoupper(substr($value['name'], 0, 1));
@@ -919,17 +891,16 @@ class HotelController extends Controller {
                     $current = str_replace(',', '.', $a);
                     //echo $current.'<br/>';
                 }
-                $entity_basic->$set_method($current);
+                $this->entity_basic->$set_method($current);
             }
-            $em->flush();
-            return $entity_basic;
         } catch (\Exception $ex) {
-            return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
+            return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
         }
     }
 
     //Actualizar los totales del formulario ultima pagina
-    public function updateCalculos($entity){
+    public function updateCalculos($entity = null){
+        $entity = is_null($entity) ? $this->entity_basic : $entity;
         $em = $this->getDoctrine()->getManager();
         //Eind Float
         $total = 0;
@@ -1018,24 +989,23 @@ class HotelController extends Controller {
      * Deletes a Listing entity.
      *
      * @Route("/{id}/delete/", name="hotel_delete")
+     * @Security("is_granted('ROLE_HOTEL_FORM')")
      * @Method("GET")
      */
     public function deleteAction($id) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_RECEPTION') {
 
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('RestaurantBundle:Hotel')->find($id);
             $user = $this->get('security.token_storage')->getToken()->getUser();
 
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
 
             }
             $now = new \DateTime('now');
             //echo  $entity_basic->getUpdated()->diff($now)->d ; die;
             //if (strtotime($olddate->format('d-m-Y')) > strtotime($entity_basic->getUpdated()->format('d-m-Y')) && $user->getRole() != 'ROLE_SUPERADMIN') {
-            if (($entity->getUpdated()->diff($now)->d >= 2) && ($user->getRole() != 'ROLE_SUPERADMIN')) {
+            if (($entity->getUpdated()->diff($now)->d >= 2) && (!$this->isGranted('ROLE_SUPER_ADMIN'))) {
                 $this->addFlash('error', 'Error! This form can not be removed.');
                 return $this->redirect($this->generateUrl('hotel', array('date' => date('m-Y'))));
             }
@@ -1068,17 +1038,15 @@ class HotelController extends Controller {
 
 
         } catch (\Exception $ex) {
-            return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
+            return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
         }
-        }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
     }
 
     private function sendMail($id){
         $em = $this->getDoctrine()->getManager();
 
         //Crear el notificador para este formulario.
-        $notifier = $em->getRepository('AdminBundle:Notifier')->findOneBy(array('form'=>'Hotel'));
+        $notifier = $em->getRepository('RestaurantBundle:Notifier')->findOneBy(array('form'=>'Hotel'));
         $entity_basic = $em->getRepository('RestaurantBundle:Hotel')->findOneBy(array('id'=>$id));
         $mails_array = explode(';',$notifier->getMails());
         $mail_customer = \Swift_Message::newInstance()
@@ -1145,27 +1113,22 @@ class HotelController extends Controller {
 
     /**
      * Displays a form to edit an existing ReceptionParking entity.
-     *
+     * @Security("is_granted('ROLE_HOTEL_FORM')")     *
      * @Route("/{id}/mail/", name="hotel_mail")
      */
     public function mailAction($id){
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_RECEPTION') {
             try {
                 $this->sendMail($id);
             } catch (\Exception $ex) {
-                return $this->render('AdminBundle:Exception:exception.html.twig', array('message' => $ex));
+                return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
             }
             $this->addFlash('success', 'Success! The form has been sent.');
             return $this->redirect($this->generateUrl('hotel', array('date' => date('m-Y'))));
-        }
-        return $this->render('AdminBundle:Exception:error403.html.twig');
-
     }
 
     /**
      * Displays a form to edit an existing ReceptionParking entity.
-     *
+     * @Security("is_granted('ROLE_HOTEL_FORM')")
      * @Route("/dinamiccheckin/{id}/", name="hotel_dinamiccheckin")
      * @Method("POST")
      */
@@ -1204,9 +1167,10 @@ class HotelController extends Controller {
     }
 
        /**
-     *
-     * @Route("/lastcheckin/", name="hotel_last_checkin")
-     * @Method("POST")
+    *
+    * @Route("/lastcheckin/", name="hotel_last_checkin")
+    * @Security("is_granted('ROLE_HOTEL_FORM')")
+    * @Method("POST")
      */
     public function lastCheckinAction(){
 
@@ -1221,9 +1185,7 @@ class HotelController extends Controller {
             return $response;
 
     }
-    
-    
-    
+
     private function isBlackList($id){
         $em = $this->getDoctrine()->getManager();
         $blacklist = $em->getRepository('RestaurantBundle:BlackList')->findAll();
@@ -1260,8 +1222,132 @@ class HotelController extends Controller {
         $em->flush();
         return $control;
     }
-    
-    
 
-    
+    /**
+     *
+     * @Route("/pdf/set/{checkin}", name="hotel_setpdf")
+     * @Security("is_granted('ROLE_HOTEL_FORM')")
+     * @Method("GET")
+     */
+    public function setPDF($checkin){
+        if ($checkin == 'null'){
+            $pdf = new Fpdi();
+            $pdf->AddPage('L');
+            $pdf->SetFont('Helvetica', 'I', 10);
+            $pdf->SetTextColor(60, 58, 58);
+            $pdf->SetXY(43, 130);
+            $pdf->SetXY(233, 130);
+            return new Response($pdf->Output(), 200, array(
+                'Content-Type' => 'application/pdf'));
+        }
+        else {
+            $checkin_obj = $this->getDoctrine()->getManager()->getRepository('RestaurantBundle:RCheckinHotel')->find($checkin);
+            $checkout = $checkin_obj->getHotel()->getDated()->format('d-m-Y');
+            $checkout = (new \DateTime($checkout))->add(new \DateInterval('P0Y0M' . $checkin_obj->getNights() . 'DT0H0M0S'));
+            $listing = is_null($checkin_obj->getListing()) ? "" : $checkin_obj->getListing()->getNumber();
+            $level = is_null($checkin_obj->getListing()) ? "" : $checkin_obj->getListing()->getLevel() . "th Floor";
+
+            $pdf = new Fpdi('P','mm',array(210,297));
+            $pdf->AddPage('L');
+            $pdf->SetFont('Helvetica', 'BI', 10);
+            $pdf->SetTextColor(60, 58, 58);
+            $pdf->SetXY(16, 140);
+            $pdf->Write(0, iconv("UTF-8", "ISO-8859-1//TRANSLIT",ucwords(strtolower($checkin_obj->getName()))));
+            $pdf->SetXY(16, 145);
+            $pdf->SetFont('Helvetica', 'I', 10);
+            $pdf->Write(0, "Apartment ");
+            $pdf->Write(0, $listing . " (" . $level. ")");
+            $pdf->SetXY(16, 150);
+            $pdf->SetFont('Helvetica', 'BI', 10);
+            $pdf->Write(0, "Check-In: ");
+            $pdf->SetFont('Helvetica', 'I', 10);
+            $pdf->Write(0, $checkin_obj->getHotel()->getDated()->format('d-m-Y'));
+            $pdf->SetFont('Helvetica', 'BI', 10);
+            $pdf->Write(0, "  Check-Out: ");
+            $pdf->SetFont('Helvetica', 'I', 10);
+            $pdf->Write(0, $checkout->format('d-m-Y'));
+
+            $pdf->SetFont('Helvetica', 'BI', 10);
+            $pdf->SetXY(208, 130);
+            $pdf->Write(0, iconv("UTF-8", "ISO-8859-1//TRANSLIT",ucwords(strtolower($checkin_obj->getName()))));
+            $pdf->SetXY(208, 135);
+            $pdf->SetFont('Helvetica', 'I', 10);
+            $pdf->Write(0, "Apartment ");
+            $pdf->Write(0, $listing . " (" . $level. ")");
+            $pdf->SetXY(208, 140);
+            $pdf->SetFont('Helvetica', 'BI', 10);
+            $pdf->Write(0, "Check-In: ");
+            $pdf->SetFont('Helvetica', 'I', 10);
+            $pdf->Write(0, $checkin_obj->getHotel()->getDated()->format('d-m-Y'));
+            $pdf->SetFont('Helvetica', 'BI', 10);
+            $pdf->Write(0, "  Check-Out: ");
+            $pdf->SetFont('Helvetica', 'I', 10);
+            $pdf->Write(0, $checkout->format('d-m-Y'));
+            return new Response($pdf->Output(), 200, array(
+                'Content-Type' => 'application/pdf'));
+        }
+    }
+
+
+    /**
+     *
+     * @Route("/pdf/all/{id}", name="hotel_allpdf")
+     * @Security("is_granted('ROLE_HOTEL_FORM')")
+     * @Method("GET")
+     */
+    public function allPDF($id){
+        //var_dump($checkin);die;
+        $checkins = $this->getDoctrine()->getManager()->getRepository('RestaurantBundle:RCheckinHotel')->findBy(array('hotel'=>$id));
+        $pdf = new Fpdi('P','mm',array(210,297));
+        foreach ($checkins as $checkin){
+            if ($checkin->getName() != ""){
+                $checkout = $checkin->getHotel()->getDated()->format('d-m-Y');
+                $checkout = (new \DateTime($checkout))->add(new \DateInterval('P0Y0M' . $checkin->getNights() . 'DT0H0M0S'));
+                $listing = is_null($checkin->getListing()) ? "" : $checkin->getListing()->getNumber();
+                $level = is_null($checkin->getListing()) ? "" : $checkin->getListing()->getLevel() . "th Floor";
+
+                $pdf->AddPage('L');
+                $pdf->SetFont('Helvetica', 'BI', 10);
+                $pdf->SetTextColor(60, 58, 58);
+                $pdf->SetXY(16, 140);
+                $pdf->Write(0, iconv("UTF-8", "ISO-8859-1//TRANSLIT",ucwords(strtolower($checkin->getName()))));
+                $pdf->SetXY(16, 145);
+                $pdf->SetFont('Helvetica', 'I', 10);
+                $pdf->Write(0, "Apartment ");
+                $pdf->Write(0, $listing . " (" . $level. ")");
+                $pdf->SetXY(16, 150);
+                $pdf->SetFont('Helvetica', 'BI', 10);
+                $pdf->Write(0, "Check-In: ");
+                $pdf->SetFont('Helvetica', 'I', 10);
+                $pdf->Write(0, $checkin->getHotel()->getDated()->format('d-m-Y'));
+                $pdf->SetFont('Helvetica', 'BI', 10);
+                $pdf->Write(0, "  Check-Out: ");
+                $pdf->SetFont('Helvetica', 'I', 10);
+                $pdf->Write(0, $checkout->format('d-m-Y'));
+
+
+                $pdf->SetXY(208, 130);
+                $pdf->SetFont('Helvetica', 'BI', 10);
+                $pdf->Write(0, iconv("UTF-8", "ISO-8859-1//TRANSLIT",ucwords(strtolower($checkin->getName()))));
+                $pdf->SetXY(208, 135);
+                $pdf->SetFont('Helvetica', 'I', 10);
+                $pdf->Write(0, "Apartment ");
+                $pdf->Write(0, $listing . " (" . $level. ")");
+                $pdf->SetXY(208, 140);
+                $pdf->SetFont('Helvetica', 'BI', 10);
+                $pdf->Write(0, "Check-In: ");
+                $pdf->SetFont('Helvetica', 'I', 10);
+                $pdf->Write(0, $checkin->getHotel()->getDated()->format('d-m-Y'));
+                $pdf->SetFont('Helvetica', 'BI', 10);
+                $pdf->Write(0, "  Check-Out: ");
+                $pdf->SetFont('Helvetica', 'I', 10);
+                $pdf->Write(0, $checkout->format('d-m-Y'));
+            }
+        }
+        return new Response($pdf->Output(), 200, array(
+            'Content-Type' => 'application/pdf'));
+
+    }
+
+
 }

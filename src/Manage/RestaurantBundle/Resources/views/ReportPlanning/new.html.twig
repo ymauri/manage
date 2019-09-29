@@ -1,4 +1,4 @@
-{% extends 'AdminBundle::frame.html.twig' %}
+{% extends 'RestaurantBundle::frame.html.twig' %}
 {% block title %} New Issue {% endblock %}
 {% block body %}
     <div class="portlet">
@@ -29,7 +29,7 @@
                     </div>
                 {% endif %}
                 <form class="container-fluid form-horizontal" action="{{ path('reportplanning_new') }}"
-                      method="POST" {{ form_enctype(form) }} novalidate>
+                      method="POST" {{ form_enctype(form) }} >
                     <div class="form-body">
                         <div class="col-md-5">
 
@@ -38,9 +38,27 @@
                                 'class' :' control-label',
                             }}) }}
                             {{ form_widget(form.details, {'attr':{
-                                'class' :'input-sm pull-right form-control'
+                                'class' :'input-sm pull-right form-control',
                             }}) }}
                             {{ form_errors(form.details) }}
+                        </div>
+                        <div class="row form-group">
+                            {{ form_label(form.begins,'From',{'attr':{
+                                'class' :' control-label',
+                            }}) }}
+                            {{ form_widget(form.begins, {'attr':{
+                                'class' :'input-sm pull-right form-control',
+                            }}) }}
+                            {{ form_errors(form.begins) }}
+                        </div>
+                        <div class="row form-group">
+                            {{ form_label(form.ends,'To',{'attr':{
+                                'class' :' control-label',
+                            }}) }}
+                            {{ form_widget(form.ends, {'attr':{
+                                'class' :'input-sm pull-right form-control',
+                            }}) }}
+                            {{ form_errors(form.ends) }}
                         </div>
 
                         <div class="row form-group">
@@ -48,7 +66,7 @@
                                 'class' :' control-label',
                             }}) }}
                             {{ form_widget(form.frequency, {'attr':{
-                                'class' :'input-sm pull-right form-control'
+                                'class' :'input-sm pull-right form-control',
                             }}) }}
                             {{ form_errors(form.frequency) }}
                         </div>
@@ -79,7 +97,7 @@
                                 </select>
                             </div>
                             <div class="row form-group" id="select_furniture">
-                                <label for="furniture">Select a Furniture</label>
+                                <label for="furniture">Select from Inventory</label>
                                 <select id="furniture" class="form-control input-sm select2">
                                     </select>
                             </div>
@@ -88,15 +106,13 @@
                                     'class' :' control-label',
                                 }}) }}
                                 {{ form_widget(form.image, {'attr':{
-                                    'class' :'',
-                                    'accept' :'image/*'
+                                    'accept' :'image/*',
                                 }}) }}
                                 {{ form_errors(form.image) }}
                             </div>
                             <br><br>
                             <div class="form-group">
                                 <button type="submit" id="restaurantbundle_reportplanning_submit" name="restaurantbundle_reportplanning[submit]" class="btn btn-primary">Create</button>
-
                             </div>
                             <br><br>
 

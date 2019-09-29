@@ -1,4 +1,4 @@
-{% extends 'AdminBundle::frame.html.twig' %}
+{% extends 'RestaurantBundle::frame.html.twig' %}
 {% block title %} Cleaning {% endblock %}
 {% block body %}
     <div class="portlet">
@@ -7,7 +7,7 @@
                 <i class="fa fa-bell"></i>Cleaning <strong>{{ dated | date ("M d, Y") }}</strong>
             </div>
             <div class="tools">
-                {% if dated and app.user.role == 'ROLE_SUPERADMIN' %}
+                {% if is_granted('ROLE_SUPER_ADMIN') %}
                 <a href="{{path('cleaninglog', {'date': dated })}}" class=" blue">
                     <i class="fa fa-list-alt"></i> Logs
                 </a>

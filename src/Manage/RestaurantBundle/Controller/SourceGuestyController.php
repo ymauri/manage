@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Manage\RestaurantBundle\Entity\SourceGuesty;
 use Manage\RestaurantBundle\Form\SourceGuestyType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * SourceGuesty controller.
@@ -19,14 +20,13 @@ class SourceGuestyController extends Controller {
 
     /**
      * Lists all SourceGuesty entities.
+     * @Security("is_granted('ROLE_GUESTY')")
      *
      * @Route("/", name="sourceguesty")
      * @Method("GET")
      * @Template()
      */
     public function indexAction() {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
 
             $entities = $em->getRepository('RestaurantBundle:SourceGuesty')->findAll();
@@ -34,22 +34,18 @@ class SourceGuestyController extends Controller {
             return array(
                 'entities' => $entities,
             );
-        }
-        else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
+
     }
 
     /**
      * Creates a new SourceGuesty entity.
      *
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Route("/", name="sourceguesty_create")
      * @Method("POST")
      * @Template("RestaurantBundle:SourceGuesty:edit.html.twig")
      */
     public function createAction(Request $request) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $entity = new SourceGuesty();
             $form = $this->createCreateForm($entity);
             $form->handleRequest($request);
@@ -66,10 +62,7 @@ class SourceGuestyController extends Controller {
                 'entity' => $entity,
                 'form' => $form->createView(),
             );
-        }
-        else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
+
     }
 
     /**
@@ -93,13 +86,12 @@ class SourceGuestyController extends Controller {
     /**
      * Displays a form to create a new SourceGuesty entity.
      *
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Route("/new/", name="sourceguesty_new")
      * @Method("GET")
      * @Template()
      */
     public function newAction() {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $entity = new SourceGuesty();
             $form = $this->createCreateForm($entity);
 
@@ -107,28 +99,24 @@ class SourceGuestyController extends Controller {
                 'entity' => $entity,
                 'form' => $form->createView(),
             );
-        }
-        else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
+
     }
 
     /**
      * Finds and displays a SourceGuesty entity.
      *
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Route("/{id}/", name="sourceguesty_show")
      * @Method("GET")
      * @Template()
      */
     public function showAction($id) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
 
             $entity = $em->getRepository('RestaurantBundle:SourceGuesty')->find($id);
 
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
             }
 
             $deleteForm = $this->createEditForm($entity);
@@ -137,28 +125,24 @@ class SourceGuestyController extends Controller {
                 'entity' => $entity,
                 'delete_form' => $deleteForm->createView(),
             );
-        }
-        else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
+
     }
 
     /**
      * Displays a form to edit an existing SourceGuesty entity.
      *
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Route("/{id}/edit/", name="sourceguesty_edit")
      * @Method("GET")
      * @Template()
      */
     public function editAction($id) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
 
             $entity = $em->getRepository('RestaurantBundle:SourceGuesty')->find($id);
 
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
 
             }
 
@@ -170,10 +154,7 @@ class SourceGuestyController extends Controller {
                 'edit_form' => $editForm->createView(),
                 'delete_form' => $deleteForm->createView(),
             );
-        }
-        else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
+
     }
 
     /**
@@ -199,19 +180,18 @@ class SourceGuestyController extends Controller {
     /**
      * Edits an existing SourceGuesty entity.
      *
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Route("/{id}/", name="sourceguesty_update")
      * @Method("PUT")
      * @Template("RestaurantBundle:SourceGuesty:edit.html.twig")
      */
     public function updateAction(Request $request, $id) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
 
             $entity = $em->getRepository('RestaurantBundle:SourceGuesty')->find($id);
 
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
 
             }
 
@@ -230,25 +210,21 @@ class SourceGuestyController extends Controller {
                 'edit_form' => $editForm->createView(),
                 'delete_form' => $deleteForm->createView(),
             );
-        }
-        else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
+
     }
 
     /**
      * Deletes a SourceGuesty entity.
      *
+     * @Security("is_granted('ROLE_GUESTY')")
      * @Route("/{id}/delete/", name="sourceguesty_delete")
      * @Method("GET")
      */
     public function deleteAction($id) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('RestaurantBundle:SourceGuesty')->find($id);
             if (!$entity) {
-                return $this->render('AdminBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
+                return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this page.'));
 
             }
 
@@ -257,10 +233,7 @@ class SourceGuestyController extends Controller {
             $this->addFlash('success', 'Success! The sourceguesty has been removed.');
 
             return $this->redirect($this->generateUrl('sourceguesty'));
-        }
-        else{
-            return $this->render('AdminBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
+     
     }
 
     /**
