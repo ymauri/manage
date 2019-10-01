@@ -23,6 +23,7 @@ class ReportIssueController extends Controller
      * Lists all ReportIssue entities.
      *
      * @Route("/", name="reportissue_index")
+     * @Security("is_granted('ROLE_MAINTENANCE_EDIT')")
      * @Method("GET")
      */
     public function indexAction()
@@ -195,19 +196,40 @@ class ReportIssueController extends Controller
     {
         $id = $request->get('id');
         $em = $this->getDoctrine()->getManager();
-        $result = $em->getRepository("RestaurantBundle:Folder")->getChildrensReportFurnitures($id);
+        $result = $em->getRepository("RestaurantBundle:Folder")->getChildrensFurnituresFull($id);
         $furnitures = array();
         foreach ($result as $item) {
             $tags = $item->getTags();
-            foreach ($tags as $tag) {
-                if ($tag->getId() == 23) {
+            //foreach ($tags as $tag) {
+              //  if ($tag->getId() == 23) {
                     $furnitures[$item->getId()] = $item->getName();
-                    break;
-                }
-            }
+                //    break;
+                //}
+            //}
         }
         $response = new JsonResponse();
         $response->setData($furnitures);
+        return $response;
+    }
+
+
+    /**
+     * @Route("/getSubfolder/", name="reportissue_getsubfolder")
+     * @Security("is_granted('ROLE_MAINTENANCE_EDIT')")
+     * @Method("POST")
+     * */
+
+    public function getSubfolderAction(Request $request)
+    {
+        $id = $request->get('id');
+        $em = $this->getDoctrine()->getManager();
+        $result = $em->getRepository("RestaurantBundle:Folder")->getChildrensNodes($id);
+        $nodes = array();
+        foreach ($result as $item) {
+            $nodes[$item->getId()] = $item->getDetails();
+        }
+        $response = new JsonResponse();
+        $response->setData($nodes);
         return $response;
     }
 }

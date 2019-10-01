@@ -18,7 +18,7 @@ framework:
     templating:
         engines: ['twig']
         #assets_base_urls: http://localhost:5803/web/
-        assets_base_urls: http://test.log.towerleisure.nl/web/
+        #assets_base_urls: http://test.log.towerleisure.nl/web/
     default_locale:  "en"
     trusted_hosts:   ~
     trusted_proxies: ~

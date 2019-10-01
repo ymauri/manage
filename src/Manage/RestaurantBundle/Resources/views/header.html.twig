@@ -22,7 +22,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                         <!--<img alt="" class="img-circle" src="../../assets/admin/layout/img/avatar3_small.jpg"/>-->
                         <span class="username">Hi
-                            <b>{% if is_granted('ROLE_USER') %}{{ current_user.username }}{% else %}Gest{% endif %}</b></span>
+                            <b>{% if is_granted('ROLE_USER') %}{{ current_user.username }}{% else %}Guest{% endif %}</b></span>
                         <i class="fa fa-angle-down"></i>
                     </a>
                     {% if is_granted('ROLE_USER') %}

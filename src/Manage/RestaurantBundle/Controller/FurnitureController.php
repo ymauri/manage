@@ -454,7 +454,7 @@ class FurnitureController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $id = $request->get('id');
-        $entities = $em->getRepository("RestaurantBundle:Folder")->getChildrensFurnitures($id);
+        $entities = $em->getRepository("RestaurantBundle:Folder")->getChildrensFurnituresFull($id);
         if (count($entities) > 0) {
             echo $this->renderView("RestaurantBundle:Furniture:datatable.html.twig", array('entities' => $entities));
             die;

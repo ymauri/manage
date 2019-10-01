@@ -55,24 +55,23 @@
                                 {{ form_errors(form.reportedat) }}
                             </div>
                             <div class="row form-group">
-                                <label for="location">Select a Location</label>
+                                <label for="location">Location</label>
                                 <select id="location" class="form-control input-sm select2">
                                     <option>Select...</option>
                                     {% for place in places %}
-                                        <optgroup label="{{ place.details }}">
-                                            <option value="{{ place.id }}">{{ place.details }}</option>
-                                            {% if locations[place.id] %}
-                                                {% for location in locations[place.id] %}
-                                                    <option value="{{ location.id }}">{{ location.details }}</option>
-                                                {% endfor %}
-                                            {% endif %}
-                                        </optgroup>
+                                        <option value="{{ place.id }}">{{ place.details }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
+
+                            <div class="row form-group" id="select_room">
+                                <label for="sub-location">Room</label>
+                                <select id="sub-location" class="form-control input-sm select2" disabled="disabled">
+                                </select>
+                            </div>
                             <div class="row form-group" id="select_furniture">
-                                <label for="furniture">Select a Furniture</label>
-                                <select id="furniture" class="form-control input-sm select2">
+                                <label for="furniture">Furniture</label>
+                                <select id="furniture" class="form-control input-sm select2" disabled="disabled">
                                     </select>
                             </div>
                             <div class="row form-group">
@@ -133,17 +132,42 @@
         function updateValue(id){
             $("#report_issue_furniture").val(id)
         }
+
+        function getFolders(id) {
+                $.post("{{ path('reportissue_getfurnitures') }}", {'id':id}, function(response){
+                    console.log(response)
+                    if (Object.keys(response).length > 0){
+                        option = '<select id="furniture" class="form-control input-sm select2" onchange="updateValue($(this).val())"><option>Select ...</option>';
+                        for (var item in response){
+                            option += '<option value="'+item+'">'+response[item]+'</option>'
+                        }
+                        option += '</select>'
+                        $("#select_furniture select").remove()
+                        $("#select_furniture").append(option)
+                    }
+                    else{
+                        $("#select_furniture select").val("").prop('disabled', 'disabled')
+                    }
+                })
+                $("#report_issue_location").val($(this).val())
+        }
         $('#location').change(function () {
-            $.post("{{ path('reportissue_getfurnitures') }}", {'id':$(this).val()}, function(response){
-                option = '<select id="furniture" class="form-control input-sm select2" onchange="updateValue($(this).val())"><option>Select ...</option>';
-                for (var item in response){
-                    option += '<option value="'+item+'">'+response[item]+'</option>'
+            $.post("{{ path('reportissue_getsubfolder') }}", {'id':$(this).val()}, function(response){
+                if (Object.keys(response).length > 0){
+                    option = '<select id="sub-location" class="form-control input-sm select2" onchange="getFolders($(this).val())"><option>Select ...</option>';
+                    for (var item in response){
+                        option += '<option value="'+item+'">'+response[item]+'</option>'
+                    }
+                    option += '</select>'
+                    $("#select_room select").remove()
+                    $("#select_room").append(option)
                 }
-                option += '</select>'
-                $("#select_furniture select").remove()
-                $("#select_furniture").append(option)
+                else {
+                    $("#select_room select").val("").prop('disabled', 'disabled')
+                    $("#select_furniture select").val("").prop('disabled', 'disabled')
+                }
             })
-            $("#report_issue_location").val($(this).val())
+            //$("#report_issue_location").val($(this).val())
         })
     </script>
 {% endblock %}

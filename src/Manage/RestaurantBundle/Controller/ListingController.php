@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Manage\RestaurantBundle\Entity\Listing;
 use Manage\RestaurantBundle\Form\ListingType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * Listing controller.
@@ -21,12 +22,11 @@ class ListingController extends Controller {
      * Lists all Listing entities.
      *
      * @Route("/", name="listing")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method("GET")
      * @Template()
      */
     public function indexAction() {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
 
             $entities = $em->getRepository('RestaurantBundle:Listing')->findAll();
@@ -34,10 +34,7 @@ class ListingController extends Controller {
             return array(
                 'entities' => $entities,
             );
-        }
-        else{
-            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
+
     }
 
     /**
@@ -45,11 +42,10 @@ class ListingController extends Controller {
      *
      * @Route("/", name="listing_create")
      * @Method("POST")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Template("RestaurantBundle:Listing:edit.html.twig")
      */
     public function createAction(Request $request) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $entity = new Listing();
             $form = $this->createCreateForm($entity);
             $form->handleRequest($request);
@@ -67,10 +63,7 @@ class ListingController extends Controller {
                 'entity' => $entity,
                 'form' => $form->createView(),
             );
-        }
-        else{
-            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
+
     }
 
     /**
@@ -94,13 +87,12 @@ class ListingController extends Controller {
     /**
      * Displays a form to create a new Listing entity.
      *
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Route("/new/", name="listing_new")
      * @Method("GET")
      * @Template()
      */
     public function newAction() {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $entity = new Listing();
             $form = $this->createCreateForm($entity);
 
@@ -108,22 +100,18 @@ class ListingController extends Controller {
                 'entity' => $entity,
                 'form' => $form->createView(),
             );
-        }
-        else{
-            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
+
     }
 
     /**
      * Finds and displays a Listing entity.
      *
      * @Route("/{id}/", name="listing_show")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method("GET")
      * @Template()
      */
     public function showAction($id) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('RestaurantBundle:Listing')->find($id);
             if (!$entity) {
@@ -136,22 +124,18 @@ class ListingController extends Controller {
                 'delete_form' => $deleteForm->createView(),
                 'furnitures' => null,
             );
-        }
-        else{
-            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
+
     }
 
     /**
      * Displays a form to edit an existing Listing entity.
      *
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Route("/{id}/edit/", name="listing_edit")
      * @Method("GET")
      * @Template()
      */
     public function editAction($id) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
 
             $entity = $em->getRepository('RestaurantBundle:Listing')->find($id);
@@ -171,10 +155,7 @@ class ListingController extends Controller {
                 'furnitures' => null,//$furniture,
                 'delete_form' => $deleteForm->createView(),
             );
-        }
-        else{
-            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
+
     }
 
     /**
@@ -199,12 +180,11 @@ class ListingController extends Controller {
      * Edits an existing Listing entity.
      *
      * @Route("/{id}/", name="listing_update")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method("PUT")
      * @Template("RestaurantBundle:Listing:edit.html.twig")
      */
     public function updateAction(Request $request, $id) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
 
             $entity = $em->getRepository('RestaurantBundle:Listing')->find($id);
@@ -254,21 +234,17 @@ class ListingController extends Controller {
                 'edit_form' => $editForm->createView(),
                 'delete_form' => $deleteForm->createView(),
             );
-        }
-        else{
-            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
+
     }
 
     /**
      * Deletes a Listing entity.
      *
      * @Route("/{id}/delete/", name="listing_delete")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method("GET")
      */
     public function deleteAction($id) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('RestaurantBundle:Listing')->find($id);
             if (!$entity) {
@@ -280,10 +256,7 @@ class ListingController extends Controller {
             $this->addFlash('success', 'Success! The listing has been removed.');
 
             return $this->redirect($this->generateUrl('listing'));
-        }
-        else{
-            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
+
     }
 
     /**
@@ -306,11 +279,10 @@ class ListingController extends Controller {
      * Deletes a Listing entity.
      *
      * @Route("/{id}/priority/", name="listing_priority")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method("POST")
      */
     public function orderAction($id, Request $request) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('RestaurantBundle:Listing')->find($id);
             if (!$entity) {
@@ -325,9 +297,6 @@ class ListingController extends Controller {
             $this->addFlash('success', 'Success! The listing has been updated.');
 
             return $this->redirect($this->generateUrl('listing'));
-        }
-        else{
-            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
+        
     }
 }
