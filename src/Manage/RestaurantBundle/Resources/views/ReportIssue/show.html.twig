@@ -56,7 +56,7 @@
                 <input type="hidden" value="{{ reportIssue.status }}" name="status">
                 {% if reportIssue.status == 'Open' %}
                     <button type="button" class="btn btn-primary" value="Wachten">Wachten</button>
-                    {% if app.user.role != 'ROLE_REPORTER' %}
+                    {% if is_granted('ROLE_MAINTENANCE_PLANNING') %}
                     <button type="button" class="btn btn-success" value="Afgerond">Afgerond</button>
                     {% endif %}
                 {% elseif reportIssue.status == 'Wachten'  %}

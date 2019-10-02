@@ -70,7 +70,7 @@
                                 </select>
                             </div>
                             <div class="row form-group" id="select_furniture">
-                                <label for="furniture">Furniture</label>
+                                <label for="furniture">Inventory</label>
                                 <select id="furniture" class="form-control input-sm select2" disabled="disabled">
                                     </select>
                             </div>
@@ -129,15 +129,15 @@
         </div>
     </div>
     <script>
-        function updateValue(id){
-            $("#report_issue_furniture").val(id)
+        function updateValue(){
+            $("#report_issue_room").val($('#sub-location').val())
+            $("#report_issue_furniture").val($('#furniture').val())
+            $("#report_issue_location").val($('#location').val())
         }
-
         function getFolders(id) {
                 $.post("{{ path('reportissue_getfurnitures') }}", {'id':id}, function(response){
-                    console.log(response)
                     if (Object.keys(response).length > 0){
-                        option = '<select id="furniture" class="form-control input-sm select2" onchange="updateValue($(this).val())"><option>Select ...</option>';
+                        option = '<select id="furniture" class="form-control input-sm select2" onchange="updateValue()"><option>Select ...</option>';
                         for (var item in response){
                             option += '<option value="'+item+'">'+response[item]+'</option>'
                         }
@@ -149,7 +149,7 @@
                         $("#select_furniture select").val("").prop('disabled', 'disabled')
                     }
                 })
-                $("#report_issue_location").val($(this).val())
+            updateValue();
         }
         $('#location').change(function () {
             $.post("{{ path('reportissue_getsubfolder') }}", {'id':$(this).val()}, function(response){
@@ -163,11 +163,12 @@
                     $("#select_room").append(option)
                 }
                 else {
-                    $("#select_room select").val("").prop('disabled', 'disabled')
-                    $("#select_furniture select").val("").prop('disabled', 'disabled')
+                    getFolders($('#location').val())
+                    $("#sub-location").val("").prop('disabled', 'disabled')
                 }
             })
-            //$("#report_issue_location").val($(this).val())
+            $("#select_furniture").find('select').val("").prop('disabled', 'disabled')
+            updateValue();
         })
     </script>
 {% endblock %}

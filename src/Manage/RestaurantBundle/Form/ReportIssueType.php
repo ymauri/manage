@@ -31,6 +31,7 @@ class ReportIssueType extends AbstractType
                 )
             ))
             ->add('details')
+            ->add('room')
             ->add('location')
             ->add('furniture')
             ->add('image', 'file', array('required'=>false))

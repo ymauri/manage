@@ -46,7 +46,15 @@ class ReportIssue
      */
     private $location;
 
-   /**
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="Folder")
+     */
+    private $room;
+
+
+    /**
      * @var string
      *
      * @ORM\ManyToOne(targetEntity="Furniture")
@@ -303,5 +311,15 @@ class ReportIssue
     public function setFurniture($furniture)
     {
         $this->furniture = $furniture;
+    }
+
+    public function getRoom()
+    {
+        return $this->room;
+    }
+
+    public function setRoom($room)
+    {
+        $this->room = $room;
     }
 }
