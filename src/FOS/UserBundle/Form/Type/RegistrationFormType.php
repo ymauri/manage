@@ -49,8 +49,8 @@ class RegistrationFormType extends AbstractType
                         'autocomplete' => 'new-password',
                     ),
                 ),
-                'first_options' => array('label' => 'form.password'),
-                'second_options' => array('label' => 'form.password_confirmation'),
+                    'first_options' => array('label' => 'Password', 'attr'=> array('class'=>'form-control')),
+                'second_options' => array('label' => 'Password confirmation','attr'=> array('class'=>'form-control')),
                 'invalid_message' => 'fos_user.password.mismatch',
             ))
         ;

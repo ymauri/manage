@@ -3,6 +3,8 @@
 namespace Manage\RestaurantBundle\Controller;
 
 use FOS\UserBundle\Doctrine\UserManager;
+use FOS\UserBundle\Form\Type\ProfileFormType;
+use FOS\UserBundle\Form\Type\UsernameFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -13,12 +15,14 @@ use Manage\RestaurantBundle\Form\UserType;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use FOS\UserBundle\Model\UserManagerInterface;
+
 /**
  * User controller.
  *
  * @Route("/user")
  */
-class UserController extends Controller {
+class UserController extends Controller
+{
 
     /**
      * Lists all User entities.
@@ -32,9 +36,9 @@ class UserController extends Controller {
     {
         $um = $this->container->get('fos_user.user_manager');
         $users = $um->findUsers();
-            return array(
-                'entities' => $users,
-            );
+        return array(
+            'entities' => $users,
+        );
 
 
     }
@@ -47,34 +51,35 @@ class UserController extends Controller {
      * @Method("POST")
      * @Template("RestaurantBundle:User:edit.html.twig")
      */
-    public function createAction(Request $request) {
+    public function createAction(Request $request)
+    {
 
-            $entity = new User();
-            $form = $this->createCreateForm($entity);
-            $form->handleRequest($request);
-            $form->getData()->setEnable(true);
-            try {
+        $entity = new User();
+        $form = $this->createCreateForm($entity);
+        $form->handleRequest($request);
+        $form->getData()->setEnable(true);
+        try {
 
-                if ($form->isValid()) {
-                    $encoder = $this->get('security.encoder_factory')->getEncoder($entity);
-                    $pass = $encoder->encodePassword($entity->getPassword(), $entity->getSalt());
-                    $entity->setPassword($pass);
+            if ($form->isValid()) {
+                $encoder = $this->get('security.encoder_factory')->getEncoder($entity);
+                $pass = $encoder->encodePassword($entity->getPassword(), $entity->getSalt());
+                $entity->setPassword($pass);
 
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($entity);
-                    $em->flush();
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($entity);
+                $em->flush();
 
-                    $this->addFlash('success', 'Success! The user has been created.');
-                    return $this->redirect($this->generateUrl('user_show', array('id' => $entity->getId())));
-                }
-            } catch (\Exception $ex) {
-                return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
+                $this->addFlash('success', 'Success! The user has been created.');
+                return $this->redirect($this->generateUrl('user_show', array('id' => $entity->getId())));
             }
+        } catch (\Exception $ex) {
+            return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
+        }
 
-            return array(
-                'entity' => $entity,
-                'form' => $form->createView(),
-            );
+        return array(
+            'entity' => $entity,
+            'form' => $form->createView(),
+        );
     }
 
     /**
@@ -84,7 +89,8 @@ class UserController extends Controller {
      * @Method("GET")
      * @Template()
      */
-    public function newAction() {
+    public function newAction()
+    {
         $user = $this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $entity = new User();
@@ -93,13 +99,13 @@ class UserController extends Controller {
                 'entity' => $entity,
                 'form' => $form->createView(),
             );
-        }
-        else {
+        } else {
             return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
     }
 
-    private function createCreateForm(User $entity) {
+    private function createCreateForm(User $entity)
+    {
         $form = $this->createForm(new UserType(), $entity, array(
             'action' => $this->generateUrl('user_create'),
             'method' => 'POST',
@@ -117,9 +123,10 @@ class UserController extends Controller {
      * @Method("GET")
      * @Template()
      */
-    public function showAction($id) {
+    public function showAction($id)
+    {
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getId()== $id) {
+        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getId() == $id) {
             $em = $this->getDoctrine()->getManager();
 
             $entity = $em->getRepository('RestaurantBundle:User')->find($id);
@@ -134,8 +141,7 @@ class UserController extends Controller {
                 'entity' => $entity,
                 'delete_form' => $deleteForm->createView(),
             );
-        }
-        else {
+        } else {
             return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
     }
@@ -148,25 +154,21 @@ class UserController extends Controller {
      * @Method("GET")
      * @Template()
      */
-    public function editAction($id) {
-        $um = $this->container('fos_user.user_manager');
-        $user = $um->findUserBy(array('id'=>$id));
-
+    public function editAction($id)
+    {
+        $user = $this->getDoctrine()->getRepository('RestaurantBundle:User')->find($id);
         if (!$user) {
             return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this User.'));
         }
 
-        $user->setUsername();
-        $user->setEmail('john.doe@example.com');
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-            $editForm = $this->createEditForm($entity);
-            $deleteForm = $this->createDeleteForm($id);
+        $editForm = $this->createEditForm($user);
+        $deleteForm = $this->createDeleteForm($id);
 
-            return array(
-                'entity' => $entity,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            );
+        return array(
+            'entity' => $user,
+            'edit_form' => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+        );
 
     }
 
@@ -177,7 +179,8 @@ class UserController extends Controller {
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(User $entity) {
+    private function createEditForm(User $entity)
+    {
         $form = $this->createForm(new UserType(), $entity, array(
             'action' => $this->generateUrl('user_update', array('id' => $entity->getId())),
             'method' => 'PUT',
@@ -195,7 +198,8 @@ class UserController extends Controller {
      * @Method("PUT")
      * @Template("RestaurantBundle:User:edit.html.twig")
      */
-    public function updateAction(Request $request, $id) {
+    public function updateAction(Request $request, $id)
+    {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('RestaurantBundle:User')->find($id);
@@ -218,7 +222,7 @@ class UserController extends Controller {
                 }
                 $em->flush();
                 $this->addFlash('success', 'Success! The user has been changed.');
-                return $this->redirect($this->generateUrl('user_show', array('id' => $id)));
+                return $this->redirect($this->generateUrl('user', array('id' => $id)));
             }
         } catch (\Exception $ex) {
             return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
@@ -237,7 +241,8 @@ class UserController extends Controller {
      * @Route("/{id}/delete/", name="user_delete")
      * @Method("GET")
      */
-    public function deleteAction($id) {
+    public function deleteAction($id)
+    {
         $user = $this->get('security.token_storage')->getToken()->getUser();
         if ($user->getRole() == 'ROLE_SUPERADMIN') {
             $em = $this->getDoctrine()->getManager();
@@ -252,8 +257,7 @@ class UserController extends Controller {
             $em->flush();
             $this->addFlash('success', 'Success! The user has been removed.');
             return $this->redirect($this->generateUrl('user'));
-        }
-        else{
+        } else {
             return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
         }
     }
@@ -265,16 +269,14 @@ class UserController extends Controller {
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm($id) {
+    private function createDeleteForm($id)
+    {
         return $this->createFormBuilder()
-                        ->setAction($this->generateUrl('user_delete', array('id' => $id)))
-                        ->setMethod('DELETE')
-                        ->add('submit', 'submit', array('label' => 'Delete', 'attr' => array('class' => 'btn btn-primary')))
-                        ->getForm()
-        ;
+            ->setAction($this->generateUrl('user_delete', array('id' => $id)))
+            ->setMethod('DELETE')
+            ->add('submit', 'submit', array('label' => 'Delete', 'attr' => array('class' => 'btn btn-primary')))
+            ->getForm();
     }
-
-
 
 
 }

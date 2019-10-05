@@ -7,7 +7,7 @@
             <i class="icon icon-user"></i>Users
         </div>
         <div class="tools">
-            {% if app.user.role == 'ROLE_SUPERADMIN' %}
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
             <a href="{{path('user_new')}}" class=" blue">
                 <i class="fa fa-plus"></i> Create new
             </a>
@@ -48,52 +48,32 @@
                     {{form_errors(edit_form.email)}}  
                 </div>
                  <div class="row form-group">
-                    {{form_label(edit_form.name,'Name',{'attr':{                       
+                    {{form_label(edit_form.username,'Username',{'attr':{
                       'class' :' control-label',
                       }})}}
-                    {{form_widget(edit_form.name, {'attr':{                       
+                    {{form_widget(edit_form.username, {'attr':{                       
                       'class' :' form-control'
                       }})}}  
-                    {{form_errors(edit_form.name)}}  
+                    {{form_errors(edit_form.username)}}  
                 </div>
                 <div class="row form-group ">
-                    {{form_label(edit_form.lastname,'Last name',{'attr':{                       
+                    {{form_label(edit_form.password,'Passowrd',{'attr':{
                       'class' :' control-label',
                       }})}}
-                    {{form_widget(edit_form.lastname, {'attr':{                       
-                      'class' :' form-control'
-                      }})}}  
-                    {{form_errors(edit_form.lastname)}}  
-                </div>
-                                   
-
-                    <div class="row form-group " {% if app.user.role != 'ROLE_SUPERADMIN' %} hidden="hidden"  {% endif %}>
-                    {{form_label(edit_form.role,'Role',{'attr':{                       
-                      'class' :' control-label',
-                      }})}}
-                    {{form_widget(edit_form.role, {'attr':{                       
-                      'class' :' form-control'
-                      }})}}  
-                    {{form_errors(edit_form.role)}}  
-                </div>
-               
-                <div class="row form-group ">
-                    {{form_label(edit_form.password.first,'Password',{'attr':{                       
-                      'class' :' control-label',
-                      }})}}
-                    {{form_widget(edit_form.password.first, {'attr':{                       
-                      'class' :' form-control'
-                      }})}}
-                    {{form_errors(edit_form.password.first)}}  
-                </div>
-                <div class="row form-group ">
-                    {{form_label(edit_form.password.second,'Retype passowrd',{'attr':{                       
-                      'class' :' control-label',
-                      }})}}
-                    {{form_widget(edit_form.password.second, {'attr':{                       
-                      'class' :' form-control'
+                    {{form_widget(edit_form.password, {'attr':{
+                      'class' :' form-control',
+                        'required': false
                       }})}} 
-                    {{form_errors(edit_form.password.second)}}
+                    {{form_errors(edit_form.password)}}
+                </div>
+                <div class="row form-group ">
+                    {{form_label(edit_form.roles,'Roles',{'attr':{
+                      'class' :' control-label',
+                      }})}}
+                    {{form_widget(edit_form.roles, {'attr':{
+                      'class' :' form-control'
+                      }})}}
+                    {{form_errors(edit_form.roles)}}
                 </div>
                 <div class="row form-group ">
                 {{ form_rest(edit_form) }}

@@ -7,7 +7,7 @@
                     <i class="icon icon-user"></i>Users
                 </div>
                 <div class="tools">                    
-                    <a href="{{path('user_new')}}" class=" blue">
+                    <a href="#" class=" blue">
                         <i class="fa fa-plus"></i> Create new 
                     </a>
                 </div>
@@ -48,7 +48,7 @@
                                                 <a href="{{ path('user_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-search"></span>View</a>
                                             </li>
                                             <li>
-                                                <a href="{{ path('fos_user_profile_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span>Edit</a>
+                                                <a href="{{ path('user_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span>Edit</a>
                                             </li>
 
                                         </ul>

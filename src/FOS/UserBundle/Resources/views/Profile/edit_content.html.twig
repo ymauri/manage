@@ -1,6 +1,4 @@
-{% extends 'RestaurantBundle::frame.html.twig' %}
-{% block title %} Edit User {% endblock %}
-{% block body %}
+
     <div class="portlet">
     <div class="portlet-title">
         <div class="caption">
@@ -28,10 +26,40 @@
             </div>
         </div>
         <div class="portlet-body form">
-            {{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'fos_user_profile_edit' } }) }}
+            {{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'fos_user_profile_edit container-fluid form-horizontal' } }) }}
+            <div class="form-body col-md-5">
+
+            <div class="row form-group ">
+                {{form_label(form.username,'User',{'attr':{
+                    'class' :' control-label',
+                }})}}
+                {{form_widget(form.username, {'attr':{
+                    'class' :' form-control'
+                }})}}
+                {{form_errors(form.username)}}
+            </div>
+            <div class="row form-group ">
+                {{form_label(form.email,'Email',{'attr':{
+                    'class' :' control-label',
+                }})}}
+                {{form_widget(form.email, {'attr':{
+                    'class' :' form-control'
+                }})}}
+                {{form_errors(form.email)}}
+            </div>
+            <div class="row form-group ">
+                {{form_label(form.current_password,'Password',{'attr':{
+                    'class' :' control-label',
+                }})}}
+                {{form_widget(form.current_password, {'attr':{
+                    'class' :' form-control'
+                }})}}
+                {{form_errors(form.current_password)}}
+            </div>
             {{ form_widget(form) }}
-            <div>
-                <input type="submit" value="{{ 'profile.edit.submit'|trans }}"/>
+            <div class="row form-group ">
+                <input type="submit" class="btn blue-hoki" value="Update"/>
+            </div>
             </div>
             {{ form_end(form) }}
 
@@ -39,4 +67,3 @@
 
         </div>
     </div>
-{% endblock %}
