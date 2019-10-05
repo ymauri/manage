@@ -533,10 +533,10 @@
                 }
                 break;
             case 'parkingdag':
-                value = numeral($(this).val()).value() * {{ entity_basic.parking }}
+                value = numeral($(this).val()).value() * numeral('{{ entity_basic.parking | replace('.',',')}}').value()
+                console.log(value)
                 if (value != 0) {
-                    $('#parking-' + number).val(value)
-                    $('#parking-' + number).trigger('blur')
+                    $('#parking-' + number).val(numeral(value).format('0.0,'))
                 }
                 else  $('#parking-' + number).val('')
                 total = 0

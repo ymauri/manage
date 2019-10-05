@@ -541,7 +541,7 @@ class DefaultController extends Controller {
             'iva'       => $em->getRepository('RestaurantBundle:Parameters')->getFieldsIva(),
             'hotel'     => $em->getRepository('RestaurantBundle:Parameters')->getFieldsHotel(),
             'general'   => $em->getRepository('RestaurantBundle:Parameters')->getFieldsGeneral(),
-            'rules'   => $em->getRepository('RestaurantBundle:Parameters')->getFieldsRules(),
+            'rules'     => $em->getRepository('RestaurantBundle:Parameters')->getFieldsRules(),
         ));
     }
 
@@ -561,7 +561,7 @@ class DefaultController extends Controller {
             $hotel = $em->getRepository('RestaurantBundle:Parameters')->getFieldsHotel();
             foreach ($hotel as $item){
                 if ($item->getVariable() == 'parking_quantity')
-                    $item->setValue((integer)$request->get($item->getVariable()));
+                    $item->setValue((double)$request->get($item->getVariable()));
                 $item->setValue($request->get($item->getVariable()));
             }
             //$request->get('turism-taxes');
