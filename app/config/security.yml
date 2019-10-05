@@ -1,11 +1,10 @@
 # you can read more about security in the related section of the documentation
-# http://symfony.com/doc/current/book/security.html
+# https://symfony.com/doc/current/book/security.html
 security:
     
     encoders:
         FOS\UserBundle\Model\UserInterface: sha512
-        #Manage\AdminBundle\Entity\User: {algorithm: sha512, encode_as_base64: true, iterations: 10}
-   
+
     role_hierarchy:
         ROLE_CLEANING:    [ROLE_CLEANING_LIST]
         ROLE_MAINTENANCE: [ROLE_CLEANING, ROLE_MAINTENANCE_LIST, ROLE_MAINTENANCE_EDIT]
@@ -16,9 +15,7 @@ security:
     providers:
         fos_userbundle:
             id: fos_user.user_provider.username
-        #email:
-            #entity: {class: Manage\AdminBundle\Entity\User, property: email}
-   
+
     firewalls:
         main:
             pattern: ^/
@@ -71,28 +68,16 @@ security:
             anonymous: ~
             security: false
 
-
-#        admin:
-#            pattern:  ^/*
-#            provider: email
-#            form_login:
-#                login_path: login
-#                check_path: login_check
-#                default_target_path: home
-#            logout:
-#                path: logout
-#                target: login
-#
     access_control:
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http}
-        - { path: ^/command, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/guesty/*, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http}
-        - { path: ^/rule/hook/*, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http}
-        - { path: ^/rule/execute, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http}
-        - { path: ^/hook/*, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http}
-        - { path: ^/reportplanning/createissue/, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http}
-        - { path: ^/reportissue/new, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http}
-        - { path: ^/reportissue, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http}
-        - { path: ^/*, roles: ROLE_USER, requires_channel: http}
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https}
+        - { path: ^/command, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/guesty/*, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https}
+        - { path: ^/rule/hook/*, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https}
+        - { path: ^/rule/execute, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https}
+        - { path: ^/hook/*, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https}
+        - { path: ^/reportplanning/createissue/, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https}
+        - { path: ^/reportissue/new, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https}
+        - { path: ^/reportissue, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https}
+        - { path: ^/*, roles: ROLE_USER, requires_channel: https}

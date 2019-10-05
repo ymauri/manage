@@ -18,7 +18,7 @@ framework:
     templating:
         engines: ['twig']
         #assets_base_urls: http://localhost:5803/web/
-        #assets_base_urls: http://test.log.towerleisure.nl/web/
+        assets_base_urls: https://test.log.towerleisure.nl/web/
     default_locale:  "en"
     trusted_hosts:   ~
     trusted_proxies: ~
@@ -86,5 +86,5 @@ fos_user:
     firewall_name: main # Es el firewall configurado en el archivo security.yml en el paso 4
     user_class: Manage\RestaurantBundle\Entity\User # Es el usuario de tu aplicación creado en el paso 3 y la introducción
     from_email:
-        address: "noreply@yourcompany.com"
-        sender_name: "No Reply"
+        address: "info@log.towerleisure.nl"
+        sender_name: "The Penthouse"

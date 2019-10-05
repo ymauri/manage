@@ -2,7 +2,8 @@ restaurant:
     resource: "@RestaurantBundle/Controller/"
     type:     annotation
     prefix: /
-    schemes: [http]
+    schemes: [https]
 
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+    schemes: [https]
