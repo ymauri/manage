@@ -28,11 +28,11 @@ class ReportIssueController extends Controller
      */
     public function indexAction()
     {
-            $em = $this->getDoctrine()->getManager();
-            $reportIssues = $em->getRepository('RestaurantBundle:ReportIssue')->findAll();
-            return $this->render('RestaurantBundle:ReportIssue:index.html.twig', array(
-                'reportIssues' => $reportIssues,
-            ));
+        $em = $this->getDoctrine()->getManager();
+        $reportIssues = $em->getRepository('RestaurantBundle:ReportIssue')->findAll();
+        return $this->render('RestaurantBundle:ReportIssue:index.html.twig', array(
+            'reportIssues' => $reportIssues,
+        ));
     }
 
     /**
@@ -43,35 +43,35 @@ class ReportIssueController extends Controller
      */
     public function newAction(Request $request)
     {
-            $reportIssue = new ReportIssue();
-            $form = $this->createForm('Manage\RestaurantBundle\Form\ReportIssueType', $reportIssue);
-            $form->handleRequest($request);
-            // var_dump($form->getData());die;
+        $reportIssue = new ReportIssue();
+        $form = $this->createForm('Manage\RestaurantBundle\Form\ReportIssueType', $reportIssue);
+        $form->handleRequest($request);
+        // var_dump($form->getData());die;
 
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $reportIssue->uploadImage($this->container->getParameter('images.reportissue'));
-
-                $em->persist($reportIssue);
-                $em->flush();
-                if ($this->isGranted('ROLE_MAINTENANCE_EDIT')){
-                    return $this->redirectToRoute('reportissue_show', array('id' => $reportIssue->getId()));
-                }
-                return $this->redirectToRoute('reportissue_index');
-            }
+        if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $places = $em->getRepository("RestaurantBundle:Folder")->findBy(array('issheet' => 0, 'isroot' => 0), array('details' => 'ASC'));
-            $locations = array();
-            foreach ($places as $place) {
-                $locations[$place->getId()] = $em->getRepository("RestaurantBundle:Folder")->getChildrensNodes($place->getId());
+            $reportIssue->uploadImage($this->container->getParameter('images.reportissue'));
+
+            $em->persist($reportIssue);
+            $em->flush();
+            if ($this->isGranted('ROLE_MAINTENANCE_EDIT')) {
+                return $this->redirectToRoute('reportissue_show', array('id' => $reportIssue->getId()));
             }
-            return $this->render('RestaurantBundle:ReportIssue:new.html.twig', array(
-                'reportIssue' => $reportIssue,
-                'form' => $form->createView(),
-                'places' => $places,
-                'locations' => $locations,
-            ));
+            return $this->redirectToRoute('reportissue_index');
+        }
+        $em = $this->getDoctrine()->getManager();
+        $places = $em->getRepository("RestaurantBundle:Folder")->findBy(array('issheet' => 0, 'isroot' => 0), array('details' => 'ASC'));
+        $locations = array();
+        foreach ($places as $place) {
+            $locations[$place->getId()] = $em->getRepository("RestaurantBundle:Folder")->getChildrensNodes($place->getId());
+        }
+        return $this->render('RestaurantBundle:ReportIssue:new.html.twig', array(
+            'reportIssue' => $reportIssue,
+            'form' => $form->createView(),
+            'places' => $places,
+            'locations' => $locations,
+        ));
     }
 
     /**
@@ -83,12 +83,12 @@ class ReportIssueController extends Controller
      */
     public function showAction(ReportIssue $reportIssue)
     {
-            $deleteForm = $this->createDeleteForm($reportIssue);
+        $deleteForm = $this->createDeleteForm($reportIssue);
 
-            return $this->render('RestaurantBundle:ReportIssue:show.html.twig', array(
-                'reportIssue' => $reportIssue,
-                'delete_form' => $deleteForm->createView(),
-            ));
+        return $this->render('RestaurantBundle:ReportIssue:show.html.twig', array(
+            'reportIssue' => $reportIssue,
+            'delete_form' => $deleteForm->createView(),
+        ));
     }
 
     /**
@@ -100,33 +100,33 @@ class ReportIssueController extends Controller
      */
     public function editAction(Request $request, ReportIssue $reportIssue)
     {
-            $deleteForm = $this->createDeleteForm($reportIssue);
-            $editForm = $this->createForm('Manage\RestaurantBundle\Form\ReportIssueType', $reportIssue);
-            $editForm->handleRequest($request);
+        $deleteForm = $this->createDeleteForm($reportIssue);
+        $editForm = $this->createForm('Manage\RestaurantBundle\Form\ReportIssueType', $reportIssue);
+        $editForm->handleRequest($request);
 
-            if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $reportIssue->uploadImage($this->container->getParameter('images.reportissue'));
-                $em->persist($reportIssue);
-                $em->flush();
-
-                return $this->redirectToRoute('reportissue_index');
-            }
-
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $places = $em->getRepository("RestaurantBundle:Folder")->findBy(array('issheet' => 0, 'isroot' => 0), array('details' => 'ASC'));
-            $locations = array();
-            foreach ($places as $place) {
-                $locations[$place->getId()] = $em->getRepository("RestaurantBundle:Folder")->getChildrensNodes($place->getId());
-            }
+            $reportIssue->uploadImage($this->container->getParameter('images.reportissue'));
+            $em->persist($reportIssue);
+            $em->flush();
 
-            return $this->render('RestaurantBundle:ReportIssue:edit.html.twig', array(
-                'reportIssue' => $reportIssue,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-                'places' => $places,
-                'locations' => $locations,
-            ));
+            return $this->redirectToRoute('reportissue_index');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $places = $em->getRepository("RestaurantBundle:Folder")->findBy(array('issheet' => 0, 'isroot' => 0), array('details' => 'ASC'));
+        $locations = array();
+        foreach ($places as $place) {
+            $locations[$place->getId()] = $em->getRepository("RestaurantBundle:Folder")->getChildrensNodes($place->getId());
+        }
+
+        return $this->render('RestaurantBundle:ReportIssue:edit.html.twig', array(
+            'reportIssue' => $reportIssue,
+            'edit_form' => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+            'places' => $places,
+            'locations' => $locations,
+        ));
     }
 
     /**
@@ -139,16 +139,16 @@ class ReportIssueController extends Controller
     public function deleteAction(Request $request, ReportIssue $reportIssue)
     {
 
-            $form = $this->createDeleteForm($reportIssue);
-            $form->handleRequest($request);
+        $form = $this->createDeleteForm($reportIssue);
+        $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($reportIssue);
-                $em->flush();
-            }
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($reportIssue);
+            $em->flush();
+        }
 
-            return $this->redirectToRoute('reportissue_index');
+        return $this->redirectToRoute('reportissue_index');
     }
 
     /**
@@ -201,10 +201,10 @@ class ReportIssueController extends Controller
         foreach ($result as $item) {
             $tags = $item->getTags();
             //foreach ($tags as $tag) {
-              //  if ($tag->getId() == 23) {
-                    $furnitures[$item->getId()] = $item->getName();
-                //    break;
-                //}
+            //  if ($tag->getId() == 23) {
+            $furnitures[$item->getId()] = $item->getName();
+            //    break;
+            //}
             //}
         }
         $response = new JsonResponse();
@@ -232,4 +232,44 @@ class ReportIssueController extends Controller
         $response->setData($nodes);
         return $response;
     }
+
+    /**
+     * @Route("/pdfjson/", name="reportissue_pdfjson")
+     * @Security("is_granted('ROLE_SERVICE')")
+     * @Method("GET")
+     */
+    public function pdfJsonAction(Request $request)
+    {
+        $response = new JsonResponse();
+        $result = array();
+        $id_furniture = $request->get('id_furniture');
+        if (empty($id_furniture)) {
+            $issues = $this->getDoctrine()->getRepository('RestaurantBundle:ReportIssue')->findBy(array('status' => array('Open', 'Wachten')), array('dated' => 'DESC', 'reportedat' => 'DESC'));
+            $result['header'] = count($issues)." Issues";
+        } else {
+            $furniture = $this->getDoctrine()->getRepository('RestaurantBundle:Furniture')->find($id_furniture);
+            $issues = $this->getDoctrine()->getRepository('RestaurantBundle:ReportIssue')->findBy(array('furniture' => $id_furniture), array('dated' => 'DESC', 'reportedat' => 'DESC'));
+            $result['header'] = $furniture->getName();
+        }
+        $result['pagetotal'] = count($issues) % 6 == 0 ? number_format(count($issues) / 6, 0) : number_format(count($issues) / 6, 0) + 1;
+        $result['date'] = date('F jS, Y');
+
+        for ($i = 0; $i < count($issues); $i++) {
+//            $fileimg = $_SERVER['DOCUMENT_ROOT'] . '/uploads/images/reportissue/' . $issues[$i]->getPathimage();
+            $fileimg = $_SERVER['DOCUMENT_ROOT'] . '/web/uploads/images/reportissue/' . $issues[$i]->getPathimage();
+            $fileimg = str_replace('private', 'public', $fileimg);
+            $imagen = file_exists($fileimg) ? $issues[$i]->getPathimage() : '';
+            $result['elements'][] = array(
+                'name' => $issues[$i]->getDetails(),
+                'status' => $issues[$i]->getStatus(),
+                'location' => !is_null($issues[$i]->getLocation()) ? $issues[$i]->getLocation()->getDetails() : '',
+                'furniture' => !is_null($issues[$i]->getFurniture()) && !is_null($issues[$i]->getFurniture()->getName()) ? $issues[$i]->getFurniture()->getName() : '',
+                'reportedby' => $issues[$i]->getReporter()->getName(),
+                'date' => $issues[$i]->getDated()->format('d-m-Y') . " " . $issues[$i]->getReportedat()->format('H:i:s'),
+                'peacture' => is_null($imagen) ? '' : $imagen
+            );
+        }
+        return $response->setData($result);
+    }
+
 }

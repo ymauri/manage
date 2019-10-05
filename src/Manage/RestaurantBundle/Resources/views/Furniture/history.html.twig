@@ -1,14 +1,14 @@
 {% extends 'RestaurantBundle::frame.html.twig' %}
-{% block title %} List Issues {% endblock %}
+{% block title %} Issues {{ furniture.name }} {% endblock %}
 {% block body %}
     <div class="portlet">
         <div class="portlet-title">
             <div class="caption">
-                <i class="icon-list"></i>Issues
+                <i class="icon-list"></i>{{ furniture.name }}
             </div>
             <div class="tools">
-                <a href="{{ path('reportissue_new') }}" class=" blue">
-                    <i class="fa fa-plus"></i> Create new
+                <a href="{{ path('furniture') }}" class=" blue">
+                    <i class="fa fa-folder"></i> Inventory
                 </a>
                 <a href="#" class=" blue" id="export">
                     <i class="fa fa-print"></i> Export
@@ -86,10 +86,12 @@
     <script type="text/javascript" src="{{ asset('global/plugins/datatables/media/js/jquery.dataTables.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous"></script>
-
     <script>
+
         var initTable = function () {
+
             var table = $('#dataissue');
+
             // begin first table
             table.dataTable({
                 "columns": [{
@@ -133,25 +135,24 @@
                     [1, "asc"]
                 ] // set first column as a default sort by asc
             });
+
             var tableWrapper = jQuery('#dataissue_wrapper');
+
         }
+
 
         initTable();
         $("#export").click(function(e){
             e.preventDefault();
-            $.get("{{ path('reportissue_pdfjson') }}", {}, function(response){
-                var lMargin=15; //left margin in mm
-                var rMargin=15; //right margin in mm
-                var pdfInMM=210;  // width of A4 in mm
-                var yposition = 40;
-                var xposition = 15;
+            $.get("{{ path('reportissue_pdfjson') }}", {'id_furniture':{{ furniture.id }}}, function(response){
+                var y = 40;
+                var x = 15;
                 var page = 1;
                 var pdf = new jsPDF();
                 pdf.setFont("helvetica");
                 var img = new Image();
-//                img.src = "http://localhost:5800/img/tphlogo.jpeg";
-//                img.src = "https://log.towerleisure.nl/web/img/tphlogo.jpeg";
-                img.src = "https://test.log.towerleisure.nl/web/img/tphlogo.jpeg";
+//                img.src = "http://localhost:5800/img/tphlogo.jpg";
+                img.src = "https://log.towerleisure.nl/web/img/tphlogo.jpg";
                 pdf.addImage(img, 'jpg', 15, 10, 50, 9);
                 pdf.setFontSize(10);
                 pdf.setFontType('bold');
@@ -168,35 +169,28 @@
                             format = item.peacture.split('.')
                             var img = new Image();
                             if (format[1] == 'jpeg' || format[1] == 'png' || format[1] == 'jpg'){
-//                                img.src = "../../uploads/images/reportissue/"+item.peacture;
-//                                img.src = "https://log.towerleisure.nl/web/uploads/images/reportissue/"+item.peacture;
-                                img.src = "https://test.log.towerleisure.nl/web/uploads/images/reportissue/"+item.peacture;
-                                pdf.addImage(img, format[1], xposition, yposition, 35, 30)
-                                xposition = 55;
+                                //img.src = "../../uploads/images/reportissue/"+item.peacture;
+                                img.src = "https://log.towerleisure.nl/web/uploads/images/reportissue/"+item.peacture;
+                                pdf.addImage(img, format[1], x, y, 35, 30)
+                                x = 55;
                             }
                         }
-                        yposition += 3;
-                        pdf.setFontSize(11);
+                        y += 3;
+                        pdf.setFontSize(12);
                         pdf.setFontType('bold');
-                        lines = pdf.splitTextToSize(item.name, (pdfInMM-lMargin-rMargin))
-                        pdf.text(xposition, yposition, lines);
-                        yposition += lines.length * 5;
+                        pdf.text(x, y, item.name);
                         pdf.setFontType('normal');
                         pdf.setFontSize(10);
-                        pdf.text(xposition, yposition, "Reported at: "+item.date);
-                        pdf.text(xposition, yposition + 5, "Location: "+ item.location);
-                        pdf.text(xposition, yposition + 10, "Reported by: "+item.reportedby);
-                        pdf.text(xposition, yposition + 15, "Status: "+item.status);
-                        yposition += 37;
-                        xposition = 15;
-
+                        pdf.text(x, y + 5, "Reported at: "+item.date);
+                        pdf.text(x, y + 10, "Location: "+ item.location);
+                        pdf.text(x, y + 15, "Reported by: "+item.reportedby);
+                        pdf.text(x, y + 20, "Status: "+item.status);
+                        y += 37;
                         if ((i + 1) % 5 == 0 && !(i + 1 == response.elements.length)){
                             page ++;
                             pdf.addPage()
-//                            img.src = "http://localhost:5800/img/tphlogo.jpeg";
-//                            img.src = "https://log.towerleisure.nl/web/img/tphlogo.jpeg";
-                            var img = new Image();
-                            img.src = "https://test.log.towerleisure.nl/web/img/tphlogo.jpeg";
+                            //img.src = "http://localhost:5800/img/tphlogo.jpg";
+                            img.src = "https://log.towerleisure.nl/web/img/tphlogo.jpg";
                             pdf.addImage(img, 'jpg', 15, 10, 50, 9);
                             pdf.setFontSize(10);
                             pdf.setFontType('bold');
@@ -205,7 +199,7 @@
                             pdf.text(160, 18, response.date);
                             pdf.text(160, 265, 'Page '+page + ' of ' +  response.pagetotal);
                             pdf.line(15, 28, 200, 28)
-                            yposition = 40;
+                            y = 40;
                         }
                     })
                     pdf.save( Math.random().toString(36).substr(2, 15) + ".pdf");

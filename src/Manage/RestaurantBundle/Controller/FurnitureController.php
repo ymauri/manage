@@ -670,5 +670,24 @@ class FurnitureController extends Controller
         }
         return $response->setData($result);
     }
+
+    /**
+     * @Route("/history/{id_furniture}", name="furniture_history")
+     * @Security("is_granted('ROLE_SERVICE')")
+     * @Method("GET")
+     */
+    public function itemHistory(Request $request, $id_furniture){
+        $furniture = $this->getDoctrine()->getRepository('RestaurantBundle:Furniture')->find($id_furniture);
+        $issues = $this->getDoctrine()->getRepository('RestaurantBundle:ReportIssue')->findBy(array('furniture'=>$id_furniture));
+        if (count($issues) > 0){
+            return $this->render("RestaurantBundle:Furniture:history.html.twig", array(
+                'reportIssues' => $issues,
+                'furniture' => $furniture,
+            ));
+        }
+        $this->addFlash('error', 'There is no issue history for "'.$furniture->getName().'"');
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer);
+    }
 }
 

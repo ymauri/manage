@@ -67,6 +67,9 @@
                         <li>
                             <a href="{{ path('furniture_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span>Edit</a>
                         </li>
+                        <li>
+                            <a href="{{ path('furniture_history', { 'id_furniture': entity.id }) }}"><span class="icon icon-energy"></span>Log Issues</a>
+                        </li>
                         {% if is_granted('ROLE_SUPER_ADMIM') %}
                         <li>
                             <a href="{{ path('furniture_delete', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-remove"></span>Delete</a>
