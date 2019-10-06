@@ -32,7 +32,7 @@
                 <tbody>
                 {% for reportIssue in reportIssues %}
                     {% if (reportIssue.status != 'Afgerond') or (is_granted('ROLE_SUPER_ADMIN')) %}
-                    <tr {% if reportIssue.status == 'Wachten' %} class="alert-info" {% endif %}>
+                    <tr {% if reportIssue.status == 'Wachten' %} class="alert-info" {% endif %} {% if reportIssue.status == 'Afgerond' %} class="alert-success" {% endif %}>
                         <td>
                             <a href="{% if is_granted('ROLE_MAINTENANCE_EDIT') %}{{ path('reportissue_show', { 'id': reportIssue.id }) }}{% else %}#{% endif %}">
                                 <b>{{ reportIssue.location }}</b> <br/>
@@ -50,7 +50,6 @@
                                 {{ reportIssue.details }}
                             </a>
                         </td>
-
                         <td>
                             <a href="{% if is_granted('ROLE_MAINTENANCE_EDIT') %}{{ path('reportissue_show', { 'id': reportIssue.id }) }}{% else %}#{% endif %}">
                                 {% if reportIssue.pathimage %}<img
@@ -130,7 +129,7 @@
                     "targets": [0]
                 }],
                 "order": [
-                    [1, "asc"]
+                    [1, "desc"]
                 ] // set first column as a default sort by asc
             });
             var tableWrapper = jQuery('#dataissue_wrapper');
@@ -151,7 +150,7 @@
                 var img = new Image();
 //                img.src = "http://localhost:5800/img/tphlogo.jpeg";
 //                img.src = "https://log.towerleisure.nl/web/img/tphlogo.jpeg";
-                img.src = "https://test.log.towerleisure.nl/web/img/tphlogo.jpeg";
+                img.src = "https://log.towerleisure.nl/web/img/tphlogo.jpeg";
                 pdf.addImage(img, 'jpg', 15, 10, 50, 9);
                 pdf.setFontSize(10);
                 pdf.setFontType('bold');
@@ -170,7 +169,7 @@
                             if (format[1] == 'jpeg' || format[1] == 'png' || format[1] == 'jpg'){
 //                                img.src = "../../uploads/images/reportissue/"+item.peacture;
 //                                img.src = "https://log.towerleisure.nl/web/uploads/images/reportissue/"+item.peacture;
-                                img.src = "https://test.log.towerleisure.nl/web/uploads/images/reportissue/"+item.peacture;
+                                img.src = "https://log.towerleisure.nl/web/uploads/images/reportissue/"+item.peacture;
                                 pdf.addImage(img, format[1], xposition, yposition, 35, 30)
                                 xposition = 55;
                             }
@@ -196,7 +195,7 @@
 //                            img.src = "http://localhost:5800/img/tphlogo.jpeg";
 //                            img.src = "https://log.towerleisure.nl/web/img/tphlogo.jpeg";
                             var img = new Image();
-                            img.src = "https://test.log.towerleisure.nl/web/img/tphlogo.jpeg";
+                            img.src = "https://log.towerleisure.nl/web/img/tphlogo.jpeg";
                             pdf.addImage(img, 'jpg', 15, 10, 50, 9);
                             pdf.setFontSize(10);
                             pdf.setFontType('bold');

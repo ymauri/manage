@@ -494,7 +494,7 @@ class HotelController extends Controller {
                     $this->em->flush();
                     $this->updateCalculos();
                     if ($final == 'true') {
-                        if ($user->getRole() == 'ROLE_SUPERADMIN')
+                        if ($this->isGranted('ROLE_SUPER_ADMIN'))
                             $this->entity_basic->setName('true');
                         $this->entity_basic->setFinished(new \DateTime('today'));
                         $this->em->persist($this->entity_basic);

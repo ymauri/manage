@@ -53,13 +53,10 @@ class UserController extends Controller
      */
     public function createAction(Request $request)
     {
-
         $entity = new User();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-        $form->getData()->setEnable(true);
         try {
-
             if ($form->isValid()) {
                 $encoder = $this->get('security.encoder_factory')->getEncoder($entity);
                 $pass = $encoder->encodePassword($entity->getPassword(), $entity->getSalt());
@@ -70,7 +67,7 @@ class UserController extends Controller
                 $em->flush();
 
                 $this->addFlash('success', 'Success! The user has been created.');
-                return $this->redirect($this->generateUrl('user_show', array('id' => $entity->getId())));
+                return $this->redirect($this->generateUrl('user', array('id' => $entity->getId())));
             }
         } catch (\Exception $ex) {
             return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
@@ -86,22 +83,18 @@ class UserController extends Controller
      * Displays a form to create a new User entity.
      *
      * @Route("/new/", name="user_new")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method("GET")
      * @Template()
      */
     public function newAction()
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN') {
-            $entity = new User();
-            $form = $this->createCreateForm($entity);
-            return array(
-                'entity' => $entity,
-                'form' => $form->createView(),
-            );
-        } else {
-            return $this->render('RestaurantBundle:Exception:error403.html.twig', array('message' => 'You don\'t have permissions for this action'));
-        }
+        $entity = new User();
+        $form = $this->createCreateForm($entity);
+        return array(
+            'entity' => $entity,
+            'form' => $form->createView(),
+        );
     }
 
     private function createCreateForm(User $entity)

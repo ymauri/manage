@@ -216,16 +216,17 @@ class ReportPlanningController extends Controller
                 $issue->setReportedat(new \DateTime());
                 $issue->setDetails($report->getDetails());
                 //Copiar la imagen de un directorio a otro
-                copy($this->container->getParameter('images.reportplanning') . DIRECTORY_SEPARATOR . $report->getPathimage(), $this->container->getParameter('images.reportissue') . DIRECTORY_SEPARATOR . $report->getPathimage());
-                //exec('copy "'.$this->container->getParameter('images.reportplanning').DIRECTORY_SEPARATOR. $report->getPathimage().'" "'.$this->container->getParameter('images.reportissue').DIRECTORY_SEPARATOR.$report->getPathimage().'"');
+                //copy($this->container->getParameter('images.reportplanning') . DIRECTORY_SEPARATOR . $report->getPathimage(), $this->container->getParameter('images.reportissue') . DIRECTORY_SEPARATOR . $report->getPathimage());
+                exec('copy "'.$this->container->getParameter('images.reportplanning').DIRECTORY_SEPARATOR. $report->getPathimage().'" "'.$this->container->getParameter('images.reportissue').DIRECTORY_SEPARATOR.$report->getPathimage().'"');
                 $issue->setPathimage($report->getPathimage());
                 $issue->setPriority($report->getPriority());
                 $report->setUpdated(new \DateTime());
                 $em->persist($issue);
                 $em->persist($report);
+                $em->flush();
+
             }
         }
-        $em->flush();
         die;
     }
 

@@ -23,7 +23,7 @@ class ReportIssueController extends Controller
      * Lists all ReportIssue entities.
      *
      * @Route("/", name="reportissue_index")
-     * @Security("is_granted('ROLE_MAINTENANCE_EDIT')")
+     * @Security("is_granted('ROLE_USER')")
      * @Method("GET")
      */
     public function indexAction()
@@ -188,8 +188,7 @@ class ReportIssueController extends Controller
 
     /**
      * @Route("/getfurnitures/", name="reportissue_getfurnitures")
-     * @Security("is_granted('ROLE_MAINTENANCE_EDIT')")
-     * @Method("POST")
+     * @Method({"GET", "POST"})
      * */
 
     public function getFurnituresAction(Request $request)
@@ -215,8 +214,7 @@ class ReportIssueController extends Controller
 
     /**
      * @Route("/getSubfolder/", name="reportissue_getsubfolder")
-     * @Security("is_granted('ROLE_MAINTENANCE_EDIT')")
-     * @Method("POST")
+     * @Method({"GET", "POST"})
      * */
 
     public function getSubfolderAction(Request $request)
@@ -235,7 +233,7 @@ class ReportIssueController extends Controller
 
     /**
      * @Route("/pdfjson/", name="reportissue_pdfjson")
-     * @Security("is_granted('ROLE_SERVICE')")
+     * @Security("is_granted('ROLE_CLEANING_LIST')")
      * @Method("GET")
      */
     public function pdfJsonAction(Request $request)
@@ -264,7 +262,7 @@ class ReportIssueController extends Controller
                 'status' => $issues[$i]->getStatus(),
                 'location' => !is_null($issues[$i]->getLocation()) ? $issues[$i]->getLocation()->getDetails() : '',
                 'furniture' => !is_null($issues[$i]->getFurniture()) && !is_null($issues[$i]->getFurniture()->getName()) ? $issues[$i]->getFurniture()->getName() : '',
-                'reportedby' => $issues[$i]->getReporter()->getName(),
+                'reportedby' => !empty($issues[$i]->getReporter()) ? $issues[$i]->getReporter()->getName() : '',
                 'date' => $issues[$i]->getDated()->format('d-m-Y') . " " . $issues[$i]->getReportedat()->format('H:i:s'),
                 'peacture' => is_null($imagen) ? '' : $imagen
             );

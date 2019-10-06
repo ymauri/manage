@@ -61,7 +61,7 @@
                                                 <select id="listing-{{control}}" class="form-control input-sm listing-checkin" name='listing' data-placeholder="Select..." >
                                                     {% if is_granted("ROLE_SUPER_ADMIN") and (not var.checkin or not var.fromguesty) %}  <option ></option> {% endif %}
                                                     {% for val in listing%}
-                                                        <option value="{{val.id}}" {% if var.listing.id == val.id %} selected = "selected" {% endif %} {% if not is_granted("ROLE_SUPERADMIN") and var.listing.id != val.id and var.checkin and var.fromguesty %}  disabled="disabled" {% endif %}>{{val.details}} </option>
+                                                        <option value="{{val.id}}" {% if var.listing.id == val.id %} selected = "selected" {% endif %} {% if not is_granted("ROLE_SUPER_ADMIN") and var.listing.id != val.id and var.checkin and var.fromguesty %}  disabled="disabled" {% endif %}>{{val.details}} </option>
                                                     {% endfor  %}
                                                 </select>
                                             </td>

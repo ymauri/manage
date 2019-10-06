@@ -7,7 +7,7 @@
                     <i class="icon icon-user"></i>Users
                 </div>
                 <div class="tools">                    
-                    <a href="#" class=" blue">
+                    <a href="{{ path('fos_user_registration_register') }}" class=" blue">
                         <i class="fa fa-plus"></i> Create new 
                     </a>
                 </div>
@@ -44,9 +44,9 @@
                                             Actions  <i class="fa fa-angle-down"></i>
                                         </button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li>
+                                            <!--<li>
                                                 <a href="{{ path('user_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-search"></span>View</a>
-                                            </li>
+                                            </li>-->
                                             <li>
                                                 <a href="{{ path('user_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span>Edit</a>
                                             </li>

@@ -119,6 +119,8 @@
                         <span class="title">Inventory</span></a>
                 </li>
             {% endif %}
+            {% if is_granted('ROLE_MAINTENANCE_LIST') %}
+
             <li>
 
                 <a href="javascript:;">
@@ -127,6 +129,7 @@
                     <span class="arrow"></span>
                 </a>
                 <ul class="sub-menu">
+
                     <li>
                         <a href="{{ path('reportissue_index') }}"> Issues </a>
                     </li>
@@ -137,6 +140,8 @@
                     {% endif %}
                 </ul>
             </li>
+            {% endif %}
+
             {% if is_granted('ROLE_USER') %}
                 <li>
                     <a href="javascript:;">

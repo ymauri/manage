@@ -284,33 +284,48 @@ class ReportPlanning
         $this->updated = $updated;
     }
 
-    public function canApplyToday(){
+    public function canApplyToday()
+    {
         $today = new \DateTime();
-        if ($today >= $this->getBegins() && $today <= $this->getEnds() ){
+        if ((empty($this->getBegins() && empty($this->getEnds()))) || (!empty($this->getBegins()) && $today >= $this->getBegins()) || (!empty($this->getEnds()) && $today <= $this->getEnds())) {
             switch ($this->frequency) {
                 case Nomenclator::PLANNING_WEEKLY:
                     //Si hoy es lunes entonces crear
-                    if (/*$today->format('w') == 1 &&*/ (is_null($this->updated) || $this->getUpdated()->diff($today)->d >= 7))
+                    if (/*$today->format('w') == 1 &&*/
+                    (empty($this->updated) || $this->getUpdated()->diff($today)->d >= 7)
+                    )
                         return true;
+                    break;
                 case Nomenclator::PLANNING_MONTHLY:
                     //Si hoy es 1 de cualquier mes entonces cerar
-                    if (/*$today->format('d') == 1 &&*/ (is_null($this->updated) || $this->getUpdated()->diff($today)->m >= 1))
+                    if (/*$today->format('d') == 1 &&*/
+                    (empty($this->updated) || $this->getUpdated()->diff($today)->m >= 1)
+                    )
                         return true;
+                    break;
                 case Nomenclator::PLANNING_QUATERLY:
                     //Si hoy es 1 de enero, abril, julio u octubre, entonces crear
-                    if (/*$today->format('d') == 1 && ($today->format('n') == 1 || $today->format('n') == 4 || $today->format('n') == 7 || $today->format('n') == 10) &&*/ (is_null($this->updated) || $this->getUpdated()->diff($today)->m >= 3))
+                    if (/*$today->format('d') == 1 && ($today->format('n') == 1 || $today->format('n') == 4 || $today->format('n') == 7 || $today->format('n') == 10) &&*/
+                    (empty($this->updated) || $this->getUpdated()->diff($today)->m >= 3)
+                    )
                         return true;
+                    break;
                 case Nomenclator::PLANNING_BIANNUAL:
                     //Si hoy es 1 de enero o julio, entonces crear
-                    if (/*$today->format('d') == 1 && ($today->format('n') == 1 || $today->format('n') == 7) &&*/ (is_null($this->updated) || $this->getUpdated()->diff($today)->m >= 6))
+                    if (/*$today->format('d') == 1 && ($today->format('n') == 1 || $today->format('n') == 7) &&*/
+                    (empty($this->updated) || $this->getUpdated()->diff($today)->m >= 6)
+                    )
                         return true;
+                    break;
                 case Nomenclator::PLANNING_YEARLY:
                     //Si ho yes 1 de enero entonces crear
-                    if (/*$today->format('d') == 1 && $today->format('n') == 1 && */(is_null($this->updated) || $this->getUpdated()->diff($today)->y >= 1))
+                    if (/*$today->format('d') == 1 && $today->format('n') == 1 && */
+                    (empty($this->updated) || $this->getUpdated()->diff($today)->y >= 1)
+                    )
                         return true;
+                    break;
             }
         }
-
         return false;
     }
 

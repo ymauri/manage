@@ -221,7 +221,7 @@ class CleaningController extends Controller
      *
      * @Route("/extra/update/", name="cleaning_update_status")
      * @Method("POST")
-     * @Security("is_granted('ROLE_LONGSTAY_EDIT')")
+     * @Security("is_granted('ROLE_CLEANING_LIST')")
      * @Template()
      */
     public function cleaningUpdateAction()

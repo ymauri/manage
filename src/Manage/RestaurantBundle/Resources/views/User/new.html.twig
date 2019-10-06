@@ -1,5 +1,5 @@
 {% extends 'RestaurantBundle::frame.html.twig' %}
-{% block title %} New User {% endblock %}
+{% block title %} Edit User {% endblock %}
 {% block body %}
 <div class="portlet">
     <div class="portlet-title">
@@ -7,90 +7,78 @@
             <i class="icon icon-user"></i>Users
         </div>
         <div class="tools">
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <a href="{{path('user_new')}}" class=" blue">
+                    <i class="fa fa-plus"></i> Create new
+                </a>
+            {% endif %}
             <a href="{{path('user')}}" class=" blue">
                 <i class="fa fa-list-alt"></i> List
             </a>
         </div>
     </div>
-        <div class="portlet box blue-hoki">
-            <div class="portlet-title">
-                <div class="caption">
-                    <i class="fa fa-plus"></i>New
-                </div>
-                <div class="tools">
-                    <a href="javascript:;" class="collapse">
-                    </a>
-                </div>
+    <div class="portlet box blue-hoki">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-pencil"></i>Edit
             </div>
-            <div class="portlet-body form">
-                {% if form_errors(form) %}
-                    <div class="alert alert-danger display-hide" style="display: block;">
-                        <button class="close" data-close="alert"></button>
-                        <span>  {{form_errors(form)}} </span>
-                    </div>
-                {% endif %}
-                <form class="container-fluid form-horizontal " action="{{path('user_create')}}" method="POST" {{form_enctype(form)}}>
-                    <div class="form-body col-md-5">
-                        <div class="row form-group">
-                            {{form_label(form.email,'Email',{'attr':{                       
-                      'class' :' control-label',
-                            }})}}
-                            {{form_widget(form.email, {'attr':{                       
-                      'class' :' form-control'
-                            }})}}  
-                            {{form_errors(form.email)}}  
-                        </div>
-                        <div class="row form-group">
-                            {{form_label(form.name,'Name',{'attr':{                       
-                      'class' :' control-label',
-                            }})}}
-                            {{form_widget(form.name, {'attr':{                       
-                      'class' :' form-control'
-                            }})}} 
-                            {{form_errors(form.name)}}  
-                        </div>
-                        <div class="row form-group ">
-                            {{form_label(form.lastname,'Last name',{'attr':{                       
-                      'class' :' control-label',
-                            }})}}
-                            {{form_widget(form.lastname, {'attr':{                       
-                      'class' :' form-control'
-                            }})}}  
-                            {{form_errors(form.lastname)}}  
-                        </div>
-                        <div class="row form-group ">
-                    {{form_label(form.role,'Role',{'attr':{                       
-                      'class' :' control-label',
-                      }})}}
-                    {{form_widget(form.role, {'attr':{                       
-                      'class' :' form-control'
-                      }})}}  
-                    {{form_errors(form.role)}}  
-                </div>
-                        <div class="row form-group ">
-                            {{form_label(form.password.first,'Password',{'attr':{                       
-                      'class' :' control-label',
-                            }})}}
-                            {{form_widget(form.password.first, {'attr':{                       
-                      'class' :' form-control'
-                            }})}}  
-                            {{form_errors(form.password.first)}}  
-                        </div>
-                        <div class="row form-group ">
-                            {{form_label(form.password.second,'Retype passowrd',{'attr':{                       
-                      'class' :' control-label',
-                            }})}}
-                            {{form_widget(form.password.second, {'attr':{                       
-                      'class' :' form-control'
-                            }})}}  
-                            {{form_errors(form.password.second)}}  
-                        </div>
-                        <div class="row form-group ">
-                            {{ form_rest(form) }}
-                        </div>
-                    </div>
-                </form>
+            <div class="tools">
+                <a href="javascript:;" class="collapse">
+                </a>
             </div>
         </div>
+        <div class="portlet-body form">
+            {% if form_errors(form) %}
+                <div class="alert alert-danger display-hide" style="display: block;">
+                    <button class="close" data-close="alert"></button>
+                    <span>  {{form_errors(form)}} </span>
+                </div>
+            {% endif %}
+            <form class="container-fluid form-horizontal" action="{{path('user_create')}}" method="post" {{form_enctype(form)}}>
+                <input name="_method" value="POST" type="hidden">
+                <div class="form-body col-md-5">
+                    <div class="row form-group">
+                        {{form_label(form.email,'Email',{'attr':{
+                            'class' :' control-label',
+                        }})}}
+                        {{form_widget(form.email, {'attr':{
+                            'class' :' form-control'
+                        }})}}
+                        {{form_errors(form.email)}}
+                    </div>
+                    <div class="row form-group">
+                        {{form_label(form.username,'Username',{'attr':{
+                            'class' :' control-label',
+                        }})}}
+                        {{form_widget(form.username, {'attr':{
+                            'class' :' form-control'
+                        }})}}
+                        {{form_errors(form.username)}}
+                    </div>
+                    <div class="row form-group ">
+                        {{form_label(form.password,'Passowrd',{'attr':{
+                            'class' :' control-label',
+                        }})}}
+                        {{form_widget(form.password, {'attr':{
+                            'class' :' form-control',
+                            'required': false
+                        }})}}
+                        {{form_errors(form.password)}}
+                    </div>
+                    <div class="row form-group ">
+                        {{form_label(form.roles,'Roles',{'attr':{
+                            'class' :' control-label',
+                        }})}}
+                        {{form_widget(form.roles, {'attr':{
+                            'class' :' form-control'
+                        }})}}
+                        {{form_errors(form.roles)}}
+                    </div>
+                    <div class="row form-group ">
+                        {{ form_rest(form) }}
+                    </div>
+                </div>
+            </form>
         </div>
-{% endblock %}
+    </div>
+    {% endblock %}
