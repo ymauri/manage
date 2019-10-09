@@ -3,6 +3,7 @@
 namespace Manage\RestaurantBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\RadioType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -29,6 +30,16 @@ class ReportIssueType extends AbstractType
                     'readonly' => true,
 
                 )
+            ))
+            ->add('status', 'choice', array(
+                'choices' => array(
+                    'Open'=>'Open',
+                    'Wachten'=>'In behandeling',
+                    'Afgerond'=>'Afgerond',
+                ),
+                'required' => true,
+                'expanded' => true,
+
             ))
             ->add('details')
             ->add('room')

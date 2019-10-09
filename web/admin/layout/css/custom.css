@@ -1,25 +1,3 @@
-/* here you can put your own css to customize and override the theme */
-
-/***
-Rounded Portlets
-***/
-/*
-.portlet {
-	border-radius: 4px !important;
-}
-
-.portlet .portlet-title {
-	border-radius: 4px 4px 0px 0px !important;
-}
-
-.portlet .portlet-body,
-.portlet .portlet-body .form-actions  {
-	border-radius: 0px 0px 4px 4px !important;
-}
-*/
-/*Personalizado*/
-
-
 textarea{
     max-width: 100% !important;
     text-align: left !important;
@@ -465,4 +443,19 @@ label[for="adminbundle_service_voucherstotal"]{
 
 .dataTables_filter label{
     float: unset !important;
+}
+
+.status-issue input[type="radio"]{
+    margin-right: 1px;
+}
+
+.status-issue label{
+    vertical-align: middle;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+#report_issue_status{
+    text-align: center;
+    margin-top: 10px;
 }

@@ -33,6 +33,10 @@
                     <div class="form-body">
 
                         <div class="col-md-5">
+                            <div class="row form-group status-issue">
+                                {{ form_widget(edit_form.status) }}
+                                {{ form_errors(edit_form.status) }}
+                            </div>
                             <div class="row form-group">
                                 {{ form_label(edit_form.dated,'Date',{'attr':{
                                     'class' :' control-label',
@@ -121,16 +125,10 @@
                                         }}) }}
                                         {{ form_errors(edit_form.reporter) }}
                                     </div>
-
-                            <div class="row form-group">
-                                <b>Report Planning</b></div>
                             {% endif %}
                             <br><br>
                             <div class="form-group">
                                 <button type="submit" id="restaurantbundle_reportissue_submit" name="restaurantbundle_reportissue[submit]" class="btn btn-primary">Update</button>
-                                {% if reportIssue.status == 'Open'%}
-                                    <button type="button" class="btn btn-success btn-change-status" value="Afgerond">Afgerond</button>
-                                {% endif %}
                             </div>
                             <br><br>
 
@@ -141,9 +139,9 @@
 
                         <div class="col-md-7">
                             {% if reportIssue.pathimage %}
-                                <img class="img-thumbnail" src="{{ asset('uploads/images/reportissue/' ~ reportIssue.pathimage) }}" />
+                                <img style="width: 100%" class="img-thumbnail" src="{{ asset('uploads/images/reportissue/' ~ reportIssue.pathimage) }}" />
                             {% else %}
-                                <img  class="img-thumbnail"  src="{{ asset('img/noimage.jpg') }}" alt="Without image" >
+                                <img style="width: 100%" class="img-thumbnail"  src="{{ asset('img/noimage.jpg') }}" alt="Without image" >
                             {% endif %}
                             <br/><br/>
                         </div>
