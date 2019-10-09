@@ -634,14 +634,14 @@ class HotelController extends Controller {
             $relation = $this->em->getRepository('RestaurantBundle:RCheckinHotel')->find($data[0]['value']);
         }
         else {
-            foreach ($data as $value) {
-                if ($value['name'] == 'listing') {
-                    $checkin = $this->em->getRepository('RestaurantBundle:RCheckinHotel')->findOneBy(array('hotel'=>$this->entity_basic->getId(), 'listing'=>$value['value']));
-                    if (!is_null($checkin) && is_null($checkin->getCheckin()) ){
-                        $relation = $checkin;
-                    }
-                }
-            }
+//            foreach ($data as $value) {
+//                if ($value['name'] == 'listing') {
+//                    $checkin = $this->em->getRepository('RestaurantBundle:RCheckinHotel')->findOneBy(array('hotel'=>$this->entity_basic->getId(), 'listing'=>$value['value']));
+//                    if (!is_null($checkin) && is_null($checkin->getCheckin()) ){
+//                        $relation = $checkin;
+//                    }
+//                }
+//            }
         }
         try {
             foreach ($data as $value) {
