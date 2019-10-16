@@ -31,7 +31,7 @@
                 </thead>
                 <tbody>
                 {% for reportIssue in reportIssues %}
-                    {% if (reportIssue.status != 'Afgerond') or (is_granted('ROLE_SUPER_ADMIN')) %}
+                    {% if (reportIssue.status == 'Afgerond' and reportIssue.updatedat.diff(date('now')).days < 2) or (reportIssue.status != 'Afgerond') or (is_granted('ROLE_SUPER_ADMIN')) %}
                     <tr {% if reportIssue.status == 'Wachten' %} class="alert-info" {% endif %} {% if reportIssue.status == 'Afgerond' %} class="alert-success" {% endif %}>
                         <td>
                             <a href="{% if is_granted('ROLE_MAINTENANCE_EDIT') %}{{ path('reportissue_edit', { 'id': reportIssue.id }) }}{% else %}#{% endif %}">

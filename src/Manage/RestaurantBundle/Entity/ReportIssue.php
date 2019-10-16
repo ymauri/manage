@@ -16,6 +16,10 @@ use Doctrine\ORM\Mapping\JoinColumn;
  */
 class ReportIssue
 {
+    public function __construct()
+    {
+        $this->updatedat = new \DateTime();
+    }
     /**
      * @var int
      *
@@ -102,6 +106,14 @@ class ReportIssue
      * @ORM\Column(name="status", type="string", length=255)
      */
     private $status = "Open";
+
+    /**
+     * @var datetime
+     *
+     * @ORM\Column(name="updatedat", type="datetime")
+     */
+    private $updatedat;
+
 
     /**
      * Get id
@@ -321,5 +333,15 @@ class ReportIssue
     public function setRoom($room)
     {
         $this->room = $room;
+    }
+
+    public function getUpdatedat()
+    {
+        return $this->updatedat;
+    }
+
+    public function setUpdatedat($updatedat)
+    {
+        $this->updatedat = new \DateTime();
     }
 }

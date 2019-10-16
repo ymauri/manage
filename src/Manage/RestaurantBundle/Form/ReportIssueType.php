@@ -64,6 +64,9 @@ class ReportIssueType extends AbstractType
                 },
                 'required' => true,
                 'multiple' => false
+            ))
+            ->add('updatedat', 'hidden', array(
+                'data' => (new \DateTime())->format('Y-m-d H:i:s')
             ));
     }
 
