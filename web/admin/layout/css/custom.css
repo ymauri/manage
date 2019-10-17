@@ -441,7 +441,7 @@ label[for="adminbundle_service_voucherstotal"]{
     max-width: 100% !important;
 }
 
-.dataTables_filter label{
+#table_result .dataTables_filter label{
     float: unset !important;
 }
 

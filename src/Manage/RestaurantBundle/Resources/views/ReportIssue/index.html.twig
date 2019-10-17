@@ -16,6 +16,19 @@
             </div>
         </div>
         <div class="">
+            <div class="row">
+            <div class="col-md-3 pull-right">
+                <label class="pull-right">Status:
+                    <select id="status-filter" class="input-inline form-control" onchange="$(this).val() == 'All' ? Clear() : Search($(this).val())">
+                        <option value="All">All</option>
+                        <option value="Open" selected="selected">Open</option>
+                        <option value="Afgerond">Afgerond</option>
+                        <option value="In behandeling">In behandeling</option>
+                    </select>
+                </label>
+            </div>
+            </div>
+
             <table class="table table-hover" id="dataissue">
                 <thead>
                     <tr>
@@ -31,8 +44,7 @@
                 </thead>
                 <tbody>
                 {% for reportIssue in reportIssues %}
-                    {% if (reportIssue.status == 'Afgerond' and reportIssue.updatedat.diff(date('now')).days < 2) or (reportIssue.status != 'Afgerond') or (is_granted('ROLE_SUPER_ADMIN')) %}
-                    <tr {% if reportIssue.status == 'Wachten' %} class="alert-info" {% endif %} {% if reportIssue.status == 'Afgerond' %} class="alert-success" {% endif %}>
+                <tr {% if reportIssue.status == 'Wachten' %} class="alert-info" {% endif %} {% if reportIssue.status == 'Afgerond' %} class="alert-success" {% endif %} {% if reportIssue.status != 'Open' %} style="display: none;" {% endif %} >
                         <td>
                             <a href="{% if is_granted('ROLE_MAINTENANCE_EDIT') %}{{ path('reportissue_edit', { 'id': reportIssue.id }) }}{% else %}#{% endif %}">
                                 {% if reportIssue.pathimage %}<img
@@ -79,7 +91,6 @@
                         {#</td>#}
                         {#{% endif %}#}
                     </tr>
-                {% endif %}
                 {% endfor %}
                 </tbody>
             </table>
@@ -91,6 +102,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous"></script>
 
     <script>
+
+        function Clear() {
+            $('#dataissue_wrapper tr').show();
+        }
+
+        function Search(word) {
+            Clear();
+            $('#dataissue_wrapper tr > td:last-child p').each(function () {
+                if ($(this).html() != word) {
+                    $(this).parent().parent().hide();
+                }
+            });
+        }
         var initTable = function () {
             var table = $('#dataissue');
             // begin first table
@@ -141,6 +165,13 @@
         }
 
         initTable();
+
+        $('.pagination li a').click(function(){
+            Clear()
+            $("#status-filter").val('Open').trigger('change')
+        })
+
+
         $("#export").click(function(e){
             e.preventDefault();
             $.get("{{ path('reportissue_pdfjson') }}", {}, function(response){
