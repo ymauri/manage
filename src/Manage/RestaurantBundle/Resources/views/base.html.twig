@@ -50,10 +50,7 @@
         <script src="{{asset('global/scripts/metronic.js')}}" type="text/javascript"></script>
         <script>
             $(window).on('load', function () {
-               // setTimeout(function () {
-                    $(".loader-page").css({visibility:"hidden",opacity:"0"})
-               // }, 3000);
-
+                $(".loader-page").css({visibility:"hidden",opacity:"0"})
             });
         </script>
         {% block stylesheets %}
@@ -120,7 +117,7 @@
                 </div>
             </div>
         </div>
-        {% block footer%}                        
+        {% block footer%}
         {% endblock %}
        
         <script src="{{asset('admin/layout/scripts/select2.min.js')}}" type="text/javascript"></script>

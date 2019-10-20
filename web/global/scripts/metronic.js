@@ -533,12 +533,14 @@ var Metronic = function () {
         },
 
         startPageLoading: function(message) {
-            $('.page-loading').remove();
-            $('body').append('<div class="page-loading"><img src="' + this.getGlobalImgPath() + 'loading-spinner-grey.gif"/>&nbsp;&nbsp;<span>' + (message ? message : 'Loading...') + '</span></div>');
+            // $('.page-loading').remove();
+            $(".loader-page").css({visibility:"visible",opacity:"1"})
+            // $('body').append('<div class="page-loading"><img src="' + this.getGlobalImgPath() + 'loading-spinner-grey.gif"/>&nbsp;&nbsp;<span>' + (message ? message : 'Loading...') + '</span></div>');
         },
 
         stopPageLoading: function() {
-            $('.page-loading').remove();
+            $(".loader-page").css({visibility:"hidden",opacity:"0"})
+            // $('.page-loading').remove();
         },
 
         alert: function(options) {

@@ -1,74 +1,86 @@
+<div class="col-md-5">
+    <div class="portlet  light bg-inverse">
+        <div class="portlet-title">
+            <div class="caption">
+                    <span class="caption-subject bold font-green-haze">Eind Float
+                        {% if help.eind_float.content %}<i class="fa fa-question-circle tooltips" data-placement="right" data-original-title="{{ help.eind_float.content }}"></i>{% endif %}
+                    </span> &nbsp;
+                <span class="caption-helper"></span>
+            </div>
+            <div class="tools">
+                <span class="eind badge bg-green-haze"></span>
+                <a href="javascript:;" class="collapse">
+                </a>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <form id="form-bills" method="post" class="form-horizontal container-fluid " role="form" autocomplete="off">
+                <div class="form-body">
+                    <fieldset id="data-bills">
+                            <section class="x-group col-md-4 ">
+                                <div class="row form-group">
+                                    <label for="e500" class="required">€500</label>
+                                    <input type="text" id="e500" name="e500" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e500}}" >
+                                </div>
+                                <div class="row form-group">
+                                    <label for="e200" class="required">€200</label>
+                                    <input type="text" id="e200" name="e200" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e200}}">
+                                </div>
+                                <div class="row form-group">
+                                    <label for="e100" class="required">€100</label>
+                                    <input type="text" id="e100" name="e100" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e100}}">
+                                </div>
+                                <div class="row form-group">
+                                    <label for="e50" class="required">€50</label>
+                                    <input type="text" id="e50" name="e50" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e50}}">
+                                </div>
+                                <div class="row form-group">
+                                    <label for="e20" class="required">€20</label>
+                                    <input type="text" id="e20" name="e20" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e20}}">
+                                </div>
+                                <div class="row form-group">
+                                    <label for="e10" class="required">€10</label>
+                                    <input type="text" id="e10" name="e10" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e10}}">
+                                </div>
+                                <div class="row form-group">
+                                    <label for="e5" class="required">€5</label>
+                                    <input type="text" id="e5" name="e5" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e5}}">
+                                </div>
+                            </section>
+                            <section class="z-group col-md-4 ">
+                                <div class="row form-group">
+                                    <label for="e2" class="required">€2</label>
+                                    <input type="text" id="e2" name="e2" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e2}}">
+                                </div>
+                                <div class="row form-group">
+                                    <label for="e1" class="required">€1</label>
+                                    <input type="text" id="e1" name="e1" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e1}}">
+                                </div>
+                                <div class="row form-group">
+                                    <label for="e050" class="required">€0,50</label>
+                                    <input type="text" id="e050" name="e050" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e050}}">
+                                </div>
+                                <div class="row form-group">
+                                    <label for="e020" class="required">€0,20</label>
+                                    <input type="text" id="e020" name="e020" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e020}}">
+                                </div>
+                                <div class="row form-group">
+                                    <label for="e010" class="required">€0,10</label>
+                                    <input type="text" id="e010" name="e010" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e010}}">
+                                </div>
 
+                            </section>
+                                <div class="row form-group totales col-md-11">
+                                    <label for="eind" class="required">Totaal Contanten €</label>
+                                    <input type="text" id="eind" name="eind" disabled="disabled" required="required" class="input-sm pull-right form-control real" value="{{entity_basic.bill.eind}}">
+                                </div>
+                    </fieldset>
+                </div>
+            </form>
 
-<form id="form-bills" method="post" class="form-horizontal container-fluid " role="form" autocomplete="off">
-    <div class="form-body">
-        <fieldset id="data-bills" class="col-md-12">
-<div class="col-md-9 col-md-offset-3">
-            <h4>Eind Float &nbsp; {% if help.eind_float.content %}<i class="fa fa-question-circle tooltips" style="color: #d4d4d4;" data-placement="right" data-original-title="{{ help.eind_float.content }}"></i>{% endif %}</h4>
-
-            <section class="x-group col-md-2 ">
-                <div class="row form-group">
-                    <label for="e500" class="required">€500</label>
-                    <input type="text" id="e500" name="e500" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e500}}" >  
-                </div>
-                <div class="row form-group">
-                    <label for="e200" class="required">€200</label>
-                    <input type="text" id="e200" name="e200" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e200}}">  
-                </div>
-                <div class="row form-group">
-                    <label for="e100" class="required">€100</label>
-                    <input type="text" id="e100" name="e100" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e100}}">  
-                </div>
-                <div class="row form-group">
-                    <label for="e50" class="required">€50</label>
-                    <input type="text" id="e50" name="e50" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e50}}"> 
-                </div>
-                <div class="row form-group">
-                    <label for="e20" class="required">€20</label>
-                    <input type="text" id="e20" name="e20" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e20}}">
-                </div>
-                <div class="row form-group">
-                    <label for="e10" class="required">€10</label>
-                    <input type="text" id="e10" name="e10" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e10}}">
-                </div>
-                <div class="row form-group">
-                    <label for="e5" class="required">€5</label>
-                    <input type="text" id="e5" name="e5" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e5}}"> 
-                </div>
-            </section>
-                <section class="z-group col-md-2 ">
-                <div class="row form-group">
-                    <label for="e2" class="required">€2</label>
-                    <input type="text" id="e2" name="e2" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e2}}">
-                </div>
-                <div class="row form-group">
-                    <label for="e1" class="required">€1</label>
-                    <input type="text" id="e1" name="e1" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e1}}">
-                </div>
-                <div class="row form-group">
-                    <label for="e050" class="required">€0,50</label>
-                    <input type="text" id="e050" name="e050" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e050}}">  
-                </div>
-                <div class="row form-group">
-                    <label for="e020" class="required">€0,20</label>
-                    <input type="text" id="e020" name="e020" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e020}}"> 
-                </div>
-                <div class="row form-group">
-                    <label for="e010" class="required">€0,10</label>
-                    <input type="text" id="e010" name="e010" required="required" class="input-sm pull-right form-control bill-control entero" value="{{entity_basic.bill.e010}}">
-                </div>        
-                
-            </section>
-                <section class="col-md-12">
-                    <div class="row form-group totales col-md-5">
-                    <label for="eind" class="required">Totaal Contanten €</label>
-                    <input type="text" id="eind" name="eind" disabled="disabled" required="required" class="input-sm pull-right form-control real" value="{{entity_basic.bill.eind}}"> 
-                </div>
-                </section>
+        </div>
     </div>
-        </fieldset>    
-    </div>
-</form>         
+</div>
 <script>
 $('#form-bills').on('keyup', '.bill-control', function(){
     total = 0
@@ -79,11 +91,9 @@ $('#form-bills').on('keyup', '.bill-control', function(){
         total += val
     })
     $('#eind').val(numeral(total).format('0.0,'))
+    $('.eind.badge').text( '€' + numeral(total).format('0.0,'))
     //Final
     $('#totalcontanten').val(numeral(total).format('0.0,'))
     completeProfit()
-})
-$('#form-bills').ready(function(){
-    $('.bill-control').trigger('keyup');
 })
 </script>

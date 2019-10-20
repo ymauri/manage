@@ -1,152 +1,161 @@
-
-<form id="form-card" method="post" class="form-horizontal container-fluid " role="form" autocomplete="off">
-    <div class="form-body">
-        <fieldset id="data-card" class="col-md-12">
-            <div class="col-md-9 col-md-offset-3">
-            <h4>Pin Terminals &nbsp; {% if help.pin_terminal.content %}<i class="fa fa-question-circle tooltips" style="color: #d4d4d4;" data-placement="right" data-original-title="{{ help.pin_terminal.content }}"></i>{% endif %}</h4>
-            <section class="col-md-12">         
-                <div class="col-md-5 row">
-                    <div class="row form-group ">
-                        <label for="total" class="required"><b>Totaal CCV terminals €</b></label>
-                        <input type="text" id="total" name="total" disabled="disabled" required="required" class="input-sm pull-right form-control card-control real" value="{{entity_basic.card.total}}">
-                    </div>
-                    <div class="row form-group">
-                        <label for="maestro" class="required">PIN / Maestro €</label>
-                        <input type="text" id="maestro" name="maestro" required="required" class="input-sm pull-right form-control card-control real debit" value="{{entity_basic.card.maestro}}">
-                    </div>
-                    <div class="row form-group">
-                        <label for="vpay" class="required">V-Pay €</label>
-                        <input type="text" id="vpay" name="vpay" required="required" class="input-sm pull-right form-control card-control real debit" value="{{entity_basic.card.vpay}}">
-                    </div>
-                    <div class="row form-group">
-                        <label for="visa" class="required">Visa €</label>
-                        <input type="text" id="visa" name="visa" required="required" class="input-sm pull-right form-control card-control real credit" value="{{entity_basic.card.visa}}"> 
-                    </div>            
-                    <div class="row form-group">
-                        <label for="visaelec" class="required">Visa Electron €</label>
-                        <input type="text" id="visaelec" name="visaelec" required="required" class="input-sm pull-right form-control card-control real credit" value="{{entity_basic.card.visaelec}}">
-                    </div>
-                    <div class="row form-group">
-                        <label for="mastercard" class="required">Mastercard €</label>
-                        <input type="text" id="mastercard" name="mastercard" required="required" class="input-sm pull-right form-control card-control real credit" value="{{entity_basic.card.mastercard}}">
-                    </div>
-                    <div class="row form-group">
-                        <label for="american" class="required">American Express €</label>
-                        <input type="text" id="american" name="american" required="required" class="input-sm pull-right form-control card-control real credit" value="{{entity_basic.card.american}}">  
-                    </div>
-                    <div class="row form-group">
-                        <label for="union" class="required">Union Pay €</label>
-                        <input type="text" id="union" name="union" required="required" class="input-sm pull-right form-control card-control real credit" value="{{entity_basic.card.union}}"> 
-                    </div>
-                    <div class="row form-group">
-                        <label for="diners" class="required">Diners €</label>
-                        <input type="text" id="diners" name="diners" required="required" class="input-sm pull-right form-control card-control real credit" value="{{entity_basic.card.diners}}">
-                    </div>            
-
-                </div>    
-            </section>
-            <section class="col-md-12 section-totales" >
-                <div class="row col-md-5 totales">
-                    <div class="row form-group ">
-                        <label for="tdebit" class="required">Totaal Debit Cards €</label>
-                        <input type="text" id="tdebit" name="tdebit" disabled="disabled" required="required" class="input-sm pull-right form-control card-control real" value="{{entity_basic.card.tcredit}}">
-                    </div>    
-                    <div class="row form-group ">
-                        <label for="tcredit" class="required">Totaal Credit Cards €</label>
-                        <input type="text" id="tcredit" name="tcredit" disabled="disabled" required="required" class="input-sm pull-right form-control card-control real" value="{{entity_basic.card.tdebit}}">
-                    </div>
-                </div> 
-            </section>
-            <section class="col-md-12">  
-                <div class="col-md-5 row">
-                    <br/>
-                    <br/>
-                    <div class="row form-group ">
-                        <label for="iscc">Nog een Pin / CC strook invullen?</label>
-                        <div id="card_iscc">
-                            <input type="radio" id="iscc_1" name="iscc" required="required" value="1">
-                            <label  >Ja</label>
-                            <input type="radio" id="iscc_0" name="iscc" required="required" value="0" >
-                            <label >Nee</label>
-                        </div>
-                    </div>
-                    <script>
-                        {% if entity_basic.card.iscc == 1 %}
-                            $('#iscc_1').prop('checked', 'checked')
-                        {% else %}
-                            $('#iscc_0').prop('checked', 'checked')
-                        {% endif %}
-                    </script>
-
-
-                    <div class="section-card-cc"  {% if entity_basic.card.iscc == 0 %} hidden="hidden" {% endif %}>
-                        <div class="row form-group">
-                            <label for="totalcc" class="required"><b>Totaal CCV terminals 2 €</b></label>
-                            <input type="text" id="totalcc" name="totalcc" disabled="disabled" required="required" class="input-sm pull-right form-control card-control real" value="{{entity_basic.card.totalcc}}">
-                        </div>
-                        <div class="row form-group">
-                            <label for="ccmaestro" class="required">PIN / Maestro €</label>
-                            <input type="text" id="ccmaestro" name="ccmaestro" required="required" class="input-sm pull-right form-control card-control real ccdebit" value="{{entity_basic.card.ccmaestro}}">
-                        </div>
-                        <div class="row form-group">
-                            <label for="ccvpay" class="required">V-Pay €</label>
-                            <input type="text" id="ccvpay" name="ccvpay" required="required" class="input-sm pull-right form-control card-control real ccdebit" value="{{entity_basic.card.ccvpay}}">
-                        </div>
-                        <div class="row form-group">
-                            <label for="ccvisa" class="required">Visa €</label>
-                            <input type="text" id="ccvisa" name="ccvisa" required="required" class="input-sm pull-right form-control card-control real cccredit" value="{{entity_basic.card.ccvisa}}"> 
-                        </div>            
-                        <div class="row form-group">
-                            <label for="ccvisaelec" class="required">Visa Electron €</label>
-                            <input type="text" id="ccvisaelec" name="ccvisaelec" required="required" class="input-sm pull-right form-control card-control real cccredit" value="{{entity_basic.card.ccvisaelec}}">
-                        </div>
-                        <div class="row form-group">
-                            <label for="ccmastercard" class="required">Mastercard €</label>
-                            <input type="text" id="ccmastercard" name="ccmastercard" required="required" class="input-sm pull-right form-control card-control real cccredit" value="{{entity_basic.card.ccmastercard}}">
-                        </div>
-                        <div class="row form-group">
-                            <label for="ccamerican" class="required">American Express €</label>
-                            <input type="text" id="ccamerican" name="ccamerican" required="required" class="input-sm pull-right form-control card-control real cccredit" value="{{entity_basic.card.ccamerican}}">  
-                        </div>
-                        <div class="row form-group">
-                            <label for="ccunion" class="required">Union Pay €</label>
-                            <input type="text" id="ccunion" name="ccunion" required="required" class="input-sm pull-right form-control card-control real cccredit" value="{{entity_basic.card.ccunion}}"> 
-                        </div>
-                        <div class="row form-group">
-                            <label for="ccdiners" class="required">Diners €</label>
-                            <input type="text" id="ccdiners" name="ccdiners" required="required" class="input-sm pull-right form-control card-control real cccredit" value="{{entity_basic.card.ccdiners}}">
-                        </div>
-                    </div>            
-                </div>            
-            </section>
-            <section class="col-md-12 section-totales-2 "  {% if entity_basic.card.iscc == 0 %} hidden="hidden" {% endif %}>
-                <div class="row col-md-5 totales">
-                    <div class="row form-group ">
-                        <label for="cctdebit" class="required">Totaal Debit Cards 2 €</label>
-                        <input type="text" id="cctdebit" name="cctdebit" disabled="disabled" required="required" class="input-sm pull-right form-control card-control real" value="{{entity_basic.card.cctdebit}}">
-                    </div>    
-                    <div class="row form-group ">
-                        <label for="cctcredit" class="required">Totaal Credit Cards 2 €</label>
-                        <input type="text" id="cctcredit" name="cctcredit" disabled="disabled" required="required" class="input-sm pull-right form-control card-control real" value="{{entity_basic.card.cctcredit}}">
-                    </div>
-
-
-                </div> 
-            </section>
-            <section class="col-md-12" >
-                <br/>
-                <br/>
-                <div class="col-md-5 row">
-                    <div class="row form-group">
-                        <label for="alipay" class="required">AliPay €</label>
-                        <input type="text" id="alipay" name="alipay" required="required" class="input-sm pull-right form-control card-control real" value="{{entity_basic.card.alipay}}">
-                    </div>
-                </div>
-            </section>
+<div class="col-md-5">
+    <div class="portlet  light bg-inverse">
+        <div class="portlet-title">
+            <div class="caption">
+                    <span class="caption-subject bold font-green-haze">Pin Terminals
+                        {% if help.pin_terminal.content %}<i class="fa fa-question-circle tooltips" data-placement="right" data-original-title="{{ help.pin_terminal.content }}"></i>{% endif %}
+                    </span> &nbsp;
+                <span class="caption-helper"></span>
             </div>
-        </fieldset>
+            <div class="tools">
+                <span class="pin badge bg-green-haze"></span>
+                <a href="javascript:;" class="collapse">
+                </a>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <form id="form-card" method="post" class="form-horizontal container-fluid" role="form" autocomplete="off">
+                <div class="form-body">
+                    <fieldset id="data-card">
+                            <section class="col-md-12">
+                                    <div class="row form-group ">
+                                        <label for="total" class="required"><b>Totaal CCV terminals €</b></label>
+                                        <input type="text" id="total" name="total" disabled="disabled" required="required" class="input-sm pull-right form-control card-control real" value="{{entity_basic.card.total }}">
+                                    </div>
+                                    <div class="row form-group">
+                                        <label for="maestro" class="required">PIN / Maestro €</label>
+                                        <input type="text" id="maestro" name="maestro" required="required" class="input-sm pull-right form-control card-control real debit" value="{{entity_basic.card.maestro}}">
+                                    </div>
+                                    <div class="row form-group">
+                                        <label for="vpay" class="required">V-Pay €</label>
+                                        <input type="text" id="vpay" name="vpay" required="required" class="input-sm pull-right form-control card-control real debit" value="{{entity_basic.card.vpay}}">
+                                    </div>
+                                    <div class="row form-group">
+                                        <label for="visa" class="required">Visa €</label>
+                                        <input type="text" id="visa" name="visa" required="required" class="input-sm pull-right form-control card-control real credit" value="{{entity_basic.card.visa}}">
+                                    </div>
+                                    <div class="row form-group">
+                                        <label for="visaelec" class="required">Visa Electron €</label>
+                                        <input type="text" id="visaelec" name="visaelec" required="required" class="input-sm pull-right form-control card-control real credit" value="{{entity_basic.card.visaelec}}">
+                                    </div>
+                                    <div class="row form-group">
+                                        <label for="mastercard" class="required">Mastercard €</label>
+                                        <input type="text" id="mastercard" name="mastercard" required="required" class="input-sm pull-right form-control card-control real credit" value="{{entity_basic.card.mastercard}}">
+                                    </div>
+                                    <div class="row form-group">
+                                        <label for="american" class="required">American Express €</label>
+                                        <input type="text" id="american" name="american" required="required" class="input-sm pull-right form-control card-control real credit" value="{{entity_basic.card.american}}">
+                                    </div>
+                                    <div class="row form-group">
+                                        <label for="union" class="required">Union Pay €</label>
+                                        <input type="text" id="union" name="union" required="required" class="input-sm pull-right form-control card-control real credit" value="{{entity_basic.card.union}}">
+                                    </div>
+                                    <div class="row form-group">
+                                        <label for="diners" class="required">Diners €</label>
+                                        <input type="text" id="diners" name="diners" required="required" class="input-sm pull-right form-control card-control real credit" value="{{entity_basic.card.diners}}">
+                                    </div>
+
+                            </section>
+                            <section class="col-md-12 section-totales" >
+                                <div class="totales">
+                                    <div class="row form-group ">
+                                        <label for="tdebit" class="required">Totaal Debit Cards €</label>
+                                        <input type="text" id="tdebit" name="tdebit" disabled="disabled" required="required" class="input-sm pull-right form-control card-control real" value="{{entity_basic.card.tcredit}}">
+                                    </div>
+                                    <div class="row form-group ">
+                                        <label for="tcredit" class="required">Totaal Credit Cards €</label>
+                                        <input type="text" id="tcredit" name="tcredit" disabled="disabled" required="required" class="input-sm pull-right form-control card-control real" value="{{entity_basic.card.tdebit}}">
+                                    </div>
+                                </div>
+                            </section>
+                            <section class="col-md-12">
+                                    <br/>
+                                    <br/>
+                                    <div class="row form-group ">
+                                        <label for="iscc">Nog een Pin / CC strook invullen?</label>
+                                        <div id="card_iscc">
+                                            <input type="radio" id="iscc_1" name="iscc" required="required" value="1">
+                                            <label  >Ja</label>
+                                            <input type="radio" id="iscc_0" name="iscc" required="required" value="0" >
+                                            <label >Nee</label>
+                                        </div>
+                                    </div>
+                                    <script>
+                                        {% if entity_basic.card.iscc == 1 %}
+                                        $('#iscc_1').prop('checked', 'checked')
+                                        {% else %}
+                                        $('#iscc_0').prop('checked', 'checked')
+                                        {% endif %}
+                                    </script>
+
+
+                                    <div class="section-card-cc"  {% if entity_basic.card.iscc == 0 %} hidden="hidden" {% endif %}>
+                                        <div class="row form-group">
+                                            <label for="totalcc" class="required"><b>Totaal CCV terminals 2 €</b></label>
+                                            <input type="text" id="totalcc" name="totalcc" disabled="disabled" required="required" class="input-sm pull-right form-control card-control real" value="{{entity_basic.card.totalcc}}">
+                                        </div>
+                                        <div class="row form-group">
+                                            <label for="ccmaestro" class="required">PIN / Maestro €</label>
+                                            <input type="text" id="ccmaestro" name="ccmaestro" required="required" class="input-sm pull-right form-control card-control real ccdebit" value="{{entity_basic.card.ccmaestro}}">
+                                        </div>
+                                        <div class="row form-group">
+                                            <label for="ccvpay" class="required">V-Pay €</label>
+                                            <input type="text" id="ccvpay" name="ccvpay" required="required" class="input-sm pull-right form-control card-control real ccdebit" value="{{entity_basic.card.ccvpay}}">
+                                        </div>
+                                        <div class="row form-group">
+                                            <label for="ccvisa" class="required">Visa €</label>
+                                            <input type="text" id="ccvisa" name="ccvisa" required="required" class="input-sm pull-right form-control card-control real cccredit" value="{{entity_basic.card.ccvisa}}">
+                                        </div>
+                                        <div class="row form-group">
+                                            <label for="ccvisaelec" class="required">Visa Electron €</label>
+                                            <input type="text" id="ccvisaelec" name="ccvisaelec" required="required" class="input-sm pull-right form-control card-control real cccredit" value="{{entity_basic.card.ccvisaelec}}">
+                                        </div>
+                                        <div class="row form-group">
+                                            <label for="ccmastercard" class="required">Mastercard €</label>
+                                            <input type="text" id="ccmastercard" name="ccmastercard" required="required" class="input-sm pull-right form-control card-control real cccredit" value="{{entity_basic.card.ccmastercard}}">
+                                        </div>
+                                        <div class="row form-group">
+                                            <label for="ccamerican" class="required">American Express €</label>
+                                            <input type="text" id="ccamerican" name="ccamerican" required="required" class="input-sm pull-right form-control card-control real cccredit" value="{{entity_basic.card.ccamerican}}">
+                                        </div>
+                                        <div class="row form-group">
+                                            <label for="ccunion" class="required">Union Pay €</label>
+                                            <input type="text" id="ccunion" name="ccunion" required="required" class="input-sm pull-right form-control card-control real cccredit" value="{{entity_basic.card.ccunion}}">
+                                        </div>
+                                        <div class="row form-group">
+                                            <label for="ccdiners" class="required">Diners €</label>
+                                            <input type="text" id="ccdiners" name="ccdiners" required="required" class="input-sm pull-right form-control card-control real cccredit" value="{{entity_basic.card.ccdiners}}">
+                                        </div>
+                                    </div>
+                            </section>
+                            <section class="col-md-12 section-totales-2 "  {% if entity_basic.card.iscc == 0 %} hidden="hidden" {% endif %}>
+                                <div class="totales">
+                                    <div class="row form-group ">
+                                        <label for="cctdebit" class="required">Totaal Debit Cards 2 €</label>
+                                        <input type="text" id="cctdebit" name="cctdebit" disabled="disabled" required="required" class="input-sm pull-right form-control card-control real" value="{{entity_basic.card.cctdebit}}">
+                                    </div>
+                                    <div class="row form-group ">
+                                        <label for="cctcredit" class="required">Totaal Credit Cards 2 €</label>
+                                        <input type="text" id="cctcredit" name="cctcredit" disabled="disabled" required="required" class="input-sm pull-right form-control card-control real" value="{{entity_basic.card.cctcredit}}">
+                                    </div>
+
+
+                                </div>
+                            </section>
+                            <section class="col-md-12" >
+                                <br/>
+                                <br/>
+                                    <div class="row form-group">
+                                        <label for="alipay" class="required">AliPay €</label>
+                                        <input type="text" id="alipay" name="alipay" required="required" class="input-sm pull-right form-control card-control real" value="{{entity_basic.card.alipay}}">
+                                    </div>
+                            </section>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
     </div>
-</form>
+</div>
 <script>
 
 
@@ -191,6 +200,7 @@
         ali = numeral($('#alipay').val()).value()
         def = numeral($('#tcredit').val()).value() + numeral($('#tdebit').val()).value()
         $('#total').val(numeral(def).format('0.0,'))
+        $('.pin.badge').text('€' + numeral(def).format('0.0,'))
         cc = numeral($('#cctcredit').val()).value() + numeral($('#cctdebit').val()).value()
         $('#totalcc').val(numeral(cc).format('0.0,'))
         // Final
@@ -219,7 +229,6 @@
             totalesCard()
         }
     })
-
 
 
 </script>

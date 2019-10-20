@@ -383,7 +383,13 @@ class HotelController extends Controller {
             if (!$entity_basic) {
                 return $this->render('RestaurantBundle:Exception:error404.html.twig', array('message' => 'Unable to find this Form.'));
             }
-            $canceled = $em->getRepository('RestaurantBundle:Checkin')->findBy(array('date' => $entity_basic->getDated(), 'status'=>'canceled'));
+            $dbcanceled = $em->getRepository('RestaurantBundle:Checkin')->findBy(array('date' => $entity_basic->getDated(), 'status'=>'canceled'));
+            $canceled = array();
+            foreach ($dbcanceled as $item){
+                if($item->getCanceledat()->diff($item->getDate())->d < 7){
+                    $canceled[] = $item;
+                }
+            }
             $help = $em->getRepository('RestaurantBundle:Help')->findBy(array('form'=>'hotel'));
             $contenidos = array();
             foreach ($help as $content){
@@ -759,14 +765,14 @@ class HotelController extends Controller {
             $relation = $this->em->getRepository('RestaurantBundle:RCheckoutHotel')->find($data[0]['value']);
         }
         else {
-            foreach ($data as $value) {
-                if ($value['name'] == 'listing') {
-                    $checkout = $this->em->getRepository('RestaurantBundle:RCheckoutHotel')->findOneBy(array('hotel'=>$this->entity_basic->getId(), 'listing'=>$value['value']));
-                    if (!is_null($checkout) && is_null($checkout->getCheckin()) ){
-                        $relation = $checkout;
-                    }
-                }
-            }
+//            foreach ($data as $value) {
+//                if ($value['name'] == 'listing') {
+//                    $checkout = $this->em->getRepository('RestaurantBundle:RCheckoutHotel')->findOneBy(array('hotel'=>$this->entity_basic->getId(), 'listing'=>$value['value']));
+//                    if (!is_null($checkout) && is_null($checkout->getCheckin()) ){
+//                        $relation = $checkout;
+//                    }
+//                }
+//            }
         }
         try {
             $confirm = false;
@@ -792,7 +798,7 @@ class HotelController extends Controller {
                     $checkout = $this->em->getRepository('RestaurantBundle:Checkout')->find($current['value']);
                     $relation->setCheckout($checkout);
                 }
-                if ($current['name'] == 'name'){
+                if (substr($current['name'], 0, 4) == 'name'){
                     $relation->setName($current['value']);
                 }
             }

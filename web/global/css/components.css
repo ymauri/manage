@@ -1801,7 +1801,7 @@ Form Layouts
   padding: 0 !important;
 }
 .form .form-body {
-  padding: 10px;
+  padding: 10px 0;
 }
 .portlet.light .form .form-body {
   padding-left: 0;

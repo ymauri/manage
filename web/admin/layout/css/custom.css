@@ -67,8 +67,7 @@ fieldset.turnover-final  .form-control,
 #form-card fieldset, 
 #form-log fieldset,
 #data-checkin{
-    border-bottom: 1px solid #999;
-    padding: 15px 0;
+    padding: 10px 0;
 }
 
 .fieldset-userdoor{
@@ -173,7 +172,6 @@ h2 .info{
 }
 
 .details-checkin {
-    border-bottom: 1px solid #efefef;
     margin-bottom: 15px;
     padding-bottom: 15px;
 }
@@ -459,3 +457,8 @@ label[for="adminbundle_service_voucherstotal"]{
     text-align: center;
     margin-top: 10px;
 }
+
+.fa.fa-question-circle.tooltips {
+    color: #d4d4d4;
+}
+
