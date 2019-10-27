@@ -30,8 +30,11 @@ class ReportIssueController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $reportIssues = $em->getRepository('RestaurantBundle:ReportIssue')->findAll();
+        $responsibles = $em->getRepository('RestaurantBundle:ReportIssue')->getResponsibles();
+        
         return $this->render('RestaurantBundle:ReportIssue:index.html.twig', array(
             'reportIssues' => $reportIssues,
+            'responsibles' => $responsibles
         ));
     }
 
@@ -61,7 +64,7 @@ class ReportIssueController extends Controller
             return $this->redirectToRoute('reportissue_index');
         }
         $em = $this->getDoctrine()->getManager();
-        $places = $em->getRepository("RestaurantBundle:Folder")->findBy(array('issheet' => 0, 'isroot' => 0), array('details' => 'ASC'));
+        $places = $em->getRepository("RestaurantBundle:Folder")->findBy(array('issheet' => 0, 'isroot' => 0), array('details' => 'DESC'));
         $locations = array();
         foreach ($places as $place) {
             $locations[$place->getId()] = $em->getRepository("RestaurantBundle:Folder")->getChildrensNodes($place->getId());
@@ -132,18 +135,16 @@ class ReportIssueController extends Controller
     /**
      * Deletes a ReportIssue entity.
      *
-     * @Route("/{id}", name="reportissue_delete")
+     * @Route("/{id}/delete", name="reportissue_delete")
      * @Security("is_granted('ROLE_MAINTENANCE_EDIT')")
-     * @Method("DELETE")
+     * @Method("GET")
      */
-    public function deleteAction(Request $request, ReportIssue $reportIssue)
+    public function deleteAction($id)
     {
-
-        $form = $this->createDeleteForm($reportIssue);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
+        $reportIssue = $em->getRepository("RestaurantBundle:ReportIssue")->find($id);
+        
+        if (!empty($reportIssue)) {
             $em->remove($reportIssue);
             $em->flush();
         }
@@ -195,7 +196,7 @@ class ReportIssueController extends Controller
     {
         $id = $request->get('id');
         $em = $this->getDoctrine()->getManager();
-        $result = $em->getRepository("RestaurantBundle:Folder")->getChildrensFurnituresFull($id);
+        $result = $em->getRepository("RestaurantBundle:Folder")->getChildrensFurnituresIssues($id);
         $furnitures = array();
         foreach ($result as $item) {
             $tags = $item->getTags();

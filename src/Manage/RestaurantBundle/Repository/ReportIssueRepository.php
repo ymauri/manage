@@ -18,4 +18,10 @@ class ReportIssueRepository extends EntityRepository
             ->setParameter("status", 'Afgerond')
             ->getResult();
     }
+
+    public function getResponsibles(){
+        return $this->getEntityManager()
+            ->createQuery('SELECT r, w FROM RestaurantBundle:ReportIssue r JOIN r.responsible w WHERE r.responsible IS NOT NULL GROUP BY w.id')
+            ->getResult();
+    }
 }

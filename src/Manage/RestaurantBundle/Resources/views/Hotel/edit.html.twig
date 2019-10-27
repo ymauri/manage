@@ -62,19 +62,16 @@
                                 {% if entity_basic.finished == null %}
                                 $('#restaurantbundle_hotel_dated').on({
                                     'change': function () {
-                                        fe = $('#restaurantbundle_hotel_dated').val()
+                                        var fe = $('#restaurantbundle_hotel_dated').val()
                                         //$('.string-date').text(days[fecha.getUTCDay()] + ', ' + fecha.toLocaleDateString("en-us", options))
                                         if (fe == "") {
                                             fe = {{ entity_basic.dated | date('d-m-Y') }}
                                         }
-
                                         else {
                                             separated = $(this).val().split('-')
                                             fecha = new Date((separated[1] + '-' + separated[0] + '-' + separated[2]).replace(/-/g, "/"))
                                             $('.string-date').text(fecha.toLocaleDateString("en-us", options))
-
                                         }
-
                                         Metronic.startPageLoading()
                                         $.post('{{ path('hotel_change_date', {'id':entity_basic.id}) }}', {'date': fe}, function (response) {
                                             window.location = window.location

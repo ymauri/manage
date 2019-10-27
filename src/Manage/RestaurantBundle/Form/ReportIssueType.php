@@ -65,6 +65,17 @@ class ReportIssueType extends AbstractType
                 'required' => true,
                 'multiple' => false
             ))
+            ->add('responsible', 'entity', array(
+                'class' => 'Manage\RestaurantBundle\Entity\Worker',
+                'query_builder' => function (WorkerRepository $repository) {
+                    return $repository->createQueryBuilder('b')
+                        ->select('b')
+                        ->where('b.isactive = \'1\' ')
+                        ->addOrderBy('b.name');
+                },
+                'required' => false,
+                'multiple' => false
+            ))
             ->add('updatedat', 'hidden', array(
                 'data' => (new \DateTime())->format('Y-m-d H:i:s')
             ));

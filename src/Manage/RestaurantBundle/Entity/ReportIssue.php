@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 use Doctrine\ORM\Mapping\JoinColumn;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * ReportIssue
@@ -99,6 +100,13 @@ class ReportIssue
      */
     private $reporter;
 
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="Manage\RestaurantBundle\Entity\Worker")
+     */
+    private $responsible;
+
 
     /**
      * @var string
@@ -150,7 +158,7 @@ class ReportIssue
 
     /**
      * Set reportedat
-     *
+     * @Serializer\Type("DateTime<'Y-m-d'>")
      * @param \DateTime $reportedat
      * @return ResportIssue
      */
@@ -343,5 +351,15 @@ class ReportIssue
     public function setUpdatedat($updatedat)
     {
         $this->updatedat = new \DateTime();
+    }
+
+    public function getResponsible()
+    {
+        return $this->responsible;
+    }
+
+    public function setResponsible($responsible)
+    {
+        $this->responsible = $responsible;
     }
 }

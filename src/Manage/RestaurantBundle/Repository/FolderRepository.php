@@ -38,6 +38,14 @@ class FolderRepository extends EntityRepository {
             return $this->getEntityManager()->createQuery('SELECT f FROM RestaurantBundle:Furniture f WHERE f.pathfolder like :parent')->setParameter("parent",'%/'.$parent.'/%')->getResult();
     }
 
+    public function getChildrensFurnituresIssues($parent){
+        return $this->getEntityManager()
+                    ->createQuery('SELECT f FROM RestaurantBundle:Furniture f JOIN f.tags t WHERE f.pathfolder like :parent AND t.name = :tagname')
+                    ->setParameter("parent",'%/'.$parent.'/%')
+                    ->setParameter("tagname", 'Onderhoud')
+                    ->getResult();
+    }
+
     public function getStatisticsChildrens($parent){
         $folder = $this->getEntityManager()->createQuery('SELECT f FROM RestaurantBundle:Folder f WHERE f.id = :id')->setParameter("id",$parent)->getResult();
         $quantity = $total = 0;

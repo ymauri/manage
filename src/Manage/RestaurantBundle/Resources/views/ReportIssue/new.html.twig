@@ -112,6 +112,16 @@
                                 }}) }}
                                 {{ form_errors(form.reporter) }}
                             </div>
+
+                            <div class="row form-group">
+                                {{ form_label(form.responsible,'Responsible',{'attr':{
+                                    'class' :' control-label',
+                                }}) }}
+                                {{ form_widget(form.responsible, {'attr':{
+                                    'class' :'input-sm pull-right form-control',
+                                }}) }}
+                                {{ form_errors(form.responsible) }}
+                            </div>
                             <br><br>
                             <div class="form-group">
                                 <button type="submit" id="restaurantbundle_reportissue_submit" name="restaurantbundle_reportissue[submit]" class="btn btn-primary">Create</button>

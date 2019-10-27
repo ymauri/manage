@@ -453,12 +453,11 @@ label[for="adminbundle_service_voucherstotal"]{
     font-weight: bold;
 }
 
-#report_issue_status{
-    text-align: center;
-    margin-top: 10px;
-}
 
 .fa.fa-question-circle.tooltips {
     color: #d4d4d4;
 }
 
+#status-filter, #responsible-filter {
+    width: 145px;
+}

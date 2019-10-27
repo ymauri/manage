@@ -29,10 +29,6 @@
                     <div class="form-body">
 
                         <div class="col-md-5">
-                            <div class="row form-group status-issue">
-                                {{ form_widget(edit_form.status) }}
-                                {{ form_errors(edit_form.status) }}
-                            </div>
                             <div class="row form-group">
                                 {{ form_label(edit_form.dated,'Date',{'attr':{
                                     'class' :' control-label',
@@ -115,17 +111,31 @@
                                         {{ form_label(edit_form.reporter,'Reporter',{'attr':{
                                             'class' :' control-label',
                                         }}) }}
-                                        {{ form_widget(edit_form.reporter, {'attr':{
-                                            'class' :'input-sm pull-right form-control',
-                                            'disabled':"disabled"
-                                        }}) }}
+                                        <input class="form-control" disabled="disabled" value="Generated automatically">
                                         {{ form_errors(edit_form.reporter) }}
                                     </div>
                             {% endif %}
-                            <br><br>
-                            <div class="form-group">
-                                <button type="submit" id="restaurantbundle_reportissue_submit" name="restaurantbundle_reportissue[submit]" class="btn btn-primary">Update</button>
+                            <div class="row form-group">
+                                {{ form_label(edit_form.responsible,'Responsible',{'attr':{
+                                    'class' :' control-label',
+                                }}) }}
+                                {{ form_widget(edit_form.responsible, {'attr':{
+                                    'class' :'input-sm pull-right form-control',
+                                }}) }}
+                                {{ form_errors(edit_form.responsible) }}
                             </div>
+                            <br><br>
+                            <div class="form-group status-issue">
+                                {{ form_widget(edit_form.status) }}
+                                {{ form_errors(edit_form.status) }}
+                            </div>
+                            <br><br>
+                                <div class="row form-group">
+                                    <button type="submit" id="restaurantbundle_reportissue_submit" name="restaurantbundle_reportissue[submit]" class="btn btn-primary">Update</button>
+
+
+                                </div>
+
                             <br><br>
 
                             <div class="row form-group " hidden="hidden" style="display: none">

@@ -196,14 +196,10 @@ class HotelController extends Controller {
 
     /**
      * Displays a form to create a new Listing entity.
-     * @Security("is_granted('ROLE_HOTEL_FORM')")
-     *
      * @Route("/hotelchangedate/{id}/", name="hotel_change_date")
+     * @Security("is_granted('ROLE_HOTEL_FORM')")
      */
-    public function hotelchangedateAction($id) {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole() == 'ROLE_SUPERADMIN' || $user->getRole() == 'ROLE_MANAGER' || $user->getRole() == 'ROLE_RECEPTION') {
-
+    public function hotelchangedateAction($id, Request $request) {
             $request = $this->getRequest();
             $response = new JsonResponse();
             if ($request->getMethod() == 'POST') {
@@ -246,6 +242,8 @@ class HotelController extends Controller {
                         $relation->setNotes($checkin->getNote());
                         $relation->setCheckin($checkin);
                         $em->persist($relation);
+                        $em->flush();
+
                     }
 
                     $checkoutguesty = $em->getRepository('RestaurantBundle:Checkout')->findBy(array('date' => $entity_hotel->getDated(), 'status'=>'confirmed'));
@@ -257,6 +255,7 @@ class HotelController extends Controller {
                         $relation->setFromguesty(TRUE);
                         $relation->setCheckout($checkout);
                         $em->persist($relation);
+                        $em->flush();
 
                         $cleaning = $em->getRepository("RestaurantBundle:Cleaning")->findOneBy(array("listing"=>$relation->getListing(), "dated"=>$relation->getHotel()->getDated()));
                         $cleaning = is_null($cleaning) ? new Cleaning() : $cleaning;
@@ -285,7 +284,6 @@ class HotelController extends Controller {
                     return $response;
                 }
             }
-        }
         return $this->render('RestaurantBundle:Exception:error403.html.twig');
 
     }
@@ -526,6 +524,12 @@ class HotelController extends Controller {
                 //Obtener los Departamentos cancelados sennalando los que deben ser cobrados
                 //Condicion de cobro: Cancelados con menos de 7 dias de diferencia de la reserva
                 $canceled = $this->em->getRepository('RestaurantBundle:Checkin')->findBy(array('date' => $this->entity_basic->getDated(), 'status'=>'canceled'));
+                $arr_canceled = array();
+                foreach ($canceled as $item) {
+                    if ($this->entity_basic->getDated()->dif($item->getCanceledat())->d < 7){
+                        $arr_canceled[] = $item;
+                    }
+                }
                 $help = $this->em->getRepository('RestaurantBundle:Help')->findBy(array('form'=>'hotel'));
                 $contenidos = array();
                 foreach ($help as $content){
@@ -545,7 +549,7 @@ class HotelController extends Controller {
                     'sources' => $this->getActiveSources(),
                     'listing' => $this->getActiveListing(),
                     //'parking' => $em->getRepository('RestaurantBundle:HotelParking')->findOneBy(array('hotel' => $this->entity_basic->getId())),
-                    'canceled' => $canceled,
+                    'canceled' => $arr_canceled,
                     'help'=>$contenidos,
                     'show' => FALSE
                 ));
