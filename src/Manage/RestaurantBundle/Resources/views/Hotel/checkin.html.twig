@@ -3,7 +3,13 @@
                 {% set control = 1 %}
                     {% if rcheckin|length > 0 %}
                         {% for var in rcheckin%}
-                            <form id="form-checkin-{{control}}" autocomplete="off" class="sortable-in {% if var.fromguesty %} fromguesty {% endif %}" order-name="{{ var.name }}" order-listing="{{ var.listing.number }}">
+                            {% set name_split = var.name | split(' ') %}
+                            {% if name_split | length > 1 %}
+                                {% set name = name_split[1] %}
+                            {% else %}
+                                {% set name = name_split[0] %}
+                            {% endif %}
+                            <form id="form-checkin-{{control}}" autocomplete="off" class="sortable-in {% if var.fromguesty %} fromguesty {% endif %}" order-name="{{ name }}" order-listing="{{ var.listing.number }}">
                                 <input hidden="hidden" name="id" id="id" value="{{ var.id }}">
                                 <input hidden="hidden" name="checkinid" id="checkinid" {% if var.checkin %}value="{{ var.checkin.id }}"{% endif %}>
                                 <input hidden="hidden" name="checkinbetalen" id="checkinbetalen" {% if var.checkin %}value="{{ var.checkin.betalen }}"{% endif %}>
@@ -53,7 +59,7 @@
                                             <div id="details-checkin-{{control}}" class="details-checkin">
                                                 <div class="form-group">
                                                     <label class="control-label">Listing</label>
-                                                    {% if help.checkin_listing.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_listing.content }}"></i>{% endif %}
+                                                    {% if help.checkin_listing.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_listing.content }}"></i>{% endif %}
                                                     <select id="listing-{{control}}" class="form-control input-sm listing-checkin" name='listing' data-placeholder="Select..." >
                                                         {% if is_granted("ROLE_SUPER_ADMIN") and (not var.checkin or not var.fromguesty) %}  <option ></option> {% endif %}
                                                         {% for val in listing%}
@@ -63,13 +69,13 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label">Naam</label>
-                                                    {% if help.checkin_name.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_name.content }}"></i>{% endif %}
+                                                    {% if help.checkin_name.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_name.content }}"></i>{% endif %}
                                                     <input type="text" id="name-{{control}}" class="input-sm form-control  col-md-6"  name='name' value="{{var.name}}">
                                                 </div>
                                                 {% if var.checkin and var.fromguesty %}
                                                     <div class="form-group">
                                                         <label class="control-label">Kanaal (Suggested by Guesty)</label>
-                                                        {% if help.checkin_source.content %}<i class="fa fa-question-circle tooltips help-source"  data-placement="right" data-original-title="{{ help.checkin_source.content }}"></i>{% endif %}
+                                                        {% if help.checkin_source.content %}<i class="fa fa-question-circle tooltips help-source"  data-placement="left" data-original-title="{{ help.checkin_source.content }}"></i>{% endif %}
                                                         <input type="text" id="sourceguesty-{{control}}" name="sourceguesty" class="input-sm form-control col-md-6" value="{{ var.sourceguesty }}">
                                                     </div>
                                                 {% else %}
@@ -95,7 +101,7 @@
                                                 {#{% endif  %}#}
                                                     <div class="form-group">
                                                         <label class="control-label">Kanaal</label>
-                                                        {% if help.checkin_source.content %}<i class="fa fa-question-circle tooltips help-source"    data-placement="right" data-original-title="{{ help.checkin_source.content }}"></i>{% endif %}
+                                                        {% if help.checkin_source.content %}<i class="fa fa-question-circle tooltips help-source"    data-placement="left" data-original-title="{{ help.checkin_source.content }}"></i>{% endif %}
                                                         <select id="source-{{control}}" class="form-control input-sm" name='source' data-placeholder="Select...">
                                                             <option name="1" value=""></option>
                                                             {% for val in sources %}
@@ -106,22 +112,22 @@
                                                 {% endif %}
                                                 <div class="form-group random">
                                                     <label class="control-label">Te betalen €</label>
-                                                    {% if help.checkin_betalen.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_betalen.content }}"></i>{% endif %}
+                                                    {% if help.checkin_betalen.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_betalen.content }}"></i>{% endif %}
                                                     <input type="text" id="betalen-{{control}}" class="input-sm form-control col-md-6 real"  name='betalen' value="{{var.betalen }}">
                                                 </div>
                                                 <div class="form-group random">
                                                     <label class="control-label">Reeds voldaan €</label>
-                                                    {% if help.checkin_voldaan.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_voldaan.content }}"></i>{% endif %}
+                                                    {% if help.checkin_voldaan.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_voldaan.content }}"></i>{% endif %}
                                                     <input type="text" id="voldan-{{control}}" class="input-sm form-control  col-md-6 real"  name='voldan' value="{{var.voldan }}">
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label">Aantal nachten</label>
-                                                    {% if help.checkin_nights.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_nights.content }}"></i>{% endif %}
+                                                    {% if help.checkin_nights.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_nights.content }}"></i>{% endif %}
                                                     <input type="text" id="nights-{{control}}" class="input-sm form-control  col-md-6 entero"   name='nights' value="{{var.nights}}">
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label">Aantal personen</label>
-                                                    {% if help.checkin_guests.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_guests.content }}"></i>{% endif %}
+                                                    {% if help.checkin_guests.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_guests.content }}"></i>{% endif %}
                                                     <select id="guests-{{control}}" class="form-control input-sm" data-placeholder="Select..." name='guests'>
                                                         {% set guests = { '0':'', '1':'1', '2':'2', '3':'3', '4':'4', '5':'5', '6':'6' }  %}
                                                         {% for val in guests %}
@@ -131,27 +137,27 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label">Toeristenbelasting €</label>
-                                                    {% if help.checkin_toer.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_toer.content }}"></i>{% endif %}
+                                                    {% if help.checkin_toer.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_toer.content }}"></i>{% endif %}
                                                     <input type="text" id="toer-{{control}}" class="input-sm form-control col-md-6 real" readonly="readonly" tabindex="-1"  name="toer" value="{{var.toer}}">
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label">Parking Dagtickets (€{{ entity_basic.parking | number_format(2,',','.') }}/24uur)</label>
-                                                    {% if help.checkin_tickets.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_tickets.content }}"></i>{% endif %}
+                                                    {% if help.checkin_tickets.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_tickets.content }}"></i>{% endif %}
                                                     <input type="text" id="parkingdag-{{control}}" class="input-sm form-control  col-md-6 entero"  name='parkingdag' value="{{var.parkingdag}}">
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label">Parking €</label>
-                                                    {% if help.checkin_parking.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_parking.content }}"></i>{% endif %}
+                                                    {% if help.checkin_parking.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_parking.content }}"></i>{% endif %}
                                                     <input type="text" id="parking-{{control}}" class="input-sm form-control  col-md-6 real" readonly="readonly" tabindex="-1"  name='parking' value="{{var.parking}}">
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label">Verlenging/Late Check-Out/Extra's €</label>
-                                                    {% if help.checkin_extra.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_extra.content }}"></i>{% endif %}
+                                                    {% if help.checkin_extra.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_extra.content }}"></i>{% endif %}
                                                     <input type="text" id="latecheckin-{{control}}" class="input-sm form-control  col-md-6 real"  name='latecheckin' value="{{var.latecheckin}}">
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label">Borg Ontvangen €</label>
-                                                    {% if help.checkin_borg.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_borg.content }}"></i>{% endif %}
+                                                    {% if help.checkin_borg.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_borg.content }}"></i>{% endif %}
                                                     <input type="text" id="borg-{{control}}" class="input-sm form-control  col-md-6 real"  name='borg' value="{{var.borg}}">
                                                 </div>
                                                 <div class="form-group">
@@ -160,7 +166,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label">Opmerkingen</label>
-                                                    {% if help.checkin_details.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_details.content }}"></i>{% endif %}
+                                                    {% if help.checkin_details.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_details.content }}"></i>{% endif %}
                                                     <textarea type="text" id="details-{{control}}" class=" form-control "  name='details' >{{var.details}}</textarea>
                                                 </div>
                                                 {% if var.checkin  and var.checkin.note != '' %}
@@ -197,7 +203,7 @@
                                         <div id="details-checkin-{{control}}" class="details-checkin">
                                             <div class="form-group">
                                                 <label class="control-label">Listing</label>
-                                                {% if help.checkin_listing.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_listing.content }}"></i>{% endif %}
+                                                {% if help.checkin_listing.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_listing.content }}"></i>{% endif %}
                                                 <select id="listing-{{control}}" class="form-control input-sm listing-checkin" name='listing' data-placeholder="Select..." >
                                                     <option></option>
                                                     {% for val in listing%}
@@ -207,12 +213,12 @@
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">Naam</label>
-                                                {% if help.checkin_name.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_name.content }}"></i>{% endif %}
+                                                {% if help.checkin_name.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_name.content }}"></i>{% endif %}
                                                 <input type="text" id="name-{{control}}" class="input-sm form-control  col-md-6"  name='name' value="">
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">Kanaal</label>
-                                                {% if help.checkin_source.content %}<i class="fa fa-question-circle tooltips help-source"    data-placement="right" data-original-title="{{ help.checkin_source.content }}"></i>{% endif %}
+                                                {% if help.checkin_source.content %}<i class="fa fa-question-circle tooltips help-source"    data-placement="left" data-original-title="{{ help.checkin_source.content }}"></i>{% endif %}
                                                 <select id="source-{{control}}" class="form-control input-sm" name='source' data-placeholder="Select...">
                                                     {% for val in sources %}
                                                         <option name="{% if (val.extrafield == 1) %}1 {% else  %}  0 {% endif %}" value="{{val.id}}">{{val.details}}</option>
@@ -221,22 +227,22 @@
                                             </div>
                                             <div class="form-group random">
                                                 <label class="control-label">Te betalen €</label>
-                                                {% if help.checkin_betalen.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_betalen.content }}"></i>{% endif %}
+                                                {% if help.checkin_betalen.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_betalen.content }}"></i>{% endif %}
                                                 <input type="text" id="betalen-{{control}}" class="input-sm form-control col-md-6 real"  name='betalen' value="">
                                             </div>
                                             <div class="form-group random">
                                                 <label class="control-label">Reeds voldaan €</label>
-                                                {% if help.checkin_voldaan.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_voldaan.content }}"></i>{% endif %}
+                                                {% if help.checkin_voldaan.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_voldaan.content }}"></i>{% endif %}
                                                 <input type="text" id="voldan-{{control}}" class="input-sm form-control  col-md-6 real"  name='voldan' value="">
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">Aantal nachten</label>
-                                                {% if help.checkin_nights.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_nights.content }}"></i>{% endif %}
+                                                {% if help.checkin_nights.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_nights.content }}"></i>{% endif %}
                                                 <input type="text" id="nights-{{control}}" class="input-sm form-control  col-md-6 entero"   name='nights' value="">
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">Aantal personen</label>
-                                                {% if help.checkin_guests.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_guests.content }}"></i>{% endif %}
+                                                {% if help.checkin_guests.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_guests.content }}"></i>{% endif %}
                                                 <select id="guests-{{control}}" class="form-control input-sm" data-placeholder="Select..." name='guests'>
                                                     {% set guests = { '0':'', '1':'1', '2':'2', '3':'3', '4':'4', '5':'5', '6':'6' }  %}
                                                     {% for val in guests %}
@@ -246,27 +252,27 @@
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">Toeristenbelasting €</label>
-                                                {% if help.checkin_toer.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_toer.content }}"></i>{% endif %}
+                                                {% if help.checkin_toer.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_toer.content }}"></i>{% endif %}
                                                 <input type="text" id="toer-{{control}}" class="input-sm form-control col-md-6 real" readonly="readonly" tabindex="-1"  name="toer" value="">
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">Parking Dagtickets (€{{ entity_basic.parking | number_format(2,',','.') }}/24uur)</label>
-                                                {% if help.checkin_tickets.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_tickets.content }}"></i>{% endif %}
+                                                {% if help.checkin_tickets.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_tickets.content }}"></i>{% endif %}
                                                 <input type="text" id="parkingdag-{{control}}" class="input-sm form-control  col-md-6 entero"  name='parkingdag' value="">
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">Parking €</label>
-                                                {% if help.checkin_parking.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_parking.content }}"></i>{% endif %}
+                                                {% if help.checkin_parking.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_parking.content }}"></i>{% endif %}
                                                 <input type="text" id="parking-{{control}}" class="input-sm form-control  col-md-6 real" readonly="readonly" tabindex="-1"  name='parking' value="">
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">Verlenging/Late Check-Out/Extra's €</label>
-                                                {% if help.checkin_extra.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_extra.content }}"></i>{% endif %}
+                                                {% if help.checkin_extra.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_extra.content }}"></i>{% endif %}
                                                 <input type="text" id="latecheckin-{{control}}" class="input-sm form-control  col-md-6 real"  name='latecheckin' value="">
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">Borg Ontvangen €</label>
-                                                {% if help.checkin_borg.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_borg.content }}"></i>{% endif %}
+                                                {% if help.checkin_borg.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_borg.content }}"></i>{% endif %}
                                                 <input type="text" id="borg-{{control}}" class="input-sm form-control  col-md-6 real"  name='borg' value="">
                                             </div>
                                             <div class="form-group">
@@ -275,7 +281,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">Opmerkingen</label>
-                                                {% if help.checkin_details.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_details.content }}"></i>{% endif %}
+                                                {% if help.checkin_details.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_details.content }}"></i>{% endif %}
                                                 <textarea type="text" id="details-{{control}}" class=" form-control "  name='details' ></textarea>
                                             </div>
                                         </div>
@@ -287,6 +293,7 @@
                     </section>
 </fieldset>
 <script>
+    $('textarea[name="details"]').closest('.form-group').css('min-height', '50px')
     var helpcontents = new Object();
     {% for content in help  %}
         helpcontents["{{ content.label | lower | replace({' ': ''}) }}"] = "{{ content.content | raw }}";
@@ -339,35 +346,35 @@
         cadena = ''
 
         cadena += '<div class="form-group"><label class="control-label" >Listing</label>' +
-                '&nbsp;{% if help.checkin_listing.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_listing.content }}"></i>{% endif %}' +
+                '&nbsp;{% if help.checkin_listing.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_listing.content }}"></i>{% endif %}' +
                 '<select class="form-control input-sm listing-checkin" name="listing"> <option name="1" value=""></option>{% for item in listing%}<option value="{{item.id}}">{{item.details}}</option>{% endfor %}</select>\n\
                 </div>'
 
-        cadena += '<div class="form-group"><label class="control-label">Naam</label>&nbsp;{% if help.checkin_name.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_name.content }}"></i>{% endif %}\n\
+        cadena += '<div class="form-group"><label class="control-label">Naam</label>&nbsp;{% if help.checkin_name.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_name.content }}"></i>{% endif %}\n\
         <input type="text" id="name-' + s + '" class="input-sm form-control  col-md-6"  name="name"> \n\
         </div>'
 
         cadena += '<div class="form-group"><label class="control-label" >Kanaal</label>&nbsp;\n\
-        {% if help.checkin_source.content %}<i class="fa fa-question-circle tooltips help-source"    data-placement="right" data-original-title="{{ help.checkin_source.content }}"></i>{% endif %}\n\
+        {% if help.checkin_source.content %}<i class="fa fa-question-circle tooltips help-source"    data-placement="left" data-original-title="{{ help.checkin_source.content }}"></i>{% endif %}\n\
         <select id="source-' + s + '" class="form-control input-sm" name="source"   data-placeholder="Select...">  {#<option></option>#}\n\
          ' + source_opciones() + ' </select> \n\
         </div>'
 
-        cadena += '<div class="form-group"><label class="control-label">Te betalen €</label>&nbsp;{% if help.checkin_betalen.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_betalen.content }}"></i>{% endif %}\n\
+        cadena += '<div class="form-group"><label class="control-label">Te betalen €</label>&nbsp;{% if help.checkin_betalen.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_betalen.content }}"></i>{% endif %}\n\
         <input type="text" id="betalen-' + s + '" class="input-sm form-control col-md-6 real"  name="betalen"> \n\
         </div>'
 
         cadena += '<div class="form-group random"><label class="control-label" >Reeds voldaan €</label>&nbsp;\n\
-        {% if help.checkin_voldaan.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_voldaan.content }}"></i>{% endif %}\n\
+        {% if help.checkin_voldaan.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_voldaan.content }}"></i>{% endif %}\n\
         <input type="text" id="voldan-' + s + '" class="input-sm form-control col-md-6 real"  name="voldan">\n\
         </div>'
 
-        cadena += '<div class="form-group"><label class="control-label" >Aantal nachten</label>&nbsp;{% if help.checkin_nights.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_nights.content }}"></i>{% endif %}\n\
+        cadena += '<div class="form-group"><label class="control-label" >Aantal nachten</label>&nbsp;{% if help.checkin_nights.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_nights.content }}"></i>{% endif %}\n\
         <input type="text" id="nights-' + s + '" class="input-sm form-control col-md-6 entero"  name="nights">\n\
         </div>'
 
         cadena += '<div class="form-group"><label class="control-label" >Aantal personen</label>&nbsp;\n\
-        {% if help.checkin_guests.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_guests.content }}"></i>{% endif %}\n\
+        {% if help.checkin_guests.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_guests.content }}"></i>{% endif %}\n\
         <select id="guests-' + s + '" class="form-control input-sm" data-placeholder="Select..." name="guests">\n\
         <option value="0"></option>\n\
         <option value="1">1</option>\n\
@@ -382,29 +389,29 @@
         <input type="text" id="toer-' + s + '" class="input-sm form-control col-md-6 real" readonly="readonly" tabindex="-1"  name="toer"> </div>'
 
         cadena += '<div class="form-group"><label class="control-label" >Parking Dagtickets (€{{ entity_basic.parking }}/24uur)</label> &nbsp;\n\
-        {% if help.checkin_tickets.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_tickets.content }}"></i>{% endif %}\n\
+        {% if help.checkin_tickets.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_tickets.content }}"></i>{% endif %}\n\
         <input type="text" id="parkingdag-' + s + '" class="input-sm form-control col-md-6 entero"  name="parkingdag"></div>'
 
         cadena += '<div class="form-group"><label class="control-label" >Parking €</label>\n\
         <input type="text" id="parking-' + s + '" class="input-sm form-control col-md-6 real" readonly="readonly" tabindex="-1"  name="parking"> </div>'
 
         cadena += '<div class="form-group"><label class="control-label" >Verlenging/Late Check-Out/Extra\'s €</label>&nbsp;\n\
-        {% if help.checkin_extra.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_extra.content }}"></i>{% endif %}\n\
+        {% if help.checkin_extra.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_extra.content }}"></i>{% endif %}\n\
         <input type="text" id="latecheckin-' + s + '" class="input-sm form-control col-md-6 entero"  name="latecheckin"></div>'
 
         cadena += '<div class="form-group"><label class="control-label" >Borg Ontvangen €</label>&nbsp;\n\
-        {% if help.checkin_borg.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_borg.content }}"></i>{% endif %}\n\
+        {% if help.checkin_borg.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_borg.content }}"></i>{% endif %}\n\
         <input type="text" id="borg-' + s + '" class="input-sm form-control col-md-6 real"  name="borg"></div>'
 
         cadena += '<div class="form-group"><label class="control-label" >Totaal te betalen €</label>\n\
         <input type="text" id="totalbetalen-' + s + '" class="input-sm form-control col-md-6 real" readonly="readonly" tabindex="-1"  name="totalbetalen"> </div>'
         
         cadena += '<div class="form-group"><label class="control-label" >Opmerkingen</label>\n\
-        {% if help.checkin_details.content %}<i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkin_details.content }}"></i>{% endif %} \n\
+        {% if help.checkin_details.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_details.content }}"></i>{% endif %} \n\
         <textarea type="text" id="details-' + s + '" class=" form-control "  name="details"></textarea> \n\
                 </div>'
 
-        form = $('<form id="form-checkin-'+ s +'" class="lastone" order-name="" order-listing="">' +
+        form = $('<form id="form-checkin-'+ s +'" class="lastone " order-name="" order-listing="">' +
                 '<div class="col-md-12 "><div class="portlet light bg-inverse">' +
                 '<div class="portlet-title"><div class="caption">' +
                 '<input type="checkbox" id="confirm-check-"'+s+' name="confirm-checkin">' +

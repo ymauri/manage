@@ -348,6 +348,25 @@ label[for="adminbundle_service_voucherstotal"]{
         width: 225px;
         max-width: 225px ;
     }
+    #section-checkin .form-control {
+        max-width: 100% !important;
+        width: 100% !important;
+        float: left;
+    }
+
+    #section-checkin .control-label {
+
+        width: 90% !important;
+        text-align: left !important;
+    }
+
+    #section-checkin .form-group{
+        height: 45px;
+    }
+
+    #section-checkin .fa-question-circle{
+       display: inline !important;
+    }
 }
 
 #restaurantbundle_rule_bytype label, #restaurantbundle_rule_dayweek label, #restaurantbundle_rule_typeofrule label, #restaurantbundle_cleaningextra_dayweek label {
@@ -460,4 +479,28 @@ label[for="adminbundle_service_voucherstotal"]{
 
 #status-filter, #responsible-filter {
     width: 145px;
+}
+
+#section-checkin .form-control, .details-checkin textarea {
+    max-width: 40%;
+    width: 40%;
+    float: right;
+}
+
+#section-checkin .control-label {
+    float: left;
+    text-align: right;
+    width: 55%;
+}
+
+#section-checkin .form-group{
+    min-height: 30px;
+}
+
+#section-checkin .form-group p.optional i{
+    float: right;
+}
+
+#section-checkin .fa-question-circle{
+    margin-left: 3px;
 }

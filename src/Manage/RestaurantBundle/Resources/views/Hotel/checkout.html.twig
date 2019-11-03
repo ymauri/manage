@@ -3,7 +3,13 @@
                 {% set control_chekout = 1 %}
                 {% if rcheckout|length > 0 %}
                     {% for var in rcheckout %}
-                        <form id="form-checkout-{{ control_chekout }}" class="edit sortable" order-name="{{ var.name }}" order-listing="{{ var.listing.number }}">
+                        {% set name_split = var.name | split(' ') %}
+                        {% if name_split | length > 1 %}
+                            {% set name = name_split[1] %}
+                        {% else %}
+                            {% set name = name_split[0] %}
+                        {% endif %}
+                        <form id="form-checkout-{{ control_chekout }}" class="edit sortable" order-name="{{ name }}" order-listing="{{ var.listing.number }}">
                             <input hidden="hidden" name="id" id="id" value="{{ var.id }}">
                             <div class="col-md-12">
                                 <div class="portlet light bg-inverse">

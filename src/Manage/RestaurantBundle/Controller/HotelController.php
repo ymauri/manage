@@ -526,7 +526,7 @@ class HotelController extends Controller {
                 $canceled = $this->em->getRepository('RestaurantBundle:Checkin')->findBy(array('date' => $this->entity_basic->getDated(), 'status'=>'canceled'));
                 $arr_canceled = array();
                 foreach ($canceled as $item) {
-                    if ($this->entity_basic->getDated()->dif($item->getCanceledat())->d < 7){
+                    if ($item->getCanceledat()->diff($item->getDate())->d < 7){
                         $arr_canceled[] = $item;
                     }
                 }
