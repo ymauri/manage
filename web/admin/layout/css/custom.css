@@ -70,6 +70,16 @@ fieldset.turnover-final  .form-control,
     padding: 10px 0;
 }
 
+#form-total-hotel fieldset,
+#form-card fieldset {
+    max-width: 280px;
+}
+
+#form-bills fieldset,
+fieldset#data-final{
+    max-width: 360px;
+}
+
 .fieldset-userdoor{
     border-bottom: 1px solid #999;
     border-top: 1px solid #999;

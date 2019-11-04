@@ -145,20 +145,21 @@
             $("#report_issue_location").val($('#location').val())
         }
         function getFolders(id) {
-                $.post("{{ path('reportissue_getfurnitures') }}", {'id':id}, function(response){
-                    if (Object.keys(response).length > 0){
-                        option = '<select id="furniture" class="form-control input-sm select2" onchange="updateValue()"><option>Select ...</option>';
-                        for (var item in response){
-                            option += '<option value="'+item+'">'+response[item]+'</option>'
-                        }
-                        option += '</select>'
-                        $("#select_furniture select").remove()
-                        $("#select_furniture").append(option)
+            id = id > 0 ? id : $('#location').val();
+            $.post("{{ path('reportissue_getfurnitures') }}", {'id':id}, function(response){
+                if (Object.keys(response).length > 0){
+                    option = '<select id="furniture" class="form-control input-sm select2" onchange="updateValue()"><option>Select ...</option>';
+                    for (var item in response){
+                        option += '<option value="'+item+'">'+response[item]+'</option>'
                     }
-                    else{
-                        $("#select_furniture select").val("").prop('disabled', 'disabled')
-                    }
-                })
+                    option += '</select>'
+                    $("#select_furniture select").remove()
+                    $("#select_furniture").append(option)
+                }
+                else{
+                    $("#select_furniture select").val("").prop('disabled', 'disabled')
+                }
+            })
             updateValue();
         }
         $('#location').change(function () {
@@ -173,11 +174,11 @@
                     $("#select_room").append(option)
                 }
                 else {
-                    getFolders($('#location').val())
                     $("#sub-location").val("").prop('disabled', 'disabled')
                 }
             })
-            $("#select_furniture").find('select').val("").prop('disabled', 'disabled')
+            getFolders($('#location').val())
+            //$("#select_furniture").find('select').val("")//.prop('disabled', 'disabled')
             updateValue();
         })
     </script>

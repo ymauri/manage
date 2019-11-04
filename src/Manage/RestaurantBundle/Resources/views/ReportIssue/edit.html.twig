@@ -170,6 +170,7 @@
             }
         }
         function getFolders(id) {
+            id = id > 0 ? id : $('#location').val();
             $.post("{{ path('reportissue_getfurnitures') }}", {'id':id}, function(response){
                 if (Object.keys(response).length > 0){
                     option = '<select id="furniture" class="form-control input-sm select2" onchange="updateValue()"><option>Select ...</option>';
@@ -202,11 +203,11 @@
                     $("#select_room").append(option)
                 }
                 else {
-                    getFolders($('#location').val())
                     $("#sub-location").val("").prop('disabled', 'disabled')
                 }
             })
-            $("#select_furniture").find('select').val("").prop('disabled', 'disabled')
+            getFolders($('#location').val())
+            //$("#select_furniture").find('select').val("")//.prop('disabled', 'disabled')
             updateValue();
         })
 

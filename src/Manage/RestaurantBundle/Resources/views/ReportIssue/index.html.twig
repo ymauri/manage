@@ -38,103 +38,105 @@
                 </label>
             </div>
             </div>
-
-            <table class="table table-hover" id="dataissue">
-                <thead>
+            <div class="table-responsive">
+                <table class="table table-hover table-responsive" id="dataissue">
+                    <thead>
                     <tr>
                         <th class="hidden-xs">Image</th>
                         <th class="hidden-xs">Date</th>
                         <th>Responsible</th>
                         <th>Location</th>
-                        <th class="hidden-xs">Description</th>
+                        <th>Description</th>
                         <th class="hidden-xs">Status</th>
                         {% if is_granted('ROLE_MAINTENANCE_EDIT') %}
-                        <th></th>
+                            <th></th>
                         {% endif %}
                     </tr>
-                </thead>
-                <tbody>
-                {% set watchen = 0 %}
-                {% set open = 0 %}
-                {% set afgerond = 0 %}
-                {% for reportIssue in reportIssues %}
-                <tr {% if reportIssue.status == 'Wachten' %} class="alert-info" {% endif %} {% if reportIssue.status == 'Afgerond' %} class="alert-success" {% endif %} {% if reportIssue.status != 'Open' %} style="display: none;" {% endif %} >
-                        <td class="hidden-xs">
-                            <a href="{% if is_granted('ROLE_MAINTENANCE_EDIT') %}{{ path('reportissue_edit', { 'id': reportIssue.id }) }}{% else %}#{% endif %}">
-                                {% if reportIssue.pathimage %}<img
-                                    src="{{ asset('uploads/images/reportissue/' ~ reportIssue.pathimage) }}"
-                                    style="width: 80px; max-height: 90px">
-                                {% else %}
-                                    <img src="{{ asset('img/noimage.jpg') }}"
-                                            style="width: 80px; max-height: 90px">
-                                {% endif %}
-                            </a>
-                        </td>
-                        <td class="hidden-xs">
-                            <a href="{{ path('reportissue_edit', {'id':reportIssue.id}) }}">
-                            {% if reportIssue.dated %}{{ reportIssue.dated|date('Y-m-d') }}{% endif %} &nbsp;
-                            {% if reportIssue.reportedat %}{{ reportIssue.reportedat|date('H:i') }}{% endif %}<br/>
-                            </a>
-                        </td>
-                    <td>
-                        <a href="{% if is_granted('ROLE_MAINTENANCE_EDIT') %}{{ path('reportissue_edit', { 'id': reportIssue.id }) }}{% else %}#{% endif %}">
-                            <b class="responsible-value">{% if reportIssue.responsible  %}{{ reportIssue.responsible }}{% else %}Not defined{% endif %}</b> <br/>
-                        </a>
-                    </td>
-                        <td>
-                            <a href="{% if is_granted('ROLE_MAINTENANCE_EDIT') %}{{ path('reportissue_edit', { 'id': reportIssue.id }) }}{% else %}#{% endif %}">
-                                {% if reportIssue.furniture %}<span class="text-danger">{{ reportIssue.furniture }}</span> <br/>{% endif %}
-                                {% if reportIssue.furniture %}<span class="text-success">{{ reportIssue.furniture.folder }}</span> <br/>{% endif %}
-                                {% if reportIssue.location %}<span class="text-info">{{ reportIssue.location }}</span> <br/> {% endif %}
-                                {% if reportIssue.reporter %}<i>{{ reportIssue.reporter }}</i>{% endif %}
-                            </a>
-                        </td>
-                        <td class="hidden-xs">
-                            <a href="{% if is_granted('ROLE_MAINTENANCE_EDIT') %}{{ path('reportissue_edit', { 'id': reportIssue.id }) }}{% else %}#{% endif %}">
-                                <i class="fa  {% if reportIssue.priority == 'Normaal' %} {% elseif reportIssue.priority == 'Laag' %} {% else %} fa-arrow-up{% endif %}"
-                                   style="color: #7c1212;"></i>
-                                {{ reportIssue.details }}
-                            </a>
-                        </td>
-
-                        <td class="hidden-xs">
-                            {% if reportIssue.status == 'Wachten' %}
-                                <p class="status-value">In behandeling</p>
-                                {% set watchen = watchen + 1 %}
-                            {% elseif reportIssue.status == 'Afgerond' %}
-                                <p class="status-value">Afgerond</p>
-                                {% set afgerond = afgerond + 1 %}
-                            {% else  %}
-                                <p class="status-value">Open</p>
-                                {% set open = open + 1 %}
-                            {% endif %}
-                        </td>
-                        {% if is_granted('ROLE_MAINTENANCE_EDIT') %}
+                    </thead>
+                    <tbody>
+                    {% set watchen = 0 %}
+                    {% set open = 0 %}
+                    {% set afgerond = 0 %}
+                    {% for reportIssue in reportIssues %}
+                        <tr {% if reportIssue.status == 'Wachten' %} class="alert-info" {% endif %} {% if reportIssue.status == 'Afgerond' %} class="alert-success" {% endif %} {% if reportIssue.status != 'Open' %} style="display: none;" {% endif %} >
+                            <td class="hidden-xs">
+                                <a href="{% if is_granted('ROLE_MAINTENANCE_EDIT') %}{{ path('reportissue_edit', { 'id': reportIssue.id }) }}{% else %}#{% endif %}">
+                                    {% if reportIssue.pathimage %}<img
+                                        src="{{ asset('uploads/images/reportissue/' ~ reportIssue.pathimage) }}"
+                                        style="width: 80px; max-height: 90px">
+                                    {% else %}
+                                        <img src="{{ asset('img/noimage.jpg') }}"
+                                             style="width: 80px; max-height: 90px">
+                                    {% endif %}
+                                </a>
+                            </td>
+                            <td class="hidden-xs">
+                                <a href="{{ path('reportissue_edit', {'id':reportIssue.id}) }}">
+                                    {% if reportIssue.dated %}{{ reportIssue.dated|date('Y-m-d') }}{% endif %} &nbsp;
+                                    {% if reportIssue.reportedat %}{{ reportIssue.reportedat|date('H:i') }}{% endif %}<br/>
+                                </a>
+                            </td>
                             <td>
+                                <a href="{% if is_granted('ROLE_MAINTENANCE_EDIT') %}{{ path('reportissue_edit', { 'id': reportIssue.id }) }}{% else %}#{% endif %}">
+                                    <b class="responsible-value">{% if reportIssue.responsible  %}{{ reportIssue.responsible }}{% else %}Not defined{% endif %}</b> <br/>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{% if is_granted('ROLE_MAINTENANCE_EDIT') %}{{ path('reportissue_edit', { 'id': reportIssue.id }) }}{% else %}#{% endif %}">
+                                    {% if reportIssue.furniture %}<span class="text-danger">{{ reportIssue.furniture }}</span> <br/>{% endif %}
+                                    {% if reportIssue.furniture %}<span class="text-success">{{ reportIssue.furniture.folder }}</span> <br/>{% endif %}
+                                    {% if reportIssue.location %}<span class="text-info">{{ reportIssue.location }}</span> <br/> {% endif %}
+                                    {% if reportIssue.reporter %}<i>{{ reportIssue.reporter }}</i>{% endif %}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{% if is_granted('ROLE_MAINTENANCE_EDIT') %}{{ path('reportissue_edit', { 'id': reportIssue.id }) }}{% else %}#{% endif %}">
+                                    <i class="fa  {% if reportIssue.priority == 'Normaal' %} {% elseif reportIssue.priority == 'Laag' %} {% else %} fa-arrow-up{% endif %}"
+                                       style="color: #7c1212;"></i>
+                                    {{ reportIssue.details }}
+                                </a>
+                            </td>
 
-                            <div class="btn-group dropdown ">
-                                <button class="btn blue-hoki btn-xs dropdown-toggle" type="button"
-                                        data-toggle="dropdown">
-                                    Actions <i class="fa fa-angle-down"></i>
-                                </button>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li>
-                                        <a href="{{ path('reportissue_edit', { 'id': reportIssue.id }) }}"><span
-                                                    class="glyphicon glyphicon-pencil"></span>Edit</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('reportissue_delete', { 'id': reportIssue.id }) }}"><span
-                                                    class="glyphicon glyphicon-trash"></span>Delete</a>
-                                    </li>
-                                </ul>
-                            </div>
+                            <td class="hidden-xs">
+                                {% if reportIssue.status == 'Wachten' %}
+                                    <p class="status-value">In behandeling</p>
+                                    {% set watchen = watchen + 1 %}
+                                {% elseif reportIssue.status == 'Afgerond' %}
+                                    <p class="status-value">Afgerond</p>
+                                    {% set afgerond = afgerond + 1 %}
+                                {% else  %}
+                                    <p class="status-value">Open</p>
+                                    {% set open = open + 1 %}
+                                {% endif %}
+                            </td>
+                            {% if is_granted('ROLE_MAINTENANCE_EDIT') %}
+                                <td>
 
-                        </td>
-                        {% endif %}
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                                    <div class="btn-group dropdown ">
+                                        <button class="btn blue-hoki btn-xs dropdown-toggle" type="button"
+                                                data-toggle="dropdown">
+                                            Actions <i class="fa fa-angle-down"></i>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li>
+                                                <a href="{{ path('reportissue_edit', { 'id': reportIssue.id }) }}"><span
+                                                            class="glyphicon glyphicon-pencil"></span>Edit</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ path('reportissue_delete', { 'id': reportIssue.id }) }}"><span
+                                                            class="glyphicon glyphicon-trash"></span>Delete</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
         </div>
 
     </div>
