@@ -182,14 +182,14 @@
                     $("#select_furniture").append(option)
                     if (start){
                         $('#furniture').val($('#report_issue_furniture').val())
-                        start = !start;
+                        start = false;
                     }
                 }
                 else{
                     $("#select_furniture select").val("").prop('disabled', 'disabled')
                 }
             })
-            updateValue();
+            if (!start) updateValue();
         }
         $('#location').change(function () {
             $.post("{{ path('reportissue_getsubfolder') }}", {'id':$(this).val()}, function(response){
@@ -201,6 +201,10 @@
                     option += '</select>'
                     $("#select_room select").remove()
                     $("#select_room").append(option)
+                    if(start) {
+                        $("#sub-location").val($('#report_issue_room').val())
+                        //$("#sub-location").trigger('change')
+                    }
                 }
                 else {
                     $("#sub-location").val("").prop('disabled', 'disabled')
@@ -208,18 +212,18 @@
             })
             getFolders($('#location').val())
             //$("#select_furniture").find('select').val("")//.prop('disabled', 'disabled')
-            updateValue();
+            if (!start) updateValue();
         })
 
 
         $('#location').val($('#report_issue_location').val())
         $('#location').trigger('change')
-        setTimeout(function(){
-            if ($('#report_issue_room').val() > 0){
-                $('#sub-location').val($('#report_issue_room').val())
-                $('#sub-location').trigger('change')
-            }
-        }, 1000)
+//        setTimeout(function(){
+//            if ($('#report_issue_room').val() > 0){
+//                $('#sub-location').val($('#report_issue_room').val())
+//                $('#sub-location').trigger('change')
+//            }
+//        }, 1000)
         $('.btn-change-status').click(function(){
             $(".change-status input[name='status']").val($(this).val());
             $('.change-status').submit();

@@ -79,26 +79,26 @@
                                                         <input type="text" id="sourceguesty-{{control}}" name="sourceguesty" class="input-sm form-control col-md-6" value="{{ var.sourceguesty }}">
                                                     </div>
                                                 {% else %}
-                                                {#{% if var.fromguesty %}#}
-                                                    {#<div class="form-group">#}
-                                                        {#<label class="control-label">Kanaal</label>#}
-                                                        {#<select id="source-{{control}}" class="form-control input-sm" name='source' data-placeholder="Select...">#}
-                                                            {#<option></option>#}
-                                                            {#{% set noesta = 0 %}#}
-                                                            {#{% for val in sources %}#}
-                                                                {#{% if var.checkin %}#}
-                                                                    {#{% if var.checkin.source | upper == val.guesty | upper %}#}
-                                                                        {#{% set noesta = 1 %}#}
-                                                                        {#<option name="{% if (val.extrafield == 1) %}1 {% endif  %} {% if (val.extrafield == 0) %} 0 {% endif %}" value="{{val.id}}" {% if var.source and var.source.id == val.id %} selected = "selected" {% endif %}>{{val.details}}</option>#}
-                                                                    {#{% endif  %}#}
-                                                                {#{% endif  %}#}
-                                                            {#{% endfor  %}#}
-                                                            {#{% if noesta == 0 %}#}
-                                                                {#<option name="1"  selected = "selected"></option>#}
-                                                            {#{% endif %}#}
-                                                        {#</select>#}
-                                                    {#</div>#}
-                                                {#{% endif  %}#}
+                                                {% if var.fromguesty %}
+                                                    <div class="form-group">
+                                                        <label class="control-label">Kanaal</label>
+                                                        <select id="source-{{control}}" class="form-control input-sm" name='source' data-placeholder="Select...">
+                                                            <option></option>
+                                                            {% set noesta = 0 %}
+                                                            {% for val in sources %}
+                                                                {% if var.checkin %}
+                                                                    {% if var.checkin.source | upper == val.guesty | upper %}
+                                                                        {% set noesta = 1 %}
+                                                                        <option name="{% if (val.extrafield == 1) %}1 {% endif  %} {% if (val.extrafield == 0) %} 0 {% endif %}" value="{{val.id}}" {% if var.source and var.source.id == val.id %} selected = "selected" {% endif %}>{{val.details}}</option>
+                                                                    {% endif  %}
+                                                                {% endif  %}
+                                                            {% endfor  %}
+                                                            {% if noesta == 0 %}
+                                                                <option name="1"  selected = "selected"></option>
+                                                            {% endif %}
+                                                        </select>
+                                                    </div>
+                                                {% endif  %}
                                                     <div class="form-group">
                                                         <label class="control-label">Kanaal</label>
                                                         {% if help.checkin_source.content %}<i class="fa fa-question-circle tooltips help-source"    data-placement="left" data-original-title="{{ help.checkin_source.content }}"></i>{% endif %}

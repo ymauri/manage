@@ -113,10 +113,6 @@ class CheckController extends Controller {
      */
     public function pricingFilterAction() {
         $em = $this->getDoctrine()->getManager();
-        $user=$this->get('security.token_storage')->getToken()->getUser();
-        if ($user->getRole()!='ROLE_SUPERADMIN'){
-            return $this->render('RestaurantBundle:Exception:error403.html.twig');
-        }
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
             $data = $request->get('data');

@@ -123,20 +123,20 @@
                                                     <td><label >Kanaal</label></td>
                                                     <td>
                                                         <select style="background: white; border: none; height: 23px;" disabled="disabled" data-placeholder="Select...">
-                                                            <option></option>
-                                                            {% if var.fromguesty %}
-                                                                {% for val in sources %}
-                                                                    {% if var.checkin %}
-                                                                        {% if var.checkin.source == val.guesty %}
-                                                                            <option name="{{ val.extrafield }}" value="{{val.id}}" {% if var.source and var.source.id == val.id %} selected = "selected" {% endif %}>{{val.details}}</option>
-                                                                        {% endif  %}
-                                                                    {% endif  %}
-                                                                {% endfor  %}
-                                                            {% else  %}
-                                                                {% for val in sources %}
-                                                                    <option name="{{ val.extrafield }}" value="{{val.id}}" {% if var.source and var.source.id == val.id %} selected = "selected" {% endif %}>{{val.details}}</option>
-                                                                {% endfor  %}
-                                                            {% endif  %}
+                                                            <option>{% if var.source %} {{ var.source.details }}{% endif %}</option>
+                                                            {#{% if var.fromguesty %}#}
+                                                                {#{% for val in sources %}#}
+                                                                    {#{% if var.checkin %}#}
+                                                                        {#{% if var.checkin.source | upper == val.guesty | upper %}#}
+                                                                            {#<option name="{{ val.extrafield }}" value="{{val.id}}" {% if var.source and var.source.id == val.id %} selected = "selected" {% endif %}>{{val.details}}</option>#}
+                                                                        {#{% endif  %}#}
+                                                                    {#{% endif  %}#}
+                                                                {#{% endfor  %}#}
+                                                            {#{% else  %}#}
+                                                                {#{% for val in sources %}#}
+                                                                    {#<option name="{{ val.extrafield }}" value="{{val.id}}" {% if var.source and var.source.id == val.id %} selected = "selected" {% endif %}>{{val.details}}</option>#}
+                                                                {#{% endfor  %}#}
+                                                            {#{% endif  %}#}
                                                         </select>
                                                     </td>
                                                 </tr>
@@ -198,7 +198,7 @@
                                                     <td><label >Opmerkingen</label></td>
                                                     <td><span style="min-width: 240px; max-width: 240px; background: white; border: none;height: 50px" type="text" disabled="disabled" >{{var.details}}</span>  </td>
                                                 </tr>
-                                                {% if var.checkin is defined %}
+                                                {% if var.checkin %}
                                                 <tr>
                                                     
                                                     <td><label >Notes from Guesy</label></td>

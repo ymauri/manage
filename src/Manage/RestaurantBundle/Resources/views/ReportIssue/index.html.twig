@@ -83,8 +83,8 @@
                             </td>
                             <td>
                                 <a href="{% if is_granted('ROLE_MAINTENANCE_EDIT') %}{{ path('reportissue_edit', { 'id': reportIssue.id }) }}{% else %}#{% endif %}">
-                                    {% if reportIssue.furniture %}<span class="text-danger">{{ reportIssue.furniture }}</span> <br/>{% endif %}
-                                    {% if reportIssue.furniture %}<span class="text-success">{{ reportIssue.furniture.folder }}</span> <br/>{% endif %}
+                                    {% if reportIssue.furniture %}<span class="text-danger">{{ reportIssue.furniture.name }}</span> <br/>{% endif %}
+                                    {% if reportIssue.room %}<span class="text-success">{{ reportIssue.room.details }}</span> <br/>{% endif %}
                                     {% if reportIssue.location %}<span class="text-info">{{ reportIssue.location }}</span> <br/> {% endif %}
                                     {% if reportIssue.reporter %}<i>{{ reportIssue.reporter }}</i>{% endif %}
                                 </a>
