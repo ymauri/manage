@@ -115,7 +115,7 @@ class CleaningController extends Controller
                 foreach ($relationscheckout as $checkout) {
                     $later = false;
                     $cleaning = $em->getRepository("RestaurantBundle:Cleaning")->findOneBy(array("listing" => $checkout->getListing(), "dated" => $date));
-                    if (is_null($cleaning)) {
+                    if (is_null($cleaning) && $checkout->getCheckout()->getStatus() == 'confirmed') {
                         $cleaning = new Cleaning();
                         $cleaning->setIsextra(false);
                         $cleaning->setDated($date);
@@ -141,7 +141,7 @@ class CleaningController extends Controller
                 foreach ($relationscheckout as $checkout) {
                     //$later = false;
                     $cleaning = $em->getRepository("RestaurantBundle:Cleaning")->findOneBy(array("listing" => $checkout->getListing(), "dated" => $date));
-                    if (is_null($cleaning)) {
+                    if (is_null($cleaning) && $checkout->getStatus() == 'confirmed') {
                         $cleaning = new Cleaning();
                         $cleaning->setIsextra(false);
                         $cleaning->setDated($date);

@@ -41,12 +41,10 @@ class DefaultController extends Controller {
                 //Buscar si existe el checkin en BD
                 $savedcheckin = $em->getRepository('RestaurantBundle:Checkin')->findOneBy(array('idguesty'=>$current['_id']));
                 //Si no exise el checkin entonces se crea uno nuevo en BD
-                $listing = $this->getCurrentListing($current['listing']['title']);
+                $listing = $this->getCurrentListing($current['listing']['_id']);
                 if (is_null($savedcheckin)) {
                     $checkin = new Checkin();
-
                     if (!is_null($listing)) {
-
                         //Obtener el objeto de la reserva correspondiente
                         //$reservation = $api->reservation($current['_id']);
                         
@@ -101,7 +99,7 @@ class DefaultController extends Controller {
                             //$money = $api->reservationMoney($current['_id']);
                            // if (isset($money['result']['money']['fareAccommodation']) && $money['result']['money']['fareAccommodation'] != 0){
                             $invoice = $this->getMoneyValues($current['money']['invoiceItems']);
-                            $savedcheckin->setBetalen($invoice['accomodation'] + $invoice['vat']);   
+                            $savedcheckin->setBetalen($invoice['accommodation'] + $invoice['vat']);   
                             //}
 
                             //if (isset($money['result']['money']['balanceDue']) && $money['result']['money']['balanceDue'] != 0){
@@ -125,7 +123,7 @@ class DefaultController extends Controller {
                 //Buscar si existe el checkout en BD
                 $savedcheckout = $em->getRepository('RestaurantBundle:Checkout')->findOneBy(array('idguesty'=>$current['_id']));
                 //Si no exise el checkout entonces se crea uno nuevo en BD
-                $listing = $this->getCurrentListing($current['listing']['title']);
+                $listing = $this->getCurrentListing($current['listing']['_id']);
                 if (is_null($savedcheckout)) {
                     $checkout = new Checkout();
 
@@ -244,7 +242,7 @@ class DefaultController extends Controller {
         $result['vat'] = 0;
         $result['accommodation'] = 0;
         foreach ($invoiceItems as $item) {
-            if ($item['type'] == 'ACCOMMODATION_FARE'){
+            if ($item['title'] == 'Accommodation fare'){
                 $result['accommodation'] = $item['amount'];
             }
             if ($item['title'] == 'VAT'){
@@ -273,7 +271,7 @@ class DefaultController extends Controller {
         if ($status == 200){
             foreach ($result as $current){
                 //var_dump($current['prices']['basePrice']);die;
-                $listing = $this->getCurrentListing($current['title']);
+                $listing = $this->getCurrentListing($current['_id']);
                 if (!is_null($listing)){
                     $listing->setDetails($current['title']);
                     //$listing->setIdguesty($current['_id']);
@@ -297,14 +295,9 @@ class DefaultController extends Controller {
        var_dump($api->integrations());die;
     }
 
-    private function getCurrentListing($name){
+    private function getCurrentListing($idGesty){
         $em = $this->getDoctrine()->getManager();
-        $listings = $em->getRepository('RestaurantBundle:Listing')->findAll();
-        foreach ($listings as $current){
-            if (substr_count($name, trim($current->getNumber())) > 0)
-                return $current;
-        }
-        return null;
+        return $em->getRepository('RestaurantBundle:Listing')->findOneBy(array('idguesty' => $idGesty));
     }
     
         /**
