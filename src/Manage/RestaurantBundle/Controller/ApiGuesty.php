@@ -35,7 +35,7 @@ class ApiGuesty {
     //Obtener los checkin correspondientes a la fecha que se pasa por parámetro
     public function checkin($date=NULL){
         if (is_null($date)) $date = 'now';
-        $campos = array('fields'=> 'checkIn checkOut confirmationCode guest.fullName listing.title status source nightsCount guestsCount notes.guest guest.notes guest.email guest.phone money.hostPayout money.balanceDue canceledAt', 'limit'=>'100' );
+        $campos = array('fields'=> 'checkIn checkOut confirmationCode guest.fullName listing.title status source nightsCount guestsCount notes.guest guest.notes guest.email guest.phone money.fareAccommodation money.invoiceItems money.balanceDue money.hostPayout canceledAt', 'limit'=>'100' );
         return $this->conect('reservations/?'.http_build_query($campos));
     }
 

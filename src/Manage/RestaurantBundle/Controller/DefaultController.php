@@ -62,9 +62,10 @@ class DefaultController extends Controller {
                         $checkin->setGuests($current['guestsCount']);
                         $checkin->setStatus($current['status']);
                         $checkin->setNote(isset($current['guest']['notes']) ? $current['guest']['notes'] : null);
-                        $checkin->setEmail($current['guest']['email']);
-                        $checkin->setPhone($current['guest']['phone']);
-                        $checkin->setBetalen($current['money']['hostPayout']);
+                        $checkin->setEmail(isset($current['guest']['email']) ? $current['guest']['email'] : null);
+                        $checkin->setPhone(isset($current['guest']['phone']) ? $current['guest']['phone'] : null);
+                        $invoice = $this->getMoneyValues($current['money']['invoiceItems']);
+                        $checkin->setBetalen($invoice['accommodation'] + $invoice['vat']);
                         $checkin->setVoldan($current['money']['hostPayout'] - $current['money']['balanceDue']);
                         /*$guest = $api->guest($current['guestId']);
                         if ($guest['status'] == 200) {
@@ -98,8 +99,9 @@ class DefaultController extends Controller {
                             $savedcheckin->setStatus($current['status']);
                             $savedcheckin->setNote(isset($current['guest']['notes']) ? $current['guest']['notes'] : null);
                             //$money = $api->reservationMoney($current['_id']);
-                           // if (isset($money['result']['money']['hostPayout']) && $money['result']['money']['hostPayout'] != 0){
-                                $savedcheckin->setBetalen($current['money']['hostPayout']);
+                           // if (isset($money['result']['money']['fareAccommodation']) && $money['result']['money']['fareAccommodation'] != 0){
+                            $invoice = $this->getMoneyValues($current['money']['invoiceItems']);
+                            $savedcheckin->setBetalen($invoice['accomodation'] + $invoice['vat']);   
                             //}
 
                             //if (isset($money['result']['money']['balanceDue']) && $money['result']['money']['balanceDue'] != 0){
@@ -141,9 +143,9 @@ class DefaultController extends Controller {
                             $checkout->setNights($current['nightsCount']);
                             $checkout->setGuests($current['guestsCount']);
                             $checkout->setStatus($current['status']);
-                            $checkout->setEmail($current['guest']['email']);
-                            $checkout->setPhone($current['guest']['phone']);
-
+                            $checkout->setEmail(isset($current['guest']['email']) ? $current['guest']['email'] : null);
+                            $checkout->setPhone(isset($current['guest']['phone']) ? $current['guest']['phone'] : null);
+                            
                             $checkout->setUpdatedat(new \DateTime(date('Y-m-d h:m:s')));
                             $em->persist($checkout);
                             $em->flush();
@@ -222,62 +224,34 @@ class DefaultController extends Controller {
         foreach ($savedcheckin as $checkin){
             $result = $api->reservation($checkin->getIdguesty());
             $reserva = $result['result'];
+            // var_dump($this->getMoneyValues($reserva['money']['invoiceItems']));die;
             $status = $result['status'];
             // var_dump($reserva['status']);die;
             if ($status == 200){
-                $listing = $this->getCurrentListing($reserva['listing']['title']);
-                $checkin->setListing($listing->getId());
-                $checkin->setTime(new \DateTime($reserva['checkIn']));
-                $date = new \DateTime($reserva['checkIn']);
-                $checkin->setDate(new \DateTime($date->format('Y-m-d')));
-                $checkin->setName($reserva['guest']['fullName']);
-                $checkin->setConfcode($reserva['confirmationCode']);
-                $checkin->setIdguesty($reserva['_id']);
-                $checkin->setSource($reserva['source']);
-                $checkin->setNights($reserva['nightsCount']);
-                $checkin->setGuests($reserva['guestsCount']);
-                $checkin->setStatus($reserva['status']);
-                $checkin->setNote(isset($reserva['guest']['notes']) ? $reserva['guest']['notes'] : null);;
-
-//              $checkin->setNote($reserva['guest']['notes']);
-                if (isset($reserva['canceledAt']))
-                    $checkin->setCanceledat(new \DateTime($reserva['canceledAt']));
+                $invoice = $this->getMoneyValues($reserva['money']['invoiceItems']);
+                $checkin->setBetalen($invoice['accommodation'] + $invoice['vat']);
+                // $checkin->setBetalen($reserva['money']['fareAccommodation']);
+                // $checkin->setVoldan($reserva['money']['hostPayout'] - $reserva['money']['balanceDue']);
                 $em->persist($checkin);
-
-
-                //Checkout
-
-
-                $consulta = $em->createQuery('SELECT o FROM RestaurantBundle:Checkout o WHERE o.idguesty = :idguesty');
-                $consulta->setParameter('idguesty', $checkin->getIdguesty());
-                $checkout = $consulta->getResult();
-                if ($checkout != null){
-                    $listing = $this->getCurrentListing($reserva['listing']['title']);
-                    $checkout[0]->setListing($listing->getId());
-                    $checkout[0]->setTime(new \DateTime($reserva['checkOut']));
-                    $date = new \DateTime($reserva['checkOut']);
-                    $checkout[0]->setDate(new \DateTime($date->format('Y-m-d')));
-                    $checkout[0]->setName($reserva['guest']['fullName']);
-                    $checkout[0]->setConfcode($reserva['confirmationCode']);
-                    $checkout[0]->setIdguesty($reserva['_id']);
-                    $checkout[0]->setSource($reserva['source']);
-                    $checkout[0]->setNights($reserva['nightsCount']);
-                    $checkout[0]->setGuests($reserva['guestsCount']);
-                    $checkout[0]->setStatus($reserva['status']);
-                    $em->persist($checkout[0]);
-                }
-
-
-
             }
-
         }
         $em->flush();
         echo 'done';
-
-
-
         die;
+    }
+
+    private function getMoneyValues($invoiceItems) {
+        $result['vat'] = 0;
+        $result['accommodation'] = 0;
+        foreach ($invoiceItems as $item) {
+            if ($item['type'] == 'ACCOMMODATION_FARE'){
+                $result['accommodation'] = $item['amount'];
+            }
+            if ($item['title'] == 'VAT'){
+                $result['vat'] = $item['amount'];
+            }
+        }
+        return $result;
     }
 
 
