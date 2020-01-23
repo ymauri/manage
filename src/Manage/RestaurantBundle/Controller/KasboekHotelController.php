@@ -184,7 +184,7 @@ class KasboekHotelController extends Controller {
         $now = new \DateTime('now');
 
         //if (strtotime($olddate->format('d-m-Y')) > strtotime($entity_basic->getUpdated()->format('d-m-Y')) && $user->getRole()!='ROLE_SUPERADMIN' && $user->getRole()!='ROLE_MANAGER'){
-        if (($entity_basic->getUpdated()->diff($now)->d >= 7) && ($this->isGranted('ROLE_SUPER_ADMIN'))) {
+        if (($entity_basic->getUpdated()->diff($now)->d >= 15) && ($this->isGranted('ROLE_SUPER_ADMIN'))) {
             $this->addFlash('error', 'Error! This form can not be modified.');
             return $this->redirect($this->generateUrl('kasboekhotel', array('date'=>date('m-Y'))));
         }
