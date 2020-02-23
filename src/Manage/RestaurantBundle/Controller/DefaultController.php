@@ -100,7 +100,7 @@ class DefaultController extends Controller {
                            // if (isset($money['result']['money']['fareAccommodation']) && $money['result']['money']['fareAccommodation'] != 0){
                             $invoice = $this->getMoneyValues($current['money']['invoiceItems']);
                             $savedcheckin->setBetalen($invoice['accommodation'] + $invoice['vat']);   
-                            //}
+                            //} 
 
                             //if (isset($money['result']['money']['balanceDue']) && $money['result']['money']['balanceDue'] != 0){
                                 $savedcheckin->setVoldan($current['money']['hostPayout'] - $current['money']['balanceDue']);
@@ -209,28 +209,31 @@ class DefaultController extends Controller {
      */
 
     public function updateReservationsAction() {
-        //die ("si");
         $em = $this->getDoctrine()->getManager();
-        $consulta = $em->createQuery('SELECT o FROM RestaurantBundle:Checkin o WHERE o.idguesty != :vacio AND o.date >= :dated ORDER BY o.date ASC ');
+        $consulta = $em->createQuery('SELECT o FROM RestaurantBundle:Checkin o WHERE  o.date >= :dated ORDER BY o.date ASC ');
         $consulta->setParameter('dated',  date('Y-m-d') );
-        $consulta->setParameter('vacio', '');
-        $consulta->setMaxResults(20);
+        $consulta->setMaxResults(50);
 
         $savedcheckin = $consulta->getResult();
         $api = new ApiGuesty();
-        //var_dump(count($savedcheckin));die;
         foreach ($savedcheckin as $checkin){
             $result = $api->reservation($checkin->getIdguesty());
             $reserva = $result['result'];
-            // var_dump($this->getMoneyValues($reserva['money']['invoiceItems']));die;
             $status = $result['status'];
-            // var_dump($reserva['status']);die;
             if ($status == 200){
                 $invoice = $this->getMoneyValues($reserva['money']['invoiceItems']);
                 $checkin->setBetalen($invoice['accommodation'] + $invoice['vat']);
-                // $checkin->setBetalen($reserva['money']['fareAccommodation']);
-                // $checkin->setVoldan($reserva['money']['hostPayout'] - $reserva['money']['balanceDue']);
+                $checkin->setStatus($reserva['status']);
+                if (isset($reserva['canceledAt']))
+                    $checkin->setCanceledat(new \DateTime($reserva['canceledAt']));
+
                 $em->persist($checkin);
+
+                $checkout = $em->getRepository('RestaurantBundle:Checkout')->findOneBy(array('confcode' => $checkin->getConfcode()));
+                if (!is_null($checkout)) {
+                    $checkout->setStatus($reserva['status']);
+                    $em->persist($checkout);
+                }
             }
         }
         $em->flush();
