@@ -58,9 +58,12 @@ class CleaningExtraType extends AbstractType
                 'expanded' => true,
                 'multiple' => true,
             ))
-
-
-        ;
+            ->add('paymentDay', 'choice', array(
+                'choices' => $this->getPaymentDays(),
+            ))
+            ->add('paymentAmount', 'number', array(
+                'required' => false
+            ));
     }
     
     /**
@@ -79,5 +82,13 @@ class CleaningExtraType extends AbstractType
     public function getName()
     {
         return 'restaurantbundle_cleaningextra';
+    }
+    
+    private function getPaymentDays() {
+        $days = [0=>""];
+        foreach (range(1, 31) as $item) {
+            $days[$item] = $item;
+        }
+        return $days;
     }
 }

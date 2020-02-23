@@ -83,6 +83,28 @@
                             }}) }}
                             {{ form_errors(form.details) }}
                         </div>
+
+                        <div class="row form-group ">
+                            {{form_label(form.paymentDay,'Day for payment',{'attr':{
+                                'class' :' control-label',
+                            }})}}
+                            {{form_widget(form.paymentDay, {'attr':{
+                                'class' :' form-control'
+                            }})}}
+                            {{form_errors(form.paymentDay)}}
+                        </div>
+
+
+                        <div class="row form-group ">
+                            {{form_label(form.paymentAmount,'Amount €',{'attr':{
+                                'class' :' control-label',
+                            }})}}
+                            {{form_widget(form.paymentAmount, {'attr':{
+                                'class' :' form-control'
+                            }})}}
+                            {{form_errors(form.paymentAmount)}}
+                        </div>
+
                         <div class="row form-group ">
                             {{ form_rest(form) }}
                         </div>

@@ -87,6 +87,7 @@
                                             <td colspan="4" style="font-weight: bold;color: #FF8C11;font-size: 16px; text-align: center">Incheck</td>
                                         </tr>
                                         {% set control = 1 %}
+
                                         {% if rcheckin|length > 0 %}
                                             {% for var in rcheckin%}
                                         <table style="border-bottom: solid  1px #707070">
@@ -459,6 +460,10 @@
                                             <td style="font-weight: bold;">Saldo Borg €</td>
                                             <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.saldoborg | number_format(2, ',', '.')}}" ></td>
                                         </tr>
+                                            <tr>
+                                                <td style="font-weight: bold;">Long Stay €</td>
+                                                <td><input style="min-width: 70px; max-width: 70px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.longstay | number_format(2, ',', '.')}}" ></td>
+                                            </tr>
                                         <tr>
                                             <td style="font-weight: bold;">Kasverschil €</td>
                                             {% if entity_basic.kasver | number_format(2, ',', '.')  != '-0,00' %}

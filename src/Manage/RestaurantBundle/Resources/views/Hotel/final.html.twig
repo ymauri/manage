@@ -59,6 +59,11 @@
                             </div>
 
                             <div class="row form-group">
+                                <label for="longStay" class="required">Long Stay €</label>
+                                <input type="text" id="longStay" name="longStay" class="input-sm pull-right form-control real" placeholder="0" tabindex=-1 readonly="readonly" {% if entity_basic.longStay %}  value="{{entity_basic.longStay}}" {% endif %}>
+                            </div>
+
+                            <div class="row form-group">
                                 <label for="kasver" class="required wrong">Kasverschil €</label>
                                 <input type="text" id="kasver" name="kasver" class="input-sm pull-right form-control" placeholder="0" tabindex=-1 readonly="readonly"{% if entity_basic.kasver %}  value="{{entity_basic.kasver}}" {% endif %}>
                             </div>

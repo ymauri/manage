@@ -57,6 +57,18 @@ class CleaningExtra {
      */
     private $dayweek;
 
+       /**
+     * @var integer
+     * @ORM\Column(name="paymentDay", type="integer", nullable=true)
+     */
+    private $paymentDay;
+
+          /**
+     * @var float
+     * @ORM\Column(name="paymentAmount", type="float", nullable=true)
+     */
+    private $paymentAmount;
+
     /**
      * Get id
      *
@@ -114,6 +126,22 @@ class CleaningExtra {
     public function setDayweek($dayweek)
     {
         $this->dayweek = $dayweek;
+    }
+
+    public function getPaymentday () {
+        return $this->paymentDay;
+    }
+
+    public function setPaymentday ($paymentDay) {
+        $this->paymentDay = $paymentDay;
+    }
+    
+    public function getPaymentamount () {
+        return $this->paymentAmount;
+    }
+
+    public function setPaymentamount ($paymentAmount) {
+        $this->paymentAmount = $paymentAmount;
     }
     
 }

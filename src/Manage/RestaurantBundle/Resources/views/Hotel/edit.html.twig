@@ -82,9 +82,10 @@
                                 {% endif %}
 
                             </script>
-                            {% if canceled | length > 0 %}
+                            {% if canceled | length > 0 or pendingPayment | length > 0  %}
                                 <fieldset class="hotel-basic">
                                     <div class="alert alert-warning col-md-12">
+                                        {% if canceled | length > 0%}
                                         {% for item in canceled %}
                                             {% set currentlisting = '' %}
                                             {% for val in listing %}
@@ -96,6 +97,18 @@
                                                         Payment</b></span> Client:({{ item.name }}) Email: <a
                                                         href="mailto:{{ item.email }}">{{ item.email }}</a></li>
                                         {% endfor %}
+                                        {% endif %}
+                                        {% if pendingPayment | length > 0  %}
+                                        {% for pending in pendingPayment %}
+                                            <li >
+                                                {#<input type="checkbox" class="pendingPayment" style="margin-top: 4px;">#}
+                                                <b>Long Stay</b>&nbsp;
+                                                The guest of the department <b>{{ pending.cleaningextra.listing.number }}</b> must pay <b>€ {{ pending.paymentamount}}</b>
+                                                &nbsp;
+
+                                            </li>
+                                        {% endfor %}
+                                        {% endif %}
                                     </div>
                                 </fieldset>
                             {% endif %}
@@ -323,6 +336,23 @@
                 $('button.final-submit').hide();
             }
         })
+
+        $('input[name="payed"]').click(function() {
+            $('#longStay').val(totalExtra()).trigger('blur');
+            completeProfit()
+        })
+        //pending payment
+        function totalExtra() {
+            var extra = 0;
+            $('input[name="paymentAmount"]').each(function() {
+                var form = $(this).closest('form');
+                if (form.find('input[name="payed"]').is(':checked')){
+                    extra +=  numeral($(this).val()).value();
+                }
+            })
+            return extra;
+        }
+
         //Enviar la iformación de los formularios
         $('button[type="submit"]').on({
             "click": function () {
@@ -394,7 +424,7 @@
         function completeProfit() {
             a = numeral($('#totalcontanten').val()).value() + numeral($('#totalccv').val()).value()
             $('#totalont').val(numeral(a).format('0.0,'))
-            b = numeral($('#totalont').val()).value() - numeral($('#totaldag').val()).value() - numeral($('#saldoborg').val()).value()
+            b = numeral($('#totalont').val()).value() - numeral($('#totaldag').val()).value() - numeral($('#saldoborg').val()).value() - numeral($('#longStay').val()).value()
             //console.log (isNaN(b))
             $('#kasver').val(parseFloat(b).toFixed(2))
             $('.kasv.badge').text('€' + $('#kasver').val())

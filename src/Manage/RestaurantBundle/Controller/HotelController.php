@@ -3,6 +3,7 @@
 namespace Manage\RestaurantBundle\Controller;
 
 use Manage\RestaurantBundle\Entity\CleaningLog;
+use Manage\RestaurantBundle\Entity\RCleaningExtraHotel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -51,7 +52,7 @@ class HotelController extends Controller {
             $date = $partes[1] . '-' . $partes[0];
 
             $em = $this->getDoctrine()->getManager();
-            $consulta = $em->createQuery('SELECT r FROM RestaurantBundle:Hotel r WHERE r.dated >= \'' . $date . '-01\' AND r.dated <= \'' . $date . '-31\' ORDER BY r.dated DESC');
+        $consulta = $em->createQuery('SELECT r FROM RestaurantBundle:Hotel r WHERE r.dated >= \'' . $date . '-01\' AND r.dated <= \'' . $date . '-31\' ORDER BY r.dated DESC');
             $entities = $consulta->getResult();
             $consulta = $em->createQuery('SELECT r.form, count(r.id) AS cantidad FROM RestaurantBundle:RNotifierForm r JOIN r.notifier n WHERE n.form LIKE \'Hotel\' GROUP BY r.form');
             $notifier = $consulta->getResult();
@@ -149,12 +150,26 @@ class HotelController extends Controller {
                 $hpark->setParkingFalse($i);
                 $em->persist($hpark);
             }*/
-            $em->flush();
+//            $em->flush();
             $blacklist = $this->isBlackList($entity_hotel->getId());
             //if (count($blacklist) > 0){
                 //$this->notifyBlacklist($blacklist, $entity_hotel->getId());
             //}
 
+            //Buscar los long stay pendientes por pagar
+
+        $pending = $em->getRepository('RestaurantBundle:CleaningExtra')->pendingPayment($entity_hotel->getDated());
+        foreach ($pending as $item) {
+            $cleaning = new RCleaningExtraHotel();
+            $cleaning->setHotel($entity_hotel);
+            $cleaning->setCleaningextra($item);
+            $cleaning->setPaymentamount($item->getPaymentamount());
+            $cleaning->setPaymentday($item->getPaymentday());
+            $cleaning->setPayed(0);
+            $em->persist($cleaning);
+        }
+        $em->flush();
+//            $pending = $em->getRepository('RestaurantBundle:CleaningExtra')->findBy()
             return $this->redirect($this->generateUrl('hotel_edit', array('id' => $entity_hotel->getId())));
 
     }
@@ -384,7 +399,7 @@ class HotelController extends Controller {
             $dbcanceled = $em->getRepository('RestaurantBundle:Checkin')->findBy(array('date' => $entity_basic->getDated(), 'status'=>'canceled'));
             $canceled = array();
             foreach ($dbcanceled as $item){
-                if($item->getCanceledat()->diff($item->getDate())->d < 7){
+                if($item->getCanceledat()->diff($item->getTime())->days < 7){
                     $canceled[] = $item;
                 }
             }
@@ -409,7 +424,9 @@ class HotelController extends Controller {
                 'parking' => $em->getRepository('RestaurantBundle:HotelParking')->findOneBy(array('hotel' => $entity_basic->getId())),
                 'canceled'=> $canceled,
                 'help'=>$contenidos,
-                'show' => TRUE
+                'show' => TRUE,
+                'pendingPayment' => $em->getRepository('RestaurantBundle:RCleaningExtraHotel')->findBy(array('hotel' => $entity_basic->getId()))
+
             ));
     }
 
@@ -470,6 +487,19 @@ class HotelController extends Controller {
                             if (substr($key, 0, 13) == 'form-checkout') {
                                 $visitedout[] = $this->createCheckout($value);
                             }
+                            if (substr($key, 0, 12) == 'form-payment') {
+                                $em = $this->getDoctrine()->getEntityManager();
+                                $long = $em->getRepository('RestaurantBundle:RCleaningExtraHotel')->find($value[0]['value']);
+                                if (isset($value[1])) {
+                                     $long->setPayed(1);
+                                    $long->setPayedat(new \DateTime());
+                                } else {
+                                    $long->setPayed(0);
+                                    $long->setPayedat(null);
+                                }
+                                $em->flush();
+
+                            }
                             break;
                     }
                     $this->em->flush();
@@ -526,7 +556,7 @@ class HotelController extends Controller {
                 $canceled = $this->em->getRepository('RestaurantBundle:Checkin')->findBy(array('date' => $this->entity_basic->getDated(), 'status'=>'canceled'));
                 $arr_canceled = array();
                 foreach ($canceled as $item) {
-                    if ($item->getCanceledat()->diff($item->getDate())->d < 7){
+                    if ($item->getCanceledat()->diff($item->getTime())->days < 7){
                         $arr_canceled[] = $item;
                     }
                 }
@@ -551,8 +581,10 @@ class HotelController extends Controller {
                     //'parking' => $em->getRepository('RestaurantBundle:HotelParking')->findOneBy(array('hotel' => $this->entity_basic->getId())),
                     'canceled' => $arr_canceled,
                     'help'=>$contenidos,
-                    'show' => FALSE
-                ));
+                    'show' => FALSE,
+                    'pendingPayment' => $this->em->getRepository('RestaurantBundle:RCleaningExtraHotel')->findBy(array('hotel' => $this->entity_basic->getId()))
+
+            ));
             }
     }
 
@@ -990,7 +1022,7 @@ class HotelController extends Controller {
             $entity->getTotaldebit($pin->getTdebit());
             $entity->getTotalcredit($pin->getTcredit());
         }
-        $entity->setKasver($entity->getTotalont() - $entity->getTotaldag() - $totalborg);
+        $entity->setKasver($entity->getTotalont() - $entity->getTotaldag() - $totalborg - $entity->getLongstay());
         $em->persist($entity);
         $em->flush();
     }
@@ -1037,9 +1069,15 @@ class HotelController extends Controller {
             foreach ($rcheckout as $value) {
                 $em->remove($value);
             }
-            /*$amountparking = $em->getRepository('RestaurantBundle:HotelParking')->findBy(array('hotel' => $id));
-            foreach ($amountparking as $value)
-            $em->remove($value);*/
+
+            $extra = $em->getRepository('RestaurantBundle:RCleaningExtraHotel')->findBy(array('hotel' => $id));
+        foreach ($extra as $value) {
+            $em->remove($value);
+        }
+
+        /*$amountparking = $em->getRepository('RestaurantBundle:HotelParking')->findBy(array('hotel' => $id));
+        foreach ($amountparking as $value)
+        $em->remove($value);*/
             try{
                 $em->remove($entity);
                 $em->flush();

@@ -153,6 +153,12 @@ class Hotel {
      * @ORM\Column(name="saldoborg", type="float", nullable=true)
      */
     private $saldoborg;
+
+    /**
+     * @var float
+     * @ORM\Column(name="longStay", type="float", nullable=true)
+     */
+    private $longStay;
     /**
      * @var float
      * @ORM\Column(name="totalccv", type="float", nullable=true)
@@ -415,9 +421,23 @@ class Hotel {
         return $this;
     }
 
+    public function getLongstay(){
+        return $this->longStay;
+    }
+
+    public function setLongstay($v){
+        $this->longStay = $v;
+        return $this;
+    }
+
+
+
+
     public function __toString() {
         return $this->dated.' '.$this->name;
     }
+
+
 
     
 }

@@ -1,6 +1,41 @@
 <fieldset id="data-checkin" class="col-md-12" style="border-bottom: none;">
     <section id="section-checkin" class="col-md-6">
-                {% set control = 1 %}
+        {#Payment#}
+
+        {% for pending in pendingPayment %}
+            <form id="form-payment-{{ pending.id }}" autocomplete="off" class="sortable-in">
+                <input hidden="hidden" name="idCleaningExtraHotel" id="id" value="{{ pending.id }}">
+                <div class="col-md-12">
+                    <div class="portlet light bg-inverse">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <input type="checkbox" id="payed-{{ pending.id }}" name="payed"
+                                       {% if pending.payed %}checked="checked" {% endif %}>
+                                <span class="caption-subject bold font-blue-steel uppercase"> {{ pending.cleaningextra.listing.number }} </span>
+                                <span class="caption-helper">&nbsp;{{ pending.cleaningextra.details }}</span>
+                            </div>
+                            <div class="tools">
+                                <span class="serial_checkin badge bg-blue-steel"></span>&nbsp;
+                                <span class="badge bg-red-intense">€ {{ pending.paymentamount }}</span>&nbsp;
+
+                                <a href="javascript:;" class="expand"></a>
+                            </div>
+                        </div>
+                        <div class="portlet-body container-fluid display-hide">
+                            <div id="details" class="details-checkin">
+                                  <div class="form-group">
+                                        <label class="control-label">Amount €</label>
+                                        <input type="text" id="amount-{{pending.id}}" name="paymentAmount" class=" input-sm form-control col-md-6 real" value="{{ pending.paymentamount }}" disabled="disabled">
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        {% endfor %}
+
+        {% set control = 1 %}
                     {% if rcheckin|length > 0 %}
                         {% for var in rcheckin%}
                             {% set name_split = var.name | split(' ') %}
