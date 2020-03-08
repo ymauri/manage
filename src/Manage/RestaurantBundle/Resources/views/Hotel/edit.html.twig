@@ -102,8 +102,8 @@
                                         {% for pending in pendingPayment %}
                                             <li >
                                                 {#<input type="checkbox" class="pendingPayment" style="margin-top: 4px;">#}
-                                                <b>Long Stay</b>&nbsp;
-                                                The guest of the department <b>{{ pending.cleaningextra.listing.number }}</b> must pay <b>€ {{ pending.paymentamount}}</b>
+                                                <b>Long Stay</b>.
+                                                 Monthly rent for Apartment <b>{{ pending.cleaningextra.listing.number }}</b> is now due - <b>€ {{ pending.paymentamount}}</b>
                                                 &nbsp;
 
                                             </li>

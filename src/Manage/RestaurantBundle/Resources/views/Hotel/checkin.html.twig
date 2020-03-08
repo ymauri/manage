@@ -3,7 +3,7 @@
         {#Payment#}
 
         {% for pending in pendingPayment %}
-            <form id="form-payment-{{ pending.id }}" autocomplete="off" class="sortable-in">
+            <form id="form-payment-{{ pending.id }}" autocomplete="off" class="sortable-in pending-payment">
                 <input hidden="hidden" name="idCleaningExtraHotel" id="id" value="{{ pending.id }}">
                 <div class="col-md-12">
                     <div class="portlet light bg-inverse">
@@ -11,12 +11,12 @@
                             <div class="caption">
                                 <input type="checkbox" id="payed-{{ pending.id }}" name="payed"
                                        {% if pending.payed %}checked="checked" {% endif %}>
-                                <span class="caption-subject bold font-blue-steel uppercase"> {{ pending.cleaningextra.listing.number }} </span>
+                                <span class="caption-subject bold font-yellow-crusta uppercase"> {{ pending.cleaningextra.listing.number }} </span>
                                 <span class="caption-helper">&nbsp;{{ pending.cleaningextra.details }}</span>
                             </div>
                             <div class="tools">
-                                <span class="serial_checkin badge bg-blue-steel"></span>&nbsp;
-                                <span class="badge bg-red-intense">€ {{ pending.paymentamount }}</span>&nbsp;
+                                <span class="serial_checkin badge bg-yellow-crusta"></span>&nbsp;
+                                <span class="badge bg-yellow-crusta">€ {{ pending.paymentamount }}</span>&nbsp;
 
                                 <a href="javascript:;" class="expand"></a>
                             </div>

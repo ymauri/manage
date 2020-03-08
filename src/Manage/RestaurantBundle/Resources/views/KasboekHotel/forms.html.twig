@@ -20,6 +20,9 @@
                 <td>Borg €</td>
             </tr>
             <tr>
+                <td>Long Stay €</td>
+            </tr>
+            <tr>
                 <td style="font-weight: bold">Totaal ontvangsten €</td>
             </tr>
             <tr>
@@ -80,8 +83,14 @@
                     </tr>
                     <tr>
                         <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   value="{{ item.longstay | number_format(2, ',', '.') }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
                                    class=" form-control  input-sm negrita"
-                                   value="{{ (item.totalover + item.totaltoer + item.totalextra + item.totalparking + item.saldoborg)  | number_format(2, ',', '.') }}">
+                                   value="{{ (item.totalover + item.totaltoer + item.totalextra + item.totalparking + item.saldoborg + item.longstay)  | number_format(2, ',', '.') }}">
                         </td>
                     </tr>
                     <tr>
@@ -109,7 +118,7 @@
                         </td>
                     </tr>
                     <tr>
-                        {% set kas = (((item.totalcontanten+ item.totaldebit + item.totalcredit) -  (item.totalover + item.totaltoer + item.totalextra + item.totalparking + item.saldoborg) + item.totalvoldan ))  %}
+                        {% set kas = (((item.totalcontanten+ item.totaldebit + item.totalcredit) -  (item.totalover + item.totaltoer + item.totalextra + item.totalparking + item.saldoborg + item.longstay) + item.totalvoldan ))  %}
 
                         <td><input disabled="disabled" tabindex="-1"
                                    class=" form-control  input-sm"
@@ -129,6 +138,13 @@
                     </thead>
 
                     <tbody>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   >
+                        </td>
+                    </tr>
+                    
                     <tr>
                         <td><input disabled="disabled" tabindex="-1"
                                    class=" form-control  input-sm"
@@ -222,6 +238,9 @@
                 <td>Borg €</td>
             </tr>
             <tr>
+                <td>Long Stay €</td>
+            </tr>
+            <tr>
                 <td style="font-weight: bold">Totaal ontvangsten €</td>
             </tr>
             <tr>
@@ -282,8 +301,14 @@
                     </tr>
                     <tr>
                         <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   value="{{ item.longstay | number_format(2, ',', '.') }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
                                    class=" form-control  input-sm negrita"
-                                   value="{{ (item.totalover + item.totaltoer + item.totalextra + item.totalparking + item.saldoborg) | number_format(2, ',', '.') }}">
+                                   value="{{ (item.totalover + item.totaltoer + item.totalextra + item.totalparking + item.saldoborg + item.longstay) | number_format(2, ',', '.') }}">
                         </td>
                     </tr>
                     <tr>
@@ -311,7 +336,7 @@
                         </td>
                     </tr>
                     <tr>
-                        {% set kas = (((item.totalcontanten+ item.totaldebit + item.totalcredit) -  (item.totalover + item.totaltoer + item.totalextra + item.totalparking + item.saldoborg) + item.totalvoldan ))  %}
+                        {% set kas = (((item.totalcontanten+ item.totaldebit + item.totalcredit) -  (item.totalover + item.totaltoer + item.totalextra + item.totalparking + item.saldoborg + item.longstay) + item.totalvoldan ))  %}
 
                         <td><input disabled="disabled" tabindex="-1"
                                    class=" form-control  input-sm"
@@ -331,6 +356,12 @@
                     </thead>
 
                     <tbody>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   >
+                        </td>
+                    </tr>
                     <tr>
                         <td><input disabled="disabled" tabindex="-1"
                                    class=" form-control  input-sm"
@@ -424,6 +455,9 @@
                 <td>Borg €</td>
             </tr>
             <tr>
+                <td>Long Stay €</td>
+            </tr>
+            <tr>
                 <td style="font-weight: bold">Totaal ontvangsten €</td>
             </tr>
             <tr>
@@ -485,8 +519,15 @@
                     </tr>
                     <tr>
                         <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   value="{{ item.longstay | number_format(2, ',', '.') }}">
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
                                    class=" form-control  input-sm negrita"
-                                   value="{{ (item.totalover + item.totaltoer + item.totalextra + item.totalparking + item.saldoborg) | number_format(2, ',', '.') }}">
+                                   value="{{ (item.totalover + item.totaltoer + item.totalextra + item.totalparking + item.saldoborg + item.longstay) | number_format(2, ',', '.') }}">
                         </td>
                     </tr>
 
@@ -516,7 +557,7 @@
                         </td>
                     </tr>
                     <tr>
-                        {% set kas = (((item.totalcontanten+ item.totaldebit + item.totalcredit) -  (item.totalover + item.totaltoer + item.totalextra + item.totalparking + item.saldoborg) + item.totalvoldan ))  %}
+                        {% set kas = (((item.totalcontanten+ item.totaldebit + item.totalcredit) -  (item.totalover + item.totaltoer + item.totalextra + item.totalparking + item.saldoborg + item.longstay) + item.totalvoldan ))  %}
 
                         <td><input disabled="disabled" tabindex="-1"
                                    class=" form-control  input-sm"
@@ -590,12 +631,19 @@
                                    >
                         </td>
                     </tr>
+                     <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   >
+                        </td>
+                    </tr>
                     <tr>
                         <td><input disabled="disabled" tabindex="-1"
                                    class=" form-control  input-sm"
                                    >
                         </td>
                     </tr>
+                    
                     </tbody>
                 </table>
             {% endif %}
@@ -629,6 +677,9 @@
                 <td>Borg €</td>
             </tr>
 
+            <tr>
+                <td>Long Stay €</td>
+            </tr>
             <tr>
                 <td style="font-weight: bold">Totaal ontvangsten €</td>
             </tr>
@@ -690,8 +741,15 @@
                     </tr>
                     <tr>
                         <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   value="{{ item.longstay | number_format(2, ',', '.') }}">
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
                                    class=" form-control  input-sm negrita"
-                                   value="{{ (item.totalover + item.totaltoer + item.totalextra + item.totalparking + item.saldoborg) | number_format(2, ',', '.') }}">
+                                   value="{{ (item.totalover + item.totaltoer + item.totalextra + item.totalparking + item.saldoborg + item.longstay) | number_format(2, ',', '.') }}">
                         </td>
                     </tr>
                     <tr>
@@ -719,7 +777,7 @@
                         </td>
                     </tr>
                     <tr>
-                        {% set kas = (((item.totalcontanten+ item.totaldebit + item.totalcredit) -  (item.totalover + item.totaltoer + item.totalextra + item.totalparking + item.saldoborg) + item.totalvoldan ))  %}
+                        {% set kas = (((item.totalcontanten+ item.totaldebit + item.totalcredit) -  (item.totalover + item.totaltoer + item.totalextra + item.totalparking + item.saldoborg + item.longstay) + item.totalvoldan ))  %}
 
                         <td><input disabled="disabled" tabindex="-1"
                                    class=" form-control  input-sm"
@@ -739,12 +797,12 @@
                     </thead>
 
                     <tbody>
-                    {#<tr>
+                    <tr>
                         <td><input disabled="disabled" tabindex="-1"
                                    class=" form-control  input-sm"
                                    >
                         </td>
-                    </tr>#}
+                    </tr>
                     <tr>
                         <td><input disabled="disabled" tabindex="-1"
                                    class=" form-control  input-sm"
@@ -838,6 +896,9 @@
                 <td>Borg €</td>
             </tr>
             <tr>
+                <td>Long Stay €</td>
+            </tr>
+            <tr>
                 <td style="font-weight: bold">Totaal ontvangsten €</td>
             </tr>
             <tr>
@@ -898,8 +959,15 @@
                     </tr>
                     <tr>
                         <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   value="{{ item.longstay | number_format(2, ',', '.') }}">
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
                                    class=" form-control  input-sm negrita"
-                                   value="{{ (item.totalover + item.totaltoer + item.totalextra + item.totalparking + item.saldoborg) | number_format(2, ',', '.') }}">
+                                   value="{{ (item.totalover + item.totaltoer + item.totalextra + item.totalparking + item.saldoborg + item.longstay) | number_format(2, ',', '.') }}">
                         </td>
                     </tr>
                     <tr>
@@ -927,7 +995,7 @@
                         </td>
                     </tr>
                     <tr>
-                        {% set kas = (((item.totalcontanten+ item.totaldebit + item.totalcredit) -  (item.totalover + item.totaltoer + item.totalextra + item.totalparking + item.saldoborg) + item.totalvoldan ))  %}
+                        {% set kas = (((item.totalcontanten+ item.totaldebit + item.totalcredit) -  (item.totalover + item.totaltoer + item.totalextra + item.totalparking + item.saldoborg + item.longstay) + item.totalvoldan ))  %}
 
                         <td><input disabled="disabled" tabindex="-1"
                                    class=" form-control  input-sm"
@@ -947,6 +1015,13 @@
                     </thead>
 
                     <tbody>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   >
+                        </td>
+                    </tr>
+                    
                     <tr>
                         <td><input disabled="disabled" tabindex="-1"
                                    class=" form-control  input-sm"

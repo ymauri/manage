@@ -290,6 +290,19 @@ class HotelController extends Controller {
                         $em->persist($cleaninglog);
                     }
                     $em->flush();
+                                //Buscar los long stay pendientes por pagar
+
+                    $pending = $em->getRepository('RestaurantBundle:CleaningExtra')->pendingPayment($entity_hotel->getDated());
+                    foreach ($pending as $item) {
+                        $cleaning = new RCleaningExtraHotel();
+                        $cleaning->setHotel($entity_hotel);
+                        $cleaning->setCleaningextra($item);
+                        $cleaning->setPaymentamount($item->getPaymentamount());
+                        $cleaning->setPaymentday($item->getPaymentday());
+                        $cleaning->setPayed(0);
+                        $em->persist($cleaning);
+                    }
+                    $em->flush();
                     $r = $this->isBlackList($entity_hotel->getId());
                     $response->setData('true');
                     return $response;
@@ -1054,11 +1067,14 @@ class HotelController extends Controller {
             $rcheckin = $em->getRepository('RestaurantBundle:RCheckinHotel')->findBy(array('hotel' => $id));
             $rcheckout = $em->getRepository('RestaurantBundle:RCheckoutHotel')->findBy(array('hotel' => $id));
             foreach ($rcheckout as $value) {
-                $cleaning = $em->getRepository("RestaurantBundle:Cleaning")->findOneBy(array("checkout"=>$value->getCheckout()->getId()));
-                if (!is_null($cleaning)){
-                    $cleaning->setCheckout(NULL);
-                    $em->persist($cleaning);
+                if (!empty($value->getCheckout())) {
+                    $cleaning = $em->getRepository("RestaurantBundle:Cleaning")->findOneBy(array("checkout"=>$value->getCheckout()->getId()));
+                    if (!is_null($cleaning)){
+                        $cleaning->setCheckout(NULL);
+                        $em->persist($cleaning);
+                    }
                 }
+                
 
             }
             $em->flush();

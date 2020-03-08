@@ -74,49 +74,51 @@
                                             <td></td>
                                         </tr>
                                         <tr>
-                                            <td>Totaal Ontvangsten €</td>
-                                            <td>{{ form_widget(form_basic.totaalont, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                                            <td>Long Stay €</td>
+                                            <td>{{ form_widget(form_basic.longstay, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
                                             <td style="text-align: right">€ 20</td>
                                             <td>{{ form_widget(form_float.e20, {'attr':{ 'class' :'input-sm  form-control entero money'}}) }}</td>
+
+                                            <td></td>
                                         </tr>
                                         <tr>
-                                            <td>Totaal contant in kas €</td>
-                                            <td>{{ form_widget(form_basic.contanten, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                                            <td>Totaal Ontvangsten €</td>
+                                            <td>{{ form_widget(form_basic.totaalont, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
                                             <td style="text-align: right">€ 10</td>
                                             <td>{{ form_widget(form_float.e10, {'attr':{ 'class' :'input-sm  form-control entero money'}}) }}</td>
                                         </tr>
                                         <tr>
-                                            <td>Totaal PIN/Maestro €</td>
-                                            <td>{{ form_widget(form_basic.debit, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                                            <td>Totaal contant in kas €</td>
+                                            <td>{{ form_widget(form_basic.contanten, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
                                             <td style="text-align: right">€ 5</td>
                                             <td>{{ form_widget(form_float.e5, {'attr':{ 'class' :'input-sm  form-control entero money'}}) }}</td>
                                         </tr>
                                         <tr>
-                                            <td>Totaal Credit Cards €</td>
-                                            <td>{{ form_widget(form_basic.credit, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                                            <td>Totaal PIN/Maestro €</td>
+                                            <td>{{ form_widget(form_basic.debit, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
                                             <td style="text-align: right">Muntgeld waarde €</td>
                                             <td>{{ form_widget(form_float.waarde, {'attr':{ 'class' :'input-sm  form-control real money'}}) }}</td>
                                         </tr>
                                         <tr>
+                                            <td>Totaal Credit Cards €</td>
+                                            <td>{{ form_widget(form_basic.credit, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                                             <td style="text-align: right">Subtotaal €</td>
+                                            <td>{{ form_widget(form_float.totalmoney, {'attr':{ 'class' :'input-sm  form-control real money'}}) }}</td>
+                                      </tr>
+                                        <tr>
                                             <td>Totaal in Kas €</td>
                                             <td>{{ form_widget(form_basic.totaalnaar, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
-                                            <td style="text-align: right">Subtotaal €</td>
-                                            <td>{{ form_widget(form_float.totalmoney, {'attr':{ 'class' :'input-sm  form-control real money'}}) }}</td>
-                                        </tr>
+                                              <td style="text-align: right">Bank 1 €</td>
+                                            <td>{{ form_widget(form_float.bank1, {'attr':{ 'class' :'input-sm  form-control real money'}}) }}</td>
+                                       </tr>
                                         <tr>
                                             <td>Kasverschil €</td>
                                             <td>{{ form_widget(form_basic.kasverschil, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
-                                            <td style="text-align: right">Bank 1 €</td>
-                                            <td>{{ form_widget(form_float.bank1, {'attr':{ 'class' :'input-sm  form-control real money'}}) }}</td>
-                                        </tr>
-
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
                                             <td style="text-align: right">Bank 2 €</td>
                                             <td>{{ form_widget(form_float.bank2, {'attr':{ 'class' :'input-sm  form-control real money'}}) }}</td>
                                         </tr>
-                                        <tr>
+
+                                        
                                             <td></td>
                                             <td></td>
                                             <td style="text-align: right">Bank 3 €</td>

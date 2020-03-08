@@ -184,7 +184,7 @@ class KasboekHotelController extends Controller {
         $now = new \DateTime('now');
 
         //if (strtotime($olddate->format('d-m-Y')) > strtotime($entity_basic->getUpdated()->format('d-m-Y')) && $user->getRole()!='ROLE_SUPERADMIN' && $user->getRole()!='ROLE_MANAGER'){
-        if (($entity_basic->getUpdated()->diff($now)->d >= 15) && ($this->isGranted('ROLE_SUPER_ADMIN'))) {
+        if (($entity_basic->getUpdated()->diff($now)->days >= 15) && ($this->isGranted('ROLE_SUPER_ADMIN'))) {
             $this->addFlash('error', 'Error! This form can not be modified.');
             return $this->redirect($this->generateUrl('kasboekhotel', array('date'=>date('m-Y'))));
         }
@@ -360,6 +360,7 @@ class KasboekHotelController extends Controller {
         $calcs['credit']  = 0;
         $calcs['totaalnaar']  = 0;
         $calcs['kasverschil']= 0;
+        $calcs['longstay']= 0;
 
         foreach ($hotels as $hotel) {
             $calcs['overnachtingen'] +=  ($hotel->getTotalover() + $hotel->getTotalextra() - $hotel->getTotalvoldan());
@@ -367,13 +368,13 @@ class KasboekHotelController extends Controller {
             $calcs['toeristenbelasting']  +=  $hotel->getTotaltoer();
             $calcs['totaalborg']  +=  $hotel->getSaldoborg();
             //(item.totalover + item.totaltoer + item.totalparking)
-            $calcs['totaalont']  +=  ($hotel->getTotalover() + $hotel->getTotalextra() + $hotel->getTotaltoer() + $hotel->getTotalparking() + $hotel->getSaldoborg() - $hotel->getTotalvoldan()) ;
+            $calcs['totaalont']  +=  ($hotel->getTotalover() + $hotel->getTotalextra() + $hotel->getTotaltoer() + $hotel->getTotalparking() + $hotel->getSaldoborg() + $hotel->getLongstay() - $hotel->getTotalvoldan()) ;
             $calcs['contanten']  += $hotel->getTotalcontanten();
             $calcs['debit']  +=  $hotel->getTotaldebit();
             $calcs['credit']  +=  $hotel->getTotalcredit();
-            //(item.totalcontanten+ item.totaldebit + item.totalcredit)
             $calcs['totaalnaar'] += ($hotel->getTotalcontanten() + $hotel->getTotaldebit() + $hotel->getTotalcredit());
             //$calcs['kasverschil'] += (($hotel->getTotalcontanten() + $hotel->getTotaldebit() + $hotel->getTotalcredit()) - ($hotel->getTotalover() + $hotel->getTotaltoer() + $hotel->getTotalparking()));
+            $calcs['longstay']  +=  $hotel->getLongstay();
         }
 
 
@@ -388,6 +389,7 @@ class KasboekHotelController extends Controller {
         $entity_kasboek->setCredit($calcs['credit']);
         $entity_kasboek->setTotaalnaar($calcs['totaalnaar']);
         $entity_kasboek->setKasverschil($calcs['totaalnaar'] - $calcs['totaalont']);
+        $entity_kasboek->setLongstay($calcs['longstay']);
 
         $total = 0;
         $float = $entity_kasboek->getFloat();
@@ -409,7 +411,7 @@ class KasboekHotelController extends Controller {
         $float->setContant($total + $float->getWaarde() + $float->getBank1() + $float->getBank2() + $float->getBank3() + $float->getBank4() + $bank);
         //$float->setKasverschil($total + $float->getWaarde() - $calcs['contanten']);
 
-        $float->setKasverschil($float->getContant() - $calcs['contanten']);
+        $float->setKasverschil($float->getContant() - $calcs['contanten'] );
         $entity_kasboek->setFloat($float);
         $em->persist($entity_kasboek);
         $em->flush();

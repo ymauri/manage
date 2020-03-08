@@ -87,6 +87,12 @@ class KasboekHotelForms {
      * @ORM\Column(name="kasverschil", type="float", nullable=true)
      */
     private $kasverschil ;
+    
+    /**
+     * @var float
+     * @ORM\Column(name="longstay", type="float", nullable=true)
+     */
+    private $longstay;
 
     public function getId() {
         return $this->id;
@@ -197,5 +203,13 @@ class KasboekHotelForms {
 
     public function getKasboekhotel(){
         return $this->kasboekhotel;
+    }
+
+    public function getLongstay() {
+        return $this->longstay;
+    }
+
+    public function setLongstay($longstay) {
+        $this->longstay = $longstay;
     }
 }

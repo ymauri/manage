@@ -116,7 +116,11 @@ class KasboekHotel {
      */
     private $float;
 
-
+    /**
+     * @var float
+     * @ORM\Column(name="longstay", type="float", nullable=true)
+     */
+    private $longstay;
 
     public function getId() {
         return $this->id;
@@ -279,6 +283,14 @@ class KasboekHotel {
     public function setTotaalborg($totaalborg)
     {
         $this->totaalborg = $totaalborg;
+    }
+
+    public function getLongstay() {
+        return $this->longstay;
+    }
+
+    public function setLongstay($longstay) {
+        $this->longstay = $longstay;
     }
 
 }

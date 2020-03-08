@@ -28,6 +28,7 @@ class KasboekHotelType extends AbstractType
             ->add('parking','number', array( 'attr'=>array('tabindex'=>-1,'readonly' =>true,), 'precision' => 2))
             ->add('toeristenbelasting','number', array( 'attr'=>array('tabindex'=>-1,'readonly' =>true,), 'precision' => 2))
             ->add('totaalborg','number', array( 'attr'=>array('tabindex'=>-1,'readonly' =>true,), 'precision' => 2))
+            ->add('longstay','number', array( 'attr'=>array('tabindex'=>-1,'readonly' =>true,), 'precision' => 2))
             ->add('totaalont','number', array( 'attr'=>array('tabindex'=>-1,'readonly' =>true,), 'precision' => 2))
             ->add('contanten','number', array( 'attr'=>array('tabindex'=>-1,'readonly' =>true,), 'precision' => 2))
             ->add('debit','number', array( 'attr'=>array('tabindex'=>-1,'readonly' =>true,), 'precision' => 2))

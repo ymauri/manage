@@ -64,16 +64,26 @@
                    style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
                    value="{{ entity_basic.float.e50 }}"></td>
     </tr>
+    <tr>
+        <td> <input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Long Stay €"> </td>
+        <td><input disabled="disabled"
+                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
+                   value="{{ entity_basic.longstay | number_format(2, ',', '.') }}"></td>
+        <td style="text-align: right">€ 20</td>
+        <td><input disabled="disabled"
+                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
+                   value="{{ entity_basic.float.e20 }}"></td>
+    </tr>
 
     <tr>
         <td><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Totaal ontvangsten €"></td>
         <td><input disabled="disabled"
                    style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
                    value="{{ entity_basic.totaalont | number_format(2, ',', '.') }}"></td>
-        <td style="text-align: right">€ 20</td>
+        <td style="text-align: right">€ 10</td>
         <td><input disabled="disabled"
                    style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.float.e20 }}"></td>
+                   value="{{ entity_basic.float.e10 }}"></td>
 
     </tr>
     <tr>
@@ -82,10 +92,10 @@
         <td><input disabled="disabled"
                    style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
                    value="{{ entity_basic.contanten | number_format(2, ',', '.') }}"></td>
-        <td style="text-align: right">€ 10</td>
+         <td style="text-align: right">€ 5</td>
         <td><input disabled="disabled"
                    style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.float.e10 }}"></td>
+                   value="{{ entity_basic.float.e5 }}"></td>
 
     </tr>
     <tr>
@@ -93,10 +103,10 @@
         <td><input disabled="disabled"
                    style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
                    value="{{ entity_basic.debit | number_format(2, ',', '.') }}"></td>
-        <td style="text-align: right">€ 5</td>
+        <td style="text-align: right">Muntgeld waarde €</td>
         <td><input disabled="disabled"
                    style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.float.e5 }}"></td>
+                   value="{{ entity_basic.float.waarde | number_format(2, ',', '.') }}"></td>
 
     </tr>
     <tr>
@@ -104,10 +114,10 @@
         <td><input disabled="disabled"
                    style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
                    value="{{ entity_basic.credit | number_format(2, ',', '.') }}"></td>
-        <td style="text-align: right">Muntgeld waarde €</td>
+         <td style="text-align: right">Subtotaal €</td>
         <td><input disabled="disabled"
                    style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.float.waarde | number_format(2, ',', '.') }}"></td>
+                   value="{{ entity_basic.float.totalmoney | number_format(2, ',', '.') }}"></td>
 
     </tr>
     <tr>
@@ -116,10 +126,10 @@
         <td><input disabled="disabled"
                    style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
                    value="{{ entity_basic.totaalnaar | number_format(2, ',', '.') }}"></td>
-        <td style="text-align: right">Subtotaal €</td>
+      <td style="text-align: right">Bank 1 €</td>
         <td><input disabled="disabled"
                    style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.float.totalmoney | number_format(2, ',', '.') }}"></td>
+                   value="{{ entity_basic.float.bank1 | number_format(2, ',', '.') }}"></td>
 
     </tr>
     <tr>
@@ -127,16 +137,6 @@
         <td><input disabled="disabled"
                    style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
                    value="{{ entity_basic.kasverschil | number_format(2, ',', '.') }}"></td>
-        <td style="text-align: right">Bank 1 €</td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.float.bank1 | number_format(2, ',', '.') }}"></td>
-
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-
         <td style="text-align: right">Bank 2 €</td>
         <td><input disabled="disabled"
                    style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
@@ -227,6 +227,9 @@
                     <tr>
                         <td style=""><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Borg €"></td>
                     </tr>
+                     <tr>
+                        <td style=""><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Long Stay €"></td>
+                    </tr>
                     <tr>
                         <td style="font-weight: bold; "><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Totaal ontvangsten €"></td>
                     </tr>
@@ -287,6 +290,13 @@
                                            value="{{ item.saldoborg | number_format(2, ',', '.') }}">
                                 </td>
                             </tr>
+                            
+                            <tr>
+                                <td><input disabled="disabled" tabindex="-1"
+                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
+                                           value="{{ (item.longstay) | number_format(2, ',', '.') }}">
+                                </td>
+                            </tr>
                             <tr>
                                 <td><input disabled="disabled" tabindex="-1"
                                            style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
@@ -320,7 +330,7 @@
                             <tr>
                                 <td><input disabled="disabled" tabindex="-1"
                                            style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
-                                           value="{{ (item.totalont - item.totaldag - item.saldoborg) | number_format(2, ',', '.') }}">
+                                           value="{{ (item.totalont - item.totaldag - item.saldoborg - item.longstay) | number_format(2, ',', '.') }}">
                                 </td>
                             </tr>
                             </tbody>
@@ -433,6 +443,9 @@
                     <tr>
                         <td style=""><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Borg €"></td>
                     </tr>
+                     <tr>
+                        <td style=""><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Long Stay €"></td>
+                    </tr>
                     <tr>
                         <td style="font-weight: bold; "><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Totaal ontvangsten €"></td>
                     </tr>
@@ -493,6 +506,13 @@
                                            value="{{ item.saldoborg | number_format(2, ',', '.') }}">
                                 </td>
                             </tr>
+                            
+                            <tr>
+                                <td><input disabled="disabled" tabindex="-1"
+                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
+                                           value="{{ (item.longstay) | number_format(2, ',', '.') }}">
+                                </td>
+                            </tr>
                             <tr>
                                 <td><input disabled="disabled" tabindex="-1"
                                            style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;; text-align:right;"
@@ -526,7 +546,7 @@
                             <tr>
                                 <td><input disabled="disabled" tabindex="-1"
                                            style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;; text-align:right;"
-                                           value="{{ (item.totalont - item.totaldag - item.saldoborg) | number_format(2, ',', '.') }}">
+                                           value="{{ (item.totalont - item.totaldag - item.saldoborg - item.longstay) | number_format(2, ',', '.') }}">
                                 </td>
                             </tr>
                             </tbody>
@@ -637,6 +657,9 @@
                     </tr>
                     <tr>
                         <td style=""><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Borg €"></td>
+                    </tr>                    
+                     <tr>
+                        <td style=""><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Long Stay €"></td>
                     </tr>
                     <tr>
                         <td style="font-weight: bold; "><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Totaal ontvangsten €"></td>
@@ -699,6 +722,13 @@
                                            value="{{ item.saldoborg | number_format(2, ',', '.') }}">
                                 </td>
                             </tr>
+                            
+                            <tr>
+                                <td><input disabled="disabled" tabindex="-1"
+                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
+                                           value="{{ (item.longstay) | number_format(2, ',', '.') }}">
+                                </td>
+                            </tr>
                             <tr>
                                 <td><input disabled="disabled" tabindex="-1"
                                            style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
@@ -734,7 +764,7 @@
                             <tr>
                                 <td><input disabled="disabled" tabindex="-1"
                                            style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
-                                           value="{{ (item.totalont - item.totaldag - item.saldoborg) | number_format(2, ',', '.') }}">
+                                           value="{{ (item.totalont - item.totaldag - item.saldoborg - item.longstay) | number_format(2, ',', '.') }}">
                                 </td>
                             </tr>
                             </tbody>
@@ -845,6 +875,9 @@
                     </tr>
                     <tr>
                         <td style=""><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Borg €"></td>
+                    </tr>                    
+                     <tr>
+                        <td style=""><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Long Stay €"></td>
                     </tr>
                     <tr>
                         <td style="font-weight: bold; "><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Totaal ontvangsten €"></td>
@@ -907,9 +940,16 @@
                                    value="{{ item.saldoborg | number_format(2, ',', '.') }}">
                         </td>
                     </tr>
+                    
+                            <tr>
+                                <td><input disabled="disabled" tabindex="-1"
+                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
+                                           value="{{ (item.longstay) | number_format(2, ',', '.') }}">
+                                </td>
+                            </tr>
                     <tr>
                         <td><input disabled="disabled" tabindex="-1"
-                                   class=" form-control  input-sm negrita"
+                                    style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
                                    value="{{ (item.totalover + item.totaltoer + item.totalextra + item.totalparking + item.saldoborg) | number_format(2, ',', '.') }}">
                         </td>
                     </tr>
@@ -940,7 +980,7 @@
                     <tr>
                         <td><input disabled="disabled" tabindex="-1"
                                    style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
-                                   value="{{ (item.totalont - item.totaldag - item.saldoborg) | number_format(2, ',', '.') }}">
+                                   value="{{ (item.totalont - item.totaldag - item.saldoborg - item.longstay) | number_format(2, ',', '.') }}">
                         </td>
                     </tr>
                     </tbody>
@@ -1056,6 +1096,9 @@
                     </tr>
                     <tr>
                         <td style=""><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Borg €"></td>
+                    </tr>                    
+                     <tr>
+                        <td style=""><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Long Stay €"></td>
                     </tr>
                     <tr>
                         <td style="font-weight: bold; "><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Totaal ontvangsten €"></td>
@@ -1118,6 +1161,13 @@
                                            value="{{ item.saldoborg | number_format(2, ',', '.') }}">
                                 </td>
                             </tr>
+                            
+                            <tr>
+                                <td><input disabled="disabled" tabindex="-1"
+                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
+                                           value="{{ (item.longstay) | number_format(2, ',', '.') }}">
+                                </td>
+                            </tr>
                             <tr>
                                 <td><input disabled="disabled" tabindex="-1"
                                            class=" form-control  input-sm negrita"
@@ -1151,7 +1201,7 @@
                             <tr>
                                 <td><input disabled="disabled" tabindex="-1"
                                            style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
-                                           value="{{ (item.totalont - item.totaldag - item.saldoborg) | number_format(2, ',', '.') }}">
+                                           value="{{ (item.totalont - item.totaldag - item.saldoborg - item.longstay) | number_format(2, ',', '.') }}">
                                 </td>
                             </tr>
                             </tbody>
