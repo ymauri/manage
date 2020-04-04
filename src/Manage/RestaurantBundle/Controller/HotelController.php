@@ -751,7 +751,9 @@ class HotelController extends Controller {
                         $relation->setParking((float)$current);
                         break;
                     case 'latecheckin':
-                        $relation->setLatecheckin((float)$value['value']);
+                        $current = str_replace('.', '', $value['value']);
+                        $current = str_replace(',', '.', $current);
+                        $relation->setLatecheckin((float)$current);
                         break;
                     case 'details':
                         $relation->setDetails($value['value']);
