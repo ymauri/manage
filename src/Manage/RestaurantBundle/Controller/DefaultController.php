@@ -31,147 +31,74 @@ class DefaultController extends Controller {
        $rowdata = $api->checkin();
        $result = $rowdata['result']['results'];
        $status = $rowdata['status'];
-       //var_dump($rowdata); die;
-        $log = $this->get('logger');
-        //echo ($rowdata['status']); die;
+    //    var_dump($rowdata); die;
        $em = $this->getDoctrine()->getManager();
         if ($status == 200){
             foreach ($result as $current){
-                //var_dump($current);die;
-                //Buscar si existe el checkin en BD
-                $savedcheckin = $em->getRepository('RestaurantBundle:Checkin')->findOneBy(array('idguesty'=>$current['_id']));
-                //Si no exise el checkin entonces se crea uno nuevo en BD
-                $listing = $this->getCurrentListing($current['listing']['_id']);
-                if (is_null($savedcheckin)) {
-                    $checkin = new Checkin();
-                    if (!is_null($listing)) {
-                        //Obtener el objeto de la reserva correspondiente
-                        //$reservation = $api->reservation($current['_id']);
-                        
-                        $checkin->setListing($listing->getId());
-                        $checkin->setTime(new \DateTime($current['checkIn']));
-                        $date = new \DateTime($current['checkIn']);
-                        $checkin->setDate(new \DateTime($date->format('Y-m-d')));
-                        $checkin->setName($current['guest']['fullName']);
-                        $checkin->setConfcode($current['confirmationCode']);
-                        $checkin->setIdguesty($current['_id']);
-                        $checkin->setSource($current['source']);
-                        $checkin->setNights($current['nightsCount']);
-                        $checkin->setGuests($current['guestsCount']);
-                        $checkin->setStatus($current['status']);
-                        $checkin->setNote(isset($current['guest']['notes']) ? $current['guest']['notes'] : null);
-                        $checkin->setEmail(isset($current['guest']['email']) ? $current['guest']['email'] : null);
-                        $checkin->setPhone(isset($current['guest']['phone']) ? $current['guest']['phone'] : null);
-                        $invoice = $this->getMoneyValues($current['money']['invoiceItems']);
-                        $checkin->setBetalen($invoice['accommodation'] + $invoice['vat']);
-                        $checkin->setVoldan($current['money']['hostPayout'] - $current['money']['balanceDue']);
-                        /*$guest = $api->guest($current['guestId']);
-                        if ($guest['status'] == 200) {
-                            if (isset($guest['result']['email'])) $checkin->setEmail($current['guest']['email']);
-                            if (isset($guest['result']['phone'])) $checkin->setPhone($current['guest']['phone']);
-                        }*/
-                        if (isset($current['canceledAt']))
-                            $checkin->setCanceledat(new \DateTime($current['canceledAt']));
-                        $checkin->setUpdatedat(new \DateTime(date('Y-m-d h:m:s')));
-                        $em->persist($checkin);
-                        $em->flush();
-                        $log->alert(' Checkin created. ID:'.$current['_id']. ' Listing: '. $current['listing']['title']);
-                    }
-                }
-                else{
-
-
-                    if (!is_null($listing)) {
-                        //Obtener el objeto de la reserva correspondiente
-                        //$reservation = $api->reservation($current['_id']);
-
-                            $savedcheckin->setListing($listing->getId());
-                            $savedcheckin->setTime(new \DateTime($current['checkIn']));
+                if ($current['checkInDateLocalized'] == date('Y-m-d') && $current['status'] == 'confirmed') {
+                    //var_dump($current);die;
+                    //Buscar si existe el checkin en BD
+                    $savedcheckin = $em->getRepository('RestaurantBundle:Checkin')->findOneBy(array('idguesty'=>$current['_id']));
+                    //Si no exise el checkin entonces se crea uno nuevo en BD
+                    $listing = $this->getCurrentListing($current['listing']['_id']);
+                    if (is_null($savedcheckin)) {
+                        $checkin = new Checkin();
+                        if (!is_null($listing)) {
+                            //Obtener el objeto de la reserva correspondiente
+                            $checkin->setListing($listing->getId());
+                            $checkin->setTime(new \DateTime($current['checkIn']));
                             $date = new \DateTime($current['checkIn']);
-                            $savedcheckin->setDate(new \DateTime($date->format('Y-m-d')));
-                            $savedcheckin->setName($current['guest']['fullName']);
-                            $savedcheckin->setConfcode($current['confirmationCode']);
-                            $savedcheckin->setSource($current['source']);
-                            $savedcheckin->setNights($current['nightsCount']);
-                            $savedcheckin->setGuests($current['guestsCount']);
-                            $savedcheckin->setStatus($current['status']);
-                            $savedcheckin->setNote(isset($current['guest']['notes']) ? $current['guest']['notes'] : null);
-                            //$money = $api->reservationMoney($current['_id']);
-                           // if (isset($money['result']['money']['fareAccommodation']) && $money['result']['money']['fareAccommodation'] != 0){
+                            $checkin->setDate(new \DateTime($date->format('Y-m-d')));
+                            $checkin->setName($current['guest']['fullName']);
+                            $checkin->setConfcode($current['confirmationCode']);
+                            $checkin->setIdguesty($current['_id']);
+                            $checkin->setSource($current['source']);
+                            $checkin->setNights($current['nightsCount']);
+                            $checkin->setGuests($current['guestsCount']);
+                            $checkin->setStatus($current['status']);
+                            $checkin->setNote(isset($current['guest']['notes']) ? $current['guest']['notes'] : null);
+                            $checkin->setEmail(isset($current['guest']['email']) ? $current['guest']['email'] : null);
+                            $checkin->setPhone(isset($current['guest']['phone']) ? $current['guest']['phone'] : null);
                             $invoice = $this->getMoneyValues($current['money']['invoiceItems']);
-                            $savedcheckin->setBetalen($invoice['accommodation'] + $invoice['vat']);   
-                            //} 
-
-                            //if (isset($money['result']['money']['balanceDue']) && $money['result']['money']['balanceDue'] != 0){
-                                $savedcheckin->setVoldan($current['money']['hostPayout'] - $current['money']['balanceDue']);
-                            //}
-
-                            /*if (isset($money['result']['money']['totalRefunded']) && $money['result']['money']['totalRefunded'] != 0){
-                                $savedcheckin->setVoldan($savedcheckin->getVoldan()-$money['result']['money']['totalRefunded']);
+                            $checkin->setBetalen($invoice['accommodation'] + $invoice['vat'] - $invoice['discount']);
+                            $checkin->setVoldan($current['money']['hostPayout'] - $current['money']['balanceDue']);
+                            /*$guest = $api->guest($current['guestId']);
+                            if ($guest['status'] == 200) {
+                                if (isset($guest['result']['email'])) $checkin->setEmail($current['guest']['email']);
+                                if (isset($guest['result']['phone'])) $checkin->setPhone($current['guest']['phone']);
                             }*/
                             if (isset($current['canceledAt']))
-                                $savedcheckin->setCanceledat(new \DateTime($current['canceledAt']));
-                            $savedcheckin->setUpdatedat(new \DateTime(date('Y-m-d h:m:s')));
-                            $em->persist($savedcheckin);
+                                $checkin->setCanceledat(new \DateTime($current['canceledAt']));
+                            $checkin->setUpdatedat(new \DateTime(date('Y-m-d h:m:s')));
+                            $em->persist($checkin);
                             $em->flush();
-                            $log->alert(' Checkin updated. ID:'.$current['_id']. ' Listing: '. $current['listing']['title']);
-
+                        }
+                    }
+                    else{
+                        if (!is_null($listing)) {
+                                $savedcheckin->setListing($listing->getId());
+                                $savedcheckin->setTime(new \DateTime($current['checkIn']));
+                                $date = new \DateTime($current['checkIn']);
+                                $savedcheckin->setDate(new \DateTime($date->format('Y-m-d')));
+                                $savedcheckin->setName($current['guest']['fullName']);
+                                $savedcheckin->setConfcode($current['confirmationCode']);
+                                $savedcheckin->setSource($current['source']);
+                                $savedcheckin->setNights($current['nightsCount']);
+                                $savedcheckin->setGuests($current['guestsCount']);
+                                $savedcheckin->setStatus($current['status']);
+                                $savedcheckin->setNote(isset($current['guest']['notes']) ? $current['guest']['notes'] : null);
+                                $invoice = $this->getMoneyValues($current['money']['invoiceItems']);
+                                $savedcheckin->setBetalen($invoice['accommodation'] + $invoice['vat'] - $invoice['discount']);   
+                                $savedcheckin->setVoldan($current['money']['hostPayout'] - $current['money']['balanceDue']);
+                                if (isset($current['canceledAt']))
+                                    $savedcheckin->setCanceledat(new \DateTime($current['canceledAt']));
+                                $savedcheckin->setUpdatedat(new \DateTime(date('Y-m-d h:m:s')));
+                                $em->persist($savedcheckin);
+                                $em->flush();
+                        }
 
                     }
-
-                }
-                //Buscar si existe el checkout en BD
-                $savedcheckout = $em->getRepository('RestaurantBundle:Checkout')->findOneBy(array('idguesty'=>$current['_id']));
-                //Si no exise el checkout entonces se crea uno nuevo en BD
-                $listing = $this->getCurrentListing($current['listing']['_id']);
-                if (is_null($savedcheckout)) {
-                    $checkout = new Checkout();
-
-                    if (!is_null($listing)) {
-                        //Obtener el objeto de la reserva correspondiente
-
-                            $checkout->setListing($listing->getId());
-                            $checkout->setTime(new \DateTime($current['checkOut']));
-                            $date = new \DateTime($current['checkOut']);
-                            $checkout->setDate(new \DateTime($date->format('Y-m-d')));
-                            $checkout->setName($current['guest']['fullName']);
-                            $checkout->setConfcode($current['confirmationCode']);
-                            $checkout->setIdguesty($current['_id']);
-                            $checkout->setSource($current['source']);
-                            $checkout->setNights($current['nightsCount']);
-                            $checkout->setGuests($current['guestsCount']);
-                            $checkout->setStatus($current['status']);
-                            $checkout->setEmail(isset($current['guest']['email']) ? $current['guest']['email'] : null);
-                            $checkout->setPhone(isset($current['guest']['phone']) ? $current['guest']['phone'] : null);
-                            
-                            $checkout->setUpdatedat(new \DateTime(date('Y-m-d h:m:s')));
-                            $em->persist($checkout);
-                            $em->flush();
-                            //$log->alert(' Checkout created. ID:' . $current['_id'] . ' Listing: ' . $current['listing']['title']);
-
-                    }
-                }
-
-                else{
-                    if (!is_null($listing)) {
-
-                            $savedcheckout->setListing($listing->getId());
-                            $savedcheckout->setTime(new \DateTime($current['checkOut']));
-                            $date = new \DateTime($current['checkOut']);
-                            $savedcheckout->setDate(new \DateTime($date->format('Y-m-d')));
-                            $savedcheckout->setName($current['guest']['fullName']);
-                            $savedcheckout->setConfcode($current['confirmationCode']);
-                            $savedcheckout->setSource($current['source']);
-                            $savedcheckout->setNights($current['nightsCount']);
-                            $savedcheckout->setGuests($current['guestsCount']);
-                            $savedcheckout->setStatus($current['status']);
-
-                            $savedcheckout->setUpdatedat(new \DateTime(date('Y-m-d h:m:s')));
-                            $em->persist($savedcheckout);
-                            $em->flush();
-                            //$log->alert(' Checkout updated. ID:'.$current['_id']. ' Listing: '. $current['listing']['title']);
-
-                    }
+                    
                 }
             }
 
@@ -179,6 +106,84 @@ class DefaultController extends Controller {
         //else $log->alert('No data recovered');
         die;
     }
+
+    /**
+     * Displays a form to create a new Listing entity.
+     *
+     * @Route("/guesty/checkout/", name="get_checkout")
+     * @Method("GET")
+     * @Template()
+     */
+    public function getCheckoutAction() {
+        $api = new ApiGuesty();
+        $rowdata = $api->checkuot(date('Y-m-d'));
+        $result = $rowdata['result']['results'];
+        $status = $rowdata['status'];
+        $em = $this->getDoctrine()->getManager();
+         if ($status == 200){
+             foreach ($result as $current){
+                 //var_dump($current);die;
+                 //Buscar si existe el checkout en BD
+                 if ($current['checkOutDateLocalized'] == date('Y-m-d') && $current['status'] == 'confirmed') {
+                    $savedcheckout = $em->getRepository('RestaurantBundle:Checkout')->findOneBy(array('idguesty'=>$current['_id']));
+                    //Si no exise el checkout entonces se crea uno nuevo en BD
+                    $listing = $this->getCurrentListing($current['listing']['_id']);
+                    if (is_null($savedcheckout)) {
+                        $checkout = new Checkout();
+    
+                        if (!is_null($listing)) {
+                            //Obtener el objeto de la reserva correspondiente
+    
+                                $checkout->setListing($listing->getId());
+                                $checkout->setTime(new \DateTime($current['checkOut']));
+                                $date = new \DateTime($current['checkOut']);
+                                $checkout->setDate(new \DateTime($date->format('Y-m-d')));
+                                $checkout->setName($current['guest']['fullName']);
+                                $checkout->setConfcode($current['confirmationCode']);
+                                $checkout->setIdguesty($current['_id']);
+                                $checkout->setSource($current['source']);
+                                $checkout->setNights($current['nightsCount']);
+                                $checkout->setGuests($current['guestsCount']);
+                                $checkout->setStatus($current['status']);
+                                $checkout->setEmail(isset($current['guest']['email']) ? $current['guest']['email'] : null);
+                                $checkout->setPhone(isset($current['guest']['phone']) ? $current['guest']['phone'] : null);
+                                
+                                $checkout->setUpdatedat(new \DateTime(date('Y-m-d h:m:s')));
+                                $em->persist($checkout);
+                                $em->flush();
+                                //$log->alert(' Checkout created. ID:' . $current['_id'] . ' Listing: ' . $current['listing']['title']);
+    
+                        }
+                    }
+    
+                    else{
+                        if (!is_null($listing)) {
+    
+                                $savedcheckout->setListing($listing->getId());
+                                $savedcheckout->setTime(new \DateTime($current['checkOut']));
+                                $date = new \DateTime($current['checkOut']);
+                                $savedcheckout->setDate(new \DateTime($date->format('Y-m-d')));
+                                $savedcheckout->setName($current['guest']['fullName']);
+                                $savedcheckout->setConfcode($current['confirmationCode']);
+                                $savedcheckout->setSource($current['source']);
+                                $savedcheckout->setNights($current['nightsCount']);
+                                $savedcheckout->setGuests($current['guestsCount']);
+                                $savedcheckout->setStatus($current['status']);
+    
+                                $savedcheckout->setUpdatedat(new \DateTime(date('Y-m-d h:m:s')));
+                                $em->persist($savedcheckout);
+                                $em->flush();
+                                //$log->alert(' Checkout updated. ID:'.$current['_id']. ' Listing: '. $current['listing']['title']);
+    
+                        }
+                    }
+                }
+             }
+ 
+         }
+         //else $log->alert('No data recovered');
+         die;
+     }
 
     /**
      *
@@ -198,58 +203,19 @@ class DefaultController extends Controller {
 
     }
 
-
-
-
-      /**
-     *
-     * @Route("/guesty/updater/", name="guesty_updater")
-     * @Method("GET")
-     * @Template()
-     */
-
-    public function updateReservationsAction() {
-        $em = $this->getDoctrine()->getManager();
-        $consulta = $em->createQuery('SELECT o FROM RestaurantBundle:Checkin o WHERE  o.date >= :dated ORDER BY o.date ASC ');
-        $consulta->setParameter('dated',  date('Y-m-d') );
-        $consulta->setMaxResults(50);
-
-        $savedcheckin = $consulta->getResult();
-        $api = new ApiGuesty();
-        foreach ($savedcheckin as $checkin){
-            $result = $api->reservation($checkin->getIdguesty());
-            $reserva = $result['result'];
-            $status = $result['status'];
-            if ($status == 200){
-                $invoice = $this->getMoneyValues($reserva['money']['invoiceItems']);
-                $checkin->setBetalen($invoice['accommodation'] + $invoice['vat']);
-                $checkin->setStatus($reserva['status']);
-                if (isset($reserva['canceledAt']))
-                    $checkin->setCanceledat(new \DateTime($reserva['canceledAt']));
-
-                $em->persist($checkin);
-
-                $checkout = $em->getRepository('RestaurantBundle:Checkout')->findOneBy(array('confcode' => $checkin->getConfcode()));
-                if (!is_null($checkout)) {
-                    $checkout->setStatus($reserva['status']);
-                    $em->persist($checkout);
-                }
-            }
-        }
-        $em->flush();
-        echo 'done';
-        die;
-    }
-
     private function getMoneyValues($invoiceItems) {
         $result['vat'] = 0;
         $result['accommodation'] = 0;
+        $result['discount'] = 0;
         foreach ($invoiceItems as $item) {
-            if ($item['title'] == 'Accommodation fare'){
+            if ($item['type'] == 'ACCOMMODATION_FARE'){
                 $result['accommodation'] = $item['amount'];
             }
             if ($item['title'] == 'VAT'){
                 $result['vat'] = $item['amount'];
+            }
+            if ($item['type'] == 'DISCOUNT') {
+                $result['discount'] = $item['amount'];
             }
         }
         return $result;

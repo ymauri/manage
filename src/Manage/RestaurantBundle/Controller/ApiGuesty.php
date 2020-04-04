@@ -35,7 +35,7 @@ class ApiGuesty {
     //Obtener los checkin correspondientes a la fecha que se pasa por parámetro
     public function checkin($date=NULL){
         if (is_null($date)) $date = 'now';
-        $campos = array('fields'=> 'checkIn checkOut confirmationCode guest.fullName listing.title status source nightsCount guestsCount notes.guest guest.notes guest.email guest.phone money.fareAccommodation money.invoiceItems money.balanceDue money.hostPayout canceledAt', 'limit'=>'100' );
+        $campos = array('fields'=> 'checkIn checkOut checkInDateLocalized checkOutDateLocalized confirmationCode guest.fullName listing.title status source nightsCount guestsCount notes.guest guest.notes guest.email guest.phone money.fareAccommodation money.invoiceItems money.balanceDue money.hostPayout canceledAt', 'limit'=>'100' );
         return $this->conect('reservations/?'.http_build_query($campos));
     }
 
@@ -51,12 +51,13 @@ class ApiGuesty {
     }
 
     //Obtener los checkout correspondientes a la fecha que se pasa por parámetro
-    public function checkuot($skip){
-
-
-        return $this->conect('reservations/?viewId=5ad4bcbe3613ce002b4d2af0&limit=100');
-
-        //return $this->conect('views/5ad4bcbe3613ce002b4d2af0');
+    public function checkuot($date = null){
+        if (is_null($date)) $date = date('Y-m-d');
+        $campos = array(
+            'fields'=> 'checkIn checkOut checkInDateLocalized checkOutDateLocalized confirmationCode guest.fullName listing.title status source nightsCount guestsCount notes.guest guest.notes guest.email guest.phone money.fareAccommodation money.invoiceItems money.balanceDue money.hostPayout canceledAt', 
+            'filters' => '[{"field":"status", "operator":"$in", "value":["confirmed"]},{"field":"checkOutDateLocalized", "operator":"$eq","value":"'.$date.'", "context":"now"}]',
+            'limit'=>'30' );
+        return $this->conect('reservations/?'.http_build_query($campos));
     }
 
     //Obtener el listado actualizado de las habitaciones disponibles en guesty
