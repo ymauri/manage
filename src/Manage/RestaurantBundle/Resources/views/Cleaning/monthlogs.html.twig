@@ -51,8 +51,8 @@
                             <tr >
                                 <td class="highlight"><b>{{ entity.day }}</b></td>
                                 <td class="">{{ entity.numberdptos }}</td>
-                                <td class="">{{ entity.minutes }}</td>
-                                <td class="">{% if entity.numberdptos > 0 %} {{ (entity.minutes / entity.numberdptos) | number_format(0,',',';') }} {% else %} 0 {% endif %}</td>
+                                <td class="">{{ entity.minutes  | number_format(0,',','.')  }}</td>
+                                <td class="">{% if entity.numberdptos > 0 %} {{ (entity.minutes / entity.numberdptos) | number_format(0,',','.') }} {% else %} 0 {% endif %}</td>
                             </tr>
                         {% set totalminutes = totalminutes + entity.minutes %}
                         {% set totaldeptos = totaldeptos + entity.numberdptos %}
@@ -64,8 +64,8 @@
                     <tr >
                         <td class="highlight"><b style="color: red">Total</b></td>
                         <td class=""><b style="color: red">{{ totaldeptos }}</b></td>
-                        <td class=""><b style="color: red">{{ totalminutes }}</b></td>
-                        <td class=""><b style="color: red">{% if totaldeptos > 0 %}{{ (totalminutes / totaldeptos) |  number_format(0,',',';') }} {% else %} 0 {% endif %}</b></td>
+                        <td class=""><b style="color: red">{{ totalminutes  | number_format(0,',','.') }}</b></td>
+                        <td class=""><b style="color: red">{% if totaldeptos > 0 %}{{ (totalminutes / totaldeptos) |  number_format(0,',','.') }} {% else %} 0 {% endif %}</b></td>
                     </tr>
                     </tfoot>
                 </table>
@@ -93,8 +93,8 @@
                         <tr >
                             <td class="highlight"><b>{{ entity.day }}</b></td>
                             <td class="">{{ entity.deptos }}</td>
-                            <td class="">{{ entity.minutes }}</td>
-                            <td class="">{% if entity.numberdptos > 0 %} {{ (entity.minutes / entity.numberdptos) | number_format(0,',',';') }} {% else %} 0 {% endif %}</td>
+                            <td class="">{{ entity.minutes | number_format(0,',','.') }}</td>
+                            <td class="">{% if entity.numberdptos > 0 %} {{ (entity.minutes / entity.numberdptos) | number_format(0,',','.') }} {% else %} 0 {% endif %}</td>
                         </tr>
                         {% set totalminutes = totalminutes + entity.minutes %}
                         {% set totaldeptos = totaldeptos + entity.numberdptos %}
@@ -106,8 +106,8 @@
                     <tr >
                         <td class="highlight"><b style="color: red">Total</b></td>
                         <td class=""><b style="color: red">{{ totaldeptos }}</b></td>
-                        <td class=""><b style="color: red">{{ totalminutes }}</b></td>
-                        <td class=""><b style="color: red">{% if totaldeptos > 0 %}{{ (totalminutes / totaldeptos) |  number_format(0,',',';') }} {% else %} 0 {% endif %}</b></td>
+                        <td class=""><b style="color: red">{{ totalminutes  | number_format(0,',','.')  }}</b></td>
+                        <td class=""><b style="color: red">{% if totaldeptos > 0 %}{{ (totalminutes / totaldeptos) |  number_format(0,',',',') }} {% else %} 0 {% endif %}</b></td>
                     </tr>
                     </tfoot>
                 </table>

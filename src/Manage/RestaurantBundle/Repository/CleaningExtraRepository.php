@@ -48,4 +48,32 @@ class CleaningExtraRepository extends EntityRepository {
         return $result;
     }
 
+     //Obtener los deptos de limpieza programada de acuerdo con el rango de fecha.
+     public function getCleaningByDateType($day, $type){
+                
+         return $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select('c')
+                ->from('RestaurantBundle:Cleaning', 'c')
+                ->where("c.dated ='". $day."'")
+                ->andWhere('c.isextra = '. $type)
+                ->groupBy("c.listing")->getQuery()->getResult();
+    }
+
+    public function getCanceledCheckout($date) {        
+        $canceled =  $this->getEntityManager()
+                        ->createQueryBuilder()
+                        ->select('r.id')
+                        ->from('RestaurantBundle:RCheckoutHotel', 'r')
+                        ->innerJoin('r.checkout', 'c')
+                        ->where("c.status = 'canceled'")
+                        ->andWhere("c.date = '". $date."'")
+                        ->getQuery()->getResult();
+                        $result = [];
+        foreach ($canceled as $c) {
+            $result[] = $c['id'];
+        }
+        return $result;
+    }
+
 }

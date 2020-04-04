@@ -943,7 +943,7 @@ class HotelController extends Controller {
                 $current = $value['value'];
                 if ($value['name'] != 'details') {
                     $a = str_replace('.', '', $value['value']);
-                    $current = str_replace(',', '.', $a);
+                    $current = (double) str_replace(',', '.', $a);
                     //echo $current.'<br/>';
                 }
                 $this->entity_basic->$set_method($current);

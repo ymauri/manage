@@ -275,12 +275,12 @@ class RuleController extends Controller
                         //Invertir las condiciones bajo las cuales se ejecuta la regla
                         switch ($rule[0]->getRule()->getCond()){
                             case "listing_available_less":
-                                if (! count($calenadrios) <= $rule[0]->getRule()->getConditionvalue()){
+                                if (! (count($calenadrios) <= $rule[0]->getRule()->getConditionvalue())){
                                     $this->rollBackRule($rule, $calenadrios);
                                 }
                                 break;
                             case "listing_available_more":
-                                if (! count($calenadrios) >= $rule[0]->getRule()->getConditionvalue()){
+                                if (! (count($calenadrios) >= $rule[0]->getRule()->getConditionvalue())){
                                     $this->rollBackRule($rule, $calenadrios);
                                 }
                                 break;

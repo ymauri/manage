@@ -18,6 +18,7 @@ use Manage\RestaurantBundle\Entity\CleaningExtra;
 use Manage\RestaurantBundle\Form\CleaningExtraType;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Manage\RestaurantBundle\Entity\CleaningExtraRepository;
 
 
 /**
@@ -233,7 +234,7 @@ class CleaningController extends Controller
         $data = $request->get('data');
         $dated = new \DateTime($data[2]['value']);
         $today = new \DateTime("today");
-        if ($today == $dated) {
+        if ($today == $dated || $this->isGranted('ROLE_SUPER_ADMIN')) {
 
             //$relation = $em->find('RestaurantBundle:RCheckoutHotel', $data[0]['value']);
             $cleaning = $em->find("RestaurantBundle:Cleaning", $data[0]['value']);
@@ -585,64 +586,70 @@ class CleaningController extends Controller
         $result = array();
         $resultextra = array();
         for ($i = 1; $i <= 31; $i++) {
+
             $date = new \DateTime($i . "-" . $month);
             $monthdate = explode("-", $month);
+            $cancelados = $em->getRepository("RestaurantBundle:CleaningExtra")->getCanceledCheckout($date->format("Y-m-d"));
+            echo $i. '----'; var_dump($cancelados);
+echo "</br>";
             //Si existe la fecha y el día es menor al día de hoy
-            if (checkdate((integer)$monthdate[0], (integer)$i, (integer)$monthdate[1]) && strtotime($date->format("d-m-Y")) < strtotime(date("d-m-Y"))) {
-                $cleanings = $em->getRepository("RestaurantBundle:Cleaning")->findBy(array("dated" => $date, "isextra" => 0));
-                if (!is_null($cleanings)) {
-                    $totalhoras = 0;
-                    $deptos = array();
-                    foreach ($cleanings as $cleaning) {
-                        //var_dump($cleaning);die;
-                        $clean = $em->getRepository("RestaurantBundle:CleaningLog")->findOneBy(array("cleaning" => $cleaning, "status" => Nomenclator::LISTING_CLEAN));
-                        $working = $em->getRepository("RestaurantBundle:CleaningLog")->findOneBy(array("cleaning" => $cleaning, "status" => Nomenclator::LISTING_WORKING));
-                        if (!is_null($clean) && !is_null($working)) {
-                            $tiempo = $working->getUpdatedat()->diff($clean->getUpdatedat());
-                            if ($tiempo->i > 0) {
-                                $totalhoras += $tiempo->i;
-                            }
-                            $deptos[] = $cleaning->getListing()->getNumber();
-                        }
-                    }
-                    if (count($deptos) > 0) {
-                        $result[] = array(
-                            "day" => $i,
-                            "minutes" => $totalhoras,
-                            "deptos" => implode(", ", $deptos),
-                            "numberdptos" => count($deptos),
-                        );
-                    }
-                }
-                $cleanings = $em->getRepository("RestaurantBundle:Cleaning")->findBy(array("dated" => $date, "isextra" => 1));
-                if (!is_null($cleanings)) {
-                    $totalhoras = 0;
-                    $deptos = array();
-                    foreach ($cleanings as $cleaning) {
-                        //var_dump($cleaning);die;
-                        $clean = $em->getRepository("RestaurantBundle:CleaningLog")->findOneBy(array("cleaning" => $cleaning, "status" => Nomenclator::LISTING_CLEAN));
-                        $working = $em->getRepository("RestaurantBundle:CleaningLog")->findOneBy(array("cleaning" => $cleaning, "status" => Nomenclator::LISTING_WORKING));
-                        if (!is_null($clean) && !is_null($working)) {
-                            $tiempo = $working->getUpdatedat()->diff($clean->getUpdatedat());
-                            if ($tiempo->i > 0) {
-                                $totalhoras += $tiempo->i;
-                            }
-                            $deptos[] = $cleaning->getListing()->getNumber();
-                        }
-                    }
-                    if (count($deptos) > 0) {
-                        $resultextra[] = array(
-                            "day" => $i,
-                            "minutes" => $totalhoras,
-                            "deptos" => implode(", ", $deptos),
-                            "numberdptos" => count($deptos),
-                        );
-                    }
+            // if (checkdate((integer)$monthdate[0], (integer)$i, (integer)$monthdate[1]) && strtotime($date->format("d-m-Y")) < strtotime(date("d-m-Y"))) {
+            //     $cleanings = $em->getRepository("RestaurantBundle:CleaningExtra")->getCleaningByDateType($date->format("Y-m-d"), 0);
+            //     if (!is_null($cleanings)) {
+            //         $totalhoras = 0;
+            //         $deptos = array();
+            //         foreach ($cleanings as $cleaning) {
+            //             // var_dump($cleaning);die;
+            //             $clean = $em->getRepository("RestaurantBundle:CleaningLog")->findOneBy(array("cleaning" => $cleaning, "status" => Nomenclator::LISTING_CLEAN));
+            //             $working = $em->getRepository("RestaurantBundle:CleaningLog")->findOneBy(array("cleaning" => $cleaning, "status" => Nomenclator::LISTING_WORKING));
+            //             if (!is_null($clean) && !is_null($working)) {
+            //                 $tiempo = $working->getUpdatedat()->diff($clean->getUpdatedat());
+            //                 if ($tiempo->i > 0) {
+            //                     $totalhoras += ($tiempo->i + ($tiempo->days * 24 * 60));
+            //                 }
+            //                 $deptos[] = $cleaning->getListing()->getNumber();
+            //             }
+            //         }
+            //         if (count($deptos) > 0) {
+            //             $result[] = array(
+            //                 "day" => $i,
+            //                 "minutes" => $totalhoras,
+            //                 "deptos" => implode(", ", $deptos),
+            //                 "numberdptos" => count($deptos),
+            //             );
+            //         }
+            //     }
+            //     $cleanings = $em->getRepository("RestaurantBundle:CleaningExtra")->getCleaningByDateType($date->format("Y-m-d"), 1);
 
-                }
+            //     if (!is_null($cleanings)) {
+            //         $totalhoras = 0;
+            //         $deptos = array();
+            //         foreach ($cleanings as $cleaning) {
+            //             //var_dump($cleaning);die;
+            //             $clean = $em->getRepository("RestaurantBundle:CleaningLog")->findOneBy(array("cleaning" => $cleaning, "status" => Nomenclator::LISTING_CLEAN));
+            //             $working = $em->getRepository("RestaurantBundle:CleaningLog")->findOneBy(array("cleaning" => $cleaning, "status" => Nomenclator::LISTING_WORKING));
+            //             if (!is_null($clean) && !is_null($working)) {
+            //                 $tiempo = $working->getUpdatedat()->diff($clean->getUpdatedat());
+            //                 if ($tiempo->i > 0) {
+            //                     $totalhoras += ($tiempo->i + ($tiempo->days * 24 * 60));
+            //                 }
+            //                 $deptos[] = $cleaning->getListing()->getNumber();
+            //             }
+            //         }
+            //         if (count($deptos) > 0) {
+            //             $resultextra[] = array(
+            //                 "day" => $i,
+            //                 "minutes" => $totalhoras,
+            //                 "deptos" => implode(", ", $deptos),
+            //                 "numberdptos" => count($deptos),
+            //             );
+            //         }
 
-            }
+            //     }
+
+            // }
         }
+        die;
         return array('entities' => $result, "extra" => $resultextra, "dated" => new \DateTime("1-" . $month));
 
     }
