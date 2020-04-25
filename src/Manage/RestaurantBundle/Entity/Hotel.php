@@ -180,7 +180,31 @@ class Hotel {
      * @ORM\Column(name="ammountparking", type="float", nullable=true)
      */
     private $ammountparking;
+
+        /**
+     * @var float
+     * @ORM\Column(name="stripeguesy", type="float", nullable=true)
+     */
+    private $stripeguesy;
+
+            /**
+     * @var float
+     * @ORM\Column(name="stripeinvoice", type="float", nullable=true)
+     */
+    private $stripeinvoice;
+
+                /**
+     * @var float
+     * @ORM\Column(name="bank", type="float", nullable=true)
+     */
+    private $bank;
     
+                /**
+     * @var float
+     * @ORM\Column(name="airbnb", type="float", nullable=true)
+     */
+    private $airbnb;
+
     public function getId() {
         return $this->id;
     }
@@ -430,14 +454,44 @@ class Hotel {
         return $this;
     }
 
+    public function getStripeguesy(){
+        return $this->stripeguesy;
+    }
 
+    public function setStripeguesy($v){
+        $this->stripeguesy = $v;
+        return $this;
+    }  
 
+    public function getStripeinvoice(){
+        return $this->stripeinvoice;
+    }
+
+    public function setStripeinvoice($v){
+        $this->stripeinvoice = $v;
+        return $this;
+    }  
+    
+    public function getBank(){
+        return $this->bank;
+    }
+
+    public function setBack($v){
+        $this->bank = $v;
+        return $this;
+    }  
+
+    public function getAirbnb(){
+        return $this->airbnb;
+    }
+
+    public function setAirbnb($v){
+        $this->airbnb = $v;
+        return $this;
+    }  
 
     public function __toString() {
         return $this->dated.' '.$this->name;
     }
-
-
-
     
 }

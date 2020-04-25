@@ -169,6 +169,37 @@ class RCheckinHotel {
      * @ORM\Column(name="blacklist", type="boolean", nullable=true)
      */
     private $blacklist;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="paymentrecive", type="array", nullable=true)
+     */
+    private $paymentrecive;
+
+    /**
+     * 
+     * @ORM\ManyToOne(targetEntity="PaymentMethod")
+     */
+    private $paymentmethod;
+
+        /**
+     * @var boolean
+     * @ORM\Column(name="stripeinvoicenumber", type="string", nullable=true)
+     */
+    private $stripeinvoicenumber;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="datebank", type="date", nullable=true)
+     */
+    private $datebank;
+
+        /**
+     * @var boolean
+     * @ORM\Column(name="paymentprofit", type="float", nullable=true)
+     */
+    private $paymentprofit;
+    
     
     public function getId() {
         return $this->id;
@@ -406,4 +437,45 @@ class RCheckinHotel {
     {
         $this->blacklist = $blacklist;
     }
+
+    public function getPaymentrecive()
+    {
+        return json_decode($this->paymentrecive);
+    }
+
+    public function setPaymentrecive($value)
+    {
+        $this->paymentrecive = $value;
+    }
+
+    public function getStripeinvoicenumber()
+    {
+        return $this->stripeinvoicenumber;
+    }
+
+    public function setStripeinvoicenumber($value)
+    {
+        $this->stripeinvoicenumber = $value;
+    }
+
+    public function getDatebank()
+    {
+        return $this->datebank;
+    }
+
+    public function setDatebankr($value)
+    {
+        $this->datebank = $value;
+    }
+
+    public function getPaymentprofit()
+    {
+        return $this->paymentprofit;
+    }
+
+    public function setPaymentprofit($value)
+    {
+        $this->paymentprofit = $value;
+    }
+    
 }
