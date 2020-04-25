@@ -1,0 +1,795 @@
+<fieldset id="data-checkin" class="col-md-12" style="border-bottom: none;">
+    <section id="section-checkin" class="col-md-6">
+        {#Payment#}
+
+        {% for pending in pendingPayment %}
+            <form id="form-payment-{{ pending.id }}" autocomplete="off" class="sortable-in pending-payment">
+                <input hidden="hidden" name="idCleaningExtraHotel" id="id" value="{{ pending.id }}">
+                <div class="col-md-12">
+                    <div class="portlet light bg-inverse">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <input type="checkbox" id="payed-{{ pending.id }}" name="payed"
+                                       {% if pending.payed %}checked="checked" {% endif %}>
+                                <span class="caption-subject bold font-yellow-crusta uppercase"> {{ pending.cleaningextra.listing.number }} </span>
+                                <span class="caption-helper">&nbsp;{{ pending.cleaningextra.details }}</span>
+                            </div>
+                            <div class="tools">
+                                <span class="serial_checkin badge bg-yellow-crusta"></span>&nbsp;
+                                <span class="badge bg-yellow-crusta">€ {{ pending.paymentamount }}</span>&nbsp;
+
+                                <a href="javascript:;" class="expand"></a>
+                            </div>
+                        </div>
+                        <div class="portlet-body container-fluid display-hide">
+                            <div id="details" class="details-checkin">
+                                  <div class="form-group">
+                                        <label class="control-label">Amount €</label>
+                                        <input type="text" id="amount-{{pending.id}}" name="paymentAmount" class=" input-sm form-control col-md-6 real" value="{{ pending.paymentamount }}" disabled="disabled">
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        {% endfor %}
+
+        {% set control = 1 %}
+                    {% if rcheckin|length > 0 %}
+                        {% for var in rcheckin%}
+                            {% set name_split = var.name | split(' ') %}
+                            {% if name_split | length > 1 %}
+                                {% set name = name_split[1] %}
+                            {% else %}
+                                {% set name = name_split[0] %}
+                            {% endif %}
+                            <form id="form-checkin-{{control}}" autocomplete="off" class="sortable-in {% if var.fromguesty %} fromguesty {% endif %}" order-name="{{ name }}" order-listing="{{ var.listing.number }}">
+                                <input hidden="hidden" name="id" id="id" value="{{ var.id }}">
+                                <input hidden="hidden" name="checkinid" id="checkinid" {% if var.checkin %}value="{{ var.checkin.id }}"{% endif %}>
+                                <input hidden="hidden" name="checkinbetalen" id="checkinbetalen" {% if var.checkin %}value="{{ var.checkin.betalen }}"{% endif %}>
+                                <input hidden="hidden" name="checkinvoldan" id="checkinvoldan" {% if var.checkin %}value="{{ var.checkin.voldan }}"{% endif %}>
+                                <input hidden="hidden" name="checkinnights" id="checkinnights" {% if var.checkin %}value="{{ var.checkin.nights }}"{% endif %}>
+                                <input hidden="hidden" name="checkinguests" id="checkinguests" {% if var.checkin %}value="{{ var.checkin.guests }}"{% endif %}>
+                                <input hidden="hidden" name="checkinsourceguesty" id="checkinsourceguesty" {% if var.checkin %}value="{{ var.checkin.source }}"{% endif %}>
+                                <input hidden="hidden" name="name" id="name" value="{{ var.name }}">
+                                <div class="col-md-12">
+                                    <div class="portlet light bg-inverse">
+                                        <div class="portlet-title">
+                                            <div class="caption">
+                                                <input type="checkbox" id="confirm-check-{{ control }}" name="confirm-checkin"
+                                                       {% if var.checkindone %}checked="checked" {% endif %}>
+                                                <span class="caption-subject bold font-blue-steel uppercase"> {{ var.listing.number }} </span>
+                                                <span class="caption-helper">&nbsp;{{ var.name }}</span>
+                                            </div>
+                                            <div class="tools">
+                                                <label><span class="timeforcheck"><input id="timeforcheck" name="timeforcheck" style="text-align: center; width: 50px;background: transparent; border: none" value="{% if var.timeforcheck %}{{ var.timeforcheck | date('H:i') }}{% endif %}"/></span></label>
+                                                <span class="serial_checkin badge bg-blue-steel"></span>&nbsp;
+                                                {% if var.blacklist %}<img src="{{ asset('img/blacklist.jpg') }}" class="" style="max-width: 20px; min-width: 20px;"/>{% endif %}
+                                                {% if var.checkin %}<img src="{{ asset('img/guesty_in.png') }}" class="" style="max-width: 20px; min-width: 20px;"/>{% endif %}
+                                                {% set clear = false %}
+
+                                                {% for content in cleaning  %}
+                                                    {% if content.listing.id == var.listing.id and content.status == 'checkedOut' %}
+                                                        {% set clear = true %}
+                                                        <img class="cleaning cleaning-{{ control }} listing-{{ content.listing.number }}" src="{{ asset('img/dirty.png') }}" style="max-width: 20px; min-width: 20px;" />
+                                                    {% elseif content.listing.id == var.listing.id and content.status == 'working' %}
+                                                        {% set clear = true %}
+                                                        <img class="cleaning{{ control }}" src="{{ asset('img/readytoclear.png') }}" style="max-width: 20px; min-width: 20px;"/>
+                                                    {% elseif content.listing.id == var.listing.id and content.status == 'dirty' %}
+                                                        {% set clear = true %}
+                                                        <img class="cleaning cleaning-{{ control }} listing-{{ content.listing.number }}" src="{{ asset('img/dirty.png') }}" style="max-width: 20px; min-width: 20px;"/>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {% if not clear %}
+                                                    <img class="cleaning cleaning-{{ control }} listing-{{ var.listing.number }}" src="{{ asset('img/clear.png') }}" style="max-width: 20px; min-width: 20px;" />
+                                                {% endif %}
+                                                <a target="_blank" href="{{ path('hotel_setpdf', {'checkin':var.id}) }}" style="color: #afafaf">
+                                                    <i class="fa fa-external-link"></i>
+                                                </a>
+                                                <a href="javascript:;" class="expand"></a>
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body container-fluid display-hide">
+                                            <div id="details-checkin-{{control}}" class="details-checkin">
+                                                <div class="form-group">
+                                                    <label class="control-label">Listing</label>
+                                                    {% if help.checkin_listing.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_listing.content }}"></i>{% endif %}
+                                                    <select id="listing-{{control}}" class="form-control input-sm listing-checkin" name='listing' data-placeholder="Select..." >
+                                                        {% if is_granted("ROLE_SUPER_ADMIN") and (not var.checkin or not var.fromguesty) %}  <option ></option> {% endif %}
+                                                        {% for val in listing%}
+                                                            <option value="{{val.id}}" {% if var.listing.id == val.id %} selected = "selected" {% endif %} {% if not is_granted("ROLE_SUPER_ADMIN") and var.listing.id != val.id and var.checkin and var.fromguesty %}  disabled="disabled" {% endif %}>{{val.details}} </option>
+                                                        {% endfor  %}
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Naam</label>
+                                                    {% if help.checkin_name.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_name.content }}"></i>{% endif %}
+                                                    <input type="text" id="name-{{control}}" class="input-sm form-control  col-md-6"  name='name' value="{{var.name}}">
+                                                </div>
+                                                {% if var.checkin and var.fromguesty %}
+                                                    <div class="form-group">
+                                                        <label class="control-label">Kanaal (Suggested by Guesty)</label>
+                                                        {% if help.checkin_source.content %}<i class="fa fa-question-circle tooltips help-source"  data-placement="left" data-original-title="{{ help.checkin_source.content }}"></i>{% endif %}
+                                                        <input type="text" id="sourceguesty-{{control}}" name="sourceguesty" class="input-sm form-control col-md-6" value="{{ var.sourceguesty }}">
+                                                    </div>
+                                                {% else %}
+                                                {% if var.fromguesty %}
+                                                    <div class="form-group">
+                                                        <label class="control-label">Kanaal</label>
+                                                        <select id="source-{{control}}" class="form-control input-sm" name='source' data-placeholder="Select...">
+                                                            <option></option>
+                                                            {% set noesta = 0 %}
+                                                            {% for val in sources %}
+                                                                {% if var.checkin %}
+                                                                    {% if var.checkin.source | upper == val.guesty | upper %}
+                                                                        {% set noesta = 1 %}
+                                                                        <option name="{% if (val.extrafield == 1) %}1 {% endif  %} {% if (val.extrafield == 0) %} 0 {% endif %}" value="{{val.id}}" {% if var.source and var.source.id == val.id %} selected = "selected" {% endif %}>{{val.details}}</option>
+                                                                    {% endif  %}
+                                                                {% endif  %}
+                                                            {% endfor  %}
+                                                            {% if noesta == 0 %}
+                                                                <option name="1"  selected = "selected"></option>
+                                                            {% endif %}
+                                                        </select>
+                                                    </div>
+                                                {% endif  %}
+                                                    <div class="form-group">
+                                                        <label class="control-label">Kanaal</label>
+                                                        {% if help.checkin_source.content %}<i class="fa fa-question-circle tooltips help-source"    data-placement="left" data-original-title="{{ help.checkin_source.content }}"></i>{% endif %}
+                                                        <select id="source-{{control}}" class="form-control input-sm" name='source' data-placeholder="Select...">
+                                                            <option name="1" value=""></option>
+                                                            {% for val in sources %}
+                                                                <option name="{% if (val.extrafield == 1) %}1{% endif  %}{% if (val.extrafield == 0) %}0{% endif %}" value="{{val.id}}" {% if var.source and var.source.id == val.id %} selected = "selected" {% endif %}>{{val.details}}</option>
+                                                            {% endfor  %}
+                                                        </select>
+                                                    </div>
+                                                {% endif %}
+                                                <div class="form-group random">
+                                                    <label class="control-label">Overnachting €</label>
+                                                    {% if help.checkin_betalen.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_betalen.content }}"></i>{% endif %}
+                                                    <input type="text" id="betalen-{{control}}" class="input-sm form-control col-md-6 real"  name='betalen' value="{{var.betalen }}">
+                                                </div>
+                                                <div class="form-group random">
+                                                    <label class="control-label">Reeds voldaan €</label>
+                                                    {% if help.checkin_voldaan.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_voldaan.content }}"></i>{% endif %}
+                                                    <input type="text" id="voldan-{{control}}" class="input-sm form-control  col-md-6 real"  name='voldan' value="{{var.voldan }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Aantal nachten</label>
+                                                    {% if help.checkin_nights.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_nights.content }}"></i>{% endif %}
+                                                    <input type="text" id="nights-{{control}}" class="input-sm form-control  col-md-6 entero"   name='nights' value="{{var.nights}}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Aantal personen</label>
+                                                    {% if help.checkin_guests.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_guests.content }}"></i>{% endif %}
+                                                    <select id="guests-{{control}}" class="form-control input-sm" data-placeholder="Select..." name='guests'>
+                                                        {% set guests = { '0':'', '1':'1', '2':'2', '3':'3', '4':'4', '5':'5', '6':'6' }  %}
+                                                        {% for val in guests %}
+                                                            <option value="{{val}}" {% if val ==  var.guests %} selected="selected" {% endif %}>{{val}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Toeristenbelasting €</label>
+                                                    {% if help.checkin_toer.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_toer.content }}"></i>{% endif %}
+                                                    <input type="text" id="toer-{{control}}" class="input-sm form-control col-md-6 real" readonly="readonly" tabindex="-1"  name="toer" value="{{var.toer}}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Parking Dagtickets (€{{ entity_basic.parking | number_format(2,',','.') }}/24uur)</label>
+                                                    {% if help.checkin_tickets.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_tickets.content }}"></i>{% endif %}
+                                                    <input type="text" id="parkingdag-{{control}}" class="input-sm form-control  col-md-6 entero"  name='parkingdag' value="{{var.parkingdag}}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Parking €</label>
+                                                    {% if help.checkin_parking.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_parking.content }}"></i>{% endif %}
+                                                    <input type="text" id="parking-{{control}}" class="input-sm form-control  col-md-6 real" readonly="readonly" tabindex="-1"  name='parking' value="{{var.parking}}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Verlenging/Late Check-Out/Extra's €</label>
+                                                    {% if help.checkin_extra.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_extra.content }}"></i>{% endif %}
+                                                    <input type="text" id="latecheckin-{{control}}" class="input-sm form-control  col-md-6 real"  name='latecheckin' value="{{var.latecheckin}}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Borg Ontvangen €</label>
+                                                    {% if help.checkin_borg.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_borg.content }}"></i>{% endif %}
+                                                    <input type="text" id="borg-{{control}}" class="input-sm form-control  col-md-6 real"  name='borg' value="{{var.borg}}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Totaal te betalen €</label>
+                                                    <input type="text" id="totalbetalen-{{control}}" class="input-sm form-control  col-md-6 real" readonly="readonly" tabindex="-1"  name='totalbetalen' value="{{var.totalbetalen}}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Opmerkingen</label>
+                                                    {% if help.checkin_details.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_details.content }}"></i>{% endif %}
+                                                    <textarea type="text" id="details-{{control}}" class=" form-control "  name='details' >{{var.details}}</textarea>
+                                                </div>
+                                                {% if var.checkin  and var.checkin.note != '' %}
+                                                    <div class="form-group">
+                                                        <label class="control-label">Notes from Guesty</label>
+                                                        <textarea type="text" id="notes-{{control}}" class=" form-control "  name='notes' disabled="disabled" style="height: 100px" >{{var.checkin.note}}</textarea>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            {% set control = control + 1 %}
+                        {% endfor %}
+                    {% endif %}
+                    {% if not show %}
+                        <form id="form-checkin-{{control}}" autocomplete="off" class="lastone">
+                            <div class="col-md-12">
+                                <div class="portlet light bg-inverse">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <input type="checkbox" id="confirm-check-{{ control }}" name="confirm-checkin">
+                                            <span class="caption-subject bold font-blue-steel uppercase"> </span>&nbsp;
+                                            <span class="caption-helper"></span>
+                                        </div>
+                                        <div class="tools">
+                                            <label><span class="timeforcheck"><input id="timeforcheck" name="timeforcheck" style="text-align: center; width: 50px;background: transparent; border: none" value=""/></span></label>
+                                            <span class="serial_checkin badge bg-blue-steel"></span>&nbsp;
+                                            <a href="javascript:;" class="collapse"></a>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body container-fluid">
+                                        <div id="details-checkin-{{control}}" class="details-checkin">
+                                            <div class="form-group">
+                                                <label class="control-label">Listing</label>
+                                                {% if help.checkin_listing.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_listing.content }}"></i>{% endif %}
+                                                <select id="listing-{{control}}" class="form-control input-sm listing-checkin" name='listing' data-placeholder="Select..." >
+                                                    <option></option>
+                                                    {% for val in listing%}
+                                                        <option value="{{val.id}}">{{val.details}}</option>
+                                                    {% endfor  %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Naam</label>
+                                                {% if help.checkin_name.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_name.content }}"></i>{% endif %}
+                                                <input type="text" id="name-{{control}}" class="input-sm form-control  col-md-6"  name='name' value="">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Kanaal</label>
+                                                {% if help.checkin_source.content %}<i class="fa fa-question-circle tooltips help-source"    data-placement="left" data-original-title="{{ help.checkin_source.content }}"></i>{% endif %}
+                                                <select id="source-{{control}}" class="form-control input-sm" name='source' data-placeholder="Select...">
+                                                    {% for val in sources %}
+                                                        <option name="{% if (val.extrafield == 1) %}1 {% else  %}  0 {% endif %}" value="{{val.id}}">{{val.details}}</option>
+                                                    {% endfor  %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group random">
+                                                <label class="control-label">Overnachting €</label>
+                                                {% if help.checkin_betalen.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_betalen.content }}"></i>{% endif %}
+                                                <input type="text" id="betalen-{{control}}" class="input-sm form-control col-md-6 real"  name='betalen' value="">
+                                            </div>
+                                            <div class="form-group random">
+                                                <label class="control-label">Reeds voldaan €</label>
+                                                {% if help.checkin_voldaan.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_voldaan.content }}"></i>{% endif %}
+                                                <input type="text" id="voldan-{{control}}" class="input-sm form-control  col-md-6 real"  name='voldan' value="">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Aantal nachten</label>
+                                                {% if help.checkin_nights.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_nights.content }}"></i>{% endif %}
+                                                <input type="text" id="nights-{{control}}" class="input-sm form-control  col-md-6 entero"   name='nights' value="">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Aantal personen</label>
+                                                {% if help.checkin_guests.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_guests.content }}"></i>{% endif %}
+                                                <select id="guests-{{control}}" class="form-control input-sm" data-placeholder="Select..." name='guests'>
+                                                    {% set guests = { '0':'', '1':'1', '2':'2', '3':'3', '4':'4', '5':'5', '6':'6' }  %}
+                                                    {% for val in guests %}
+                                                        <option value="{{val}}">{{val}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Toeristenbelasting €</label>
+                                                {% if help.checkin_toer.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_toer.content }}"></i>{% endif %}
+                                                <input type="text" id="toer-{{control}}" class="input-sm form-control col-md-6 real" readonly="readonly" tabindex="-1"  name="toer" value="">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Parking Dagtickets (€{{ entity_basic.parking | number_format(2,',','.') }}/24uur)</label>
+                                                {% if help.checkin_tickets.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_tickets.content }}"></i>{% endif %}
+                                                <input type="text" id="parkingdag-{{control}}" class="input-sm form-control  col-md-6 entero"  name='parkingdag' value="">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Parking €</label>
+                                                {% if help.checkin_parking.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_parking.content }}"></i>{% endif %}
+                                                <input type="text" id="parking-{{control}}" class="input-sm form-control  col-md-6 real" readonly="readonly" tabindex="-1"  name='parking' value="">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Verlenging/Late Check-Out/Extra's €</label>
+                                                {% if help.checkin_extra.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_extra.content }}"></i>{% endif %}
+                                                <input type="text" id="latecheckin-{{control}}" class="input-sm form-control  col-md-6 real"  name='latecheckin' value="">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Borg Ontvangen €</label>
+                                                {% if help.checkin_borg.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_borg.content }}"></i>{% endif %}
+                                                <input type="text" id="borg-{{control}}" class="input-sm form-control  col-md-6 real"  name='borg' value="">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Totaal te betalen €</label>
+                                                <input type="text" id="totalbetalen-{{control}}" class="input-sm form-control  col-md-6 real" readonly="readonly" tabindex="-1"  name='totalbetalen' value="">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Opmerkingen</label>
+                                                {% if help.checkin_details.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_details.content }}"></i>{% endif %}
+                                                <textarea type="text" id="details-{{control}}" class=" form-control "  name='details' ></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    {% endif %}
+                    </section>
+</fieldset>
+<script>
+    $('textarea[name="details"]').closest('.form-group').css('min-height', '50px')
+    var helpcontents = new Object();
+    {% for content in help  %}
+        helpcontents["{{ content.label | lower | replace({' ': ''}) }}"] = "{{ content.content | raw }}";
+    {% endfor %}
+
+    updateSerialCheckin()
+    findListingSelectedCheckin()
+    $('select[name="source"]').find(":selected").each(function(){
+        if ($(this).attr('name') != 0 ){
+            tbody = $(this).parent().parent().parent().parent()
+            $(this).closest('random').show()
+        }
+    })
+    
+    function updateSerialCheckin(){
+        $('.serial_checkin').each(function(index, item){
+            $(item).text(index + 1)
+        })
+    }
+    
+    var serial = {{control}};
+        $('#section-checkin').on('change', '.listing-checkin', function() {
+            checkin_element = $(this)
+            checkin_value = $(this).val()
+            number = $(this).attr('id').split('-');
+            $('#form-checkin-' + number[1]).find('.caption-subject').text($("#listing-"+number[1]+" option:selected" ).text())
+
+            if (checkin_value == '') {
+                checkin_element.closest('form').remove();
+                $('input[name="betalen"]').trigger('keyup')
+                Dagopbrengst()
+                completeProfit()
+        }
+        else {
+
+            //Adicionar el checkin siguiente
+            if (checkin_element.closest('form').hasClass('lastone')) {
+                $('.lastone').removeClass('lastone')
+                serial++;
+                $('#section-checkin').append(genetare_form(serial));
+                $('#source-'+serial).trigger('change')
+                $('.tooltips').tooltip()
+            }
+        }
+        updateSerialCheckin()
+        findListingSelectedCheckin()
+    })
+
+    function genetare_form(s) {
+        cadena = ''
+
+        cadena += '<div class="form-group"><label class="control-label" >Listing</label>' +
+                '&nbsp;{% if help.checkin_listing.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_listing.content }}"></i>{% endif %}' +
+                '<select class="form-control input-sm listing-checkin" name="listing"> <option name="1" value=""></option>{% for item in listing%}<option value="{{item.id}}">{{item.details}}</option>{% endfor %}</select>\n\
+                </div>'
+
+        cadena += '<div class="form-group"><label class="control-label">Naam</label>&nbsp;{% if help.checkin_name.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_name.content }}"></i>{% endif %}\n\
+        <input type="text" id="name-' + s + '" class="input-sm form-control  col-md-6"  name="name"> \n\
+        </div>'
+
+        cadena += '<div class="form-group"><label class="control-label" >Kanaal</label>&nbsp;\n\
+        {% if help.checkin_source.content %}<i class="fa fa-question-circle tooltips help-source"    data-placement="left" data-original-title="{{ help.checkin_source.content }}"></i>{% endif %}\n\
+        <select id="source-' + s + '" class="form-control input-sm" name="source"   data-placeholder="Select...">  {#<option></option>#}\n\
+         ' + source_opciones() + ' </select> \n\
+        </div>'
+
+        cadena += '<div class="form-group"><label class="control-label">Overnachting €</label>&nbsp;{% if help.checkin_betalen.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_betalen.content }}"></i>{% endif %}\n\
+        <input type="text" id="betalen-' + s + '" class="input-sm form-control col-md-6 real"  name="betalen"> \n\
+        </div>'
+
+        cadena += '<div class="form-group random"><label class="control-label" >Reeds voldaan €</label>&nbsp;\n\
+        {% if help.checkin_voldaan.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_voldaan.content }}"></i>{% endif %}\n\
+        <input type="text" id="voldan-' + s + '" class="input-sm form-control col-md-6 real"  name="voldan">\n\
+        </div>'
+
+        cadena += '<div class="form-group"><label class="control-label" >Aantal nachten</label>&nbsp;{% if help.checkin_nights.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_nights.content }}"></i>{% endif %}\n\
+        <input type="text" id="nights-' + s + '" class="input-sm form-control col-md-6 entero"  name="nights">\n\
+        </div>'
+
+        cadena += '<div class="form-group"><label class="control-label" >Aantal personen</label>&nbsp;\n\
+        {% if help.checkin_guests.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_guests.content }}"></i>{% endif %}\n\
+        <select id="guests-' + s + '" class="form-control input-sm" data-placeholder="Select..." name="guests">\n\
+        <option value="0"></option>\n\
+        <option value="1">1</option>\n\
+        <option value="2">2</option>\n\
+        <option value="3">3</option>\n\
+        <option value="4">4</option>\n\
+        <option value="5">5</option>\n\
+        <option value="6">6</option>\n\
+        </select> </div>'
+
+        cadena += '<div class="form-group"><label class="control-label" >Toeristenbelasting €</label></td> \n\
+        <input type="text" id="toer-' + s + '" class="input-sm form-control col-md-6 real" readonly="readonly" tabindex="-1"  name="toer"> </div>'
+
+        cadena += '<div class="form-group"><label class="control-label" >Parking Dagtickets (€{{ entity_basic.parking }}/24uur)</label> &nbsp;\n\
+        {% if help.checkin_tickets.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_tickets.content }}"></i>{% endif %}\n\
+        <input type="text" id="parkingdag-' + s + '" class="input-sm form-control col-md-6 entero"  name="parkingdag"></div>'
+
+        cadena += '<div class="form-group"><label class="control-label" >Parking €</label>\n\
+        <input type="text" id="parking-' + s + '" class="input-sm form-control col-md-6 real" readonly="readonly" tabindex="-1"  name="parking"> </div>'
+
+        cadena += '<div class="form-group"><label class="control-label" >Verlenging/Late Check-Out/Extra\'s €</label>&nbsp;\n\
+        {% if help.checkin_extra.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_extra.content }}"></i>{% endif %}\n\
+        <input type="text" id="latecheckin-' + s + '" class="input-sm form-control col-md-6 entero"  name="latecheckin"></div>'
+
+        cadena += '<div class="form-group"><label class="control-label" >Borg Ontvangen €</label>&nbsp;\n\
+        {% if help.checkin_borg.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_borg.content }}"></i>{% endif %}\n\
+        <input type="text" id="borg-' + s + '" class="input-sm form-control col-md-6 real"  name="borg"></div>'
+
+        cadena += '<div class="form-group"><label class="control-label" >Totaal te betalen €</label>\n\
+        <input type="text" id="totalbetalen-' + s + '" class="input-sm form-control col-md-6 real" readonly="readonly" tabindex="-1"  name="totalbetalen"> </div>'
+        
+        cadena += '<div class="form-group"><label class="control-label" >Opmerkingen</label>\n\
+        {% if help.checkin_details.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_details.content }}"></i>{% endif %} \n\
+        <textarea type="text" id="details-' + s + '" class=" form-control "  name="details"></textarea> \n\
+                </div>'
+
+        form = $('<form id="form-checkin-'+ s +'" class="lastone " order-name="" order-listing="">' +
+                '<div class="col-md-12 "><div class="portlet light bg-inverse">' +
+                '<div class="portlet-title"><div class="caption">' +
+                '<input type="checkbox" id="confirm-check-"'+s+' name="confirm-checkin">' +
+                '<span class="caption-subject bold font-blue-steel uppercase"></span>&nbsp;'+
+                '<span class="caption-helper"></span></div>' +
+                '<div class="tools">'+
+                '<label><span class="timeforcheck"><input id="timeforcheck" name="timeforcheck" style="text-align: center; width: 50px;background: transparent; border: none" value=""/></span></label>'+
+                '<span class="serial_checkin badge bg-blue-steel"></span>'+
+                '<a href="javascript:;" class="collapse"></a></div>' +
+                '</div> <div class="portlet-body container-fluid">'+ cadena +
+                '</div></div></form>')
+        return form;
+    }
+
+    $('input[name="name"]').on({'keyup': function(){
+        number = $(this).attr('id').split('-');
+        $('#form-checkin-' + number[1]).find('.caption-helper').text($("#name-"+number[1]).val())
+    }})
+    //Calcular los totales iterando sobre los formularios del checkin
+    //PARKING
+    $('#section-checkin').on('keyup', '.form-control', function() {
+        tmp = $(this).attr('id').split('-')
+        field = tmp[0]
+        number = tmp[1]
+        switch (field) {
+            case 'betalen':
+                total = 0
+                /*$('input[name="betalen"]').each(function(index, value) {
+                    total += numeral($(value).val()).value()
+                })
+                $('#totalover').val(numeral(total).format('0.0,'))*/
+
+                    //Poner campo en rojo si es diferente al original
+                    original = $('#form-checkin-'+number+' #checkinbetalen').val()
+                    if (numeral($(this).val()).value() != original && original != undefined && $('#form-checkin-'+number+' #checkinid').val() != ""){
+                        $(this).attr('style', 'color: red; font-weight: bold; background: #fbdada;')
+                    }
+                    else {
+                        $(this).attr('style', '')
+                    }
+                break;
+            case 'sourceguesty':
+
+                original = $('#form-checkin-'+number+' #checkinsourceguesty').val()
+                current = $(this).val();
+                if (original.localeCompare(current) != 0 && original != undefined && $('#form-checkin-'+number+' #checkinid').val() != ""){
+                    $(this).attr('style', 'color: red; font-weight: bold;')
+                }
+                else {
+                    $(this).attr('style', '')
+                }
+                break;
+            case 'parkingdag':
+                value = numeral($(this).val()).value() * numeral('{{ entity_basic.parking | replace('.',',')}}').value()
+                if (value != 0) {
+                    $('#parking-' + number).val(numeral(value).format('0.0,'))
+                }
+                else  $('#parking-' + number).val('')
+                total = 0
+                $('input[name="parking"]').each(function(index, value) {
+                    total += numeral($(value).val()).value()
+                })
+                $('#totalparking').val(numeral(total).format('0.0,'))
+                $('#form-final #totalparking').val(numeral(total).format('0.0,'))
+                //ext = numeral($('#totalextra').val()).value()
+                //over = numeral($('#totalover').val()).value()
+                //$('#totalparkingextra').val(numeral(ext + over).format('0.0,'))
+                break;
+            case 'voldan':
+                total = 0
+                $('input[name="voldan"]').each(function(index, value) {
+                    total += numeral($(value).val()).value()
+                })
+                $('#totalvoldan').val(numeral(total).format('0.0,'))
+                //Poner campo en rojo si es diferente al original
+                original = $('#form-checkin-'+number+' #checkinvoldan').val()
+                if (numeral($(this).val()).value() != (original) && original != undefined && original != "" && $('#form-checkin-'+number+' #checkinid').val() != ""){
+                    $(this).attr('style', 'color: red; font-weight: bold;')
+                }
+                else {
+                    $(this).attr('style', '')
+                }
+                break;
+            case 'latecheckin':
+                total = 0
+                $('input[name="latecheckin"]').each(function(index, value) {
+                    total += numeral($(value).val()).value()
+                })
+                $('#totalextra').val(numeral(total).format('0.0,'))
+
+
+                break;
+            case 'nights':
+                value = numeral($(this).val()).value()
+                ctr = (value - {{ entity_basic.nightslimit }})
+                calc = 0
+                if (ctr <= 0) calc = value * {{ entity_basic.tax }} * numeral($('#guests-' + number).val()).value()
+                else calc = (numeral($('#guests-' + number).val()).value() * {{ entity_basic.nightslimit }} * {{ entity_basic.tax }} )
+                $('#toer-' + number).val(numeral(calc).format('0.0,'))
+                total = 0
+                $('input[name="toer"]').each(function(index, value) {
+                    total += numeral($(value).val()).value()
+                })
+                $('#data-final #totaltoer').val(numeral(total).format('0.0,'))
+                $('#form-total-hotel #totaltoer').val(numeral(total).format('0.0,'))
+                original = $('#form-checkin-'+number+' #checkinnights').val()
+                if (numeral($(this).val()).value() != (original) && original != undefined && original != "" && $('#form-checkin-'+number+' #checkinid').val() != ""){
+                    $(this).attr('style', 'color: red; font-weight: bold;')
+                }
+                else {
+                    $(this).attr('style', '')
+                }
+
+                /*total = 0
+                $('input[name="nights"]').each(function(index, value) {
+                    total += numeral($(value).val()).value()
+                })
+                personas = 0
+                $('select[name="guests"]').each(function(index, value) {
+                    personas += numeral($(value).val()).value()
+                })
+                var tax = parseFloat({{ entity_basic.tax }})
+                total = total * personas * tax
+                $('#totalover').val(numeral(total).format('0.0,'))*/
+                break;
+            case 'borg':
+                value = numeral($(this).val()).value()
+                total = 0
+                $('input[name="borg"]').each(function(index, value) {
+                    total += numeral($(value).val()).value()
+                })
+                $('#totalborg').val(numeral(total).format('0.0,'))
+                break;
+            default:
+                break;
+        }
+        TotalBetalen(number)
+    })
+
+    $('#section-checkin').on('change', 'select[name="guests"]', function() {
+        //alert('si')
+        tmp = $(this).attr('id').split('-')
+        field = tmp[0]
+        number = tmp[1]
+        calc = 0;
+        if ($('#nights-'+number).val() <= {{ entity_basic.nightslimit }} ) calc = $('#nights-'+number).val() * {{ entity_basic.tax }} * $(this).val()
+        else calc = $(this).val() * {{ entity_basic.nightslimit }} * {{ entity_basic.tax }}
+        $('#toer-' + number).val(numeral(calc).format('0.0,'))
+        total = 0
+        $('input[name="toer"]').each(function(index, value) {
+            total += numeral($(value).val()).value()
+        })
+
+        $('#data-final #totaltoer').val(numeral(total).format('0.0,'))
+        $('#form-total-hotel #totaltoer').val(numeral(total).format('0.0,'))
+
+        /*latecheckin = 0
+        $('input[name="latecheckin"]').each(function(index, value) {
+            latecheckin += numeral($(value).val()).value()
+        })
+        totalbetalen = 0
+        $('select[name="totalbetalen"]').each(function(index, value) {
+            totalbetalen += numeral($(value).val()).value()
+        })
+
+        total = totalbetalen + latecheckin
+        $('#totalover').val(numeral(total).format('0.0,'))*/
+
+        original = $('#form-checkin-'+number+' #checkinguests').val()
+        if (numeral($(this).val()).value() != original && original != undefined && original != "" && $('#form-checkin-'+number+' #checkinid').val() != ""){
+            $(this).attr('style', 'color: red; font-weight: bold;')
+        }
+        else {
+            $(this).attr('style', '')
+        }
+        TotalBetalen(number)
+    })
+
+    //Calcular el total te betalen
+    function TotalBetalen(index) {
+        total = numeral($('#toer-' + index).val()).value()
+                + numeral($('#parking-' + index).val()).value()
+                + numeral($('#latecheckin-' + index).val()).value()
+                + numeral($('#betalen-' + index).val()).value()
+                + numeral($('#borg-' + index).val()).value()
+                - numeral($('#voldan-' + index).val()).value()
+        $('#totalbetalen-' + index).val(numeral(total).format('0.0,'))
+
+
+        Dagopbrengst()
+
+    }
+
+    //Calcular el total Dagopbrengst
+    function Dagopbrengst() {
+        total = 0
+        $('input[name="totalbetalen"]').each(function(index, value) {
+            total += numeral($(value).val()).value()
+        })
+
+
+        betalen = 0
+        $('input[name="betalen"]').each(function(index, value) {
+            betalen += numeral($(value).val()).value()
+        })
+
+        extra = 0
+        $('input[name="latecheckin"]').each(function(index, value) {
+            extra += numeral($(value).val()).value()
+        })
+
+        voldan = 0
+        $('input[name="voldan"]').each(function(index, value) {
+            voldan += numeral($(value).val()).value()
+        })
+        $('#data-final #totalparkingextra').val(numeral(extra + betalen - voldan).format('0.0,'))
+
+        borg = 0
+        $('input[name="borg"]').each(function(index, value) {
+            borg += numeral($(value).val()).value()
+        })
+        $('#form-total-hotel #totalborg').val(numeral(borg).format('0.0,'))
+
+        retour = 0
+        $('.retour').each(function(index, value) {
+            retour += numeral($(value).val()).value()
+        })
+        $('#form-total-hotel #totalretourborg').val(numeral(retour).format('0.0,'))
+
+        total = total - borg
+
+        $('#data-final #totaldag').val(numeral(total).format('0.0,'))
+        $('.dago.badge').text('€' + numeral(total).format('0.0,'))
+        $('#data-final #saldoborg').val(numeral(borg-retour).format('0.0,'))
+        $('#form-total-hotel #totaldag').val(numeral(total).format('0.0,'))
+
+
+
+        /*latecheckin = 0
+        $('input[name="latecheckin"]').each(function(index, value) {
+            latecheckin += numeral($(value).val()).value()
+        })*/
+        betalen = 0
+        $('input[name="betalen"]').each(function(index, value) {
+            betalen += numeral($(value).val()).value()
+        })
+
+        $('#totalover').val(numeral(betalen ).format('0.0,'))
+        completeProfit()
+    }
+
+    $('#section-checkin').on('change','select[name="source"]', function(){
+        if ( $(this).find(":selected").attr('name') != 0){
+            $(this).parent().parent().find('.random').show()
+
+        }
+        else{
+            $(this).parent().parent().find('.random').hide()
+            $(this).parent().parent().find('.random').find('input[name="betalen"]').val('')
+            $(this).parent().parent().find('.random').find('input[name="voldan"]').val('')
+        }
+        id =  $(this).attr('id').split('-')
+
+        if($(this).find(":selected").val() == 1){
+            //alert('si')
+            $('#details-checkin-'+id[1]+' .optional').remove()
+            $('#borg-'+id[1]).parent('div').append('<p class="optional"><i>Geen borg voor Airbnb.</i></p>')
+        }
+        else{
+            $('#details-checkin-'+id[1]+' .optional').remove()
+        }
+        id = $(this).attr('id');
+        var suorcename = $('#'+id+' option:selected').text().toLowerCase().replace(" ", "")
+        if ((helpcontents[suorcename]) != null ){
+            $(this).parent().parent().find('.random').find('.help-source').attr("data-original-title", helpcontents[suorcename]);
+        } else{
+            $(this).parent().parent().find('.random').find('.help-source').attr("data-original-title", helpcontents["kanaal"]);
+        }
+
+
+    })
+    $('input[name="sourceguesty"]').each(function(){
+        var suorcename = $(this).val().toLowerCase().replace(" ", "")
+        if ((helpcontents[suorcename]) != null ){
+            $(this).closest('.help-source').attr("data-original-title", helpcontents[suorcename]);
+        } else {
+            $(this).closest('.help-source').attr("data-original-title", helpcontents["kanaal"]);
+
+        }
+    })
+
+     function findListingSelectedCheckin(){
+        $('.listing-checkin option').removeAttr('style','')
+        //$('.listing-checkout option').is(':selected')
+        $('.listing-checkin').each(function(index,item){
+            seleccionado = $(item).val()
+            $('.listing-checkin option').each(function(index1,item1){
+               if($(item1).val() == seleccionado){
+                   $(item1).attr('style','color:red;')
+               }
+            })
+        })
+    }
+
+    $('#section-checkin').ready(function() {
+        $('.form-control').trigger('keyup')
+        $('.form-control').trigger('blur')
+        $('select[name="source"]').trigger('change')
+    })
+
+    $('#section-checkin').on('click','input[name="readytoclear"]', function(){
+
+        checkinStatusClear($(this));
+
+    })
+
+    $('#section-checkin').on('click','input[name="confirm-checkin"]', function(){
+        id = $(this).closest('form').attr('id');
+        hora = new Date();
+        if ($('#' +id+ ' input[name="confirm-checkin"]').is(':checked')){
+            if (hora.getMinutes().toString().length == 1)
+                $('#' +id+ ' #timeforcheck').val(hora.getHours()+":0"+hora.getMinutes())
+            else
+                $('#' +id+ ' #timeforcheck').val(hora.getHours()+":"+hora.getMinutes())
+        }
+        else{
+            $('#' +id+ ' #timeforcheck').val("")
+        }
+    })
+
+    function checkinStatusClear(control){
+       // alert(control.is(":checked"))
+       /* if (control.is(":checked")){
+            $('.'+control.attr('id')).attr('src',"{{ asset('img/clear.png') }}").show();
+        }
+        else{
+            $('.'+control.attr('id')).hide();
+        }*/
+    }
+
+    $('input[name="readytoclear"]').each(function(){
+        checkinStatusClear($(this));
+    })
+
+
+</script>

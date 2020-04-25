@@ -170,7 +170,6 @@
             form = parseQuery($('#filter-pricing').serialize());
             for(var i = 0; i < data.length; i++){
                 fecha = new Date(data[i]["date"].replace('-', '/'));
-                console.log(fecha.getDay())
                 Object.keys(form).forEach( function( indice) {
                     if (indice == fecha.getDay()){
                         if (data[i]['status'] == 'available')

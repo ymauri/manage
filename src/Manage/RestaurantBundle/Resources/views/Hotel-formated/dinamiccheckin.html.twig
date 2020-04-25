@@ -1,0 +1,125 @@
+
+{% set control = 99 %}
+{% if rcheckin|length > 0 %}
+    {% for var in rcheckin%}
+        <form id="form-checkin-{{control}}" autocomplete="off">
+            {#<input hidden="hidden" name="id" id="id" value="{{ var.id }}">#}
+            <input hidden="hidden" name="fromguesty" id="fromguesty" value="{{ var.fromguesty }}">
+            <input hidden="hidden" name="checkinid" id="checkinid" {% if var.checkin %}value="{{ var.checkin.id }}"{% endif %}>
+            <input hidden="hidden" name="checkinbetalen" id="checkinbetalen" {% if var.checkin %}value="{{ var.checkin.betalen }}"{% endif %}>
+            <input hidden="hidden" name="checkinvoldan" id="checkinvoldan" {% if var.checkin %}value="{{ var.checkin.voldan }}"{% endif %}>
+            <input hidden="hidden" name="checkinnights" id="checkinnights" {% if var.checkin %}value="{{ var.checkin.nights }}"{% endif %}>
+            <input hidden="hidden" name="checkinguests" id="checkinguests" {% if var.checkin %}value="{{ var.checkin.guests }}"{% endif %}>
+            <input hidden="hidden" name="checkinsourceguesty" id="checkinsourceguesty" {% if var.checkin %}value="{{ var.checkin.source }}"{% endif %}>
+            <input hidden="hidden" name="name" id="name" value="{{ var.name }}">
+
+            <div class="row form-group">
+                {% if var.fromguesty %}<img src="{{ asset('img/guesty.png') }}" class="col-md-1" style="width: 60px;"/>{% endif %}
+
+                <label class="control-label col-md-2"><b>Incheck <span class="serial_checkin"></span></b></label>
+                <div class="col-md-7">
+                    <select id="listing-{{control}}" class="form-control input-sm listing-checkin" name='listing' data-placeholder="Select...">
+                        <option></option>
+                        {% for val in listing%}
+                            <option value="{{val.id}}" {% if var.listing.id == val.id %} selected = "selected" {% endif %}>{{val.details}}</option>
+                        {% endfor  %}
+                    </select>
+                </div>
+                <div class="col-md-1" style="margin-top: 8px;">
+                    <input class="checker" type="checkbox" id="confirm-checkin-1" name='confirm-checkin' {% if var.checkindone %} checked="checked" {% endif %}>
+                </div>
+            </div>
+            <div id="details-checkin-{{control}}" class="details-checkin">
+                <table class="table-details table-condensed" >
+                    <tr>
+                        <td><label >Naam</label></td>
+                        <td><input type="text" id="name-{{control}}" class="input-sm form-control  col-md-6"  name='name' value="{{var.name}}">  </td>
+                    </tr>
+                    {% if var.checkin and var.fromguesty  %}
+                        <tr>
+                            <td><label >Kanaal (Suggested by Guesty)</label></td>
+                            <td><input type="text" id="sourceguesty-{{control}}" name="sourceguesty" class="input-sm form-control col-md-6" value="{{ var.sourceguesty }}">  </td>
+                        </tr>
+                    {% endif  %}
+                    <tr hidden="hidden">
+                        <td><label >Kanaal</label></td>
+                        <td>
+                            <select id="source-{{control}}" class="form-control input-sm" name='source' data-placeholder="Select...">
+                                {#<option></option>#}
+                                {% if var.fromguesty %}
+                                    {% for val in sources %}
+                                        {% if var.checkin %}
+                                            {% if var.checkin.source == val.guesty %}
+                                                <option name="{{ val.extrafield }}" value="{{val.id}}" {% if var.source and var.source.id == val.id %} selected = "selected" {% endif %}>{{val.details}}</option>
+                                            {% endif  %}
+                                        {% endif  %}
+                                    {% endfor  %}
+                                {% else  %}
+                                    {% for val in sources %}
+                                        <option name="{{ val.extrafield }}" value="{{val.id}}" {% if var.source and var.source.id == val.id %} selected = "selected" {% endif %}>{{val.details}}</option>
+                                    {% endfor  %}
+                                {% endif  %}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr {#class="random"#} >
+                        <td><label >Te betalen €</label></td>
+                        <td><input type="text" id="betalen-{{control}}" class="input-sm form-control col-md-6 real" placeholder="0"  name='betalen' value="{{var.betalen }}">  </td>
+                    </tr>
+                    <tr {#class="random"#} >
+                        <td><label >Reeds voldaan €</label></td>
+                        <td><input type="text" id="voldan-{{control}}" class="input-sm form-control  col-md-6 real" placeholder="0"  name='voldan' value="{{var.voldan }}"> </td>
+                    </tr>
+                    <tr>
+                        <td><label >Aantal nachten</label></td>
+                        <td> <input type="text" id="nights-{{control}}" class="input-sm form-control  col-md-6 entero"   name='nights' value="{{var.nights}}">  </td>
+                    </tr>
+                    <tr>
+                        <td><label >Aantal personen</label></td>
+                        <td><select id="guests-{{control}}" class="form-control input-sm" data-placeholder="Select..." name='guests'>
+                                {% set guests = { '0':'', '1':'1', '2':'2', '3':'3', '4':'4', '5':'5', '6':'6' }  %}
+                                {% for val in guests %}
+                                    <option value="{{val}}" {% if val ==  var.guests %} selected="selected" {% endif %}>{{val}}</option>
+                                {% endfor %}
+                            </select> </td>
+                    </tr>
+                    <tr>
+                        <td><label >Toeristenbelasting €</label></td>
+                        <td> <input type="text" id="toer-{{control}}" class="input-sm form-control col-md-6 real" readonly="readonly" tabindex="-1" placeholder="0"  name="toer" value="{{var.toer}}"> </td>
+                    </tr>
+                    <tr>
+                        <td><label >Parking Dagtickets (€{{ entity_basic.parking }}/24uur)</label></td>
+                        <td> <input type="text" id="parkingdag-{{control}}" class="input-sm form-control  col-md-6 entero" placeholder="0"  name='parkingdag' value="{{var.parkingdag}}"> </td>
+                    </tr>
+                    <tr>
+                        <td><label >Parking €</label></td>
+                        <td> <input type="text" id="parking-{{control}}" class="input-sm form-control  col-md-6 real" readonly="readonly" tabindex="-1" placeholder="0"  name='parking' value="{{var.parking}}"> </td>
+                    </tr>
+                    <tr>
+                        <td><label >Verlenging/Late Check-Out/Extra's €</label></td>
+                        <td><input type="text" id="latecheckin-{{control}}" class="input-sm form-control  col-md-6 real" placeholder="0"  name='latecheckin' value="{{var.latecheckin}}">  </td>
+                    </tr>
+                    <tr>
+                        <td><label >Borg Ontvangen €</label></td>
+                        <td><input type="text" id="borg-{{control}}" class="input-sm form-control  col-md-6 real" placeholder="0"  name='borg' value="{{var.borg}}">  </td>
+                    </tr>
+                    <tr>
+                        <td><label >Totaal te betalen €</label></td>
+                        <td><input type="text" id="totalbetalen-{{control}}" class="input-sm form-control  col-md-6 real" readonly="readonly" tabindex="-1" placeholder="0"  name='totalbetalen' value="{{var.totalbetalen}}">  </td>
+                    </tr>
+                    <tr>
+                        <td><label >Opmerkingen</label></td>
+                        <td><textarea type="text" id="details-{{control}}" class=" form-control "  name='details' >{{var.details}}</textarea>  </td>
+                    </tr>
+                </table>
+                <br/>
+            </div>
+
+        </form>
+
+            {% set control = control - 1 %}
+    {% endfor %}
+{% endif %}
+
+<script>
+</script>

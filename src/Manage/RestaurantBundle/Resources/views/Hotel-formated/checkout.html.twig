@@ -1,0 +1,268 @@
+    <fieldset>
+            <div id="section-checkout" class="col-md-6 container-fluid">
+                {% set control_chekout = 1 %}
+                {% if rcheckout|length > 0 %}
+                    {% for var in rcheckout %}
+                        {% set name_split = var.name | split(' ') %}
+                        {% if name_split | length > 1 %}
+                            {% set name = name_split[1] %}
+                        {% else %}
+                            {% set name = name_split[0] %}
+                        {% endif %}
+                        <form id="form-checkout-{{ control_chekout }}" class="edit sortable" order-name="{{ name }}" order-listing="{{ var.listing.number }}">
+                            <input hidden="hidden" name="id" id="id" value="{{ var.id }}">
+                            <div class="col-md-12">
+                                <div class="portlet light bg-inverse">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <input type="checkbox" id="confirm-checkout-{{ control_chekout }}" name="confirm-checkout-{{ control_chekout }}"
+                                            {% if var.checkoutdone %}checked="checked" {% endif %}>
+                                            <span class="caption-subject bold font-red-intense uppercase"> {{ var.listing.number }} </span>
+                                            <span class="caption-helper">&nbsp;{{ var.name }}</span>
+                                        </div>
+                                        <div class="tools">
+                                            <span class="serial_checkout badge bg-red-intense"></span>&nbsp;
+                                            {% if var.fromguesty %} <img src="{{ asset('img/guesty_out.png') }}" style="max-width: 20px; min-width: 20px;"/>{% endif %}
+                                            <a href="javascript:;" class="expand"></a>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body container-fluid display-hide">
+                                        <div class="form-group">
+                                            <label class="control-label">Listing</label>&nbsp; {% if help.checkout_listing.content %}
+                                            <i class="fa fa-question-circle tooltips" 
+                                               data-placement="right"
+                                               data-original-title="{{ help.checkout_listing.content }}"></i>{% endif %}
+                                            <select id="checkout-listing-{{ control_chekout }}"
+                                                    class="form-control input-sm listing-checkout control-{{ control_chekout }}"
+                                                    data-placeholder="Select..."
+                                                    name='listing-{{ control_chekout }}'
+                                                    onchange="addCheckout($(this))" {% if var.fromguesty %} disabled="disabled"  {% endif %}>
+                                                <option></option>
+                                                {% for val in listing %}
+                                                    <option value="{{ val.id }}" {% if var.listing.id == val.id %} selected="selected"{% endif %}>{{ val.details }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Naam</label>&nbsp; {% if help.checkout_name.content %}
+                                            <i class="fa fa-question-circle tooltips" 
+                                               data-placement="right"
+                                               data-original-title="{{ help.checkout_name.content }}"></i>{% endif %}
+                                            <input class="form-control input-sm name" id="checkout-name-{{ control_chekout }}" placeholder=""
+                                                   {% if var.fromguesty %} disabled="disabled"  {% endif %} name="name-{{ control_chekout }}" value="{{ var.name }}"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Aantal
+                                                Nachten</label>&nbsp; {% if help.checkout_nights.content %}<i
+                                                class="fa fa-question-circle tooltips" 
+                                                data-placement="right"
+                                                data-original-title="{{ help.checkout_nights.content }}"></i>{% endif %}
+                                            <input class="form-control input-sm" placeholder=""
+                                                    {% if var.fromguesty %} disabled="disabled"  {% endif %}
+                                                   value="{% if  var.checkout %}{{ var.checkout.nights }}{% endif %}"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Opmerkingen</label>&nbsp; {% if help.checkout_details.content %}
+                                            <i class="fa fa-question-circle tooltips" 
+                                               data-placement="right"
+                                               data-original-title="{{ help.checkout_details.content }}"></i>{% endif %}
+                                            <textarea class="form-control" name="details-{{ control_chekout }}" class="form-control input-sm" placeholder="">{{ var.details }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <input hidden="hidden" name="fromguesty" id="fromguesty" value="{{ var.fromguesty }}">
+                            <input hidden="hidden" name="checkoutid" id="checkoutid" {% if var.checkout %}value="{{ var.checkout.id }}"{% endif %}>
+                            <input hidden="hidden" name="name" id="name" value="{{ var.name }}">
+                        </form>
+                        {% set control_chekout = control_chekout + 1 %}
+                    {% endfor %}
+                {% endif %}
+                {% if not show %}
+                    <form id="form-checkout-{{ control_chekout }}" order-name="" order-listing="" class="last-checkout">
+                        <div class="col-md-12 ">
+                            <div class="portlet light bg-inverse">
+                                <div class="portlet-title">
+                                    <div class="caption">
+                                        <input type="checkbox" id="confirm-checkout-{{ control_chekout }}" name="confirm-checkout-{{ control_chekout }}">
+                                        <span class="caption-subject bold font-red-flamingo uppercase"></span>&nbsp;
+                                        <span class="caption-helper"></span>
+                                    </div>
+                                    <div class="tools">
+                                        <span class="serial_checkout badge bg-red-intense"></span>
+                                        <a href="javascript:;" class="collapse"></a>
+                                    </div>
+                                </div>
+                                <div class="portlet-body container-fluid">
+                                    <div class="form-group">
+                                        <label class="control-label">Listing</label>&nbsp; {% if help.checkout_listing.content %}
+                                        <i class="fa fa-question-circle tooltips" 
+                                           data-placement="right"
+                                           data-original-title="{{ help.checkout_listing.content }}"></i>{% endif %}
+                                        <select id="checkout-listing-{{ control_chekout }}"
+                                                class="form-control input-sm listing-checkout control-{{ control_chekout }} last-checkout"
+                                                data-placeholder="Select..."
+                                                name='listing-{{ control_chekout }}'
+                                                onchange="addCheckout($(this))">
+                                            <option></option>
+                                            {% for val in listing %}
+                                                <option value="{{ val.id }}">{{ val.details }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Naam</label>&nbsp; {% if help.checkout_name.content %}
+                                        <i class="fa fa-question-circle tooltips" 
+                                           data-placement="right"
+                                           data-original-title="{{ help.checkout_name.content }}"></i>{% endif %}
+                                        <input class="form-control input-sm name" name="name-{{ control_chekout }}" id="checkout-name-{{ control_chekout }}" placeholder="" value=""/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Aantal
+                                            Nachten</label>&nbsp; {% if help.checkout_nights.content %}<i
+                                            class="fa fa-question-circle tooltips" 
+                                            data-placement="right"
+                                            data-original-title="{{ help.checkout_nights.content }}"></i>{% endif %}
+                                        <input class="form-control input-sm" id="checkout-name-{{ control_chekout }}" placeholder="" value=""/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Opmerkingen</label>&nbsp; {% if help.checkout_details.content %}
+                                        <i class="fa fa-question-circle tooltips" 
+                                           data-placement="right"
+                                           data-original-title="{{ help.checkout_details.content }}"></i>{% endif %}
+                                        <textarea class="form-control" name="details-{{ control_chekout }}" class="form-control input-sm" placeholder=""></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    {% set control_chekout = control_chekout + 1 %}
+                {% endif %}
+            </div>
+    </fieldset>
+<script>
+    updateSerialCheckout()
+    findListingSelectedCheckout()
+    $('input.real').trigger('blur')
+    var serialcheckout = {{ control_chekout }};
+    function updateSerialCheckout() {
+        $('.serial_checkout').each(function (index, item) {
+            $(item).text(index + 1)
+        })
+    }
+    function source_opciones() {
+        value = ''
+        {% for item in sources %}
+        value = value + '<option name="{% if (item.extrafield == 1) %}1 {% else %}  0 {% endif %}" value="{{ item.id }}">{{ item.details }}</option>'
+        {% endfor %}
+        return value;
+    }
+
+    function listing_opciones() {
+        value = ''
+        {% for item in listing %}
+        value = value + '<option value="{{ item.id }}">{{ item.details }}</option>'
+        {% endfor %}
+        return value;
+    }
+
+    function listing_field(){
+        return  '<div class="form-group">' +
+                '<label class="control-label">Listing</label>&nbsp; {% if help.checkout_listing.content %} <i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkout_listing.content }}"></i>{% endif %}' +
+                '<select id="checkout-listing-' + serialcheckout + '" class="form-control input-sm listing-checkout last-checkout control-' + serialcheckout + '" data-placeholder="Select..." name="listing-' + serialcheckout + '" onchange="addCheckout($(this))"><option></option> ' + listing_opciones() + ' </select>' +
+                '</div>';
+    }
+
+    function name_field(){
+        return  '<div class="form-group">' +
+                '<label class="control-label">Naam</label>&nbsp; {% if help.checkout_name.content %} <i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkout_listing.content }}"></i>{% endif %}' +
+                '<input class="form-control input-sm name" name="name-'+serialcheckout+'" id="checkout-name-'+serialcheckout+'" value=""/>' +
+                '</div>';
+    }
+
+    function nights_field(){
+        return  '<div class="form-group">' +
+                '<label class="control-label">Aantal Nachten </label>&nbsp; {% if help.checkout_nights.content %} <i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkout_listing.content }}"></i>{% endif %}' +
+                '<input class="form-control input-sm" value=""/>' +
+                '</div>';
+    }
+    function details_field(){
+        return  '<div class="form-group">' +
+                '<label class="control-label">Opmerkingen </label>&nbsp; {% if help.checkout_details.content %} <i class="fa fa-question-circle tooltips"  data-placement="right" data-original-title="{{ help.checkout_listing.content }}"></i>{% endif %}' +
+                '<textarea class="form-control" name="details-'+serialcheckout+'" class="form-control input-sm" placeholder=""></textarea>' +
+                '</div>';
+    }
+
+    function findListingSelectedCheckout() {
+        $('.listing-checkout option').removeAttr('style', '')
+        //$('.listing-checkout option').is(':selected')
+        $('.listing-checkout').each(function (index, item) {
+            seleccionado = $(item).val()
+            $('.listing-checkout option').each(function (index1, item1) {
+                if ($(item1).val() == seleccionado) {
+                    $(item1).attr('style', 'color:red;')
+                }
+            })
+        })
+    }
+
+    $('input[type="checkbox"]').bind('click')
+
+    function addCheckout(current) {
+        current_value = current.val()
+        if (current_value == '' || current_value == null) {
+            current.parent().parent().parent().parent().parent().remove();
+            completeProfit()
+        }
+        else {
+            number = current.attr('id').split('-');
+            $('#form-checkout-' + number[2]).find('.caption-subject').text($("#checkout-listing-"+number[2]+" option:selected" ).text())
+            if (current.hasClass('last-checkout')) {
+                $('.last-checkout').removeClass('last-checkout')
+                form = $('<form id="form-checkout-'+ serialcheckout +'" class="last-checkout" order-name="" order-listing="">' +
+                        '<div class="col-md-12 "><div class="portlet light bg-inverse">' +
+                        '<div class="portlet-title"><div class="caption">' +
+                        '<input type="checkbox" id="confirm-checkout-"'+serialcheckout+' name="confirm-checkout-'+serialcheckout+'">' +
+                        '<span class="caption-subject bold font-red-intense uppercase"></span>&nbsp;'+
+                        '<span class="caption-helper"></span></div>' +
+                        '<div class="tools">'+
+                        '<span class="serial_checkout badge bg-red-intense"></span>'+
+                        '<a href="javascript:;" class="collapse"></a></div>' +
+                        '</div> <div class="portlet-body container-fluid">'+ listing_field() + name_field() + nights_field() + details_field() +
+                        '</div></div></form>')
+                $('#section-checkout').append(form);
+                $('#checkout-listing-' + serialcheckout).bind('change')
+                $('#checkout-name-' + serialcheckout).bind('keyup')
+                $('.tooltips').tooltip()
+                serialcheckout = serialcheckout + 1
+            }
+            $.post("{{ path('hotel_last_checkin') }}", {
+                'apto': current_value,
+                'hotel_id': '{{ entity_basic.id }}'
+            }, function (response) {
+                separate = current.attr('id')
+                id = separate.split('-')
+                if (!isNaN(response)) {
+                    $('#checkin-borg-' + id[2]).val(numeral(response).format('0.0,'))
+                }
+                else $('#checkin-borg-' + id[2]).val('')
+            })
+        }
+        updateSerialCheckout()
+        findListingSelectedCheckout()
+
+        Layout.init();
+    }
+
+    $('.retuor').on({
+        'keyup': function () {
+            completeProfit()
+        }
+    })
+    $('.name').on({'keyup': function(){
+        number = $(this).attr('id').split('-');
+        $('#form-checkout-' + number[2]).find('.caption-helper').text($("#checkout-name-"+number[2]).val())
+    }
+})
+
+</script>
