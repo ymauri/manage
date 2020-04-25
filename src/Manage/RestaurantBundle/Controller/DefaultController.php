@@ -209,13 +209,13 @@ class DefaultController extends Controller {
         $result['discount'] = 0;
         foreach ($invoiceItems as $item) {
             if ($item['type'] == 'ACCOMMODATION_FARE'){
-                $result['accommodation'] = $item['amount'];
+                $result['accommodation'] = abs($item['amount']);
             }
             if ($item['title'] == 'VAT'){
-                $result['vat'] = $item['amount'];
+                $result['vat'] = abs($item['amount']);
             }
             if ($item['type'] == 'DISCOUNT') {
-                $result['discount'] = $item['amount'];
+                $result['discount'] = abs($item['amount']);
             }
         }
         return $result;
