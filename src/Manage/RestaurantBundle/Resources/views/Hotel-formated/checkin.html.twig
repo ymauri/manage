@@ -400,7 +400,7 @@
                                                 <label class="control-label">Stripe Invoice Number €</label>
                                                 <input type="text" id="stripeinvoicenumber-{{control}}" class="input-sm form-control  col-md-6"  name='stripeinvoicenumber' value="">
                                             </div>
-                                                <div class="form-group">
+                                            <div class="form-group">
                                                 <label class="control-label">Datum bankbetaling</label>
                                                 <input type="date" id="datebank-{{control}}" class="input-sm form-control  col-md-6"  name='datebank' value="">
                                             </div>
@@ -465,6 +465,7 @@
                 serial++;
                 $('#section-checkin').append(genetare_form(serial));
                 $('#source-'+serial).trigger('change')
+                $('#paymentmethod-'+serial).trigger('change')
                 $('.tooltips').tooltip()
             }
         }
@@ -536,12 +537,50 @@
         cadena += '<div class="form-group"><label class="control-label" >Totaal te betalen €</label>\n\
         <input type="text" id="totalbetalen-' + s + '" class="input-sm form-control col-md-6 real" readonly="readonly" tabindex="-1"  name="totalbetalen"> </div>'
         
+        cadena += `<div class="form-group">
+                        <label class="control-label">Betaling Ontvangen €</label>
+                            <div class="input-group">
+								<input type="text" id="paymentrecive-${s}" class="input-sm form-control real"   name='paymentrecive[]' value="">
+								<span class="input-group-btn">
+									<button class="btn default blue-stripe btn-sm plus-bet" type="button"><i class="fa fa-plus"></i></button>
+								</span>
+							</div></div><div class='space-betaling-${s}'></div>`;
+        
+        cadena += `<div class="form-group">
+                        <label class="control-label">Betaalmethode €</label>
+                        <select id="paymentmethod-${s}" placeholder="Select ..."  class="input-sm form-control col-md-6 paymentmethod"   name='paymentmethod'>
+                            <option>Select ...</option>
+                            <option value="1">PIN</option>
+                            <option value="2">Credit Card</option>
+                            <option value="3">Contant</option>
+                            <option value="4">Stripe Via Guesty (VCC)</option>
+                            <option value="5">Stripe Via Invoice (Betaallink)</option>
+                            <option value="6">Bank (Aanbetaling)</option>
+                            <option value="7">Airbnb</option>
+                        </select>
+                    </div>`; 
+
+        cadena += ` <div class="form-group">
+                        <label class="control-label">Stripe Invoice Number €</label>
+                        <input type="text" id="stripeinvoicenumber-${s}" class="input-sm form-control  col-md-6"  name='stripeinvoicenumber' value="">
+                    </div>`;      
+
+        cadena += `<div class="form-group">
+                        <label class="control-label">Datum bankbetaling</label>
+                        <input type="date" id="datebank-${s}" class="input-sm form-control  col-md-6"  name='datebank' value="">
+                    </div>`;       
+
+        cadena += `<div class="form-group">
+                        <label class="control-label">Saldo Te Betalen €</label>
+                        <input type="text" id="paymentprofit-${s}" class="input-sm form-control  col-md-6 real" readonly="readonly" tabindex="-1" name='paymentprofit' value="">
+                    </div>`;                                         
+
         cadena += '<div class="form-group"><label class="control-label" >Opmerkingen</label>\n\
         {% if help.checkin_details.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_details.content }}"></i>{% endif %} \n\
         <textarea type="text" id="details-' + s + '" class=" form-control "  name="details"></textarea> \n\
                 </div>'
 
-        form = $('<form id="form-checkin-'+ s +'" class="lastone " order-name="" order-listing="">' +
+        form = $('<form id="form-checkin-'+ s +'" class="lastone details-checkin" order-name="" order-listing="">' +
                 '<div class="col-md-12 "><div class="portlet light bg-inverse">' +
                 '<div class="portlet-title"><div class="caption">' +
                 '<input type="checkbox" id="confirm-check-"'+s+' name="confirm-checkin">' +
