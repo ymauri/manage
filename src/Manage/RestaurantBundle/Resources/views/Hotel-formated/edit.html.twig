@@ -130,7 +130,7 @@
                     {#  PÁGINA 3 DEL FORMULARIO  #}
                     <div class="form-step-3 steps" hidden="hidden">
                         <div class="row col-md-12">
-                            <div class="col-md-5">
+                            <div class="col-md-4">
                                 <div class="portlet  light bg-inverse">
                                     <div class="portlet-title">
                                         <div class="caption">
@@ -144,7 +144,7 @@
                                         </div>
                                     </div>
                                     <div class="portlet-body">
-                                        <form id="form-total-hotel" class="container-fluid form-horizontal edit"
+                                        <form id="form-total-hotel" class="container-fluid form-horizontal edit "
                                               autocomplete="off" role="form">
                                             <div class="form-body">
                                                 <fieldset id="data-totales">
@@ -155,14 +155,6 @@
                                                                readonly="readonly"
                                                                class=" pull-right form-control input-sm "
                                                                value='{{ entity_basic.totalover }}'>
-                                                    </div>
-                                                    <div class="row form-group">
-                                                        <label for="totalvoldan" class="required">Totaal Reeds voldaan
-                                                            €</label>
-                                                        <input type="text" id="totalvoldan" name="totalvoldan"
-                                                               tabindex=-1 readonly="readonly"
-                                                               class=" pull-right form-control input-sm "
-                                                               value='{{ entity_basic.totalvoldan }}'>
                                                     </div>
                                                     <div class="row form-group">
                                                         <label for="totaltoer" class="required">Totaal
@@ -178,14 +170,6 @@
                                                                readonly="readonly"
                                                                class=" pull-right form-control input-sm "
                                                                value='{{ entity_basic.totalborg }}'>
-                                                    </div>
-                                                    <div class="row form-group">
-                                                        <label for="totalretourborg" class="required">Retour Borg
-                                                            €</label>
-                                                        <input type="text" id="totalretourborg" name="totalretourborg"
-                                                               tabindex=-1 readonly="readonly"
-                                                               class=" pull-right form-control input-sm "
-                                                               value='{{ entity_basic.totalretourborg }}'>
                                                     </div>
                                                     <div class="row form-group">
                                                         <label for="totalparking" class="required">Totaal Parking
@@ -215,17 +199,67 @@
                                                 </fieldset>
                                             </div>
                                         </form>
-
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="portlet  light bg-inverse height-fluid">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <span class="caption-subject bold font-green-haze">Overige Betaalmethoden</span>
+                                            <span class="caption-helper"></span>
+                                        </div>
+                                        <div class="tools">
+                                            <span class="Overige badge bg-green-haze"></span>
+                                            <a href="javascript:;" class="collapse">
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <form id="form-total-hotel" class="container-fluid form-horizontal edit"
+                                              autocomplete="off" role="form">
+                                            <div class="form-body">
+                                                <fieldset id="data-totales">
+                                                    <div class="row form-group">
+                                                        <label for="totalover" class="required">Stripe Via Guesty (VCC) €</label>
+                                                        <input type="text" id="stripeguesy" name="stripeguesy" tabindex=-1
+                                                               readonly="readonly"
+                                                               class=" pull-right form-control input-sm "
+                                                               value='{{ entity_basic.stripeguesy }}'>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <label for="totaltoer" class="required">Stripe Via Invoice (Betaallink) €</label>
+                                                        <input type="text" id="stripeinvoice" name="stripeinvoice" tabindex=-1
+                                                               readonly="readonly"
+                                                               class=" pull-right form-control input-sm "
+                                                               value='{{ entity_basic.stripeinvoice }}'>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <label for="totalborg" class="required">Bank (Aanbetaling) €</label>
+                                                        <input type="text" id="bank" name="bank" tabindex=-1
+                                                               readonly="readonly"
+                                                               class=" pull-right form-control input-sm "
+                                                               value='{{ entity_basic.bank }}'>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <label for="totalparking" class="required">Airbnb €</label>
+                                                        <input type="text" id="airbnb" name="airbnb"
+                                                               tabindex=-1 readonly="readonly"
+                                                               class=" pull-right form-control input-sm "
+                                                               value='{{ entity_basic.airbnb }}'>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
                             {% include "RestaurantBundle:Hotel-formated:bill.html.twig" %}
                         </div>
                         <div class="row col-md-12">
-                            {% include "RestaurantBundle:Hotel-formated:card.html.twig" %}
+                            {% include "RestaurantBundle:Hotel-formated:card.html.twig" %}                        
                             {% include "RestaurantBundle:Hotel-formated:final.html.twig" %}
                         </div>
-
                         <br/>
                         <br/>
                     </div>

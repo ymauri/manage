@@ -22,9 +22,9 @@ use Manage\RestaurantBundle\Entity\RNotifierForm;
 use Manage\RestaurantBundle\Entity\Checkin;
 use Manage\RestaurantBundle\Entity\Checkout;
 use Manage\RestaurantBundle\Entity\Cleaning;
-use Manage\RestaurantBundle\Controller\Nomenclator;
 use Manage\RestaurantBundle\Components\fpdf\FPDF;
 use Manage\RestaurantBundle\Components\fpdi\Fpdi;
+use Manage\RestaurantBundle\Nomenclator\PaymentMethod;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
@@ -423,8 +423,10 @@ class HotelController extends Controller {
                     'label' => $content->getLabel(),
                     'content' => $content->getContent(),
                 );
-            }
-            return $this->render('RestaurantBundle:Hotel:edit.html.twig', array(
+            }  
+            $limit = new \DateTime('2020-04-15');
+            $view = $entity_basic->getDated() > $limit ? 'RestaurantBundle:Hotel-formated:edit.html.twig' : 'RestaurantBundle:Hotel:edit.html.twig';
+            return $this->render($view, array(
                 'entity_basic' => $entity_basic,
                 'rcheckin' => $em->getRepository('RestaurantBundle:RCheckinHotel')->getOrderedCheckin($id),
                 'rcheckout' => $em->getRepository('RestaurantBundle:RCheckoutHotel')->getOrderedCheckout($id),
@@ -438,6 +440,7 @@ class HotelController extends Controller {
                 'canceled'=> $canceled,
                 'help'=>$contenidos,
                 'show' => TRUE,
+                'paymentMethods' => PaymentMethod::allAssociative(),
                 'pendingPayment' => $em->getRepository('RestaurantBundle:RCleaningExtraHotel')->findBy(array('hotel' => $entity_basic->getId()))
 
             ));
@@ -581,7 +584,9 @@ class HotelController extends Controller {
                         'content' => $content->getContent(),
                     );
                 }
-                return $this->render('RestaurantBundle:Hotel:edit.html.twig', array(
+                $limit = new \DateTime('2020-04-15');
+                $view =  $this->entity_basic->getDated() > $limit ? 'RestaurantBundle:Hotel-formated:edit.html.twig' : 'RestaurantBundle:Hotel:edit.html.twig';
+                return $this->render($view, array(
                     'entity_basic' => $this->entity_basic,
                     'rcheckin' => $this->em->getRepository('RestaurantBundle:RCheckinHotel')->getOrderedCheckin($id),
                     'rcheckout' => $this->em->getRepository('RestaurantBundle:RCheckoutHotel')->getOrderedCheckout($id),
@@ -595,6 +600,7 @@ class HotelController extends Controller {
                     'canceled' => $arr_canceled,
                     'help'=>$contenidos,
                     'show' => FALSE,
+                    'paymentMethods' => PaymentMethod::allAssociative(),
                     'pendingPayment' => $this->em->getRepository('RestaurantBundle:RCleaningExtraHotel')->findBy(array('hotel' => $this->entity_basic->getId()))
 
             ));
@@ -698,6 +704,7 @@ class HotelController extends Controller {
 //                }
 //            }
         }
+        $paymentrecive = [];
         try {
             foreach ($data as $value) {
                 switch ($value['name']) {
@@ -785,10 +792,36 @@ class HotelController extends Controller {
                     case 'notes':
                         $relation->setNotes($value['value']);
                         break;
+                    case 'paymentrecive[]':
+                        $current = str_replace('.', '', $value['value']);
+                        $current = str_replace(',', '.', $current);
+                        $paymentrecive[] = $current;
+                    break;
+                    case 'stripeinvoicenumber':
+                        $relation->setStripeinvoicenumber($value['value']);    
+                    break;
+                    case 'datebank':
+                        if (!empty($value['value'])) {
+                            $relation->setDatebank(new \DateTime($value['value']));
+                        } else {
+                            $relation->setDatebank(null);
+                        }
+                    break;
+                    case 'paymentprofit':
+                        $current = str_replace('.', '', $value['value']);
+                        $current = str_replace(',', '.', $current);
+                        $relation->setPaymentprofit((float)$current);
+                    break;
+                    case 'paymentmethod':
+                        $pay = $this->em->getRepository('RestaurantBundle:PaymentMethod')->find($value['value']);
+                        $relation->setPaymentmethod($pay);
+                    break;
                     default:
                         break;
                 }
             }
+
+            $relation->setPaymentrecive($paymentrecive);
             if (is_null($relation->getCheckindone())){
                 $relation->setCheckindone(0);
             }

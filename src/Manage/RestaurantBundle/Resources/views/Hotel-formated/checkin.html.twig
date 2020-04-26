@@ -195,9 +195,69 @@
                                                     {% if help.checkin_borg.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_borg.content }}"></i>{% endif %}
                                                     <input type="text" id="borg-{{control}}" class="input-sm form-control  col-md-6 real"  name='borg' value="{{var.borg}}">
                                                 </div>
+
                                                 <div class="form-group">
                                                     <label class="control-label">Totaal te betalen €</label>
                                                     <input type="text" id="totalbetalen-{{control}}" class="input-sm form-control  col-md-6 real" readonly="readonly" tabindex="-1"  name='totalbetalen' value="{{var.totalbetalen}}">
+                                                </div>
+
+                                                <div class="form-group ">
+                                                    <label class="control-label">Betaling Ontvangen €</label>       
+                                                        <div class="input-group">
+                                                        {% set first = true %}
+                                                        {% if var.paymentrecive|length > 0 %}
+                                                           {% for pay in var.paymentrecive if first %}
+											                <input type="text" id="paymentrecive-{{control}}" class="input-sm form-control  real"   name='paymentrecive[]' value="{{pay}}">
+                                                            {% set first = false %}
+                                                           {% endfor %}
+                                                        {% else %}
+											                <input type="text" id="paymentrecive-{{control}}" class="input-sm form-control  real"   name='paymentrecive[]' value="">
+                                                        {% endif %}
+
+											<span class="input-group-btn">
+											<button class="btn default blue-stripe btn-sm plus-bet" type="button"><i class="fa fa-plus"></i></button>
+											</span>
+										</div>                                             
+                                                    {# <input type="text" id="paymentrecive-{{control}}" class="input-sm form-control  col-md-6 real"   name='paymentrecive[]' value=""> #}
+                                                    {# <span class="badge badge-info"> <i class="fa fa-plus"> </i></span> #}
+                                                </div>
+                                              <div class='space-betaling-{{control}}'>
+                                                  {% if var.paymentrecive|length > 1 %}
+                                                  {% for pay in var.paymentrecive %}
+                                                  {% if not loop.first %}
+                                                      <div class="form-group ">
+                 <label class="control-label"></label>       
+                    <div class="input-group">
+						<input id="" type="text" class="input-sm form-control  real" name="paymentrecive[]" value="{{pay}}">
+                        <span class="input-group-btn">
+						<button class="btn default blue-stripe btn-sm minus-bet" type="button"><i class="fa fa-minus"></i></button>
+						</span>
+					</div>  
+                </div>
+                                                  {% endif %}
+
+                                                  {% endfor %}
+                                                  {% endif %}
+                                              </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Betaalmethode €</label>
+                                                    <select id="paymentmethod-{{control}}" placeholder="Select ..." class="input-sm form-control col-md-6 paymentmethod"   name='paymentmethod'>
+                                                {% for key, value in paymentMethods %}
+                                                    <option value="{{key}}" {% if key == var.paymentmethod.id %} selected="selected" {% endif %}>{{value}}</option>
+                                                {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Stripe Invoice Number €</label>
+                                                    <input type="text" id="stripeinvoicenumber-{{control}}" class="input-sm form-control  col-md-6"  name='stripeinvoicenumber' value="{{var.stripeinvoicenumber}}">
+                                                </div>
+                                                 <div class="form-group">
+                                                    <label class="control-label">Datum bankbetaling</label>
+                                                    <input type="date" id="datebank-{{control}}" class="input-sm form-control  col-md-6"  name='datebank' value="{{var.datebank}}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Saldo Te Betalen €</label>
+                                                    <input type="text" id="paymentprofit-{{control}}" class="input-sm form-control  col-md-6 real" readonly="readonly" tabindex="-1" name='paymentprofit' value="{{var.paymentprofit}}">
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label">Opmerkingen</label>
@@ -314,6 +374,41 @@
                                                 <label class="control-label">Totaal te betalen €</label>
                                                 <input type="text" id="totalbetalen-{{control}}" class="input-sm form-control  col-md-6 real" readonly="readonly" tabindex="-1"  name='totalbetalen' value="">
                                             </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label">Betaling Ontvangen €</label>
+                                                <div class="input-group">
+											<input type="text" id="paymentrecive-{{control}}" class="input-sm form-control real"   name='paymentrecive[]' value="">
+											<span class="input-group-btn">
+											<button class="btn default blue-stripe btn-sm plus-bet" type="button"><i class="fa fa-plus"></i></button>
+											</span>
+										</div>
+                                                {# <input type="text" id="paymentrecive-{{control}}" class="input-sm form-control  col-md-6 real"   name='paymentrecive[]' value="">
+                                                <span class="badge badge-info"> <i class="fa fa-plus"> </i></span> #}
+                                            </div>
+                                            <div class='space-betaling-{{control}}'></div>
+
+                                            <div class="form-group">
+                                                <label class="control-label">Betaalmethode €</label>
+                                                <select id="paymentmethod-{{control}}" placeholder="Select ..."  class="input-sm form-control col-md-6 paymentmethod"   name='paymentmethod'>
+                                                {% for key, value in paymentMethods %}
+                                                    <option value="{{key}}">{{value}}</option>
+                                                {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Stripe Invoice Number €</label>
+                                                <input type="text" id="stripeinvoicenumber-{{control}}" class="input-sm form-control  col-md-6"  name='stripeinvoicenumber' value="">
+                                            </div>
+                                                <div class="form-group">
+                                                <label class="control-label">Datum bankbetaling</label>
+                                                <input type="date" id="datebank-{{control}}" class="input-sm form-control  col-md-6"  name='datebank' value="">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Saldo Te Betalen €</label>
+                                                <input type="text" id="paymentprofit-{{control}}" class="input-sm form-control  col-md-6 real" readonly="readonly" tabindex="-1" name='paymentprofit' value="">
+                                            </div>
+
                                             <div class="form-group">
                                                 <label class="control-label">Opmerkingen</label>
                                                 {% if help.checkin_details.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_details.content }}"></i>{% endif %}
@@ -632,11 +727,18 @@
                 + numeral($('#latecheckin-' + index).val()).value()
                 + numeral($('#betalen-' + index).val()).value()
                 + numeral($('#borg-' + index).val()).value()
-                - numeral($('#voldan-' + index).val()).value()
-        $('#totalbetalen-' + index).val(numeral(total).format('0.0,'))
-
-
-        Dagopbrengst()
+                - numeral($('#voldan-' + index).val()).value();
+        $('#totalbetalen-' + index).val(numeral(total).format('0.0,'));
+        total -= (
+            numeral($('#betalen-' + index).val()).value() +
+            numeral($('#toer-' + index).val()).value() +
+            numeral($('#parking-' + index).val()).value() +
+            numeral($('#latecheckin-' + index).val()).value() +
+            numeral($('#borg-' + index).val()).value() 
+        );
+        $('#paymentprofit-' + index).val(numeral(total).format('0.0,'));        
+        Dagopbrengst();
+        profitStripeGuesty();
 
     }
 
@@ -785,6 +887,86 @@
         else{
             $('.'+control.attr('id')).hide();
         }*/
+    }
+
+{% if not show %}
+    plusBetaling ();
+    {% endif %}
+    function plusBetaling () {
+        $('body').on('click', '.plus-bet', function () {
+            var id = $(this).closest('.input-group').children('input').attr('id').split('-');            
+             $('.space-betaling-'+id[1]).append(`<div class="form-group ">
+                 <label class="control-label"></label>       
+                    <div class="input-group">
+						<input id="" type="text" class="input-sm form-control  real" name="paymentrecive[]" value="">
+                        <span class="input-group-btn">
+						<button class="btn default blue-stripe btn-sm minus-bet" type="button"><i class="fa fa-minus"></i></button>
+						</span>
+					</div>  
+                </div>`);    
+        })
+        .on('click', '.minus-bet', function () {
+            var id = $(this).closest('.form-group').remove();            
+        })
+        .on('keyup', 'input[name="paymentrecive[]"]', function () {
+            profitStripeGuesty();
+        }); 
+    }
+
+    stripeInvoice();
+    function stripeInvoice() {
+         $('body').on('change', '.paymentmethod', function () {
+            var id = $(this).attr('id').split('-');   
+            if ($(this).val() == 4) {
+                $('#stripeinvoicenumber-'+id[1]).closest('.form-group').show(100);
+                $('#datebank-'+id[1]).val("").closest('.form-group').hide(100);
+            } else if ($(this).val() == 5) {
+                $('#datebank-'+id[1]).closest('.form-group').show(100);
+                $('#stripeinvoicenumber-'+id[1]).val("").closest('.form-group').hide(100);
+            } else {
+                $('#datebank-'+id[1]).val("").closest('.form-group').hide(100);
+                $('#stripeinvoicenumber-'+id[1]).val("").closest('.form-group').hide(100);
+            }
+            profitStripeGuesty();
+         });
+
+         $('.paymentmethod').trigger('change');
+    }
+
+ 
+    function profitStripeGuesty() {
+        var guesty = invoice = bank = airbnb = 0;
+        $('.paymentmethod').each(function() {
+             var id = $(this).attr('id').split('-');   
+            switch ($(this).val()) {
+                case "4":
+                     guesty += totalBetaling (id[1])
+                break;
+                case "5":
+                     invoice += totalBetaling (id[1])
+                break;
+                case "6":
+                     bank += totalBetaling (id[1])
+                break;
+                case "7":
+                     airbnb += totalBetaling (id[1])
+                break;
+            }
+        });
+
+        $('#stripeguesy').val(numeral(guesty).format('0.0,'));       
+        $('#stripeinvoice').val(numeral(invoice).format('0.0,'));       
+        $('#bank').val(numeral(bank).format('0.0,'));       
+        $('#airbnb').val(numeral(airbnb).format('0.0,'));       
+    }
+
+    function totalBetaling (id) {
+        var id_form = $('#paymentrecive-'+id).closest('form').attr('id');
+        var total = 0;
+        $('#'+id_form+' input[name="paymentrecive[]"]').each(function() {
+            total += numeral($(this).val()).value();
+        })
+        return total;        
     }
 
     $('input[name="readytoclear"]').each(function(){

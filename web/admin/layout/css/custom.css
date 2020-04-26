@@ -1,516 +1,531 @@
-textarea{
-    max-width: 100% !important;
-    text-align: left !important;
-    font-size: 12px !important;
-}
-
-
-#form-basic-service textarea,
-#form-basic-skybar textarea,
-#form-basic-reception textarea {
-    min-width: 100% !important;
-    min-height: 80px !important;
-}
-
-
-.spacer{
-    height: 45px;
-    width: 100%;
-    background: #555;
-}
-
-.global-container{
-    min-height: 488px;
-    margin-top: 20px;
-}
-
-section.x-group, section.z-group {
-    margin: 0 40px 0px 0;
-}
-
-.form-step-3 #data-bills .x-group label,
-.form-step-3 #data-bills .z-group label {
-   /* width: 70px;*/
-    text-align: right;
-}
-
-fieldset.turnover-final  .form-control,
-#data-total .form-control, 
-#data-bills .form-control, 
-#form-card .form-control, 
-#data-begin .form-control, 
-#form-final .form-control, 
-#form-basic-reception .form-control,
-#form-basic-service .form-control,
-#form-basic-skybar .form-control,
-#form-basic-turnover .form-control,
-#form-total-hotel .form-control,
-#form-basic-kasboekhotel .form-control,
-#kasboek_contanten input,
-#kasboek_turnovers input,
-#kasboek_final input{
-    max-width: 80px;
-    text-align: right;
-    color: #333333;
-}
-
-#form-total-hotel fieldset ,
-#form-basic-service fieldset,
-#form-basic-skybar fieldset,
-#form-basic-turnover fieldset,
-#form-basic-reception fieldset,
-#form-basic-kasboek fieldset,
-#form-basic-kasboekhotel fieldset,
-#form-basic-hotel fieldset,
-#form-checkout,
-#form-bills fieldset, 
-#form-card fieldset, 
-#form-log fieldset,
-#data-checkin{
-    padding: 10px 0;
-}
-
-#form-total-hotel fieldset,
-#form-card fieldset {
-    max-width: 280px;
-}
-
-#form-bills fieldset,
-fieldset#data-final{
-    max-width: 360px;
-}
-
-.fieldset-userdoor{
-    border-bottom: 1px solid #999;
-    border-top: 1px solid #999;
-    padding: 15px 0;
-}
-
-#form-final fieldset{
-    padding: 15px 0;
-}
-
-.cashclosure-basic input,
-.cashclosure-basic textarea,
-fieldset.reception-basic  input,
-fieldset.service-basic  input,
-fieldset.hotel-basic  input,
-fieldset.log-basic  input,
-fieldset.skybar-basic  input,
-fieldset.turnover-basic  input,
-fieldset.reception-basic textarea,
-fieldset.service-basic textarea,
-fieldset.skybar-basic textarea,
-fieldset.reception-basic select,
-fieldset.service-basic select,
-fieldset.skybar-basic select{
-    max-width: 200px !important;
-    display: inline !important;
-    text-align: left !important;
-}
-
-
-#filter-pricing input {
-    text-align: left !important;
-}
-
-#filter-pricing input[type="checkbox"]{
-    width: 18px;
-    height: 18px;
-    margin-top: 0px;
-}
-
-#filter-pricing{
-    padding: 15px 0;
-    
-}
-
-.checkbox-list > label.checkbox-inline{
-    margin-top: 10px;
-}
-
-
-#form-log textarea, #form-log select, #form-log input {
-    max-width: 300px !important;
-    display: inline !important;
-    text-align: left !important;
-    float: right !important;
-}
-#form-log label{
-    padding: 2% 0;
-}
-
-/*#form-basic-service .form-cashclosure-details, #form-basic-service .form-cashclosure-help{*/
-h2 .info{
-    display: inline;
-    font-size: 16px;
-    padding: 0 0 8px 8px;
-    cursor: pointer;
-    color: #428bca;
-}
-
-.totales{
-    padding-top: 5px;
-    border-top: 1px solid #D9D9D9;
-    
-}
-
-.totales label{
-    
-    font-weight: bold;
-}
-
-#data-total .table{
-    text-align: center;
-}
-
-.wrong{
-    font-weight: bold;
-    color: red !important;
-}
-
-.page-loading {
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.8);
-    padding-top: 50%;
-    z-index: 1000;
-}
-
-.details-checkin table tr td label{
-    float: right;
-}
-
-.details-checkin {
-    margin-bottom: 15px;
-    padding-bottom: 15px;
-}
-
-form h4 {
-    font-weight: bold;
-    color: #555;
-}
-
-#adminbundle_card_iscc {
-    margin-bottom: -8px;
-}
-
-div#card_iscc label,
-div#adminbundle_card_iscc label,
-div#adminbundle_beginbill_standard label,
-div#adminbundle_beginbill_extra label,
-div#adminbundle_beginbill_hascash label{
-    margin: 0 30px 10px 0;
-}
-
-.has-error .mandatory{
-    background-color: #F9E5E5 !important;
-}
-
-.actions{
-    width: 238px;
-}
-
-.counter{
-    width: 50px;
-    text-align: center;
-}
-
-#form-basic-reception input[data-provide="datepicker"],
-#form-basic-service input[data-provide="datepicker"],
-#form-basic-skybar input[data-provide="datepicker"],
-#form-basic-hotel input[data-provide="datepicker"],
-#form-basic-turnover input[data-provide="datepicker"],
-#form-basic-kasboek input[data-provide="datepicker"],
-#form-log input[data-provide="datepicker"]{
-    height: 25px;
-    padding: 5px 5px;
-    font-size: 12px;
-    width: 95px;
-}
-
-.botonera div{
-    /*margin: 0 auto;*/
-}
-
-#control_chekout form div img{
-    max-width: 60px;
-    min-width: 60px;
-}
-
-.turnover-omzet label, .turnover-omzet .form-control, .turnover-final label,  .turnover-final .form-control{
-    font-weight: bold;
-}
-
-#kasboek_contanten table tbody tr td ,
-#kasboekhotel_total table tbody tr td ,
-#kasboek_final table tbody tr td {
-    border: none;
-    padding: 2px;
-    vertical-align: middle;
-}
-
-#kasboekhotel_total table tbody tr td {
-    font-weight: bold;
-}
-
-#kasboek_contanten table thead tr th,
-#kasboek_final table thead tr th,
-.table-values-forms thead tr th,
-.table-values-turnover thead tr th{
-   /* text-align: center;*/
-    padding: 2px;
-
-}
-
-#kasboek_contanten table tfoot tr th{
-    text-align: right;
-    padding: 2px;
-}
-
-#kasboek_contanten input.texto {
-    min-width: 150%;
-    text-align: left;
-}
-
-#kasboek_final table tbody tr td,
-#kasboek_final table tfoot tr td {
-    font-weight: bold;
-    padding: 2px;
-}
-
-.table-values-forms tbody>tr>td,
-.table-values-turnover tbody>tr>td{
-    padding: 2px;
-    border: none;
-}
-.table-labels-forms  thead>tr>th,
-.table-labels-turnover  thead>tr>th{
-    padding: 2px;
-}
-
-#form-basic-kasboek tbody input,
-#form-basic-kasboekhotel tbody input,
-#form-basic-kasboek tfoot input {
-    height: 24px;
-}
-
-.table-values-forms,
-.table-values-turnover {
-    max-width: 8%;
-    display: inline-block;
-}
-
-.table-values-forms thead tr th,
-.table-values-turnover thead tr th {
-    text-align: center;
-}
-
-.table-labels-forms ,
-.table-labels-turnover {
-    max-width: 14%;
-    display: inline-block;
-}
-
-#kasboekhotel_forms input
-#kasboek_turnovers input{
-    max-width: 80px;
-    text-align: right;
-    color: #333333;
-}
-
-.negrita{
-    font-weight: bold !important;
-}
-
-.parking_hotel input[type="checkbox"]{
-    margin-top: 2px;
-}
-
-label[for="adminbundle_skybar_voucherstotal"],
-label[for="adminbundle_service_voucherstotal"]{
-    font-weight: bold;
-}
-
-#section-checkout form .table-condensed tbody tr td,
-#section-checkin form .table-condensed tbody tr td {
-    padding: 1px !important;
-}
-
-@media (max-width: 657px) {
-    .table-labels-forms, .table-labels-turnover {
-        max-width: 24%;
-        display: inline-block;
-        width: 137px;
-    }
-
-    .table-values-forms, .table-values-turnover {
-        max-width: 12%;
-        display: inline-block;
-    }
-
-    video {
-        max-width: 225px ;
-        width: 225px ;
-    }
-
-    img.thumbnail {
-        width: 225px;
-        max-width: 225px ;
-    }
-    #section-checkin .form-control {
+    textarea {
         max-width: 100% !important;
-        width: 100% !important;
-        float: left;
+        text-align: left !important;
+        font-size: 12px !important;
     }
-
-    #section-checkin .control-label {
-
-        width: 90% !important;
+    
+    #form-basic-service textarea,
+    #form-basic-skybar textarea,
+    #form-basic-reception textarea {
+        min-width: 100% !important;
+        min-height: 80px !important;
+    }
+    
+    .spacer {
+        height: 45px;
+        width: 100%;
+        background: #555;
+    }
+    
+    .global-container {
+        min-height: 488px;
+        margin-top: 20px;
+    }
+    
+    section.x-group,
+    section.z-group {
+        margin: 0 40px 0px 0;
+    }
+    
+    .form-step-3 #data-bills .x-group label,
+    .form-step-3 #data-bills .z-group label {
+        /* width: 70px;*/
+        text-align: right;
+    }
+    
+    fieldset.turnover-final .form-control,
+    #data-total .form-control,
+    #data-bills .form-control,
+    #form-card .form-control,
+    #data-begin .form-control,
+    #form-final .form-control,
+    #form-basic-reception .form-control,
+    #form-basic-service .form-control,
+    #form-basic-skybar .form-control,
+    #form-basic-turnover .form-control,
+    #form-total-hotel .form-control,
+    #form-basic-kasboekhotel .form-control,
+    #kasboek_contanten input,
+    #kasboek_turnovers input,
+    #kasboek_final input {
+        max-width: 80px;
+        text-align: right;
+        color: #333333;
+    }
+    
+    #form-total-hotel fieldset,
+    #form-basic-service fieldset,
+    #form-basic-skybar fieldset,
+    #form-basic-turnover fieldset,
+    #form-basic-reception fieldset,
+    #form-basic-kasboek fieldset,
+    #form-basic-kasboekhotel fieldset,
+    #form-basic-hotel fieldset,
+    #form-checkout,
+    #form-bills fieldset,
+    #form-card fieldset,
+    #form-log fieldset,
+    #data-checkin {
+        padding: 10px 0;
+    }
+    
+    #form-total-hotel fieldset,
+    #form-card fieldset {
+        max-width: 280px;
+    }
+    
+    #form-bills fieldset,
+    fieldset#data-final {
+        max-width: 360px;
+    }
+    
+    .fieldset-userdoor {
+        border-bottom: 1px solid #999;
+        border-top: 1px solid #999;
+        padding: 15px 0;
+    }
+    
+    #form-final fieldset {
+        padding: 15px 0;
+    }
+    
+    .cashclosure-basic input,
+    .cashclosure-basic textarea,
+    fieldset.reception-basic input,
+    fieldset.service-basic input,
+    fieldset.hotel-basic input,
+    fieldset.log-basic input,
+    fieldset.skybar-basic input,
+    fieldset.turnover-basic input,
+    fieldset.reception-basic textarea,
+    fieldset.service-basic textarea,
+    fieldset.skybar-basic textarea,
+    fieldset.reception-basic select,
+    fieldset.service-basic select,
+    fieldset.skybar-basic select {
+        max-width: 200px !important;
+        display: inline !important;
         text-align: left !important;
     }
-
-    #section-checkin .form-group{
-        height: 45px;
+    
+    #filter-pricing input {
+        text-align: left !important;
     }
-
-    #section-checkin .fa-question-circle{
-       display: inline !important;
+    
+    #filter-pricing input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        margin-top: 0px;
     }
-}
-
-#restaurantbundle_rule_bytype label, #restaurantbundle_rule_dayweek label, #restaurantbundle_rule_typeofrule label, #restaurantbundle_cleaningextra_dayweek label {
-    display: inline;
-    margin-left: 5px;
-    margin-right: 10px;
-}
-
-.radio-list{
-    margin: 12px 0;
-}
-
-.loader-page {
-    position: fixed;
-    z-index: 25000;
-    background: rgb(255, 255, 255);
-    left: 0px;
-    top: 0px;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition:all .3s ease;
-    cursor: progress;
-}
-.loader-page::before {
-    content: "";
-    position: absolute;
-    border: 2px solid rgb(50, 150, 176);
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    box-sizing: border-box;
-    border-left: 2px solid rgba(50, 150, 176,0);
-    border-top: 2px solid rgba(50, 150, 176,0);
-    animation: rotarload 1s linear infinite;
-    transform: rotate(0deg);
-}
-@keyframes rotarload {
-    0%   {transform: rotate(0deg)}
-    100% {transform: rotate(360deg)}
-}
-.loader-page::after {
-    content: "";
-    position: absolute;
-    border: 2px solid rgba(50, 150, 176,.5);
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    box-sizing: border-box;
-    border-left: 2px solid rgba(50, 150, 176, 0);
-    border-top: 2px solid rgba(50, 150, 176, 0);
-    animation: rotarload 1s ease-out infinite;
-    transform: rotate(0deg);
-}
-
-.cleanning.note-success{
-    margin-bottom: 0;
-    border-bottom: solid 1px #bbdba1;
-}
-.cleanning.note-danger{
-    margin-bottom: 0;
-    border-bottom: solid 1px #dca7b0;
-}
-
-
-.cleanning.note-warning {
-    margin-bottom: 0;
-    border-bottom: solid 1px #f2cf87;
-}
-
-.cleanning.note-info {
-    margin-bottom: 0;
-    border-bottom: solid 1px #91d9e8;
-}
-
-.ready-for-change{
-    min-width: 130px !important;
-}
-
-.accordion .panel-default{
-    border: none !important;
-}
-
-
-#scanner div video {
-    width: 100%;
-    max-width: 100% !important;
-}
-
-#table_result .dataTables_filter label{
-    float: unset !important;
-}
-
-.status-issue input[type="radio"]{
-    margin-right: 1px;
-}
-
-.status-issue label{
-    vertical-align: middle;
-    margin-right: 10px;
-    font-weight: bold;
-}
-
-
-.fa.fa-question-circle.tooltips {
-    color: #d4d4d4;
-}
-
-#status-filter, #responsible-filter {
-    width: 145px;
-}
-
-#section-checkin .form-control, .details-checkin textarea {
-    max-width: 40%;
-    width: 40%;
-    float: right;
-}
-
-#section-checkin .control-label {
-    float: left;
-    text-align: right;
-    width: 55%;
-}
-
-#section-checkin .form-group{
-    min-height: 30px;
-}
-
-#section-checkin .form-group p.optional i{
-    float: right;
-}
-
-#section-checkin .fa-question-circle{
-    margin-left: 3px;
-}
+    
+    #filter-pricing {
+        padding: 15px 0;
+    }
+    
+    .checkbox-list>label.checkbox-inline {
+        margin-top: 10px;
+    }
+    
+    #form-log textarea,
+    #form-log select,
+    #form-log input {
+        max-width: 300px !important;
+        display: inline !important;
+        text-align: left !important;
+        float: right !important;
+    }
+    
+    #form-log label {
+        padding: 2% 0;
+    }
+    /*#form-basic-service .form-cashclosure-details, #form-basic-service .form-cashclosure-help{*/
+    
+    h2 .info {
+        display: inline;
+        font-size: 16px;
+        padding: 0 0 8px 8px;
+        cursor: pointer;
+        color: #428bca;
+    }
+    
+    .totales {
+        padding-top: 5px;
+        border-top: 1px solid #D9D9D9;
+    }
+    
+    .totales label {
+        font-weight: bold;
+    }
+    
+    #data-total .table {
+        text-align: center;
+    }
+    
+    .wrong {
+        font-weight: bold;
+        color: red !important;
+    }
+    
+    .page-loading {
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        padding-top: 50%;
+        z-index: 1000;
+    }
+    
+    .details-checkin table tr td label {
+        float: right;
+    }
+    
+    .details-checkin {
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+    }
+    
+    form h4 {
+        font-weight: bold;
+        color: #555;
+    }
+    
+    #adminbundle_card_iscc {
+        margin-bottom: -8px;
+    }
+    
+    div#card_iscc label,
+    div#adminbundle_card_iscc label,
+    div#adminbundle_beginbill_standard label,
+    div#adminbundle_beginbill_extra label,
+    div#adminbundle_beginbill_hascash label {
+        margin: 0 30px 10px 0;
+    }
+    
+    .has-error .mandatory {
+        background-color: #F9E5E5 !important;
+    }
+    
+    .actions {
+        width: 238px;
+    }
+    
+    .counter {
+        width: 50px;
+        text-align: center;
+    }
+    
+    #form-basic-reception input[data-provide="datepicker"],
+    #form-basic-service input[data-provide="datepicker"],
+    #form-basic-skybar input[data-provide="datepicker"],
+    #form-basic-hotel input[data-provide="datepicker"],
+    #form-basic-turnover input[data-provide="datepicker"],
+    #form-basic-kasboek input[data-provide="datepicker"],
+    #form-log input[data-provide="datepicker"] {
+        height: 25px;
+        padding: 5px 5px;
+        font-size: 12px;
+        width: 95px;
+    }
+    
+    .botonera div {
+        /*margin: 0 auto;*/
+    }
+    
+    #control_chekout form div img {
+        max-width: 60px;
+        min-width: 60px;
+    }
+    
+    .turnover-omzet label,
+    .turnover-omzet .form-control,
+    .turnover-final label,
+    .turnover-final .form-control {
+        font-weight: bold;
+    }
+    
+    #kasboek_contanten table tbody tr td,
+    #kasboekhotel_total table tbody tr td,
+    #kasboek_final table tbody tr td {
+        border: none;
+        padding: 2px;
+        vertical-align: middle;
+    }
+    
+    #kasboekhotel_total table tbody tr td {
+        font-weight: bold;
+    }
+    
+    #kasboek_contanten table thead tr th,
+    #kasboek_final table thead tr th,
+    .table-values-forms thead tr th,
+    .table-values-turnover thead tr th {
+        /* text-align: center;*/
+        padding: 2px;
+    }
+    
+    #kasboek_contanten table tfoot tr th {
+        text-align: right;
+        padding: 2px;
+    }
+    
+    #kasboek_contanten input.texto {
+        min-width: 150%;
+        text-align: left;
+    }
+    
+    #kasboek_final table tbody tr td,
+    #kasboek_final table tfoot tr td {
+        font-weight: bold;
+        padding: 2px;
+    }
+    
+    .table-values-forms tbody>tr>td,
+    .table-values-turnover tbody>tr>td {
+        padding: 2px;
+        border: none;
+    }
+    
+    .table-labels-forms thead>tr>th,
+    .table-labels-turnover thead>tr>th {
+        padding: 2px;
+    }
+    
+    #form-basic-kasboek tbody input,
+    #form-basic-kasboekhotel tbody input,
+    #form-basic-kasboek tfoot input {
+        height: 24px;
+    }
+    
+    .table-values-forms,
+    .table-values-turnover {
+        max-width: 8%;
+        display: inline-block;
+    }
+    
+    .table-values-forms thead tr th,
+    .table-values-turnover thead tr th {
+        text-align: center;
+    }
+    
+    .table-labels-forms,
+    .table-labels-turnover {
+        max-width: 14%;
+        display: inline-block;
+    }
+    
+    #kasboekhotel_forms input #kasboek_turnovers input {
+        max-width: 80px;
+        text-align: right;
+        color: #333333;
+    }
+    
+    .negrita {
+        font-weight: bold !important;
+    }
+    
+    .parking_hotel input[type="checkbox"] {
+        margin-top: 2px;
+    }
+    
+    label[for="adminbundle_skybar_voucherstotal"],
+    label[for="adminbundle_service_voucherstotal"] {
+        font-weight: bold;
+    }
+    
+    #section-checkout form .table-condensed tbody tr td,
+    #section-checkin form .table-condensed tbody tr td {
+        padding: 1px !important;
+    }
+    
+    @media (max-width: 657px) {
+        .table-labels-forms,
+        .table-labels-turnover {
+            max-width: 24%;
+            display: inline-block;
+            width: 137px;
+        }
+        .table-values-forms,
+        .table-values-turnover {
+            max-width: 12%;
+            display: inline-block;
+        }
+        video {
+            max-width: 225px;
+            width: 225px;
+        }
+        img.thumbnail {
+            width: 225px;
+            max-width: 225px;
+        }
+        #section-checkin .form-control {
+            max-width: 100% !important;
+            width: 100% !important;
+            float: left;
+        }
+        #section-checkin .control-label {
+            width: 90% !important;
+            text-align: left !important;
+        }
+        #section-checkin .form-group {
+            height: 45px;
+        }
+        #section-checkin .fa-question-circle {
+            display: inline !important;
+        }
+    }
+    
+    #restaurantbundle_rule_bytype label,
+    #restaurantbundle_rule_dayweek label,
+    #restaurantbundle_rule_typeofrule label,
+    #restaurantbundle_cleaningextra_dayweek label {
+        display: inline;
+        margin-left: 5px;
+        margin-right: 10px;
+    }
+    
+    .radio-list {
+        margin: 12px 0;
+    }
+    
+    .loader-page {
+        position: fixed;
+        z-index: 25000;
+        background: rgb(255, 255, 255);
+        left: 0px;
+        top: 0px;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all .3s ease;
+        cursor: progress;
+    }
+    
+    .loader-page::before {
+        content: "";
+        position: absolute;
+        border: 2px solid rgb(50, 150, 176);
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        box-sizing: border-box;
+        border-left: 2px solid rgba(50, 150, 176, 0);
+        border-top: 2px solid rgba(50, 150, 176, 0);
+        animation: rotarload 1s linear infinite;
+        transform: rotate(0deg);
+    }
+    
+    @keyframes rotarload {
+        0% {
+            transform: rotate(0deg)
+        }
+        100% {
+            transform: rotate(360deg)
+        }
+    }
+    
+    .loader-page::after {
+        content: "";
+        position: absolute;
+        border: 2px solid rgba(50, 150, 176, .5);
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        box-sizing: border-box;
+        border-left: 2px solid rgba(50, 150, 176, 0);
+        border-top: 2px solid rgba(50, 150, 176, 0);
+        animation: rotarload 1s ease-out infinite;
+        transform: rotate(0deg);
+    }
+    
+    .cleanning.note-success {
+        margin-bottom: 0;
+        border-bottom: solid 1px #bbdba1;
+    }
+    
+    .cleanning.note-danger {
+        margin-bottom: 0;
+        border-bottom: solid 1px #dca7b0;
+    }
+    
+    .cleanning.note-warning {
+        margin-bottom: 0;
+        border-bottom: solid 1px #f2cf87;
+    }
+    
+    .cleanning.note-info {
+        margin-bottom: 0;
+        border-bottom: solid 1px #91d9e8;
+    }
+    
+    .ready-for-change {
+        min-width: 130px !important;
+    }
+    
+    .accordion .panel-default {
+        border: none !important;
+    }
+    
+    #scanner div video {
+        width: 100%;
+        max-width: 100% !important;
+    }
+    
+    #table_result .dataTables_filter label {
+        float: unset !important;
+    }
+    
+    .status-issue input[type="radio"] {
+        margin-right: 1px;
+    }
+    
+    .status-issue label {
+        vertical-align: middle;
+        margin-right: 10px;
+        font-weight: bold;
+    }
+    
+    .fa.fa-question-circle.tooltips {
+        color: #d4d4d4;
+    }
+    
+    #status-filter,
+    #responsible-filter {
+        width: 145px;
+    }
+    
+    #section-checkin .form-control,
+    .details-checkin textarea,
+    .details-checkin .input-group {
+        max-width: 40%;
+        width: 40%;
+        float: right;
+    }
+    
+    .details-checkin .input-group input {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+    
+    #section-checkin .control-label {
+        float: left;
+        text-align: right;
+        width: 55%;
+    }
+    
+    #section-checkin .form-group {
+        min-height: 30px;
+    }
+    
+    #section-checkin .form-group p.optional i {
+        float: right;
+    }
+    
+    #section-checkin .fa-question-circle {
+        margin-left: 3px;
+    }
+    
+    .btn-sm,
+    .btn-xs {
+        line-height: 0.5 !important;
+    }

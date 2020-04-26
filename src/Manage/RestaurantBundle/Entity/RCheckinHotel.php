@@ -438,9 +438,19 @@ class RCheckinHotel {
         $this->blacklist = $blacklist;
     }
 
+    public function getPaymentmethod()
+    {
+        return $this->paymentmethod;
+    }
+
+    public function setPaymentmethod($value)
+    {
+        $this->paymentmethod = $value;
+    }
+
     public function getPaymentrecive()
     {
-        return json_decode($this->paymentrecive);
+        return $this->paymentrecive;
     }
 
     public function setPaymentrecive($value)
@@ -463,7 +473,7 @@ class RCheckinHotel {
         return $this->datebank;
     }
 
-    public function setDatebankr($value)
+    public function setDatebank($value)
     {
         $this->datebank = $value;
     }
