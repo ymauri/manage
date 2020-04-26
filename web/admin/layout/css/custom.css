@@ -44,6 +44,7 @@
     #form-basic-skybar .form-control,
     #form-basic-turnover .form-control,
     #form-total-hotel .form-control,
+    #form-total-stripe .form-control,
     #form-basic-kasboekhotel .form-control,
     #kasboek_contanten input,
     #kasboek_turnovers input,
@@ -54,6 +55,7 @@
     }
     
     #form-total-hotel fieldset,
+    #form-total-stripe fieldset,
     #form-basic-service fieldset,
     #form-basic-skybar fieldset,
     #form-basic-turnover fieldset,
@@ -70,6 +72,7 @@
     }
     
     #form-total-hotel fieldset,
+    #form-total-stripe fieldset,
     #form-card fieldset {
         max-width: 280px;
     }

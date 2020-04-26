@@ -207,43 +207,43 @@
                                                         {% set first = true %}
                                                         {% if var.paymentrecive|length > 0 %}
                                                            {% for pay in var.paymentrecive if first %}
-											                <input type="text" id="paymentrecive-{{control}}" class="input-sm form-control  real"   name='paymentrecive[]' value="{{pay}}">
+											                <input type="text" id="paymentrecive-{{control}}" class="input-sm form-control  real"   name='paymentrecive' value="{{pay}}">
                                                             {% set first = false %}
                                                            {% endfor %}
                                                         {% else %}
-											                <input type="text" id="paymentrecive-{{control}}" class="input-sm form-control  real"   name='paymentrecive[]' value="">
+											                <input type="text" id="paymentrecive-{{control}}" class="input-sm form-control  real"   name='paymentrecive' value="">
                                                         {% endif %}
 
 											<span class="input-group-btn">
 											<button class="btn default blue-stripe btn-sm plus-bet" type="button"><i class="fa fa-plus"></i></button>
 											</span>
 										</div>                                             
-                                                    {# <input type="text" id="paymentrecive-{{control}}" class="input-sm form-control  col-md-6 real"   name='paymentrecive[]' value=""> #}
+                                                    {# <input type="text" id="paymentrecive-{{control}}" class="input-sm form-control  col-md-6 real"   name='paymentrecive' value=""> #}
                                                     {# <span class="badge badge-info"> <i class="fa fa-plus"> </i></span> #}
                                                 </div>
                                               <div class='space-betaling-{{control}}'>
                                                   {% if var.paymentrecive|length > 1 %}
-                                                  {% for pay in var.paymentrecive %}
-                                                  {% if not loop.first %}
-                                                      <div class="form-group ">
-                 <label class="control-label"></label>       
-                    <div class="input-group">
-						<input id="" type="text" class="input-sm form-control  real" name="paymentrecive[]" value="{{pay}}">
-                        <span class="input-group-btn">
-						<button class="btn default blue-stripe btn-sm minus-bet" type="button"><i class="fa fa-minus"></i></button>
-						</span>
-					</div>  
-                </div>
-                                                  {% endif %}
-
-                                                  {% endfor %}
+                                                    {% for pay in var.paymentrecive %}
+                                                        {% if not loop.first %}
+                                                            <div class="form-group ">
+                                                                <label class="control-label"></label>       
+                                                                    <div class="input-group">
+                                                                        <input id="" type="text" class="input-sm form-control  real" name="paymentrecive" value="{{pay}}">
+                                                                        <span class="input-group-btn">
+                                                                        <button class="btn default blue-stripe btn-sm minus-bet" type="button"><i class="fa fa-minus"></i></button>
+                                                                        </span>
+                                                                    </div>  
+                                                                </div>
+                                                        {% endif %}
+                                                    {% endfor %}
                                                   {% endif %}
                                               </div>
                                                 <div class="form-group">
                                                     <label class="control-label">Betaalmethode €</label>
                                                     <select id="paymentmethod-{{control}}" placeholder="Select ..." class="input-sm form-control col-md-6 paymentmethod"   name='paymentmethod'>
+                                                    <option>Select ...</option>
                                                 {% for key, value in paymentMethods %}
-                                                    <option value="{{key}}" {% if key == var.paymentmethod.id %} selected="selected" {% endif %}>{{value}}</option>
+                                                    <option value="{{key}}" {% if  var.paymentmethod and key == var.paymentmethod.id %} selected="selected" {% endif %}>{{value}}</option>
                                                 {% endfor %}
                                                     </select>
                                                 </div>
@@ -253,7 +253,7 @@
                                                 </div>
                                                  <div class="form-group">
                                                     <label class="control-label">Datum bankbetaling</label>
-                                                    <input type="date" id="datebank-{{control}}" class="input-sm form-control  col-md-6"  name='datebank' value="{{var.datebank}}">
+                                                    <input type="date" id="datebank-{{control}}" class="input-sm form-control  col-md-6"  name='datebank' value="{{var.datebank | date('Y-m-d') }}">
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label">Saldo Te Betalen €</label>
@@ -378,12 +378,12 @@
                                             <div class="form-group">
                                                 <label class="control-label">Betaling Ontvangen €</label>
                                                 <div class="input-group">
-											<input type="text" id="paymentrecive-{{control}}" class="input-sm form-control real"   name='paymentrecive[]' value="">
+											<input type="text" id="paymentrecive-{{control}}" class="input-sm form-control real"   name='paymentrecive' value="">
 											<span class="input-group-btn">
 											<button class="btn default blue-stripe btn-sm plus-bet" type="button"><i class="fa fa-plus"></i></button>
 											</span>
 										</div>
-                                                {# <input type="text" id="paymentrecive-{{control}}" class="input-sm form-control  col-md-6 real"   name='paymentrecive[]' value="">
+                                                {# <input type="text" id="paymentrecive-{{control}}" class="input-sm form-control  col-md-6 real"   name='paymentrecive' value="">
                                                 <span class="badge badge-info"> <i class="fa fa-plus"> </i></span> #}
                                             </div>
                                             <div class='space-betaling-{{control}}'></div>
@@ -391,6 +391,8 @@
                                             <div class="form-group">
                                                 <label class="control-label">Betaalmethode €</label>
                                                 <select id="paymentmethod-{{control}}" placeholder="Select ..."  class="input-sm form-control col-md-6 paymentmethod"   name='paymentmethod'>
+                                                    <option>Select ...</option>
+                                                
                                                 {% for key, value in paymentMethods %}
                                                     <option value="{{key}}">{{value}}</option>
                                                 {% endfor %}
@@ -540,7 +542,7 @@
         cadena += `<div class="form-group">
                         <label class="control-label">Betaling Ontvangen €</label>
                             <div class="input-group">
-								<input type="text" id="paymentrecive-${s}" class="input-sm form-control real"   name='paymentrecive[]' value="">
+								<input type="text" id="paymentrecive-${s}" class="input-sm form-control real"   name='paymentrecive' value="">
 								<span class="input-group-btn">
 									<button class="btn default blue-stripe btn-sm plus-bet" type="button"><i class="fa fa-plus"></i></button>
 								</span>
@@ -937,7 +939,7 @@
              $('.space-betaling-'+id[1]).append(`<div class="form-group ">
                  <label class="control-label"></label>       
                     <div class="input-group">
-						<input id="" type="text" class="input-sm form-control  real" name="paymentrecive[]" value="">
+						<input id="" type="text" class="input-sm form-control  real" name="paymentrecive" value="">
                         <span class="input-group-btn">
 						<button class="btn default blue-stripe btn-sm minus-bet" type="button"><i class="fa fa-minus"></i></button>
 						</span>
@@ -947,7 +949,7 @@
         .on('click', '.minus-bet', function () {
             var id = $(this).closest('.form-group').remove();            
         })
-        .on('keyup', 'input[name="paymentrecive[]"]', function () {
+        .on('keyup', 'input[name="paymentrecive"]', function () {
             profitStripeGuesty();
         }); 
     }
@@ -1012,13 +1014,14 @@
         
         $('#overige').val(numeral(pin + credit + contant + guesty + invoice + bank + airbnb).format('0.0,'));  
         $('.overige.badge').text("€"+numeral(guesty + invoice + bank + airbnb).format('0.0,'));  
-        $('.bill-control').first().trigger('click');
+        $('.bill-control').first().trigger('keyup');
+        $('.card').first().trigger('keyup');
     }
 
     function totalBetaling (id) {
         var id_form = $('#paymentrecive-'+id).closest('form').attr('id');
         var total = 0;
-        $('#'+id_form+' input[name="paymentrecive[]"]').each(function() {
+        $('#'+id_form+' input[name="paymentrecive"]').each(function() {
             total += numeral($(this).val()).value();
         })
         return total;        

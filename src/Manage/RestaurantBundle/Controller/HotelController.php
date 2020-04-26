@@ -478,11 +478,8 @@ class HotelController extends Controller {
                 foreach ($data as $key => $value) {
                     switch ($key) {
                         case 'form-basic-hotel':
-                            $this->updateHotel($value);
-                            break;
+                        case 'form-total-stripe':
                         case 'form-total-hotel':
-                            $this->updateHotel($value);
-                            break;
                         case 'form-notifier-hotel':
                             $this->updateHotel($value);
                             break;
@@ -632,45 +629,24 @@ class HotelController extends Controller {
                         }
                         break;
                     case 'totalover':
-                        $current = str_replace('.', '', $value['value']);
-                        $current = str_replace(',', '.', $current);
-                        $this->entity_basic->setTotalover($current);
-                        break;
                     case 'totalvoldan':
-                        $current = str_replace('.', '', $value['value']);
-                        $current = str_replace(',', '.', $current);
-                        $this->entity_basic->setTotalvoldan($current);
-                        break;
                     case 'totaltoer':
-                        $current = str_replace('.', '', $value['value']);
-                        $current = str_replace(',', '.', $current);
-                        $this->entity_basic->setTotaltoer($current);
-                        break;
                     case 'totalborg':
-                        $current = str_replace('.', '', $value['value']);
-                        $current = str_replace(',', '.', $current);
-                        $this->entity_basic->setTotalborg($current);
-                        break;
                     case 'totalretourborg':
-                        $current = str_replace('.', '', $value['value']);
-                        $current = str_replace(',', '.', $current);
-                        $this->entity_basic->setTotalretourborg($current);
-                        break;
                     case 'totalparking':
-                        $current = str_replace('.', '', $value['value']);
-                        $current = str_replace(',', '.', $current);
-                        $this->entity_basic->setTotalparking($current);
-                        break;
                     case 'totalextra':
-                        $current = str_replace('.', '', $value['value']);
-                        $current = str_replace(',', '.', $current);
-                        $this->entity_basic->setTotalextra($current);
-                        break;
                     case 'totaldag':
+                    case 'stripeguesy':
+                    case 'stripeinvoice':
+                    case 'bank':
+                    case 'airbnb':                        
+                    case 'overige':                      
+                    case 'omzet':
+                        $functionName = 'set' . ucfirst($value['name']);
                         $current = str_replace('.', '', $value['value']);
                         $current = str_replace(',', '.', $current);
-                        $this->entity_basic->setTotaldag($current);
-                        break;
+                        $this->entity_basic->$functionName($current);
+                        break;    
                     case 'userdoor':
                         $user = $this->em->getRepository('RestaurantBundle:Worker')->find($value['value']);
                         $this->entity_basic->setUserdoor($user);
@@ -792,7 +768,7 @@ class HotelController extends Controller {
                     case 'notes':
                         $relation->setNotes($value['value']);
                         break;
-                    case 'paymentrecive[]':
+                    case 'paymentrecive':
                         $current = str_replace('.', '', $value['value']);
                         $current = str_replace(',', '.', $current);
                         $paymentrecive[] = $current;
@@ -920,16 +896,18 @@ class HotelController extends Controller {
         $bill = $this->entity_basic->getBill();
         try {
             foreach ($data as $value) {
-                $upper = strtoupper(substr($value['name'], 0, 1));
-                $rest = substr($value['name'], 1);
-                $set_method = 'set'.$upper.$rest;
+                $set_method = 'set' . ucfirst($value['name']);
                 //if ($value['value'] > 0){
                     if ($value['name'] == 'eind') {
-
                         $current = str_replace('.', '', $value['value']);
                         $current = str_replace(',', '.', $current);
                         $bill->$set_method((float)$current);
                    }
+                   if ($value['name'] == 'contant') {
+                        $current = str_replace('.', '', $value['value']);
+                        $current = str_replace(',', '.', $current);
+                        $this->entity_basic->$set_method((float)$current);
+                    }
                     else {
                         $current = str_replace('.', '', $value['value']);
                         $bill->$set_method((integer)$current);
@@ -949,19 +927,18 @@ class HotelController extends Controller {
             $ctrl = FALSE;
             foreach ($data as $value) {
                 if ($value['name'] == 'iscc') $ctrl = TRUE;
-                $upper = strtoupper(substr($value['name'], 0, 1));
-                $rest = substr($value['name'], 1);
-                $set_method = 'set'.$upper.$rest;
+                $set_method = 'set' . ucfirst($value['name']);
                 $current = str_replace('.', '', $value['value']);
                 $current = str_replace(',', '.', $current);
-                $card->$set_method((float)$current);
+                if ($value['name'] == 'pin' || $value['name'] == 'credit'){
+                    $this->entity_basic->$set_method((float)$current);
+                } else {
+                    $card->$set_method((float)$current);
+                }
             }
             if (!$ctrl) $card->setIscc(FALSE);
-            //$em->flush();
-            //var_dump($card);die;
             $this->entity_basic->setCard($card);
        //     $this->em->flush();
-
             //return $entity_basic;
         } catch (\Exception $ex) {
             return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));

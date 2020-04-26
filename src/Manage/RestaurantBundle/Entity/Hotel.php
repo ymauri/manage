@@ -506,7 +506,7 @@ class Hotel {
         return $this->bank;
     }
 
-    public function setBack($v){
+    public function setBank($v){
         $this->bank = $v;
         return $this;
     }  
