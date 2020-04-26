@@ -66,6 +66,15 @@
                                         <label for="tcredit" class="required">Totaal Credit Cards €</label>
                                         <input type="text" id="tcredit" name="tcredit" disabled="disabled" required="required" class="input-sm pull-right form-control card-control real" value="{{entity_basic.card.tdebit}}">
                                     </div>
+                                    
+                                   <div class="row form-group ">
+                                        <label for="pin" class="required">Totaal Check-in PIN €</label>
+                                        <input type="text" id="pin" name="pin" disabled="disabled" required="required" class="input-sm pull-right form-control card-control real" value="{{entity_basic.pin}}">
+                                    </div>
+                                    <div class="row form-group ">
+                                        <label for="credit" class="required">Totaal Check-in Credit Card €</label>
+                                        <input type="text" id="credit" name="credit" disabled="disabled" required="required" class="input-sm pull-right form-control card-control real" value="{{entity_basic.pin}}">
+                                    </div>
                                 </div>
                             </section>
                             <section class="col-md-12">
@@ -138,8 +147,6 @@
                                         <label for="cctcredit" class="required">Totaal Credit Cards 2 €</label>
                                         <input type="text" id="cctcredit" name="cctcredit" disabled="disabled" required="required" class="input-sm pull-right form-control card-control real" value="{{entity_basic.card.cctcredit}}">
                                     </div>
-
-
                                 </div>
                             </section>
                             <section class="col-md-12" >
@@ -200,6 +207,8 @@
         ali = numeral($('#alipay').val()).value()
         def = numeral($('#tcredit').val()).value() + numeral($('#tdebit').val()).value()
         $('#total').val(numeral(def).format('0.0,'))
+        def += numeral($('#pin').val()).value()
+        def += numeral($('#credit').val()).value()
         $('.pin.badge').text('€' + numeral(def).format('0.0,'))
         cc = numeral($('#cctcredit').val()).value() + numeral($('#cctdebit').val()).value()
         $('#totalcc').val(numeral(cc).format('0.0,'))

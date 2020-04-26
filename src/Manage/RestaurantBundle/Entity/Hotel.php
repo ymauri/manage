@@ -205,6 +205,36 @@ class Hotel {
      */
     private $airbnb;
 
+     /**
+     * @var float
+     * @ORM\Column(name="pin", type="float", nullable=true)
+     */
+    private $pin;
+
+    /**
+     * @var float
+     * @ORM\Column(name="credit", type="float", nullable=true)
+     */
+    private $credit;
+
+    /**
+     * @var float
+     * @ORM\Column(name="contant", type="float", nullable=true)
+     */
+    private $contant;
+
+      /**
+     * @var float
+     * @ORM\Column(name="overige", type="float", nullable=true)
+     */
+    private $overige;
+
+      /**
+     * @var float
+     * @ORM\Column(name="omzet", type="float", nullable=true)
+     */
+    private $omzet;
+
     public function getId() {
         return $this->id;
     }
@@ -488,8 +518,53 @@ class Hotel {
     public function setAirbnb($v){
         $this->airbnb = $v;
         return $this;
+    } 
+    
+    public function getPin(){
+        return $this->pin;
+    }
+
+    public function setPin($v){
+        $this->pin = $v;
+        return $this;
+    }  
+    
+    public function getCredit(){
+        return $this->credit;
+    }
+
+    public function setCredit($v){
+        $this->credit = $v;
+        return $this;
     }  
 
+    public function getContant(){
+        return $this->contant;
+    }
+
+    public function setContant($v){
+        $this->contant = $v;
+        return $this;
+    }  
+
+    
+    public function getOverige(){
+        return $this->overige;
+    }
+
+    public function setOverige($v){
+        $this->overige = $v;
+        return $this;
+    }  
+    
+    public function getOmzet(){
+        return $this->omzet;
+    }
+
+    public function setOmzet($v){
+        $this->omzet = $v;
+        return $this;
+    }  
     public function __toString() {
         return $this->dated.' '.$this->name;
     }

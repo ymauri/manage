@@ -16,52 +16,58 @@
                 <div class="form-body">
                     <fieldset id="data-final" class="col-md-12">
                         <section>
-                            <div class="row form-group total-terminals " {% if not entity_basic.card.iscc == 1 %} hidden="hidden"   {% endif %}>
-                                <label for="totalccv" class="required">Totaal alle CCV terminals €</label>
-                                <input type="text" id="totalccv" name="totalccv" class="input-sm pull-right form-control" placeholder="0" tabindex=-1 readonly="readonly" {% if entity_basic.totalccv %}value="{{entity_basic.totalccv}}" {% endif %}>
-                            </div>
-                            <div class="row form-group">
-                                <label for="totalont" class="required">Totaal Ontvangen €</label>
-                                <input type="text" id="totalont" name="totalont" class="input-sm pull-right form-control" placeholder="0" tabindex=-1 readonly="readonly" {% if entity_basic.totalont %}value="{{entity_basic.totalont}}" {% endif %}>
-                            </div>
+                        
                             <div class="row form-group">
                                 <label for="totalparkingextra" class="required">Totaal Overnachtingen inclusief extra's €</label>
-                                <input type="text" id="totalparkingextra" name="totalparkingextra" class="input-sm pull-right form-control" placeholder="0" tabindex=-1 readonly="readonly" {% if entity_basic.totalparkingextra %}value="{{entity_basic.totalparkingextra}}" {% endif %}">
-                            </div>
-                            <div class="row form-group">
-                                <label for="totalparking" class="required">Totaal Parking €</label>
-                                <input type="text" id="totalparking" name="totalparking" tabindex=-1 readonly="readonly" class=" pull-right form-control input-sm " {% if entity_basic.totalparking %} value='{{entity_basic.totalparking}}' {% endif %}>
-                            </div>
+                                <input type="text" id="totalparkingextra" name="totalparkingextra" class="input-sm pull-right form-control" placeholder="0" tabindex=-1 readonly="readonly" {% if entity_basic.totalparkingextra %}value="{{entity_basic.totalparkingextra}}" {% endif %}>
+                            </div>                            
                             <div class="row form-group">
                                 <label for="totaltoer" class="required">Totaal Toeristenbelasting €</label>
                                 <input type="text" id="totaltoer" name="totaltoer" class="input-sm pull-right form-control" placeholder="0" tabindex=-1 readonly="readonly" {% if entity_basic.totaltoer %} value="{{entity_basic.totaltoer}}" {% endif %}>
                             </div>
+                            
                             <div class="row form-group">
-                                <label for="" class="required">Totaal Contanten €</label>
-                                <input type="text" id="totalcontanten" name="totalcontanten" class="input-sm pull-right form-control" placeholder="0" tabindex=-1 readonly="readonly" {% if entity_basic.totalcontanten %}  value="{{entity_basic.totalcontanten}}" {% endif %}>
+                                <label for="totalparking" class="required">Totaal Parking €</label>
+                                <input type="text" id="totalparking" name="totalparking" tabindex=-1 readonly="readonly" class=" pull-right form-control input-sm " {% if entity_basic.totalparking %} value='{{entity_basic.totalparking}}' {% endif %}>
+                            </div>                           
+
+                            <div class="row form-group">
+                                <label for="saldoborg" class="required">Saldo Borg €</label>
+                                <input type="text" id="saldoborg" name="saldoborg" class="input-sm pull-right form-control" placeholder="0" tabindex=-1 readonly="readonly" {% if entity_basic.saldoborg %}  value="{{entity_basic.saldoborg}}" {% endif %}>
+                            </div>                            
+                            <div class="row form-group">
+                                <label for="omzet" class="required">Totaal Omzet €</label>
+                                <input type="text" id="omzet" name="omzet" class="input-sm pull-right form-control" placeholder="0" tabindex=-1 readonly="readonly"  {% if entity_basic.omzet %}   value="{{entity_basic.omzet}}" {% endif %} >
                             </div>
                             <div class="row form-group">
                                 <label for="totaldebit" class="required">Totaal Debit (Pin/Maestro) Cards alle terminals €</label>
                                 <input type="text" id="totaldebit" name="totaldebit" class="input-sm pull-right form-control" placeholder="0" tabindex=-1 readonly="readonly" {% if entity_basic.totaldebit %} value="{{entity_basic.totaldebit}}" {% endif %}>
                             </div>
+                            {# <div class="row form-group total-terminals " {% if not entity_basic.card.iscc == 1 %} hidden="hidden"   {% endif %}>
+                                <label for="totalccv" class="required">Totaal alle CCV terminals €</label>
+                                <input type="text" id="totalccv" name="totalccv" class="input-sm pull-right form-control" placeholder="0" tabindex=-1 readonly="readonly" {% if entity_basic.totalccv %}value="{{entity_basic.totalccv}}" {% endif %}>
+                            </div> #}
                             <div class="row form-group">
                                 <label for="" class="required">Totaal Credit Cards alle terminals €</label>
                                 <input type="text" id="totalcredit" name="totalcredit" class="input-sm pull-right form-control" placeholder="0" tabindex=-1 readonly="readonly" {% if entity_basic.totalcredit %}  value="{{entity_basic.totalcredit}}" {% endif %}>
                             </div>
-                            <div class="row form-group">
-                                <label for="totaldag" class="required">Totaal Dagopbrengst €</label>
-                                <input type="text" id="totaldag" name="totaldag" class="input-sm pull-right form-control" placeholder="0" tabindex=-1 readonly="readonly"  {% if entity_basic.totaldag %}   value="{{entity_basic.totaldag}}" {% endif %} >
+                             <div class="row form-group">
+                                <label for="overige" class="required">Totaal Overige Betaalmethoden €</label>
+                                <input type="text" id="overige" name="overige" class="input-sm pull-right form-control" placeholder="0" tabindex=-1 readonly="readonly" {% if entity_basic.overige %}value="{{entity_basic.overige}}" {% endif %}>
                             </div>
-
                             <div class="row form-group">
-                                <label for="saldoborg" class="required">Saldo Borg €</label>
-                                <input type="text" id="saldoborg" name="saldoborg" class="input-sm pull-right form-control" placeholder="0" tabindex=-1 readonly="readonly" {% if entity_basic.saldoborg %}  value="{{entity_basic.saldoborg}}" {% endif %}>
+                                <label for="" class="required">Totaal Contanten €</label>
+                                <input type="text" id="totalcontanten" name="totalcontanten" class="input-sm pull-right form-control" placeholder="0" tabindex=-1 readonly="readonly" {% if entity_basic.totalcontanten %}  value="{{entity_basic.totalcontanten}}" {% endif %}>
                             </div>
-
+                            
                             <div class="row form-group">
+                                <label for="totalont" class="required">Totaal Ontvangen €</label>
+                                <input type="text" id="totalont" name="totalont" class="input-sm pull-right form-control" placeholder="0" tabindex=-1 readonly="readonly" {% if entity_basic.totalont %}value="{{entity_basic.totalont}}" {% endif %}>
+                            </div>
+                            {# <div class="row form-group">
                                 <label for="longStay" class="required">Long Stay €</label>
                                 <input type="text" id="longStay" name="longStay" class="input-sm pull-right form-control real" placeholder="0" tabindex=-1 readonly="readonly" {% if entity_basic.longStay %}  value="{{entity_basic.longStay}}" {% endif %}>
-                            </div>
+                            </div> #}
 
                             <div class="row form-group">
                                 <label for="kasver" class="required wrong">Kasverschil €</label>

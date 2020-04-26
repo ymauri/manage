@@ -210,7 +210,7 @@
                                             <span class="caption-helper"></span>
                                         </div>
                                         <div class="tools">
-                                            <span class="Overige badge bg-green-haze"></span>
+                                            <span class="overige badge bg-green-haze"></span>
                                             <a href="javascript:;" class="collapse">
                                             </a>
                                         </div>
@@ -458,9 +458,10 @@
         });
 
         function completeProfit() {
-            a = numeral($('#totalcontanten').val()).value() + numeral($('#totalccv').val()).value()
+
+            a = numeral($('#totalcontanten').val()).value() + numeral($('#totalccv').val()).value() +  numeral($('#overige').val()).value() + numeral($('#totaldebit').val()).value()
             $('#totalont').val(numeral(a).format('0.0,'))
-            b = numeral($('#totalont').val()).value() - numeral($('#totaldag').val()).value() - numeral($('#saldoborg').val()).value() - numeral($('#longStay').val()).value()
+            b = numeral($('#totalont').val()).value() - numeral($('#omzet').val()).value() //- numeral($('#saldoborg').val()).value() - numeral($('#longStay').val()).value()
             //console.log (isNaN(b))
             $('#kasver').val(parseFloat(b).toFixed(2))
             $('.kasv.badge').text('€' + $('#kasver').val())

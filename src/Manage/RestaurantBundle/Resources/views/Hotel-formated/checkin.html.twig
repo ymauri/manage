@@ -780,7 +780,7 @@
 
         total = total - borg
 
-        $('#data-final #totaldag').val(numeral(total).format('0.0,'))
+        $('#data-final #omzet').val(numeral(total).format('0.0,'))
         $('.dago.badge').text('€' + numeral(total).format('0.0,'))
         $('#data-final #saldoborg').val(numeral(borg-retour).format('0.0,'))
         $('#form-total-hotel #totaldag').val(numeral(total).format('0.0,'))
@@ -935,10 +935,19 @@
 
  
     function profitStripeGuesty() {
-        var guesty = invoice = bank = airbnb = 0;
+        var pin = credit = contant = guesty = invoice = bank = airbnb = 0;
         $('.paymentmethod').each(function() {
              var id = $(this).attr('id').split('-');   
             switch ($(this).val()) {
+                case "1":
+                     pin += totalBetaling (id[1])
+                break;
+                case "2":
+                     credit += totalBetaling (id[1])
+                break;
+                case "3":
+                     contant += totalBetaling (id[1])
+                break;
                 case "4":
                      guesty += totalBetaling (id[1])
                 break;
@@ -957,7 +966,14 @@
         $('#stripeguesy').val(numeral(guesty).format('0.0,'));       
         $('#stripeinvoice').val(numeral(invoice).format('0.0,'));       
         $('#bank').val(numeral(bank).format('0.0,'));       
-        $('#airbnb').val(numeral(airbnb).format('0.0,'));       
+        $('#airbnb').val(numeral(airbnb).format('0.0,'));  
+        $('#pin').val(numeral(pin).format('0.0,'));  
+        $('#credit').val(numeral(credit).format('0.0,'));  
+        $('#contant').val(numeral(contant).format('0.0,'));  
+        
+        $('#overige').val(numeral(pin + credit + contant + guesty + invoice + bank + airbnb).format('0.0,'));  
+        $('.overige.badge').text("€"+numeral(guesty + invoice + bank + airbnb).format('0.0,'));  
+        $('.bill-control').first().trigger('click');
     }
 
     function totalBetaling (id) {

@@ -70,18 +70,32 @@
                                 </div>
 
                             </section>
-                                <div class="row form-group totales col-md-11">
-                                    <label for="eind" class="required">Totaal Contanten €</label>
-                                    <input type="text" id="eind" name="eind" disabled="disabled" required="required" class="input-sm pull-right form-control real" value="{{entity_basic.bill.eind}}">
-                                </div>
+                              
                     </fieldset>
                 </div>
+                   <div class="totales row">
+                  
+                  <div class="form-group col-md-11">
+                        <label for="eind" class="required col-md-8">Totaal Contanten €</label>
+                        <div class="col-md-4">
+                        <input type="text" id="eind" name="eind" disabled="disabled" required="required" class="input-sm pull-right form-control real" value="{{entity_basic.bill.eind}}">
+                        </div>
+                  </div>
+                   <div class="form-group col-md-11">
+                        <label for="eind" class="required col-md-8"><b>Totaal Check-in Contanten €</b></label>
+                        <div class="col-md-4">
+                        <input type="text" id="contant" name="contant" disabled="disabled" required="required" class="input-sm pull-right form-control real" value="{{entity_basic.contant}}">
+                        </div>
+                  </div>
+                  </fieldset>
+                  </div>
             </form>
 
         </div>
     </div>
 </div>
 <script>
+
 $('#form-bills').on('keyup', '.bill-control', function(){
     total = 0
     $('.bill-control').each(function(index, value){
@@ -91,9 +105,10 @@ $('#form-bills').on('keyup', '.bill-control', function(){
         total += val
     })
     $('#eind').val(numeral(total).format('0.0,'))
-    $('.eind.badge').text( '€' + numeral(total).format('0.0,'))
     //Final
-    $('#totalcontanten').val(numeral(total).format('0.0,'))
+    $('#totalcontanten').val(numeral(total).format('0.0,'))    
+    total += numeral($('#contant').val()).value();
+    $('.eind.badge').text( '€' + numeral(total).format('0.0,'))
     completeProfit()
 })
 </script>
