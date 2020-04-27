@@ -176,24 +176,6 @@ class RCheckinHotel {
      */
     private $paymentrecive;
 
-    /**
-     * 
-     * @ORM\ManyToOne(targetEntity="PaymentMethod")
-     */
-    private $paymentmethod;
-
-        /**
-     * @var boolean
-     * @ORM\Column(name="stripeinvoicenumber", type="string", nullable=true)
-     */
-    private $stripeinvoicenumber;
-
-    /**
-     * @var boolean
-     * @ORM\Column(name="datebank", type="date", nullable=true)
-     */
-    private $datebank;
-
         /**
      * @var boolean
      * @ORM\Column(name="paymentprofit", type="float", nullable=true)
@@ -438,16 +420,6 @@ class RCheckinHotel {
         $this->blacklist = $blacklist;
     }
 
-    public function getPaymentmethod()
-    {
-        return $this->paymentmethod;
-    }
-
-    public function setPaymentmethod($value)
-    {
-        $this->paymentmethod = $value;
-    }
-
     public function getPaymentrecive()
     {
         return $this->paymentrecive;
@@ -456,26 +428,6 @@ class RCheckinHotel {
     public function setPaymentrecive($value)
     {
         $this->paymentrecive = $value;
-    }
-
-    public function getStripeinvoicenumber()
-    {
-        return $this->stripeinvoicenumber;
-    }
-
-    public function setStripeinvoicenumber($value)
-    {
-        $this->stripeinvoicenumber = $value;
-    }
-
-    public function getDatebank()
-    {
-        return $this->datebank;
-    }
-
-    public function setDatebank($value)
-    {
-        $this->datebank = $value;
     }
 
     public function getPaymentprofit()

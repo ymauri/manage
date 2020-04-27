@@ -392,14 +392,26 @@
         //Enviar la iformación de los formularios
         $('button[type="submit"]').on({
             "click": function () {
-                boton = $(this)
-
-                array_to_send = new Object()
-
-                $('input[name="betalen"]').first().trigger("keyup")
+                boton = $(this);
+                array_to_send = new Object();
+                $('input[name="betalen"]').first().trigger("keyup");
 
                 $('.porlet-hotel').find('form').each(function (index, form) {
-                    array_to_send[$(form).attr('id')] = $(form).serializeArray()
+                    var idForm = $(form).attr('id').split('-');
+                    if (idForm[1] == 'checkin') {
+                        var serialized =  $(form).serializeArray();
+                        var dataFull = new Array();
+                        $(form).find('.space-betaling').each(function() {
+                            dataFull.push({
+                                "betaling" : numeral($(this).find('.betaling').first().val()).value(),
+                                "paymentmethod" : $(this).find('.paymentmethod').first().val(),
+                                "datebank" : $(this).find('.datebank').first().val(),
+                                "stripeinvoicenumber" : $(this).find('.stripeinvoicenumber').first().val()
+                            })
+                        })
+                        $(form).find('input[name="paymentrecive"]').val(JSON.stringify(dataFull));
+                    }
+                    array_to_send[$(form).attr('id')] = $(form).serializeArray();
                 })
 
                 Metronic.startPageLoading();
@@ -471,9 +483,28 @@
         {% if not show %}
         setInterval(function () {
             array_to_send = new Object()
+
             $('.porlet-hotel').find('form').each(function (index, form) {
+                    var idForm = $(form).attr('id').split('-');
+                    if (idForm[1] == 'checkin') {
+                        var serialized =  $(form).serializeArray();
+                        var dataFull = new Array();
+                        $(form).find('.space-betaling').each(function() {
+                            dataFull.push({
+                                "betaling" : numeral($(this).find('.betaling').first().val()).value(),
+                                "paymentmethod" : $(this).find('.paymentmethod').first().val(),
+                                "datebank" : $(this).find('.datebank').first().val(),
+                                "stripeinvoicenumber" : $(this).find('.stripeinvoicenumber').first().val()
+                            })
+                        })
+                        $(form).find('input[name="paymentrecive"]').val(JSON.stringify(dataFull));
+                    }
+                    array_to_send[$(form).attr('id')] = $(form).serializeArray();
+                })
+
+           /* $('.porlet-hotel').find('form').each(function (index, form) {
                 array_to_send[$(form).attr('id')] = $(form).serializeArray()
-            })
+            })*/
 
             $.post('{{ path('hotel_edit', {'id':entity_basic.id}) }}', {
                 'data': array_to_send,

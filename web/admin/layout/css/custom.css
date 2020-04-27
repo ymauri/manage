@@ -532,3 +532,9 @@
     .btn-xs {
         line-height: 0.5 !important;
     }
+    
+    .space-betaling {
+        border-bottom: 1px dotted #e6e5e5;
+        padding-top: 5px;
+        margin-bottom: 5px;
+    }

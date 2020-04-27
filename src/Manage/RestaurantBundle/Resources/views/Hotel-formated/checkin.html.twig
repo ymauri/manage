@@ -53,6 +53,8 @@
                                 <input hidden="hidden" name="checkinguests" id="checkinguests" {% if var.checkin %}value="{{ var.checkin.guests }}"{% endif %}>
                                 <input hidden="hidden" name="checkinsourceguesty" id="checkinsourceguesty" {% if var.checkin %}value="{{ var.checkin.source }}"{% endif %}>
                                 <input hidden="hidden" name="name" id="name" value="{{ var.name }}">
+                                <input hidden="hidden" name="paymentrecive" id="paymentrecive" value="">
+                                
                                 <div class="col-md-12">
                                     <div class="portlet light bg-inverse">
                                         <div class="portlet-title">
@@ -201,60 +203,90 @@
                                                     <input type="text" id="totalbetalen-{{control}}" class="input-sm form-control  col-md-6 real" readonly="readonly" tabindex="-1"  name='totalbetalen' value="{{var.totalbetalen}}">
                                                 </div>
 
-                                                <div class="form-group ">
+                                                {# <div class="form-group ">
                                                     <label class="control-label">Betaling Ontvangen €</label>       
                                                         <div class="input-group">
                                                         {% set first = true %}
                                                         {% if var.paymentrecive|length > 0 %}
                                                            {% for pay in var.paymentrecive if first %}
-											                <input type="text" id="paymentrecive-{{control}}" class="input-sm form-control  real"   name='paymentrecive' value="{{pay}}">
-                                                            {% set first = false %}
+                                                                <input type="text" id="paymentrecive-{{control}}" class="input-sm form-control  real"   name='paymentrecive' value="{{pay}}">
+                                                                {% set first = false %}
                                                            {% endfor %}
                                                         {% else %}
 											                <input type="text" id="paymentrecive-{{control}}" class="input-sm form-control  real"   name='paymentrecive' value="">
                                                         {% endif %}
-
-											<span class="input-group-btn">
-											<button class="btn default blue-stripe btn-sm plus-bet" type="button"><i class="fa fa-plus"></i></button>
-											</span>
-										</div>                                             
-                                                    {# <input type="text" id="paymentrecive-{{control}}" class="input-sm form-control  col-md-6 real"   name='paymentrecive' value=""> #}
-                                                    {# <span class="badge badge-info"> <i class="fa fa-plus"> </i></span> #}
-                                                </div>
-                                              <div class='space-betaling-{{control}}'>
-                                                  {% if var.paymentrecive|length > 1 %}
-                                                    {% for pay in var.paymentrecive %}
-                                                        {% if not loop.first %}
-                                                            <div class="form-group ">
-                                                                <label class="control-label"></label>       
+                                                        <span class="input-group-btn">
+                                                        <button class="btn default blue-stripe btn-sm plus-bet" type="button"><i class="fa fa-plus"></i></button>
+                                                        </span>
+                                                </div>                                            
+                                                </div>  #}
+                                               {% set betalinControl = 1 %}
+                                                {% if var.paymentrecive|length > 0 %}
+                                                    {% for pay in var.paymentrecive | json_decode %}
+                                                        <div class='space-betaling-{{betalinControl}} space-betaling'>
+                                                            {# {% if not loop.first %} #}
+                                                                <div class="form-group ">
+                                                                    <label class="control-label">Betaling Ontvangen €</label>       
                                                                     <div class="input-group">
-                                                                        <input id="" type="text" class="input-sm form-control  real" name="paymentrecive" value="{{pay}}">
+                                                                        <input id="" type="text" class="betaling input-sm form-control real" value="{{pay.betaling}}">
                                                                         <span class="input-group-btn">
-                                                                        <button class="btn default blue-stripe btn-sm minus-bet" type="button"><i class="fa fa-minus"></i></button>
+                                                                        <button class="btn default blue-stripe btn-sm {% if loop.first %} plus-bet {% else %} minus-bet {% endif %}" type="button"><i class="fa {% if loop.first %} fa-plus {% else %} fa-minus {% endif %}"></i></button>
                                                                         </span>
                                                                     </div>  
                                                                 </div>
-                                                        {% endif %}
+                                                                <div class="form-group">
+                                                                    <label class="control-label">Betaalmethode €</label>
+                                                                    <select placeholder="Select ..." class="paymentmethod input-sm form-control col-md-6 paymentmethod" >
+                                                                        <option>Select ...</option>
+                                                                        {% for key, value in paymentMethods %}
+                                                                            <option value="{{key}}" {% if  pay.paymentmethod == key %} selected="selected" {% endif %}>{{pay.paymentmethod}}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" style="display:none;">
+                                                                    <label class="control-label">Stripe Invoice Number €</label>
+                                                                    <input type="text" class="stripeinvoicenumber input-sm form-control  col-md-6" value="{{pay.stripeinvoicenumber}}">
+                                                                </div>
+                                                                <div class="form-group" style="display:none;">
+                                                                    <label class="control-label">Datum bankbetaling</label>
+                                                                    <input type="date" class="datebank input-sm form-control  col-md-6"  value="{{pay.datebank}}">
+                                                                </div>
+                                                            {# {% endif %} #}    
+                                                        </div>
+                                                        {% set betalinControl = betalinControl + 1 %}
                                                     {% endfor %}
-                                                  {% endif %}
-                                              </div>
-                                                <div class="form-group">
-                                                    <label class="control-label">Betaalmethode €</label>
-                                                    <select id="paymentmethod-{{control}}" placeholder="Select ..." class="input-sm form-control col-md-6 paymentmethod"   name='paymentmethod'>
-                                                    <option>Select ...</option>
-                                                {% for key, value in paymentMethods %}
-                                                    <option value="{{key}}" {% if  var.paymentmethod and key == var.paymentmethod.id %} selected="selected" {% endif %}>{{value}}</option>
-                                                {% endfor %}
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label">Stripe Invoice Number €</label>
-                                                    <input type="text" id="stripeinvoicenumber-{{control}}" class="input-sm form-control  col-md-6"  name='stripeinvoicenumber' value="{{var.stripeinvoicenumber}}">
-                                                </div>
-                                                 <div class="form-group">
-                                                    <label class="control-label">Datum bankbetaling</label>
-                                                    <input type="date" id="datebank-{{control}}" class="input-sm form-control  col-md-6"  name='datebank' value="{{var.datebank | date('Y-m-d') }}">
-                                                </div>
+                                                {% else %}
+                                                    <div class='space-betaling-{{betalinControl}} space-betaling'>
+                                                        <div class="form-group ">
+                                                            <label class="control-label">Betaling Ontvangen €</label>       
+                                                            <div class="input-group">
+                                                                <input id="" type="text" class="input-sm form-control real betaling" value="">
+                                                                <span class="input-group-btn">
+                                                                <button class="btn default blue-stripe btn-sm plus-bet" type="button"><i class="fa fa-plus"></i></button>
+                                                                </span>
+                                                            </div>  
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label">Betaalmethode €</label>
+                                                            <select placeholder="Select ..." class="paymentmethod input-sm form-control col-md-6 paymentmethod" >
+                                                                <option>Select ...</option>
+                                                                {% for key, value in paymentMethods %}
+                                                                    <option value="{{key}}" {# if  var.paymentmethod and key == var.paymentmethod.id selected="selected" {# endif #}>{{value}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group" style="display:none;">
+                                                            <label class="control-label">Stripe Invoice Number €</label>
+                                                            <input type="text"  class="stripeinvoicenumber input-sm form-control col-md-6" value="">
+                                                        </div>
+                                                        <div class="form-group" style="display:none;">
+                                                            <label class="control-label">Datum bankbetaling</label>
+                                                            <input type="date" class="datebank input-sm form-control col-md-6"  value="">
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                <div class="custom-betaling-{{control}}"></div>
+                                                
                                                 <div class="form-group">
                                                     <label class="control-label">Saldo Te Betalen €</label>
                                                     <input type="text" id="paymentprofit-{{control}}" class="input-sm form-control  col-md-6 real" readonly="readonly" tabindex="-1" name='paymentprofit' value="{{var.paymentprofit}}">
@@ -280,6 +312,7 @@
                     {% endif %}
                     {% if not show %}
                         <form id="form-checkin-{{control}}" autocomplete="off" class="lastone">
+                            <input hidden="hidden" name="paymentrecive" id="paymentrecive" value="">
                             <div class="col-md-12">
                                 <div class="portlet light bg-inverse">
                                     <div class="portlet-title">
@@ -375,37 +408,37 @@
                                                 <input type="text" id="totalbetalen-{{control}}" class="input-sm form-control  col-md-6 real" readonly="readonly" tabindex="-1"  name='totalbetalen' value="">
                                             </div>
 
-                                            <div class="form-group">
-                                                <label class="control-label">Betaling Ontvangen €</label>
-                                                <div class="input-group">
-											<input type="text" id="paymentrecive-{{control}}" class="input-sm form-control real"   name='paymentrecive' value="">
-											<span class="input-group-btn">
-											<button class="btn default blue-stripe btn-sm plus-bet" type="button"><i class="fa fa-plus"></i></button>
-											</span>
-										</div>
-                                                {# <input type="text" id="paymentrecive-{{control}}" class="input-sm form-control  col-md-6 real"   name='paymentrecive' value="">
-                                                <span class="badge badge-info"> <i class="fa fa-plus"> </i></span> #}
-                                            </div>
-                                            <div class='space-betaling-{{control}}'></div>
+                                             <div class='space-betaling-1 space-betaling'>
+                                                <div class="form-group ">
+                                                    <label class="control-label">Betaling Ontvangen €</label>       
+                                                    <div class="input-group">
+                                                        <input id="" type="text" class="betaling input-sm form-control real" id="betaling-1" value="">
+                                                        <span class="input-group-btn">
+                                                        <button class="btn default blue-stripe btn-sm plus-bet" type="button"><i class="fa fa-plus"></i></button>
+                                                        </span>
+                                                    </div>  
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Betaalmethode €</label>
+                                                    <select id="paymentmethod-1" placeholder="Select ..." class="input-sm form-control col-md-6 paymentmethod" >
+                                                        <option>Select ...</option>
+                                                        {% for key, value in paymentMethods %}
+                                                            <option value="{{key}}" {# if  var.paymentmethod and key == var.paymentmethod.id selected="selected" {# endif #}>{{value}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="form-group" style="display:none;">
+                                                    <label class="control-label">Stripe Invoice Number €</label>
+                                                    <input type="text" class="stripeinvoicenumber input-sm form-control  col-md-6" value="">
+                                                </div>
+                                                <div class="form-group" style="display:none;">
+                                                    <label class="control-label">Datum bankbetaling</label>
+                                                    <input type="date" class="datebank input-sm form-control  col-md-6"  value="">
+                                                </div>
 
-                                            <div class="form-group">
-                                                <label class="control-label">Betaalmethode €</label>
-                                                <select id="paymentmethod-{{control}}" placeholder="Select ..."  class="input-sm form-control col-md-6 paymentmethod"   name='paymentmethod'>
-                                                    <option>Select ...</option>
-                                                
-                                                {% for key, value in paymentMethods %}
-                                                    <option value="{{key}}">{{value}}</option>
-                                                {% endfor %}
-                                                </select>
                                             </div>
-                                            <div class="form-group">
-                                                <label class="control-label">Stripe Invoice Number €</label>
-                                                <input type="text" id="stripeinvoicenumber-{{control}}" class="input-sm form-control  col-md-6"  name='stripeinvoicenumber' value="">
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label">Datum bankbetaling</label>
-                                                <input type="date" id="datebank-{{control}}" class="input-sm form-control  col-md-6"  name='datebank' value="">
-                                            </div>
+                                            <div class="custom-betaling-{{control}}"></div>
+                                         
                                             <div class="form-group">
                                                 <label class="control-label">Saldo Te Betalen €</label>
                                                 <input type="text" id="paymentprofit-{{control}}" class="input-sm form-control  col-md-6 real" readonly="readonly" tabindex="-1" name='paymentprofit' value="">
@@ -429,6 +462,11 @@
     var helpcontents = new Object();
     {% for content in help  %}
         helpcontents["{{ content.label | lower | replace({' ': ''}) }}"] = "{{ content.content | raw }}";
+    {% endfor %}
+
+    var paymentOptions = `<option>Select ...</option>`;
+     {% for key, value in paymentMethods %}
+       paymentOptions += `<option value="{{key}}">{{value}}</option>`;
     {% endfor %}
 
     updateSerialCheckin()
@@ -539,38 +577,31 @@
         cadena += '<div class="form-group"><label class="control-label" >Totaal te betalen €</label>\n\
         <input type="text" id="totalbetalen-' + s + '" class="input-sm form-control col-md-6 real" readonly="readonly" tabindex="-1"  name="totalbetalen"> </div>'
         
-        cadena += `<div class="form-group">
-                        <label class="control-label">Betaling Ontvangen €</label>
-                            <div class="input-group">
-								<input type="text" id="paymentrecive-${s}" class="input-sm form-control real"   name='paymentrecive' value="">
-								<span class="input-group-btn">
-									<button class="btn default blue-stripe btn-sm plus-bet" type="button"><i class="fa fa-plus"></i></button>
-								</span>
-							</div></div><div class='space-betaling-${s}'></div>`;
-        
-        cadena += `<div class="form-group">
+        cadena += `<div class='space-betaling-${s} space-betaling'>
+                    <div class="form-group ">
+                        <label class="control-label">Betaling Ontvangen €</label>       
+                        <div class="input-group">
+                            <input id="" type="text" class="betaling input-sm form-control real" value="">
+                            <span class="input-group-btn">
+                            <button class="btn default blue-stripe btn-sm plus-bet" type="button"><i class="fa fa-plus"></i></button>
+                            </span>
+                        </div>  
+                    </div>
+                    <div class="form-group">
                         <label class="control-label">Betaalmethode €</label>
-                        <select id="paymentmethod-${s}" placeholder="Select ..."  class="input-sm form-control col-md-6 paymentmethod"   name='paymentmethod'>
-                            <option>Select ...</option>
-                            <option value="1">PIN</option>
-                            <option value="2">Credit Card</option>
-                            <option value="3">Contant</option>
-                            <option value="4">Stripe Via Guesty (VCC)</option>
-                            <option value="5">Stripe Via Invoice (Betaallink)</option>
-                            <option value="6">Bank (Aanbetaling)</option>
-                            <option value="7">Airbnb</option>
+                        <select placeholder="Select ..." class=" input-sm form-control col-md-6 paymentmethod" >
+                            ${paymentOptions}
                         </select>
-                    </div>`; 
-
-        cadena += ` <div class="form-group">
+                    </div>
+                    <div class="form-group" style="display:none;">
                         <label class="control-label">Stripe Invoice Number €</label>
-                        <input type="text" id="stripeinvoicenumber-${s}" class="input-sm form-control  col-md-6"  name='stripeinvoicenumber' value="">
-                    </div>`;      
-
-        cadena += `<div class="form-group">
+                        <input type="text" class="input-sm form-control stripeinvoicenumber col-md-6" value="">
+                    </div>
+                    <div class="form-group" style="display:none;">
                         <label class="control-label">Datum bankbetaling</label>
-                        <input type="date" id="datebank-${s}" class="input-sm form-control  col-md-6"  name='datebank' value="">
-                    </div>`;       
+                        <input type="date" class="input-sm form-control datebank col-md-6"  value="">
+                    </div>                
+                </div><div class="custom-betaling-${s}"></div>`; 
 
         cadena += `<div class="form-group">
                         <label class="control-label">Saldo Te Betalen €</label>
@@ -583,6 +614,7 @@
                 </div>'
 
         form = $('<form id="form-checkin-'+ s +'" class="lastone details-checkin" order-name="" order-listing="">' +
+                '  <input hidden="hidden" name="paymentrecive" id="paymentrecive" value="">'+
                 '<div class="col-md-12 "><div class="portlet light bg-inverse">' +
                 '<div class="portlet-title"><div class="caption">' +
                 '<input type="checkbox" id="confirm-check-"'+s+' name="confirm-checkin">' +
@@ -604,6 +636,7 @@
     //Calcular los totales iterando sobre los formularios del checkin
     //PARKING
     $('#section-checkin').on('keyup', '.form-control', function() {
+        if ( $(this).attr('id')) {
         tmp = $(this).attr('id').split('-')
         field = tmp[0]
         number = tmp[1]
@@ -720,6 +753,7 @@
                 break;
         }
         TotalBetalen(number)
+        }
     })
 
     $('#section-checkin').on('change', 'select[name="guests"]', function() {
@@ -930,43 +964,64 @@
         }*/
     }
 
-{% if not show %}
-    plusBetaling ();
-    {% endif %}
+
     function plusBetaling () {
         $('body').on('click', '.plus-bet', function () {
-            var id = $(this).closest('.input-group').children('input').attr('id').split('-');            
-             $('.space-betaling-'+id[1]).append(`<div class="form-group ">
-                 <label class="control-label"></label>       
-                    <div class="input-group">
-						<input id="" type="text" class="input-sm form-control  real" name="paymentrecive" value="">
-                        <span class="input-group-btn">
-						<button class="btn default blue-stripe btn-sm minus-bet" type="button"><i class="fa fa-minus"></i></button>
-						</span>
-					</div>  
+            var formId = $(this).closest('form').attr('id').split('-');            
+            //var betId = $(this).closest('.input-group').children('input').attr('id').split('-');            
+            var betId = $(this).closest('form').find('.space-betaling').length + 1;
+             $('.custom-betaling-'+formId[2]).append(`  
+                <div class='space-betaling-${betId} space-betaling'>
+                    <div class="form-group ">
+                        <label class="control-label">Betaling Ontvangen €</label>       
+                        <div class="input-group">
+                            <input id="" type="text" class="betaling input-sm form-control real" value="">
+                            <span class="input-group-btn">
+                            <button class="btn default blue-stripe btn-sm minus-bet" type="button"><i class="fa fa-minus"></i></button>
+                            </span>
+                        </div>  
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Betaalmethode €</label>
+                        <select placeholder="Select ..." class=" input-sm form-control col-md-6 paymentmethod" >
+                            ${paymentOptions}
+                        </select>
+                    </div>
+                    <div class="form-group" style="display:none;">
+                        <label class="control-label">Stripe Invoice Number €</label>
+                        <input type="text" class="input-sm form-control stripeinvoicenumber col-md-6" value="">
+                    </div>
+                    <div class="form-group" style="display:none;">
+                        <label class="control-label">Datum bankbetaling</label>
+                        <input type="date" class="input-sm form-control datebank col-md-6"  value="">
+                    </div>
                 </div>`);    
         })
         .on('click', '.minus-bet', function () {
-            var id = $(this).closest('.form-group').remove();            
+            var id = $(this).closest('.space-betaling').remove();            
         })
         .on('keyup', 'input[name="paymentrecive"]', function () {
             profitStripeGuesty();
         }); 
     }
 
+    {% if not show %}
+    plusBetaling ();
+    {% endif %}
+
     stripeInvoice();
     function stripeInvoice() {
          $('body').on('change', '.paymentmethod', function () {
-            var id = $(this).attr('id').split('-');   
+            var parent = $(this).closest('.space-betaling');
             if ($(this).val() == 4) {
-                $('#stripeinvoicenumber-'+id[1]).closest('.form-group').show(100);
-                $('#datebank-'+id[1]).val("").closest('.form-group').hide(100);
+                $(parent).find('.stripeinvoicenumber').closest('.form-group').show(100);
+                $(parent).find('.datebank').val("").closest('.form-group').hide(100);
             } else if ($(this).val() == 5) {
-                $('#datebank-'+id[1]).closest('.form-group').show(100);
-                $('#stripeinvoicenumber-'+id[1]).val("").closest('.form-group').hide(100);
+               $(parent).find('.datebank').closest('.form-group').show(100);
+                 $(parent).find('.stripeinvoicenumber').val("").closest('.form-group').hide(100);
             } else {
-                $('#datebank-'+id[1]).val("").closest('.form-group').hide(100);
-                $('#stripeinvoicenumber-'+id[1]).val("").closest('.form-group').hide(100);
+                $(parent).find('.datebank').val("").closest('.form-group').hide(100);
+                 $(parent).find('.stripeinvoicenumber').val("").closest('.form-group').hide(100);
             }
             profitStripeGuesty();
          });
@@ -978,25 +1033,25 @@
     function profitStripeGuesty() {
         var pin = credit = contant = guesty = invoice = bank = airbnb = 0;
         $('.paymentmethod').each(function() {
-             var id = $(this).attr('id').split('-');   
+             var space = $(this).parent('.space-betaling');   
             switch ($(this).val()) {
                 case "1":
-                     pin += totalBetaling (id[1])
+                     pin += totalBetaling (space)
                 break;
                 case "2":
-                     credit += totalBetaling (id[1])
+                     credit += totalBetaling (space)
                 break;
                 case "3":
-                     contant += totalBetaling (id[1])
+                     contant += totalBetaling (space)
                 break;
                 case "4":
-                     guesty += totalBetaling (id[1])
+                     guesty += totalBetaling (space)
                 break;
                 case "5":
-                     invoice += totalBetaling (id[1])
+                     invoice += totalBetaling (space)
                 break;
                 case "6":
-                     bank += totalBetaling (id[1])
+                     bank += totalBetaling (space)
                 break;
                 case "7":
                      airbnb += totalBetaling (id[1])
@@ -1019,11 +1074,11 @@
     }
 
     function totalBetaling (id) {
-        var id_form = $('#paymentrecive-'+id).closest('form').attr('id');
+        //var id_form = $('#paymentrecive-'+id).closest('form').attr('id');
         var total = 0;
-        $('#'+id_form+' input[name="paymentrecive"]').each(function() {
+        /*$('#'+id_form+' input[name="paymentrecive"]').each(function() {
             total += numeral($(this).val()).value();
-        })
+        })*/
         return total;        
     }
 

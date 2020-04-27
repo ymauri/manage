@@ -769,35 +769,19 @@ class HotelController extends Controller {
                         $relation->setNotes($value['value']);
                         break;
                     case 'paymentrecive':
-                        $current = str_replace('.', '', $value['value']);
-                        $current = str_replace(',', '.', $current);
-                        $paymentrecive[] = $current;
-                    break;
-                    case 'stripeinvoicenumber':
-                        $relation->setStripeinvoicenumber($value['value']);    
-                    break;
-                    case 'datebank':
-                        if (!empty($value['value'])) {
-                            $relation->setDatebank(new \DateTime($value['value']));
-                        } else {
-                            $relation->setDatebank(null);
-                        }
+                        $relation->setPaymentrecive( $value['value']);
                     break;
                     case 'paymentprofit':
                         $current = str_replace('.', '', $value['value']);
                         $current = str_replace(',', '.', $current);
                         $relation->setPaymentprofit((float)$current);
                     break;
-                    case 'paymentmethod':
-                        $pay = $this->em->getRepository('RestaurantBundle:PaymentMethod')->find($value['value']);
-                        $relation->setPaymentmethod($pay);
-                    break;
                     default:
                         break;
                 }
             }
 
-            $relation->setPaymentrecive($paymentrecive);
+           
             if (is_null($relation->getCheckindone())){
                 $relation->setCheckindone(0);
             }
