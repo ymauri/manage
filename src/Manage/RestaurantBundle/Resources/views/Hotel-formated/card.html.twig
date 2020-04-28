@@ -57,7 +57,7 @@
 
                             </section>
                             <section class="col-md-12 section-totales" >
-                                <div class="totales">
+                                <div class="totales row container-fluid">
                                     <div class="row form-group ">
                                         <label for="tdebit" class="required">Totaal Debit Cards €</label>
                                         <input type="text" id="tdebit" name="tdebit" disabled="disabled" required="required" class="input-sm pull-right form-control card-control real" value="{{entity_basic.card.tcredit}}">
@@ -215,9 +215,11 @@
         // Final
         $('#totalccv').val(numeral(def+cc+ali).format('0.0,'))
         totaldebit = numeral($('#tdebit').val()).value() + numeral($('#cctdebit').val()).value()
-        $('#totaldebit').val(numeral(totaldebit).format('0.0,'))
+        pin = numeral($('#pin').val()).value();
+        $('#totaldebit').val(numeral(totaldebit + pin).format('0.0,'))
         totalcredit = numeral($('#tcredit').val()).value() + numeral($('#cctcredit').val()).value()
-        $('#totalcredit').val(numeral(totalcredit).format('0.0,'))
+        credit = numeral($('#credit').val()).value();
+        $('#totalcredit').val(numeral(totalcredit + credit).format('0.0,'));
         completeProfit()
     }
     $('input[name="iscc"]').on({

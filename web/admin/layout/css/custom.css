@@ -48,7 +48,9 @@
     #form-basic-kasboekhotel .form-control,
     #kasboek_contanten input,
     #kasboek_turnovers input,
-    #kasboek_final input {
+    #kasboek_final input,
+    #eind,
+    #contant {
         max-width: 80px;
         text-align: right;
         color: #333333;
@@ -77,9 +79,15 @@
         max-width: 280px;
     }
     
-    #form-bills fieldset,
+    #form-bills,
     fieldset#data-final {
         max-width: 360px;
+    }
+    
+    #form-bills label.required {
+        float: right;
+        line-height: 22px;
+        padding-right: 3px;
     }
     
     .fieldset-userdoor {

@@ -294,6 +294,10 @@
 {% endblock %}
 {% block javascripts %}
     <script>
+     var paymentOptions = `<option>Select ...</option>`;
+     {% for key, value in paymentMethods %}
+       paymentOptions += `<option value="{{key}}">{{value}}</option>`;
+    {% endfor %}
         $('div').on('keypress', '.real', function (evt) {
             evt = (evt) ? evt : window.event;
             var charCode = (evt.which) ? evt.which : evt.keyCode;
@@ -469,7 +473,7 @@
             });
         });
 
-        function completeProfit() {
+        /*function completeProfit() {
 
             a = numeral($('#totalcontanten').val()).value() + numeral($('#totalccv').val()).value() +  numeral($('#overige').val()).value() + numeral($('#totaldebit').val()).value()
             $('#totalont').val(numeral(a).format('0.0,'))
@@ -478,7 +482,7 @@
             $('#kasver').val(parseFloat(b).toFixed(2))
             $('.kasv.badge').text('€' + $('#kasver').val())
             //$('#kasver').val(numeral(b).format('0.0,'))
-        }
+        }*/
 
         {% if not show %}
         setInterval(function () {

@@ -152,11 +152,11 @@
                                                     {% if help.checkin_betalen.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_betalen.content }}"></i>{% endif %}
                                                     <input type="text" id="betalen-{{control}}" class="input-sm form-control col-md-6 real"  name='betalen' value="{{var.betalen }}">
                                                 </div>
-                                                <div class="form-group random">
+                                                {# <div class="form-group random">
                                                     <label class="control-label">Reeds voldaan €</label>
                                                     {% if help.checkin_voldaan.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_voldaan.content }}"></i>{% endif %}
                                                     <input type="text" id="voldan-{{control}}" class="input-sm form-control  col-md-6 real"  name='voldan' value="{{var.voldan }}">
-                                                </div>
+                                                </div> #}
                                                 <div class="form-group">
                                                     <label class="control-label">Aantal nachten</label>
                                                     {% if help.checkin_nights.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_nights.content }}"></i>{% endif %}
@@ -202,24 +202,6 @@
                                                     <label class="control-label">Totaal te betalen €</label>
                                                     <input type="text" id="totalbetalen-{{control}}" class="input-sm form-control  col-md-6 real" readonly="readonly" tabindex="-1"  name='totalbetalen' value="{{var.totalbetalen}}">
                                                 </div>
-
-                                                {# <div class="form-group ">
-                                                    <label class="control-label">Betaling Ontvangen €</label>       
-                                                        <div class="input-group">
-                                                        {% set first = true %}
-                                                        {% if var.paymentrecive|length > 0 %}
-                                                           {% for pay in var.paymentrecive if first %}
-                                                                <input type="text" id="paymentrecive-{{control}}" class="input-sm form-control  real"   name='paymentrecive' value="{{pay}}">
-                                                                {% set first = false %}
-                                                           {% endfor %}
-                                                        {% else %}
-											                <input type="text" id="paymentrecive-{{control}}" class="input-sm form-control  real"   name='paymentrecive' value="">
-                                                        {% endif %}
-                                                        <span class="input-group-btn">
-                                                        <button class="btn default blue-stripe btn-sm plus-bet" type="button"><i class="fa fa-plus"></i></button>
-                                                        </span>
-                                                </div>                                            
-                                                </div>  #}
                                                {% set betalinControl = 1 %}
                                                 {% if var.paymentrecive|length > 0 %}
                                                     {% for pay in var.paymentrecive | json_decode %}
@@ -239,7 +221,7 @@
                                                                     <select placeholder="Select ..." class="paymentmethod input-sm form-control col-md-6 paymentmethod" >
                                                                         <option>Select ...</option>
                                                                         {% for key, value in paymentMethods %}
-                                                                            <option value="{{key}}" {% if  pay.paymentmethod == key %} selected="selected" {% endif %}>{{pay.paymentmethod}}</option>
+                                                                            <option value="{{key}}" {% if  pay.paymentmethod == key %} selected="selected" {% endif %}>{{value}}</option>
                                                                         {% endfor %}
                                                                     </select>
                                                                 </div>
@@ -260,7 +242,7 @@
                                                         <div class="form-group ">
                                                             <label class="control-label">Betaling Ontvangen €</label>       
                                                             <div class="input-group">
-                                                                <input id="" type="text" class="input-sm form-control real betaling" value="">
+                                                                <input id="betaling-{{betalinControl}}" type="text" class="input-sm form-control real betaling" value="">
                                                                 <span class="input-group-btn">
                                                                 <button class="btn default blue-stripe btn-sm plus-bet" type="button"><i class="fa fa-plus"></i></button>
                                                                 </span>
@@ -358,11 +340,11 @@
                                                 {% if help.checkin_betalen.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_betalen.content }}"></i>{% endif %}
                                                 <input type="text" id="betalen-{{control}}" class="input-sm form-control col-md-6 real"  name='betalen' value="">
                                             </div>
-                                            <div class="form-group random">
+                                            {# <div class="form-group random">
                                                 <label class="control-label">Reeds voldaan €</label>
                                                 {% if help.checkin_voldaan.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_voldaan.content }}"></i>{% endif %}
                                                 <input type="text" id="voldan-{{control}}" class="input-sm form-control  col-md-6 real"  name='voldan' value="">
-                                            </div>
+                                            </div> #}
                                             <div class="form-group">
                                                 <label class="control-label">Aantal nachten</label>
                                                 {% if help.checkin_nights.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_nights.content }}"></i>{% endif %}
@@ -464,11 +446,6 @@
         helpcontents["{{ content.label | lower | replace({' ': ''}) }}"] = "{{ content.content | raw }}";
     {% endfor %}
 
-    var paymentOptions = `<option>Select ...</option>`;
-     {% for key, value in paymentMethods %}
-       paymentOptions += `<option value="{{key}}">{{value}}</option>`;
-    {% endfor %}
-
     updateSerialCheckin()
     findListingSelectedCheckin()
     $('select[name="source"]').find(":selected").each(function(){
@@ -495,7 +472,7 @@
                 checkin_element.closest('form').remove();
                 $('input[name="betalen"]').trigger('keyup')
                 Dagopbrengst()
-                completeProfit()
+                //completeProfit()
         }
         else {
 
@@ -512,6 +489,17 @@
         updateSerialCheckin()
         findListingSelectedCheckin()
     })
+
+    function completeProfit() {
+
+            a = numeral($('#totalcontanten').val()).value() + numeral($('#totalccv').val()).value() +  numeral($('#overige').val()).value() + numeral($('#totaldebit').val()).value() ;
+            $('#totalont').val(numeral(a).format('0.0,'));
+            b = numeral($('#totalont').val()).value() - numeral($('#omzet').val()).value() //- numeral($('#saldoborg').val()).value() - numeral($('#longStay').val()).value()
+            //console.log (isNaN(b))
+            $('#kasver').val(parseFloat(b).toFixed(2))
+            $('.kasv.badge').text('€' + $('#kasver').val())
+            //$('#kasver').val(numeral(b).format('0.0,'))
+        }
 
     function genetare_form(s) {
         cadena = ''
@@ -533,11 +521,6 @@
 
         cadena += '<div class="form-group"><label class="control-label">Overnachting €</label>&nbsp;{% if help.checkin_betalen.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_betalen.content }}"></i>{% endif %}\n\
         <input type="text" id="betalen-' + s + '" class="input-sm form-control col-md-6 real"  name="betalen"> \n\
-        </div>'
-
-        cadena += '<div class="form-group random"><label class="control-label" >Reeds voldaan €</label>&nbsp;\n\
-        {% if help.checkin_voldaan.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_voldaan.content }}"></i>{% endif %}\n\
-        <input type="text" id="voldan-' + s + '" class="input-sm form-control col-md-6 real"  name="voldan">\n\
         </div>'
 
         cadena += '<div class="form-group"><label class="control-label" >Aantal nachten</label>&nbsp;{% if help.checkin_nights.content %}<i class="fa fa-question-circle tooltips"  data-placement="left" data-original-title="{{ help.checkin_nights.content }}"></i>{% endif %}\n\
@@ -581,7 +564,7 @@
                     <div class="form-group ">
                         <label class="control-label">Betaling Ontvangen €</label>       
                         <div class="input-group">
-                            <input id="" type="text" class="betaling input-sm form-control real" value="">
+                            <input id="betaling-${s}" type="text" class="betaling input-sm form-control real" value="">
                             <span class="input-group-btn">
                             <button class="btn default blue-stripe btn-sm plus-bet" type="button"><i class="fa fa-plus"></i></button>
                             </span>
@@ -728,18 +711,6 @@
                 else {
                     $(this).attr('style', '')
                 }
-
-                /*total = 0
-                $('input[name="nights"]').each(function(index, value) {
-                    total += numeral($(value).val()).value()
-                })
-                personas = 0
-                $('select[name="guests"]').each(function(index, value) {
-                    personas += numeral($(value).val()).value()
-                })
-                var tax = parseFloat({{ entity_basic.tax }})
-                total = total * personas * tax
-                $('#totalover').val(numeral(total).format('0.0,'))*/
                 break;
             case 'borg':
                 value = numeral($(this).val()).value()
@@ -773,18 +744,6 @@
         $('#data-final #totaltoer').val(numeral(total).format('0.0,'))
         $('#form-total-hotel #totaltoer').val(numeral(total).format('0.0,'))
 
-        /*latecheckin = 0
-        $('input[name="latecheckin"]').each(function(index, value) {
-            latecheckin += numeral($(value).val()).value()
-        })
-        totalbetalen = 0
-        $('select[name="totalbetalen"]').each(function(index, value) {
-            totalbetalen += numeral($(value).val()).value()
-        })
-
-        total = totalbetalen + latecheckin
-        $('#totalover').val(numeral(total).format('0.0,'))*/
-
         original = $('#form-checkin-'+number+' #checkinguests').val()
         if (numeral($(this).val()).value() != original && original != undefined && original != "" && $('#form-checkin-'+number+' #checkinid').val() != ""){
             $(this).attr('style', 'color: red; font-weight: bold;')
@@ -801,20 +760,21 @@
                 + numeral($('#parking-' + index).val()).value()
                 + numeral($('#latecheckin-' + index).val()).value()
                 + numeral($('#betalen-' + index).val()).value()
-                + numeral($('#borg-' + index).val()).value()
-                - numeral($('#voldan-' + index).val()).value();
+                + numeral($('#borg-' + index).val()).value();
         $('#totalbetalen-' + index).val(numeral(total).format('0.0,'));
-        total -= (
-            numeral($('#betalen-' + index).val()).value() +
-            numeral($('#toer-' + index).val()).value() +
-            numeral($('#parking-' + index).val()).value() +
-            numeral($('#latecheckin-' + index).val()).value() +
-            numeral($('#borg-' + index).val()).value() 
-        );
-        $('#paymentprofit-' + index).val(numeral(total).format('0.0,'));        
+        var betaling = 0;
+        $('#form-checkin-'+index).find('.betaling').each(function () {
+             betaling += numeral($(this).val()).value();
+        });
+        $('#paymentprofit-' + index).val(numeral(total - betaling).format('0.0,'));   
+        if (total - betaling > 0){
+             $('#paymentprofit-' + index).attr('style', 'color: red; font-weight: bold;');
+        }
+        else {
+             $('#paymentprofit-' + index).attr('style', '');
+        }
         Dagopbrengst();
         profitStripeGuesty();
-
     }
 
     //Calcular el total Dagopbrengst
@@ -835,11 +795,11 @@
             extra += numeral($(value).val()).value()
         })
 
-        voldan = 0
-        $('input[name="voldan"]').each(function(index, value) {
-            voldan += numeral($(value).val()).value()
-        })
-        $('#data-final #totalparkingextra').val(numeral(extra + betalen - voldan).format('0.0,'))
+        //voldan = 0
+        //$('input[name="voldan"]').each(function(index, value) {
+        //    voldan += numeral($(value).val()).value()
+        //})
+        $('#data-final #totalparkingextra').val(numeral(extra + betalen).format('0.0,'))
 
         borg = 0
         $('input[name="borg"]').each(function(index, value) {
@@ -847,25 +807,19 @@
         })
         $('#form-total-hotel #totalborg').val(numeral(borg).format('0.0,'))
 
-        retour = 0
-        $('.retour').each(function(index, value) {
-            retour += numeral($(value).val()).value()
-        })
-        $('#form-total-hotel #totalretourborg').val(numeral(retour).format('0.0,'))
+        //retour = 0
+        //$('.retour').each(function(index, value) {
+        //    retour += numeral($(value).val()).value()
+        //})
+        //$('#form-total-hotel #totalretourborg').val(numeral(retour).format('0.0,'))
 
-        total = total - borg
+        
 
         $('#data-final #omzet').val(numeral(total).format('0.0,'))
         $('.dago.badge').text('€' + numeral(total).format('0.0,'))
-        $('#data-final #saldoborg').val(numeral(borg-retour).format('0.0,'))
+        $('#data-final #saldoborg').val(numeral(borg).format('0.0,'))
         $('#form-total-hotel #totaldag').val(numeral(total).format('0.0,'))
 
-
-
-        /*latecheckin = 0
-        $('input[name="latecheckin"]').each(function(index, value) {
-            latecheckin += numeral($(value).val()).value()
-        })*/
         betalen = 0
         $('input[name="betalen"]').each(function(index, value) {
             betalen += numeral($(value).val()).value()
@@ -975,7 +929,7 @@
                     <div class="form-group ">
                         <label class="control-label">Betaling Ontvangen €</label>       
                         <div class="input-group">
-                            <input id="" type="text" class="betaling input-sm form-control real" value="">
+                            <input id="betaling-${betId}" type="text" class="betaling input-sm form-control real" value="">
                             <span class="input-group-btn">
                             <button class="btn default blue-stripe btn-sm minus-bet" type="button"><i class="fa fa-minus"></i></button>
                             </span>
@@ -997,11 +951,15 @@
                     </div>
                 </div>`);    
         })
-        .on('click', '.minus-bet', function () {
-            var id = $(this).closest('.space-betaling').remove();            
+        .on('click', '.minus-bet', function () {  
+            var form = $(this).closest('form');           
+            $(this).closest('.space-betaling').remove();        
+            $(form).find('select[name="guests"]').first().trigger('change');   
         })
-        .on('keyup', 'input[name="paymentrecive"]', function () {
+        .on('keyup', 'input.betaling', function () {
             profitStripeGuesty();
+            var id = $(this).closest('form').attr('id').split('-')
+                TotalBetalen(id[2])
         }); 
     }
 
@@ -1013,12 +971,32 @@
     function stripeInvoice() {
          $('body').on('change', '.paymentmethod', function () {
             var parent = $(this).closest('.space-betaling');
-            if ($(this).val() == 4) {
+            var form = $(this).closest('form');
+            switch (parseInt($(this).val())) {
+                case 5:
+                    $(parent).find('.stripeinvoicenumber').closest('.form-group').show(100);
+                    $(parent).find('.datebank').val("").closest('.form-group').hide(100);
+                    break;
+                case 6:
+                    $(parent).find('.datebank').closest('.form-group').show(100);
+                    $(parent).find('.stripeinvoicenumber').val("").closest('.form-group').hide(100);
+                    break;
+                case 7:
+                    var overNight =  numeral($(form).find('input[name="betalen"]').first().val()).value();
+                    $(parent).find('.betaling').val(numeral(overNight).format('0.0,')).trigger('keyup');
+                    $(parent).find('.datebank').val("").closest('.form-group').hide(100);
+                    $(parent).find('.stripeinvoicenumber').val("").closest('.form-group').hide(100);
+                break;
+                default:
+                    $(parent).find('.datebank').val("").closest('.form-group').hide(100);
+                    $(parent).find('.stripeinvoicenumber').val("").closest('.form-group').hide(100);
+                    break;
+            }
+            if ($(this).val() == 5) {
                 $(parent).find('.stripeinvoicenumber').closest('.form-group').show(100);
                 $(parent).find('.datebank').val("").closest('.form-group').hide(100);
-            } else if ($(this).val() == 5) {
-               $(parent).find('.datebank').closest('.form-group').show(100);
-                 $(parent).find('.stripeinvoicenumber').val("").closest('.form-group').hide(100);
+            } else if ($(this).val() == 6) {
+              
             } else {
                 $(parent).find('.datebank').val("").closest('.form-group').hide(100);
                  $(parent).find('.stripeinvoicenumber').val("").closest('.form-group').hide(100);
@@ -1032,29 +1010,29 @@
  
     function profitStripeGuesty() {
         var pin = credit = contant = guesty = invoice = bank = airbnb = 0;
-        $('.paymentmethod').each(function() {
-             var space = $(this).parent('.space-betaling');   
-            switch ($(this).val()) {
+        $('.space-betaling').each(function() {            
+             var mehtod = $(this).find('.paymentmethod').first().val();   
+            switch (mehtod) {
                 case "1":
-                     pin += totalBetaling (space)
+                     pin += numeral($(this).find('.betaling').first().val()).value();
                 break;
                 case "2":
-                     credit += totalBetaling (space)
+                     credit += numeral($(this).find('.betaling').first().val()).value();
                 break;
                 case "3":
-                     contant += totalBetaling (space)
+                     contant +=  numeral($(this).find('.betaling').first().val()).value();
                 break;
                 case "4":
-                     guesty += totalBetaling (space)
+                     guesty +=  numeral($(this).find('.betaling').first().val()).value();
                 break;
                 case "5":
-                     invoice += totalBetaling (space)
+                     invoice +=  numeral($(this).find('.betaling').first().val()).value();
                 break;
                 case "6":
-                     bank += totalBetaling (space)
+                     bank +=  numeral($(this).find('.betaling').first().val()).value();
                 break;
                 case "7":
-                     airbnb += totalBetaling (id[1])
+                     airbnb +=  numeral($(this).find('.betaling').first().val()).value();
                 break;
             }
         });
@@ -1067,19 +1045,10 @@
         $('#credit').val(numeral(credit).format('0.0,'));  
         $('#contant').val(numeral(contant).format('0.0,'));  
         
-        $('#overige').val(numeral(pin + credit + contant + guesty + invoice + bank + airbnb).format('0.0,'));  
+        $('#overige').val(numeral( guesty + invoice + bank + airbnb).format('0.0,'));  
         $('.overige.badge').text("€"+numeral(guesty + invoice + bank + airbnb).format('0.0,'));  
         $('.bill-control').first().trigger('keyup');
-        $('.card').first().trigger('keyup');
-    }
-
-    function totalBetaling (id) {
-        //var id_form = $('#paymentrecive-'+id).closest('form').attr('id');
-        var total = 0;
-        /*$('#'+id_form+' input[name="paymentrecive"]').each(function() {
-            total += numeral($(this).val()).value();
-        })*/
-        return total;        
+        $('.cccredit').first().trigger('keyup');
     }
 
     $('input[name="readytoclear"]').each(function(){
