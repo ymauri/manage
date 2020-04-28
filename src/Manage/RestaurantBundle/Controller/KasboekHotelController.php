@@ -121,11 +121,12 @@ class KasboekHotelController extends Controller {
             'entity_basic' => $entity_basic,
             'form_basic' => $form_basic->createView(),
             'form_float' => $form_float->createView(),
-            'hotel1'  => $this->getFormsHotel(1, $fecha_array[1], $fecha_array[0]),
-            'hotel2'  => $this->getFormsHotel(2, $fecha_array[1], $fecha_array[0]),
-            'hotel3'  => $this->getFormsHotel(3, $fecha_array[1], $fecha_array[0]),
-            'hotel4'  => $this->getFormsHotel(4, $fecha_array[1], $fecha_array[0]),
-            'hotel5'  => $this->getFormsHotel(5, $fecha_array[1], $fecha_array[0]),
+            
+            'hotels'  => [$this->getFormsHotel(1, $fecha_array[1], $fecha_array[0]),
+            $this->getFormsHotel(2, $fecha_array[1], $fecha_array[0]),
+            $this->getFormsHotel(3, $fecha_array[1], $fecha_array[0]),
+            $this->getFormsHotel(4, $fecha_array[1], $fecha_array[0]),
+            $this->getFormsHotel(5, $fecha_array[1], $fecha_array[0])],
             'show'  => TRUE,
         ));
     }
@@ -217,15 +218,17 @@ class KasboekHotelController extends Controller {
             $fecha = $entity_modif->getDated()->format('Y-m-d');
             $fecha_array = explode('-', $fecha);
             //$entity_basic = $this->updateCalculos($entity_basic);
+            $limit = new \DateTime('2020-04-15');
+            //$view =  $this->entity_basic->getDated() > $limit ? 'RestaurantBundle:KasboekHotel-formated:edit.html.twig' : 'RestaurantBundle:KasboekHotel:edit.html.twig';
             return $this->render('RestaurantBundle:KasboekHotel:edit.html.twig', array(
                 'entity_basic' => $entity_modif,
                 'form_basic' => $form_basic->createView(),
                 'form_float' => $form_float->createView(),
-                'hotel1'  => $this->getFormsHotel(1, $fecha_array[1], $fecha_array[0]),
-                'hotel2'  => $this->getFormsHotel(2, $fecha_array[1], $fecha_array[0]),
-                'hotel3'  => $this->getFormsHotel(3, $fecha_array[1], $fecha_array[0]),
-                'hotel4'  => $this->getFormsHotel(4, $fecha_array[1], $fecha_array[0]),
-                'hotel5'  => $this->getFormsHotel(5, $fecha_array[1], $fecha_array[0]),
+                'hotels'  => [$this->getFormsHotel(1, $fecha_array[1], $fecha_array[0]),
+                                $this->getFormsHotel(2, $fecha_array[1], $fecha_array[0]),
+                                $this->getFormsHotel(3, $fecha_array[1], $fecha_array[0]),
+                                $this->getFormsHotel(4, $fecha_array[1], $fecha_array[0]),
+                                $this->getFormsHotel(5, $fecha_array[1], $fecha_array[0])],
                 'show'  => FALSE,
             ));
         }
@@ -437,12 +440,12 @@ class KasboekHotelController extends Controller {
             ->setBody($this->renderView('RestaurantBundle:KasboekHotel:mail.html.twig', array(
                 'entity_basic' => $entity_basic,
                 'form_basic' => $form_basic->createView(),
-                'form_float' => $form_float->createView(),
-                'hotel1'  => $this->getFormsHotel(1, $fecha_array[1], $fecha_array[0]),
-                'hotel2'  => $this->getFormsHotel(2, $fecha_array[1], $fecha_array[0]),
-                'hotel3'  => $this->getFormsHotel(3, $fecha_array[1], $fecha_array[0]),
-                'hotel4'  => $this->getFormsHotel(4, $fecha_array[1], $fecha_array[0]),
-                'hotel5'  => $this->getFormsHotel(5, $fecha_array[1], $fecha_array[0]),
+                'form_float' => $form_float->createView(),               
+                'hotels'  => [$this->getFormsHotel(1, $fecha_array[1], $fecha_array[0]),
+                                $this->getFormsHotel(2, $fecha_array[1], $fecha_array[0]),
+                                $this->getFormsHotel(3, $fecha_array[1], $fecha_array[0]),
+                                $this->getFormsHotel(4, $fecha_array[1], $fecha_array[0]),
+                                $this->getFormsHotel(5, $fecha_array[1], $fecha_array[0])],
                 'show'  => FALSE,
             )))
             ->setContentType("text/html");
@@ -468,11 +471,12 @@ class KasboekHotelController extends Controller {
                     'entity_basic' => $entity_basic,
                     'form_basic' => $form_basic->createView(),
                     'form_float' => $form_float->createView(),
-                    'hotel1'  => $this->getFormsHotel(1, $fecha_array[1], $fecha_array[0]),
-                    'hotel2'  => $this->getFormsHotel(2, $fecha_array[1], $fecha_array[0]),
-                    'hotel3'  => $this->getFormsHotel(3, $fecha_array[1], $fecha_array[0]),
-                    'hotel4'  => $this->getFormsHotel(4, $fecha_array[1], $fecha_array[0]),
-                    'hotel5'  => $this->getFormsHotel(5, $fecha_array[1], $fecha_array[0]),
+                    
+                    'hotels'  => [$this->getFormsHotel(1, $fecha_array[1], $fecha_array[0]),
+                                    $this->getFormsHotel(2, $fecha_array[1], $fecha_array[0]),
+                                    $this->getFormsHotel(3, $fecha_array[1], $fecha_array[0]),
+                                    $this->getFormsHotel(4, $fecha_array[1], $fecha_array[0]),
+                                    $this->getFormsHotel(5, $fecha_array[1], $fecha_array[0])],
                     'show'  => FALSE,
                 )))
 

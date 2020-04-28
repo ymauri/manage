@@ -177,7 +177,9 @@
 
                             <br/>
                             <fieldset class="col-md-12">
+                                {% for hotel in hotels %}
                                 {% include 'RestaurantBundle:KasboekHotel:forms.html.twig' %}
+                                {% endfor %}
                             </fieldset>
                             <fieldset class="col-md-12" style="border-bottom: none">
                                 <div class="col-md-6 col-md-offset-3">
