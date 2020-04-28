@@ -566,7 +566,7 @@ class HotelController extends Controller {
                     $response->setData($ex);
                     return $response;
                 }
-                //return $response;
+                // return $response;
 
             }
             else {
@@ -896,7 +896,7 @@ class HotelController extends Controller {
                    if ($value['name'] == 'contant') {
                         $current = str_replace('.', '', $value['value']);
                         $current = str_replace(',', '.', $current);
-                        $this->entity_basic->$set_method((float)$current);
+                        $this->entity_basic->setContant((float)$current);
                     }
                     else {
                         $current = str_replace('.', '', $value['value']);
@@ -996,47 +996,48 @@ class HotelController extends Controller {
             $pin->setTotalcc($debit + $credit);
         }
         $em->persist($pin);
-        $em->flush();
-        $relations = $em->getRepository('RestaurantBundle:RCheckinHotel')->findBy(array("hotel"=>$entity->getId()));
-        $totalover = 0;
-        $totaltoer = 0;
-        $totalborg = 0;
-        $totalparking = 0;
-        $totalextra = 0;
-        $dago = 0;
+        // $em->flush();
+        // $relations = $em->getRepository('RestaurantBundle:RCheckinHotel')->findBy(array("hotel"=>$entity->getId()));
+        // $totalover = 0;
+        // $totaltoer = 0;
+        // $totalborg = 0;
+        // $totalparking = 0;
+        // $totalextra = 0;
+        // $dago = 0;
 
-        foreach ($relations as $checkin){
-            $totalover += $checkin->getBetalen();
-            $current = str_replace('.', '', $checkin->getToer());
-            $current = str_replace(',', '.', $current);
-            $totaltoer += $current;
-            $totalborg += $checkin->getBorg();
-            $totalparking += $checkin->getParking();
-            $totalextra += $checkin->getLatecheckin();
+        // foreach ($relations as $checkin){
+        //     $totalover += $checkin->getBetalen();
+        //     $current = str_replace('.', '', $checkin->getToer());
+        //     $current = str_replace(',', '.', $current);
+        //     $totaltoer += $current;
+        //     $totalborg += $checkin->getBorg();
+        //     $totalparking += $checkin->getParking();
+        //     $totalextra += $checkin->getLatecheckin();
             
-        }
-        $dago = $totalover + $totaltoer + $totalparking + $totalborg + $totalextra;
+        // }
+        // $dago = $totalover + $totaltoer + $totalparking + $totalborg + $totalextra;
 
-        $entity->setTotalover($totalover + $totalextra);
-        $entity->setTotaltoer($totaltoer);
-        $entity->setSaldoborg($totalborg);
-        $entity->setTotalparking($totalparking);
-        $entity->setOmzet($dago);
+        // $entity->setTotalover($totalover + $totalextra);
+        // $entity->setTotaltoer($totaltoer);
+        // $entity->setSaldoborg($totalborg);
+        // $entity->setTotalparking($totalparking);
+        // $entity->setOmzet($dago);
 
-        $entity->setTotalont($bill->getEind() + $pin->getTotal() + $pin->getTotalcc() + $pin->getAlipay() + $entity->getPin() + $entity->getCard());
-        $entity->setOverige($entity->getAribnb() + $entity->getBank() + $entity->getStripeinvoice() + $entity->getStripeguesy());
-        $entity->setTotalcontanten($bill->getEind() + $entity->getContant());
-        if ($pin->getIscc()) {
-            $entity->getTotaldebit($pin->getTdebit() + $pin->getCctdebit() + $entity->getPin());
-            $entity->getTotalcredit($pin->getTcredit() + $pin->getCctcredit() + $entity->getCard());
-        }
-        else {
-            $entity->getTotaldebit($pin->getTdebit() + $entity->getPin());
-            $entity->getTotalcredit($pin->getTcredit() + $entity->getCard());
-        }
-        $em->persist($entity);
-        $entity->setKasver($entity->getTotalont() - $entity->setOmzet());
-        $em->persist($entity);
+        // $entity->setOverige($entity->getAirbnb() + $entity->getBank() + $entity->getStripeinvoice() + $entity->getStripeguesy());
+        
+        // $entity->setTotalcontanten($bill->getEind() + $entity->getContant());
+        // if ($pin->getIscc()) {
+        //     $entity->setTotaldebit($pin->getTdebit() + $pin->getCctdebit() + $entity->getPin());
+        //     $entity->setTotalcredit($pin->getTcredit() + $pin->getCctcredit() + $entity->getCredit());
+        // }
+        // else {
+        //     $entity->setTotaldebit($pin->getTdebit() + $entity->getPin());
+        //     $entity->setTotalcredit($pin->getTcredit() + $entity->getCredit());
+        // }
+        // $em->persist($entity);
+        // $entity->setTotalont($entity->getOverige() + $entity->getTotaldebit() + $entity->getTotalcredit() + $entity->getTotalcontanten());
+        // $entity->setKasver($entity->getTotalont() - $entity->getOmzet());
+        // $em->persist($entity);
         $em->flush();
     }
 
@@ -1195,16 +1196,19 @@ class HotelController extends Controller {
 
     private function sendMail($id){
         $em = $this->getDoctrine()->getManager();
-
+       
         //Crear el notificador para este formulario.
         $notifier = $em->getRepository('RestaurantBundle:Notifier')->findOneBy(array('form'=>'Hotel'));
         $entity_basic = $em->getRepository('RestaurantBundle:Hotel')->findOneBy(array('id'=>$id));
+        $limit = new \DateTime('2020-04-15');
+        $view = $entity_basic->getDated() > $limit ? 'RestaurantBundle:Hotel-formated:mail.html.twig' : 'RestaurantBundle:Hotel:mail.html.twig';
+        
         $mails_array = explode(';',$notifier->getMails());
         $mail_customer = \Swift_Message::newInstance()
             ->setFrom('info@log.towerleisure.nl')
             ->setTo($mails_array)
             ->setSubject("Hotel Kassa Cash & Log")
-            ->setBody($this->renderView('RestaurantBundle:Hotel:mail.html.twig', array(
+            ->setBody($this->renderView($view, array(
                 'entity_basic' => $entity_basic,
                 'rcheckin' => $em->getRepository('RestaurantBundle:RCheckinHotel')->getOrderedCheckin($id),
                 'rcheckout' => $em->getRepository('RestaurantBundle:RCheckoutHotel')->getOrderedCheckout($id),
