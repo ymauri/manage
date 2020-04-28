@@ -495,8 +495,8 @@
             a = numeral($('#totalcontanten').val()).value() + numeral($('#totalccv').val()).value() +  numeral($('#overige').val()).value() + numeral($('#totaldebit').val()).value() ;
             $('#totalont').val(numeral(a).format('0.0,'));
             b = numeral($('#totalont').val()).value() - numeral($('#omzet').val()).value() //- numeral($('#saldoborg').val()).value() - numeral($('#longStay').val()).value()
-            //console.log (isNaN(b))
-            $('#kasver').val(parseFloat(b).toFixed(2))
+            //console.log (isNaN(b)) 
+            $('#kasver').val(numeral(parseFloat(b)).format('0.0,'))
             $('.kasv.badge').text('€' + $('#kasver').val())
             //$('#kasver').val(numeral(b).format('0.0,'))
         }
