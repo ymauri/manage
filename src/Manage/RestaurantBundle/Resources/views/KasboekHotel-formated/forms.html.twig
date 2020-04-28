@@ -1,0 +1,260 @@
+{% if hotel | length > 0 %}
+    <div id="kasboekhotel_forms">
+        <table class="table-labels-forms table table-condensed">
+            <thead>
+            <tr>
+                <th>&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Overnachtingen €</td>
+            </tr>
+            <tr>
+                <td>Toeristenbelasting €</td>
+            </tr>
+            <tr>
+                <td>Parking €</td>
+            </tr>
+            <tr>
+                <td>Borg €</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold">Totaal Omzet €</td>
+            </tr>
+            <tr>
+                <td>PIN/Maestro €</td>
+            </tr>
+            <tr>
+                <td>Credit Cards €</td>
+            </tr>
+            <tr>
+                <td>Stripe Guesty €</td>
+            </tr>            
+            <tr>
+                <td>Stripe Invoice €</td>
+            </tr>            
+            <tr>
+                <td>Bank €</td>
+            </tr>            
+            <tr>
+                <td>Airbnb €</td>
+            </tr>            
+            <tr>
+                <td>Contanten €</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold">Totaal naar Kas €</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold">Kasverschil €</td>
+            </tr>
+            </tbody>
+        </table>
+        {% set ctrol = 1 %}
+        {% for item in hotel %}
+            {% if item != null %}
+
+                <table class="table-values-forms table table-condensed">
+
+                    <thead>
+                    <tr>
+                        <th>{{ item.dated | date ('d-M') }}</th>
+                        {% set day = item.dated | date('j') %}
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   value="{{ (item.totalparkingextra) | number_format(2, ',', '.') }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   value="{{ item.totaltoer | number_format(2, ',', '.') }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   value="{{ item.totalparking | number_format(2, ',', '.') }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   value="{{ item.saldoborg | number_format(2, ',', '.') }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm negrita"
+                                   value="{{ (item.omzet)  | number_format(2, ',', '.') }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"`
+                                   value="{{ item.totaldebit | number_format(2, ',', '.') }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   value="{{ item.totalcredit | number_format(2, ',', '.') }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   value="{{ item.stripeguesy| number_format(2, ',', '.') }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   value="{{ (item.stripeinvoice) | number_format(2, ',', '.') }}">
+                        </td>
+                    </tr>                    
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   value="{{ (item.bank) | number_format(2, ',', '.') }}">
+                        </td>
+                    </tr>                
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   value="{{ (item.airbnb) | number_format(2, ',', '.') }}">
+                        </td>
+                    </tr>          
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   value="{{ (item.totalcontanten) | number_format(2, ',', '.') }}">
+                        </td>
+                    </tr>
+                     <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm negrita"
+                                   value="{{ ( item.totalont) | number_format(2, ',', '.') }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm negrita"
+                                   value="{{ (item.kasver) | number_format(2, ',', '.') }}">
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            {% else %}
+                <table class="table-values-forms table table-condensed">
+
+                    <thead>
+                    <tr>
+                        <th></th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   >
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                            >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input disabled="disabled" tabindex="-1"
+                                   class=" form-control  input-sm"
+                                   >
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            {% endif %}
+            {% set ctrol = ctrol + 1 %}
+        {% endfor %}
+
+    </div>
+{% endif %}
+<br/>
+<br/>

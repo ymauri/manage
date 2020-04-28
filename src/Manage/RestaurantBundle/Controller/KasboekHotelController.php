@@ -54,8 +54,13 @@ class KasboekHotelController extends Controller {
             $em->persist($form);
         }
         $em->flush();
-
-        $entity_basic = $this->updateCalculos($entity_basic);
+        $cambio = new \DateTime('2020-03-15');
+        if ($entity_basic->getDated() > $cambio) {
+            $entity_basic = $this->updateCalculosV2($entity_basic);
+        } else  {
+            $entity_basic = $this->updateCalculos($entity_basic);            
+        }
+        // $entity_basic = $this->updateCalculos($entity_basic);
         return $this->redirect($this->generateUrl('kasboekhotel_edit', array('id' => $entity_basic->getId())));
     }
 
@@ -189,7 +194,15 @@ class KasboekHotelController extends Controller {
             $this->addFlash('error', 'Error! This form can not be modified.');
             return $this->redirect($this->generateUrl('kasboekhotel', array('date'=>date('m-Y'))));
         }
-        $entity_modif = $this->updateCalculos($entity_basic);
+        
+        $cambio = new \DateTime('2020-03-15');
+        if ($entity_basic->getDated() > $cambio) {
+            $entity_modif = $this->updateCalculosV2($entity_basic);
+        } else  {
+            $entity_modif = $this->updateCalculos($entity_basic);            
+        }
+
+        // $entity_modif = $this->updateCalculos($entity_basic);
         $form_basic = $this->createForm(new KasboekHotelType(), $entity_modif);
         $form_float = $this->createForm(new KasboekHotelFloatType(), $entity_modif->getFloat());
 
@@ -218,9 +231,9 @@ class KasboekHotelController extends Controller {
             $fecha = $entity_modif->getDated()->format('Y-m-d');
             $fecha_array = explode('-', $fecha);
             //$entity_basic = $this->updateCalculos($entity_basic);
-            $limit = new \DateTime('2020-04-15');
-            //$view =  $this->entity_basic->getDated() > $limit ? 'RestaurantBundle:KasboekHotel-formated:edit.html.twig' : 'RestaurantBundle:KasboekHotel:edit.html.twig';
-            return $this->render('RestaurantBundle:KasboekHotel:edit.html.twig', array(
+            $limit = new \DateTime('2020-03-15');
+            $view =  $entity_modif->getDated() > $limit ? 'RestaurantBundle:KasboekHotel-formated:edit.html.twig' : 'RestaurantBundle:KasboekHotel:edit.html.twig';
+            return $this->render($view, array(
                 'entity_basic' => $entity_modif,
                 'form_basic' => $form_basic->createView(),
                 'form_float' => $form_float->createView(),
@@ -421,6 +434,109 @@ class KasboekHotelController extends Controller {
 
         return $entity_kasboek; 
     }
+    
+    //A partir de la entidad KasboekHotel se realizan todos los cálculos correspondientes
+    private function updateCalculosV2($entity_kasboek){
+        $str_date = $entity_kasboek->getDated()->format('Y-m');
+
+        $em = $this->getDoctrine()->getManager();
+        $hotels = array();
+        //echo var_dump(checkdate($entity_kasboek->getDated()->format('n'),31, $entity_kasboek->getDated()->format('Y')));die;
+
+        for ($i = 1; $i <= 31 && checkdate($entity_kasboek->getDated()->format('n'),$i, $entity_kasboek->getDated()->format('Y')); $i++){
+            if (true){
+
+                $result = $this->getDoctrine()->getRepository('RestaurantBundle:Hotel')->createQueryBuilder('h')
+                    ->where('h.dated = :fecha')
+                    ->andWhere("(h.finished IS NOT NULL OR h.finished != :vacio) AND h.name='true'")
+                    ->setMaxResults(1)
+                    ->setParameter('fecha', new \DateTime($str_date.'-'.$i))
+                    ->setParameter('vacio', '')
+                    ->getQuery()
+                    ->getResult();
+                if (count($result) == 1)
+                    $hotels[] = $result[0];
+            }
+
+
+        }
+        //$turnovers = $em->getRepository('RestaurantBundle:Turnover')->findAll(array('dated'=>new \DateTime($str_date)));
+        $calcs = array();
+        $calcs['overnachtingen'] = 0;
+        $calcs['parking']  = 0;
+        $calcs['toeristenbelasting']  = 0;
+        $calcs['totaalborg']  = 0;
+        $calcs['totaalont']  = 0;
+        $calcs['contanten']  = 0;
+        $calcs['debit']  = 0;
+        $calcs['credit']  = 0;
+        $calcs['totaalnaar']  = 0;
+        $calcs['kasverschil']= 0;
+        $calcs['stripeguesty']= 0;
+        $calcs['stripeinvoice']= 0;
+        $calcs['bank']= 0;
+        $calcs['airbnb']= 0;
+        $calcs['omzet']= 0;
+
+        foreach ($hotels as $hotel) {
+            $calcs['overnachtingen'] +=  $hotel->getTotalparkingextra();
+            $calcs['parking']  +=  $hotel->getTotalparking();
+            $calcs['toeristenbelasting']  +=  $hotel->getTotaltoer();
+            $calcs['totaalborg']  +=  $hotel->getSaldoborg();
+            $calcs['omzet']  +=  $hotel->getOmzet();
+            $calcs['contanten']  += $hotel->getTotalcontanten();
+            $calcs['debit']  +=  $hotel->getTotaldebit();
+            $calcs['credit']  +=  $hotel->getTotalcredit();
+            $calcs['stripeguesty']  +=  $hotel->getStripeguesy();
+            $calcs['stripeinvoice']  +=  $hotel->getStripeinvoice();
+            $calcs['bank']  +=  $hotel->getBank();
+            $calcs['airbnb']  +=  $hotel->getAirbnb();
+            $calcs['totaalnaar']  +=  $hotel->getTotalont();
+            $calcs['kasverschil'] += $hotel->getKasver();
+        }
+
+
+        $entity_kasboek->setOvernachtingen($calcs['overnachtingen']);
+        $entity_kasboek->setParking($calcs['parking']);
+        $entity_kasboek->setToeristenbelasting($calcs['toeristenbelasting']);
+        $entity_kasboek->setTotaalborg($calcs['totaalborg']);
+        $entity_kasboek->setContanten($calcs['contanten']);
+        $entity_kasboek->setDebit($calcs['debit']);
+        $entity_kasboek->setCredit($calcs['credit']);
+        $entity_kasboek->setTotaalnaar($calcs['totaalnaar']);
+        $entity_kasboek->setKasverschil($calcs['kasverschil']);
+        $entity_kasboek->setStripeguesty($calcs['stripeguesty']);
+        $entity_kasboek->setStripeinvoice($calcs['stripeinvoice']);
+        $entity_kasboek->setBank($calcs['bank']);
+        $entity_kasboek->setAirbnb($calcs['airbnb']);
+        $entity_kasboek->setOmzet($calcs['omzet']);
+
+        $total = 0;
+        $float = $entity_kasboek->getFloat();
+        $total += $float->getE500() * 500;
+        $total += $float->getE200() * 200;
+        $total += $float->getE100() * 100;
+        $total += $float->getE50() * 50;
+        $total += $float->getE20() * 20;
+        $total += $float->getE10() * 10;
+        $total += $float->getE5() * 5;
+
+        $float->setTotalmoney($total+$float->getWaarde());
+        $fullbank = $float->getBank();
+        $bank = 0;
+        if (is_array($fullbank)){
+            foreach ($fullbank as $b)
+                $bank += $b;
+        }
+        $float->setContant($total + $float->getWaarde() + $float->getBank1() + $float->getBank2() + $float->getBank3() + $float->getBank4() + $bank);
+
+        $float->setKasverschil($float->getContant() - $calcs['contanten'] );
+        $entity_kasboek->setFloat($float);
+        $em->persist($entity_kasboek);
+        $em->flush();
+
+        return $entity_kasboek; 
+    }
 
     private function sendMail($id){
         $em = $this->getDoctrine()->getManager();
@@ -470,8 +586,7 @@ class KasboekHotelController extends Controller {
                 ->setBody($this->renderView('RestaurantBundle:KasboekHotel:mail.html.twig', array(
                     'entity_basic' => $entity_basic,
                     'form_basic' => $form_basic->createView(),
-                    'form_float' => $form_float->createView(),
-                    
+                    'form_float' => $form_float->createView(),                    
                     'hotels'  => [$this->getFormsHotel(1, $fecha_array[1], $fecha_array[0]),
                                     $this->getFormsHotel(2, $fecha_array[1], $fecha_array[0]),
                                     $this->getFormsHotel(3, $fecha_array[1], $fecha_array[0]),
@@ -538,8 +653,13 @@ class KasboekHotelController extends Controller {
 
             $em->persist($entity);
             $em->flush();
-            $entity = $this->updateCalculos($entity);
-
+            $cambio = new \DateTime('2020-03-15');
+            if ($entity->getDated() > $cambio) {
+                $this->updateCalculosV2($entity);
+            } else  {
+             $this->updateCalculos($entity);
+                
+            }
             $response->setData('true');
             return $response;
 

@@ -419,7 +419,7 @@
 
                 Metronic.startPageLoading();
                 $('form .form-control').hide()
-                final = $(this).hasClass('final-submit') ? "true" : "false"
+                var final = $(this).hasClass('final-submit') ? "true" : "false"
                 $.post('{{ path('hotel_edit', {'id':entity_basic.id}) }}', {
                     'data': array_to_send,
                     'final': final

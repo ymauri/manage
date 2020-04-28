@@ -35,6 +35,11 @@ class KasboekHotelType extends AbstractType
             ->add('credit','number', array( 'attr'=>array('tabindex'=>-1,'readonly' =>true,), 'precision' => 2))
             ->add('totaalnaar','number', array( 'attr'=>array('tabindex'=>-1,'readonly' =>true,), 'precision' => 2))
             ->add('kasverschil','number', array( 'attr'=>array('tabindex'=>-1,'readonly' =>true,), 'precision' => 2))
+            ->add('stripeguesty','number', array( 'attr'=>array('tabindex'=>-1,'readonly' =>true,), 'precision' => 2))
+            ->add('stripeinvoice','number', array( 'attr'=>array('tabindex'=>-1,'readonly' =>true,), 'precision' => 2))
+            ->add('bank','number', array( 'attr'=>array('tabindex'=>-1,'readonly' =>true,), 'precision' => 2))
+            ->add('airbnb','number', array( 'attr'=>array('tabindex'=>-1,'readonly' =>true,), 'precision' => 2))
+            ->add('omzet','number', array( 'attr'=>array('tabindex'=>-1,'readonly' =>true,), 'precision' => 2))
             
         ;
     }

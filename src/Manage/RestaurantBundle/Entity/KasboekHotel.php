@@ -121,6 +121,36 @@ class KasboekHotel {
      * @ORM\Column(name="longstay", type="float", nullable=true)
      */
     private $longstay;
+    
+    /**
+    * @var float
+    * @ORM\Column(name="stripeguesty", type="float", nullable=true)
+    */
+   private $stripeguesty;
+
+   /**
+   * @var float
+   * @ORM\Column(name="stripeinvoice", type="float", nullable=true)
+   */
+   private $stripeinvoice;
+
+   /**
+   * @var float
+   * @ORM\Column(name="bank", type="float", nullable=true)
+   */
+   private $bank;
+
+   /**
+   * @var float
+   * @ORM\Column(name="airbnb", type="float", nullable=true)
+   */
+   private $airbnb;   
+
+   /**
+   * @var float
+   * @ORM\Column(name="omzet", type="float", nullable=true)
+   */
+  private $omzet;
 
     public function getId() {
         return $this->id;
@@ -291,6 +321,46 @@ class KasboekHotel {
 
     public function setLongstay($longstay) {
         $this->longstay = $longstay;
+    }  
+
+    public function getStripeguesty() {
+        return $this->stripeguesty;
+    }
+
+    public function setStripeguesty($stripeguesty) {
+        $this->stripeguesty = $stripeguesty;
+    }       
+
+    public function getStripeinvoice() {
+        return $this->stripeinvoice;
+    }
+
+    public function setStripeinvoice($stripeinvoice) {
+        $this->stripeinvoice = $stripeinvoice;
+    }     
+
+    public function getBank() {
+        return $this->bank;
+    }
+
+    public function setBank($bank) {
+        $this->bank = $bank;
+    }    
+
+    public function getAirbnb() {
+        return $this->airbnb;
+    }
+
+    public function setAirbnb($airbnb) {
+        $this->airbnb = $airbnb;
+    } 
+
+    public function getOmzet() {
+        return $this->omzet;
+    }
+
+    public function setOmzet($omzet) {
+        $this->omzet = $omzet;
     }
 
 }

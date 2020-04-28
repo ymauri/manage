@@ -1,0 +1,420 @@
+{% extends 'RestaurantBundle::frame.html.twig' %}
+{% block title %} Hotel Kasboek{% endblock %}
+{% block body %}
+    <script>numeral.locale('nl-nl');</script>
+    <div class="portlet">
+        <div class="portlet-title">
+            <div class="caption">
+            new format
+                <i class="icon icon-bell"></i>Hotel Kasboek
+            </div>
+            <div class="tools">
+                <a href="{{ path('kasboekhotel', {'date': 'today' | date('m-Y')}) }}" class=" blue">
+                    <i class="fa fa-list-alt"></i> List
+                </a>
+            </div>
+        </div>
+        <div class="portlet box blue-hoki">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-list"></i> Form
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                </div>
+            </div>
+
+
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="row">
+                    <form id="form-basic-kasboekhotel" class=" form-horizontal edit"
+                          action="{{ path('kasboekhotel_edit',{'id':entity_basic.id}) }}"
+                          method="POST" {{ form_enctype(form_basic) }} autocomplete="off">
+                        <div class="form-body">
+                            <fieldset class="kasboek-basic" >
+                                <div class="col-md-2" style="margin: auto 20px">
+                                    <div class="row form-group">
+                                        <label class="control-label ">Maand</label>
+                                        <input type="text" id="adminbundle_kasboek_dated" name="adminbundle_kasboek[dated]" class="form-control input-sm col-md-2 pull-right datepicker" data-provide="datepicker" readonly="readonly" data-date-format="MM-yyyy" value="{{ entity_basic.dated | date('F-Y') }}" style="text-align: center;">
+                                        {# <input type="text" id="adminbundle_kasboek_dated" name="adminbundle_Kasboek[dated]" required="required" class="form-control real  datepicker" data-provide="datepicker" readonly="readonly" data-date-format="dd-mm-yyyy" value="{{ entity_basic.dated | date('d-m-Y') }}" {% if show %}disabled="disabled"{% endif %}>#}
+
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset id="kasboekhotel_total">
+                                <div class="col-md-6">
+                                    <table class="table table-condensed">
+                                        <tbody>
+                                        <tr>
+                                            <td>Totaal Overnachtingen €</td>
+                                            <td>{{ form_widget(form_basic.overnachtingen, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                                            <td style="text-align: right">€ 500</td>
+                                            <td>{{ form_widget(form_float.e500, {'attr':{ 'class' :'input-sm  form-control entero money'}}) }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Totaal Toeristenbelasting €</td>
+                                            <td>{{ form_widget(form_basic.toeristenbelasting, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                                            <td style="text-align: right">€ 200</td>
+                                            <td>{{ form_widget(form_float.e200, {'attr':{ 'class' :'input-sm  form-control entero money'}}) }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Totaal Parking €</td>
+                                            <td>{{ form_widget(form_basic.parking, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                                            <td style="text-align: right">€ 100</td>
+                                            <td>{{ form_widget(form_float.e100, {'attr':{ 'class' :'input-sm  form-control entero money'}}) }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Totaal Borg €</td>
+                                            <td>{{ form_widget(form_basic.totaalborg, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                                            <td style="text-align: right">€ 50</td>
+                                            <td>{{ form_widget(form_float.e50, {'attr':{ 'class' :'input-sm  form-control entero money'}}) }}</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Omzet €</td>
+                                            <td>{{ form_widget(form_basic.omzet, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                                            <td style="text-align: right">€ 20</td>
+                                            <td>{{ form_widget(form_float.e20, {'attr':{ 'class' :'input-sm  form-control entero money'}}) }}</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Totaal PIN/Maestro €</td>
+                                            <td>{{ form_widget(form_basic.debit, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                                            <td style="text-align: right">€ 10</td>
+                                            <td>{{ form_widget(form_float.e10, {'attr':{ 'class' :'input-sm  form-control entero money'}}) }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Totaal Credit Cards €</td>
+                                            <td>{{ form_widget(form_basic.credit, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                                            
+                                            <td style="text-align: right">€ 5</td>
+                                            <td>{{ form_widget(form_float.e5, {'attr':{ 'class' :'input-sm  form-control entero money'}}) }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Totaal Stripe Guesty €</td>
+                                            <td>{{ form_widget(form_basic.stripeguesty, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                                            <td style="text-align: right">Muntgeld waarde €</td>
+                                            <td>{{ form_widget(form_float.waarde, {'attr':{ 'class' :'input-sm  form-control real money'}}) }}</td>
+                                        </tr>
+                                        <tr>                                            
+                                            <td>Totaal Stripe Invoice €</td>
+                                            <td>{{ form_widget(form_basic.stripeinvoice, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                                            <td style="text-align: right">Subtotaal €</td>
+                                            <td>{{ form_widget(form_float.totalmoney, {'attr':{ 'class' :'input-sm  form-control real money'}}) }}</td>
+                                      </tr>
+                                        <tr>
+                                            <td>Total Bank €</td>
+                                            <td>{{ form_widget(form_basic.bank, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                                            <td style="text-align: right">Bank 1 €</td>
+                                            <td>{{ form_widget(form_float.bank1, {'attr':{ 'class' :'input-sm  form-control real money'}}) }}</td>
+                                       </tr>
+                                        <tr>
+                                            <td>Totaal Airbnb €</td>
+                                            <td>{{ form_widget(form_basic.airbnb, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                                            <td style="text-align: right">Bank 2 €</td>
+                                            <td>{{ form_widget(form_float.bank2, {'attr':{ 'class' :'input-sm  form-control real money'}}) }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Totaal contant in kas €</td>
+                                            <td>{{ form_widget(form_basic.contanten, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                                            <td style="text-align: right">Bank 3 €</td>
+                                            <td>{{ form_widget(form_float.bank3, {'attr':{ 'class' :'input-sm  form-control real money'}}) }}</td>
+                                        </tr>
+                                        <tr>                                            
+                                            <td>Totaal in Kas €</td>
+                                            <td>{{ form_widget(form_basic.totaalnaar, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                                           
+                                            <td style="text-align: right">Bank 4 €</td>
+                                            <td>{{ form_widget(form_float.bank4, {'attr':{ 'class' :'input-sm  form-control real money bank', 'onkeyup':"add_bank_field(this)" }}) }}</td>
+                                        </tr>
+                                         <tr>
+                                            <td>Kasverschil €</td>
+                                            <td>{{ form_widget(form_basic.kasverschil, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                                            <td style="text-align: right">Bank 5 €</td>
+                                            <td><input type="text" id="bank5" name="bank[]" onkeyup="add_bank_field(this)" class="input-sm  form-control real money bank"></td>
+                                        </tr>
+                                        {% set cantidadbank = 6 %}
+                                        {% for item in entity_basic.float.bank %}
+                                        {% if (item != 0) %}
+
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td style="text-align: right">Bank {{ cantidadbank }} €</td>
+                                            <td><input type="text" id="bank5" name="bank[]" onkeyup="add_bank_field(this)" class="input-sm  form-control real money bank" value="{{ item }}"></td>
+                                        </tr>
+                                            {% set cantidadbank = cantidadbank + 1 %}
+                                        {% endif %}
+                                        {% endfor %}
+                                        <tr class="bank-next"></tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td style="text-align: right">Totaal contant Check €</td>
+                                            <td>{{ form_widget(form_float.contant, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                                       </tr>
+
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td style="text-align: right">Kasverschil Check €</td>
+                                            <td>{{ form_widget(form_float.kasverschil, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </fieldset>
+
+                            <br/>
+                            <fieldset class="col-md-12">
+                                {% for hotel in hotels %}
+                                {% include 'RestaurantBundle:KasboekHotel-formated:forms.html.twig' %}
+                                {% endfor %}
+                            </fieldset>
+                            <fieldset class="col-md-12" style="border-bottom: none">
+                                <div class="col-md-6 col-md-offset-3">
+                                    {% if not show %}
+                                        <button type='submit' class="btn save-while blue-hoki">Tussentijds bewaren
+                                        </button>
+                                        <button type='submit' class="btn final-submit green-seagreen" hidden>Verzenden
+                                        </button>
+                                        <a href="{{path('kasboekhotel', {'date': entity_basic.dated | date('m-Y')})}}"><button type = 'button' class="btn blue-hoki">Annuleer</button></a>
+
+                                    {% else %}
+                                        <a href="{{ path('kasboekhotel', {'date': 'today' | date('m-Y')}) }}">
+                                            <button type='button' class="btn blue-hoki">List</button>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div hidden="hidden">
+                            {{ form_rest(form_basic) }}
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        {% if show %}
+            $('.form-control').attr('disabled', 'disabled')
+        {% endif %}
+
+        var cantidad_bank = $('.bank').length + 3;
+        {% if not show %}
+        $('.bank').last().addClass('last').trigger('keyup');
+        {% endif %}
+
+        /* $('input.bank.last').on({
+             'keyup':function(){
+
+             }
+         });*/
+
+        function add_bank_field(current){
+            if ($(current).val() != "" && $(current).hasClass('last')){
+                $(current).removeClass('last')
+                cantidad_bank ++;
+                $('.bank-next').before('<tr><td></td> <td></td> <td style="text-align: right">Bank '+cantidad_bank+' €</td> <td><input type="text" id="" onkeyup="add_bank_field(this)" name="bank[]" class="input-sm  form-control real money bank last" ></td></tr>')
+                $('.money').trigger('keyup');
+                //tr = $(this).parent().parent()
+                //tr.append
+                //crear nuevo campo
+            }
+        }
+
+        $('.money').on({
+            'keyup':function(){
+                total = 0
+                $('.money').each(function (index, item) {
+                    type = $(item).attr('id').split('_')
+                    value = 0;
+                    id = type[type.length-1]
+
+                    switch(id){
+                        case 'e5':
+                            value = 5
+                            break;
+                        case 'e10':
+                            value = 10
+                            break;
+                        case 'e20':
+                            value = 20
+                            break;
+                        case 'e50':
+                            value = 50
+                            break;
+                        case 'e100':
+                            value = 100
+                            break;
+                        case 'e100':
+                            value = 100
+                            break;
+                        case 'e200':
+                            value = 200
+                            break;
+                        case 'e500':
+                            value = 500
+                            break;
+                    }
+                    total += (numeral($(item).val()).value() * value)
+                })
+                totalmoney = (total + numeral($('#kasboek_hotel_float_waarde').val()).value())
+                $('#kasboek_hotel_float_totalmoney').val(numeral(totalmoney).format('0.0,'))
+                total += numeral($('#kasboek_hotel_float_waarde').val()).value()
+                total += numeral($('#kasboek_hotel_float_bank1').val()).value()
+                total += numeral($('#kasboek_hotel_float_bank2').val()).value()
+                total += numeral($('#kasboek_hotel_float_bank3').val()).value()
+                //total += numeral($('#kasboek_hotel_float_bank4').val()).value()
+                bank = 0;
+                $('.bank').each(function(){
+                    bank += numeral($(this).val()).value()
+                })
+                //alert (bank)
+                total += bank;
+                $('#kasboek_hotel_float_contant').val(numeral(total).format('0.0,'))
+                inkas = numeral($('#kasboek_hotel_contanten').val()).value()
+                //waarde = numeral($('#kasboek_hotel_waarde').val()).value()
+                $('#kasboek_hotel_float_kasverschil').val(numeral(total - inkas).format('0.0,'))
+            }
+        })
+
+           $('button[type="submit"]').click(function(e) {
+                e.preventDefault();
+                //Pantalla Loading
+                Metronic.startPageLoading();
+                $('.form-control').hide()
+
+
+               array_to_work = $('#form-basic-kasboekhotel').clone()
+               array_to_work.find('input.form-control').each(function(index, item) {
+                   if (!$(item).hasClass('datepicker') && !$(item).hasClass('timepicker') || !$(item).hasClass('texto')){
+                       var num = numeral($(item).val()).value()
+                       if (num != null) {
+                           $(item).val(num)
+                       }
+                   }
+               })
+                    boton = $(this)
+
+               array_to_work.ajaxSubmit(function(response){
+
+                        $('.form-control').show();
+                        if (response == 'true') {
+                            if (boton.hasClass('final-submit')){
+                                $.post("{{ path("kasboekhotel_mail", {'id':entity_basic.id}) }}", function () {
+                                    $('.alert-success').text('Success! The form is done.')
+                                    $('.alert-success').show()
+                                    window.location="{{ path('kasboekhotel', {'date': entity_basic.dated | date('m-Y')}) }}";
+                                })
+                            }
+
+                            else{
+                                $('.alert-success').text('Success! The form has been modified.');
+                                $('.alert-success').show()
+                                window.location="{{ path('kasboekhotel', {'date': entity_basic.dated | date('m-Y')}) }}";
+                            }
+
+                            setTimeout(function () {
+                                $('.alert-success').hide(300)
+                            }, 5400)
+
+                        }
+                        else{
+                            $('.alert-danger').text(response);
+                            $('.alert-danger').show()
+                            setTimeout(function () {
+                                $('.alert-danger').hide(300)
+                            }, 4400)
+                        }
+
+                    Metronic.stopPageLoading();
+                    })
+                })
+
+
+           $('div').on('keypress','.real', function(evt){
+               evt = (evt) ? evt : window.event;
+               var charCode = (evt.which) ? evt.which : evt.keyCode;
+               if (charCode > 31 && (charCode < 44 || charCode > 57)) {
+                   return false;
+               }
+               var val = $(this).val()
+               $(this).val(val.split('.').join(','))
+
+               return true;
+           })
+           $('div').on('blur','.real', function(event){
+               $(event.target).val(function(index, value) {
+                   if (value != '')
+                       return numeral(value).format('0.0,');
+                   return '';
+
+               });
+           })
+           $('div').on('keypress','.entero', function(evt){
+               evt = (evt) ? evt : window.event;
+               var charCode = (evt.which) ? evt.which : evt.keyCode;
+               if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                   return false;
+               }
+               return true;
+           })
+           $('div').on('blur','.entero', function(event){
+               $(event.target).val(function(index, value) {
+                   if (value != '')
+                       return numeral(value).format('0,0');
+                   return '';
+               });
+           })
+            $('.cancel').click(function () {
+
+                bootbox.dialog({
+                    message: "This form will be removed from the system",
+                    title: "Delete form",
+                    buttons: {
+
+                        main: {
+                            label: "Cancel",
+                            className: ""
+                        },
+                        success: {
+                            label: "Confirm",
+                            className: "blue-hoki",
+                            callback: function () {
+                                window.location = "{{ path('kasboekhotel_delete', {'id':entity_basic.id}) }}";
+                            }
+                        }
+                    }
+                });
+            });
+
+           $('.form-control').trigger('keypress').trigger('blur')
+
+        $('#adminbundle_kasboek_dated').on({
+            'change':function(){
+                Metronic.startPageLoading()
+                $.post("{{ path('kasboekhotel_change_date', {'id':entity_basic.id}) }}", {'newdate':$('#adminbundle_kasboek_dated').val()}, function(e){
+                    if (e == 'true') window.location = window.location
+                    if (e == 'false') {
+                        Metronic.stopPageLoading()
+                        $('.alert-danger').text('Error! The form date can\'t be modified.');
+                        $('.alert-danger').show()
+                        setTimeout(function () {
+                            $('.alert-danger').hide(300)
+                        }, 4400)
+                        //$('#adminbundle_kasboek_dated').val({{ entity_basic.dated | date('F-Y') }})
+                    }
+                })
+            }
+        })
+
+
+    </script>
+
+{% endblock %}
