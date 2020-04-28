@@ -539,7 +539,13 @@ class HotelController extends Controller {
                     //$r = $this->isBlackList($this->entity_basic->getId());
                     $this->em->persist($this->entity_basic);
                     $this->em->flush();
-                    $this->updateCalculos();
+                    $cambio = new \DateTime('2020-04-15');
+                    if ($this->entity_basic->getDated() > $cambio) {
+                        $this->updateCalculosV2();
+                    } else  {
+                     $this->updateCalculos();
+                        
+                    }
                     if ($final == 'true') {
                         if ($this->isGranted('ROLE_SUPER_ADMIN'))
                             $this->entity_basic->setName('true');
@@ -947,6 +953,91 @@ class HotelController extends Controller {
         } catch (\Exception $ex) {
             return $this->render('RestaurantBundle:Exception:exception.html.twig', array('message' => $ex));
         }
+    }
+
+
+    //Actualizar los totales del formulario ultima pagina
+    public function updateCalculosV2($entity = null){
+        $entity = is_null($entity) ? $this->entity_basic : $entity;
+        $em = $this->getDoctrine()->getManager();
+        //Eind Float
+        $total = 0;
+        $bill = $entity->getBill();
+        $total += $bill->getE500() * 500;
+        $total += $bill->getE200() * 200;
+        $total += $bill->getE100() * 100;
+        $total += $bill->getE50() * 50;
+        $total += $bill->getE20() * 20;
+        $total += $bill->getE10() * 10;
+        $total += $bill->getE5() * 5;
+        $total += $bill->getE2() * 2;
+        $total += $bill->getE1();
+        $total += $bill->getE050() * 0.50;
+        $total += $bill->getE020() * 0.20;
+        $total += $bill->getE010() * 0.10;
+        $bill->setEind($total);
+        $em->persist($bill);
+        $em->flush();
+
+        //Pin Maestro
+        $pin = $entity->getCard();
+        $debit = $pin->getMaestro() + $pin->getVpay();
+        $credit = $pin->getVisa() + $pin->getVisaelec() + $pin->getMastercard() + $pin->getAmerican() + $pin->getUnion() + $pin->getDiners();
+        //echo $debit;die;
+        $pin->setTdebit($debit);
+        $pin->setTcredit($credit);
+        $pin->setTotal($debit + $credit);
+
+        if ($pin->getIscc()){
+            $debit = $pin->getCcmaestro() + $pin->getCcvpay();
+            $credit = $pin->getCcvisa() + $pin->getCcvisaelec() + $pin->getCcmastercard() + $pin->getCcamerican()+ $pin->getCcunion() + $pin->getCcdiners();
+            $pin->setCctdebit($debit);
+            $pin->setCctcredit($credit);
+            $pin->setTotalcc($debit + $credit);
+        }
+        $em->persist($pin);
+        $em->flush();
+        $relations = $em->getRepository('RestaurantBundle:RCheckinHotel')->findBy(array("hotel"=>$entity->getId()));
+        $totalover = 0;
+        $totaltoer = 0;
+        $totalborg = 0;
+        $totalparking = 0;
+        $totalextra = 0;
+        $dago = 0;
+
+        foreach ($relations as $checkin){
+            $totalover += $checkin->getBetalen();
+            $current = str_replace('.', '', $checkin->getToer());
+            $current = str_replace(',', '.', $current);
+            $totaltoer += $current;
+            $totalborg += $checkin->getBorg();
+            $totalparking += $checkin->getParking();
+            $totalextra += $checkin->getLatecheckin();
+            
+        }
+        $dago = $totalover + $totaltoer + $totalparking + $totalborg + $totalextra;
+
+        $entity->setTotalover($totalover + $totalextra);
+        $entity->setTotaltoer($totaltoer);
+        $entity->setSaldoborg($totalborg);
+        $entity->setTotalparking($totalparking);
+        $entity->setOmzet($dago);
+
+        $entity->setTotalont($bill->getEind() + $pin->getTotal() + $pin->getTotalcc() + $pin->getAlipay() + $entity->getPin() + $entity->getCard());
+        $entity->setOverige($entity->getAribnb() + $entity->getBank() + $entity->getStripeinvoice() + $entity->getStripeguesy());
+        $entity->setTotalcontanten($bill->getEind() + $entity->getContant());
+        if ($pin->getIscc()) {
+            $entity->getTotaldebit($pin->getTdebit() + $pin->getCctdebit() + $entity->getPin());
+            $entity->getTotalcredit($pin->getTcredit() + $pin->getCctcredit() + $entity->getCard());
+        }
+        else {
+            $entity->getTotaldebit($pin->getTdebit() + $entity->getPin());
+            $entity->getTotalcredit($pin->getTcredit() + $entity->getCard());
+        }
+        $em->persist($entity);
+        $entity->setKasver($entity->getTotalont() - $entity->setOmzet());
+        $em->persist($entity);
+        $em->flush();
     }
 
     //Actualizar los totales del formulario ultima pagina
