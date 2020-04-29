@@ -79,7 +79,7 @@
                         <label for="eind" class="">Totaal Contanten €</label>
                         <input type="text" id="eind" name="eind" disabled="disabled" required="required" class="input-sm pull-right form-control real" value="{{entity_basic.bill.eind}}">
                   </div>
-                   <div class="form-group">
+                   <div class="form-group" style="display: none;">
                         <label for="eind" class=""><b>Totaal Check-in Contanten €</b></label>
                         <input type="text" id="contant" name="contant" required="required" readonly="readonly" class="input-sm pull-right form-control real" value="{{entity_basic.contant}}">
                   </div>
@@ -103,8 +103,13 @@ $('#form-bills').on('keyup', '.bill-control', function(){
     $('#eind').val(numeral(total).format('0.0,'))
     //Final
     var cont = numeral($('#contant').val()).value();
-    $('#totalcontanten').val(numeral(total + cont).format('0.0,'))    
-    $('.eind.badge').text( '€' + numeral(total + cont).format('0.0,'))
+    $('#totalcontanten').val(numeral(total).format('0.0,'))    
+    if (total - cont < 0) {
+            $('.eind.badge').removeClass('bg-green-haze').addClass('bg-red-flamingo');
+        } else {
+            $('.eind.badge').removeClass('bg-red-flamingo').addClass('bg-green-haze');
+        }
+    $('.eind.badge').text( '€' + numeral(total - cont).format('0.0,'))
     completeProfit()
 })
 </script>
