@@ -122,7 +122,10 @@ class KasboekHotelController extends Controller {
 
         $fecha = $entity_basic->getDated()->format('Y-m-d');
         $fecha_array = explode('-', $fecha);
-        return $this->render('RestaurantBundle:KasboekHotel:edit.html.twig', array(
+        $limit = new \DateTime('2020-02-15');
+        $view =  $entity_basic->getDated() > $limit ? 'RestaurantBundle:KasboekHotel-formated:edit.html.twig' : 'RestaurantBundle:KasboekHotel:edit.html.twig';
+       
+        return $this->render($view, array(
             'entity_basic' => $entity_basic,
             'form_basic' => $form_basic->createView(),
             'form_float' => $form_float->createView(),
@@ -231,7 +234,7 @@ class KasboekHotelController extends Controller {
             $fecha = $entity_modif->getDated()->format('Y-m-d');
             $fecha_array = explode('-', $fecha);
             //$entity_basic = $this->updateCalculos($entity_basic);
-            $limit = new \DateTime('2020-03-15');
+            $limit = new \DateTime('2020-02-15');
             $view =  $entity_modif->getDated() > $limit ? 'RestaurantBundle:KasboekHotel-formated:edit.html.twig' : 'RestaurantBundle:KasboekHotel:edit.html.twig';
             return $this->render($view, array(
                 'entity_basic' => $entity_modif,
@@ -549,11 +552,26 @@ class KasboekHotelController extends Controller {
         $form_basic = $this->createForm(new KasboekHotelType(), $entity_basic);
         $form_float = $this->createForm(new KasboekHotelFloatType(), $entity_basic->getFloat());
         $mails_array = explode(';',$notifier->getMails());
+        $limit = new \DateTime('2020-03-15');
+        $view =  $entity_basic->getDated() > $limit ? 'RestaurantBundle:KasboekHotel-formated:mail.html.twig' : 'RestaurantBundle:KasboekHotel:mail.html.twig';
+        
+        // return $this->render($view, array(
+        //     'entity_basic' => $entity_basic,
+        //     'form_basic' => $form_basic->createView(),
+        //     'form_float' => $form_float->createView(),               
+        //     'hotels'  => [$this->getFormsHotel(1, $fecha_array[1], $fecha_array[0]),
+        //                     $this->getFormsHotel(2, $fecha_array[1], $fecha_array[0]),
+        //                     $this->getFormsHotel(3, $fecha_array[1], $fecha_array[0]),
+        //                     $this->getFormsHotel(4, $fecha_array[1], $fecha_array[0]),
+        //                     $this->getFormsHotel(5, $fecha_array[1], $fecha_array[0])],
+        //     'show'  => FALSE,
+        // ));
+
         $mail_customer = \Swift_Message::newInstance()
             ->setFrom('info@log.towerleisure.nl')
             ->setTo($mails_array)
             ->setSubject("Kasboek Hotel")
-            ->setBody($this->renderView('RestaurantBundle:KasboekHotel:mail.html.twig', array(
+            ->setBody($this->renderView($view, array(
                 'entity_basic' => $entity_basic,
                 'form_basic' => $form_basic->createView(),
                 'form_float' => $form_float->createView(),               

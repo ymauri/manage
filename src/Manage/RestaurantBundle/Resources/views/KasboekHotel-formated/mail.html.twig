@@ -1,211 +1,226 @@
+<!doctype html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <title></title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">  
 </head>
-<body style="max-width: 1200px;font-family: Tahoma;font-size: 13px;color: black;padding: 10px; margin: 0 auto;">
-<table style="max-width: 1200px; font-family: Lucida; font-size: 13px">
-    <thead>
-    <tr>
-        <td colspan="4"><img src="{{ asset('img/tphlogo.jpg') }}" style="max-width: 280px; margin: 30px 175px 0;"></td>
-    </tr>
-    <tr>
-        <td colspan="4"><h4
-                    style="color: #FF8C11;font-weight: bold;font-size: 19px;margin: 40px; text-align: center; font-family: sans-serif;">
-                Hotel Kasboek</h4></td>
-    </tr>
-    <tr>
-        <td style="font-weight: bold;">Datum Formulier</td>
-        <td><input style=" text-align: center; font-weight: bold; font-size: 13px; max-width: 80px; font-family: Lucida;" disabled="disabled" value='{{entity_basic.dated | date("d-m-Y")}}'></td>
-        <td></td>
-        <td></td>
-    </tr>
-
-    </thead>
-</table>
-<table style="max-width: 1200px; font-family: Lucida; font-size: 13px">
-    <tbody>
-    <tr>
-        <td> <input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Totaal Overnachtingen €"></td>
-        <td><input disabled="disabled" style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;" value="{{ entity_basic.overnachtingen | number_format(2, ',', '.') }}"></td>
-        <td style="text-align: right">€ 500</td>
-        <td><input disabled="disabled" style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.float.e500 }}"></td>
-    </tr>
-    <tr>
-        <td> <input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Totaal Parking €"></td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.parking | number_format(2, ',', '.') }}"></td>
-        <td style="text-align: right">€ 200</td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.float.e200 }}"></td>
-
-    </tr>
-    <tr>
-        <td> <input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Totaal Toeristenbelasting €"></td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.toeristenbelasting | number_format(2, ',', '.') }}"></td>
-        <td style="text-align: right">€ 100</td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.float.e100 }}"></td>
-
-    </tr>
-    <tr>
-        <td> <input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Borg €"> </td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.totaalborg | number_format(2, ',', '.') }}"></td>
-        <td style="text-align: right">€ 50</td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.float.e50 }}"></td>
-    </tr>
-    <tr>
-        <td> <input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Long Stay €"> </td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.longstay | number_format(2, ',', '.') }}"></td>
-        <td style="text-align: right">€ 20</td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.float.e20 }}"></td>
-    </tr>
-
-    <tr>
-        <td><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Totaal ontvangsten €"></td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.totaalont | number_format(2, ',', '.') }}"></td>
-        <td style="text-align: right">€ 10</td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.float.e10 }}"></td>
-
-    </tr>
-    <tr>
-        <td><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Totaal contant in kas €"></td>
-
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.contanten | number_format(2, ',', '.') }}"></td>
-         <td style="text-align: right">€ 5</td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.float.e5 }}"></td>
-
-    </tr>
-    <tr>
-        <td> <input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Totaal PIN/Maestro €"></td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.debit | number_format(2, ',', '.') }}"></td>
-        <td style="text-align: right">Muntgeld waarde €</td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.float.waarde | number_format(2, ',', '.') }}"></td>
-
-    </tr>
-    <tr>
-        <td> <input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Totaal Credit Cards €"></td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.credit | number_format(2, ',', '.') }}"></td>
-         <td style="text-align: right">Subtotaal €</td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.float.totalmoney | number_format(2, ',', '.') }}"></td>
-
-    </tr>
-    <tr>
-        <td> <input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Totaal in Kas €"></td>
-
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.totaalnaar | number_format(2, ',', '.') }}"></td>
-      <td style="text-align: right">Bank 1 €</td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.float.bank1 | number_format(2, ',', '.') }}"></td>
-
-    </tr>
-    <tr>
-        <td><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Kasverschil €"></td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.kasverschil | number_format(2, ',', '.') }}"></td>
-        <td style="text-align: right">Bank 2 €</td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.float.bank2 | number_format(2, ',', '.') }}"></td>
-    </tr>
-
-    <tr>
-        <td></td>
-        <td></td>
-        <td style="text-align: right">Bank 3 €</td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.float.bank3 | number_format(2, ',', '.') }}"></td>
-
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td style="text-align: right">Bank 4 €</td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.float.bank4 | number_format(2, ',', '.') }}"></td>
-
-    </tr>
-    {% set cantidadbank = 5 %}
-    {% for item in entity_basic.float.bank %}
-        {% if (item != 0) %}
-    <tr>
-        <td></td>
-        <td></td>
-        <td style="text-align: right">Bank {{ cantidadbank }} €</td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ item | number_format(2, ',', '.') }}"></td>
-
-    </tr>
-        {% set cantidadbank = cantidadbank + 1 %}
-        {% endif %}
-    {% endfor %}
-    <tr>
-        <td></td>
-        <td></td>
-        <td style="text-align: right">Totaal contant Check €</td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.float.contant | number_format(2, ',', '.') }}"></td>
 
 
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td style="text-align: right">Kasverschil Check €</td>
-        <td><input disabled="disabled"
-                   style="text-align: right; font-size: 13px; max-width: 80px; font-family: Lucida;"
-                   value="{{ entity_basic.float.kasverschil | number_format(2, ',', '.') }}"></td>
+<body style="font-family: 'Open Sans',sans-serif; background-color:#f0f2ea; margin:0; padding:0; color:#333333; font-size:13px">
+    <table width="100%" bgcolor="#FFFFFF" cellpadding="0" cellspacing="0" border="0">
+        <tbody>
+            <tr>
+                <td style="padding:40px 0;">
+                    <!-- begin main block -->
+                    <table cellpadding="0" cellspacing="0" width="608" border="0" align="center">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <a href="http://log.towerleisure.nl/" style="display:block; width:324px; height:64px; margin:0 auto 30px;">
+                                        <img src="http://log.towerleisure.nl/web/img/tphlogo.jpg" width="324" height="64" alt="ThePenthouse" style="display:block; border:0; margin:0;">
+                                    </a>
+                                    <!-- begin wrapper -->
+                                    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                        <tbody>            
+                                            <tr align = 'center'>
+                                                <td width="4"  style="background:url(http://demo.artlance.ru/email/shadow-left-top.png) no-repeat 100% 0;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                                                <td colspan="3" rowspan="3" bgcolor="#f0f2ea" style="padding:0 0 30px;">
+                                                    <p style="margin:33px 30px 33px; text-align:center; text-transform:uppercase; font-size:24px; line-height:30px; font-weight:bold; color:#484a42;">
+                                                        Hotel Kasboek <br>
+                                                        <span style="margin:33px 30px 33px;; text-align:center;  text-transform:none;  font-size:18px; line-height:30px; color:#484a42;">Datum Formulier: {{entity_basic.dated | date("M-Y")}}</span>
+                                                    </p>
+                                                    <!--BEGIN CONTENT-->
+                                                    <table style="padding:10px 17px;">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td style=" text-align:right;">Totaal Overnachtingen €</td>
+                                                            <td><input disabled="disabled" style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;" value="{{ entity_basic.overnachtingen | number_format(2, ',', '.') }}"></td>
+                                                            <td  style="text-align: right; text-align:right;">€ 500</td>
+                                                            <td><input disabled="disabled" style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.float.e500 }}"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style=" text-align:right;">Totaal Toeristenbelasting €</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.toeristenbelasting | number_format(2, ',', '.') }}"></td>
+                                                            <td style="text-align: right">€ 200</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.float.e200 }}"></td>
 
-    </tr>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style=" text-align:right;"> Totaal Parking €</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.parking | number_format(2, ',', '.') }}"></td>
+                                                            <td style="text-align: right">€ 100</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.float.e100 }}"></td>
 
+                                                        </tr>
+                                                        <tr>
+                                                            <td style=" text-align:right;">Totaal Borg € </td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.totaalborg | number_format(2, ',', '.') }}"></td>
+                                                            <td style="text-align: right">€ 50</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.float.e50 }}"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold;  text-align:right;">Totaal Omzet €</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.omzet | number_format(2, ',', '.') }}"></td>
+                                                            <td style="text-align: right">€ 20</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.float.e20 }}"></td>
+                                                        </tr>
 
-    </tbody>
-</table>
+                                                        <tr>
+                                                            <td style=" text-align:right;">Totaal PIN/Maestro €</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.debit | number_format(2, ',', '.') }}"></td>
+                                                            <td style="text-align: right">€ 10</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.float.e10 }}"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style=" text-align:right;">Totaal Credit Cards €</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.credit | number_format(2, ',', '.') }}"></td>
+                                                            <td style="text-align: right">€ 5</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.float.e5 }}"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style=" text-align:right;">Totaal Stripe Guesty €</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.stripeguesty | number_format(2, ',', '.') }}"></td>
+                                                            <td style="text-align: right">Muntgeld waarde €</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.float.waarde | number_format(2, ',', '.') }}"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style=" text-align:right;">Totaal Stripe Invoice €</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.stripeinvoice | number_format(2, ',', '.') }}"></td>
+                                                            <td style="text-align: right">Subtotaal €</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.float.totalmoney | number_format(2, ',', '.') }}"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style=" text-align:right;">Total Bank €</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.bank | number_format(2, ',', '.') }}"></td>
+                                                        <td style="text-align: right">Bank 1 €</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.float.bank1 | number_format(2, ',', '.') }}"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style=" text-align:right;">Totaal Airbnb €</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.airbnb | number_format(2, ',', '.') }}"></td>
+                                                            <td style="text-align: right">Bank 2 €</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.float.bank2 | number_format(2, ',', '.') }}"></td>
+                                                        </tr>
 
-<br/>
-<br/> <br/>
-<br/>
-{% for hotel in hotels %}
-    {% include 'RestaurantBundle:KasboekHotel:mail-form.html.twig' %}
-{% endfor %}
+                                                        <tr>
+                                                            <td style=" text-align:right;">Totaal contant in kas €</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.contanten | number_format(2, ',', '.') }}"></td>
+                                                            <td style="text-align: right">Bank 3 €</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.float.bank3 | number_format(2, ',', '.') }}"></td>
 
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; text-align:right;">Totaal in Kas €</td>
+                                                             <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.totaalnaar | number_format(2, ',', '.') }}"></td>
+                                                            <td style="text-align: right">Bank 4 €</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.float.bank4 | number_format(2, ',', '.') }}"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; text-align:right;">Kasverschil €</td>
+                                                             <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.kasverschil | number_format(2, ',', '.') }}"></td>
+                                                            {% for item in entity_basic.float.bank %}
+                                                                {% if loop.first %}
+                                                                <td style="text-align: right">Bank 5 €</td>
+                                                                <td><input disabled="disabled"
+                                                                        style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                        value="{{ item | number_format(2, ',', '.') }}"></td>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </tr>
+                                                        {% set cantidadbank = 6 %}
+                                                        {% for item in entity_basic.float.bank %}
+                                                            {% if (item != 0) %}
+                                                            <tr>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td style="text-align: right">Bank {{ cantidadbank }} €</td>
+                                                                <td><input disabled="disabled"
+                                                                        style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                        value="{{ item | number_format(2, ',', '.') }}"></td>
+
+                                                            </tr>
+                                                            {% set cantidadbank = cantidadbank + 1 %}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td style="text-align: right">Totaal contant Check €</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.float.contant | number_format(2, ',', '.') }}"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td style="text-align: right">Kasverschil Check €</td>
+                                                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px;text-align:right;"
+                                                                    value="{{ entity_basic.float.kasverschil | number_format(2, ',', '.') }}"></td>
+
+                                                        </tr>
+                                                    </table>
+                                                    {% for hotel in hotels %}
+                                                        {% include 'RestaurantBundle:KasboekHotel-formated:mail-form.html.twig' %}
+                                                    {% endfor %}
+                                                    <!-- END CONTENT-->
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="4" style="background:url(http://demo.artlance.ru/email/shadow-left-center.png) repeat-y 100% 0;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                                                <td width="4" style="background:url(http://demo.artlance.ru/email/shadow-right-center.png) repeat-y 0 0;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="4" height="4" style="background:url(http://demo.artlance.ru/email/shadow-left-bottom.png) repeat-y 100% 100%;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                                                <td width="4" height="4" style="background:url(http://demo.artlance.ru/email/shadow-right-bottom.png) repeat-y 0 100%;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="4" height="4" style="background:url(http://demo.artlance.ru/email/shadow-bottom-corner-left.png) no-repeat 100% 0;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                                                <td width="4" height="4" style="background:url(http://demo.artlance.ru/email/shadow-bottom-left.png) no-repeat 100% 0;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                                                <td height="4" style="background:url(http://demo.artlance.ru/email/shadow-bottom-center.png) repeat-x 0 0;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                                                <td width="4" height="4" style="background:url(http://demo.artlance.ru/email/shadow-bottom-right.png) no-repeat 0 0;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                                                <td width="4" height="4" style="background:url(http://demo.artlance.ru/email/shadow-bottom-corner-right.png) no-repeat 0 0;"><p style="margin:0; font-size:1px; line-height:1px;">&nbsp;</p></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <!-- end wrapper-->
+                                    <p style="margin:0; padding:34px 0 0; text-align:center; font-size:11px; line-height:13px; color:#333333;">
+
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- end main block -->
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>

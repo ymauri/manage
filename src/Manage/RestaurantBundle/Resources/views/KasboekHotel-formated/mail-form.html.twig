@@ -1,216 +1,265 @@
-<table style="max-width: 1200px;">
+<table style="padding-top:45px">
     {% if hotel | length > 0 %}
         <tr>
-            <td style="max-width: 120px;  font-family: Lucida; font-size: 13px">
+            <td style="max-width: 130px; min-width: 130px; font-size: 13px">
                 <table>
                     <thead>
                     <tr>
-                        <th>&nbsp;</th>
+                        <th style="height:23px; text-align:right;">&nbsp;</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
-                        <td style=""><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Overnachtingen €"></td>
+                        <td style="height:23px; text-align:right;">Overnachtingen €</td>
                     </tr>
                     <tr>
-                        <td style=""><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Parking €"></td>
+                        <td style="height:23px; text-align:right;">Toeristenbelasting €</td>
                     </tr>
                     <tr>
-                        <td style=""><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Toeristenbelasting €"></td>
+                        <td style="height:23px; text-align:right;">Parking €</td>
                     </tr>
                     <tr>
-                        <td style=""><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Borg €"></td>
+                        <td style="height:23px; text-align:right;">Borg €</td>
                     </tr>
                      <tr>
-                        <td style=""><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Long Stay €"></td>
+                        <td style="height:23px; text-align:right;font-weight: bold;">Totaal Omzet €</td>
                     </tr>
                     <tr>
-                        <td style="font-weight: bold; "><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Totaal ontvangsten €"></td>
+                        <td style="height:23px; text-align:right;">PIN/Maestro €</td>
                     </tr>
                     <tr>
-                        <td style=""><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Contanten €"></td>
+                        <td style="height:23px; text-align:right;">Credit Cards €</td>
                     </tr>
                     <tr>
-                        <td style=""><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="PIN/Maestro €"></td>
+                        <td style="height:23px; text-align:right;">Stripe Guesty €</td>
                     </tr>
                     <tr>
-                        <td style=""><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Credit Cards €"></td>
+                        <td style="height:23px; text-align:right;">Stripe Invoice €</td>
                     </tr>
                     <tr>
-                        <td style="font-weight: bold;"><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Totaal naar Kas €"></td>
+                        <td style="height:23px; text-align:right;">Bank €</td>
                     </tr>
                     <tr>
-                        <td style="font-weight: bold; "><input style="background-color: #ffffff; border: none; padding: 4px 0; color: black;" disabled="disabled" value="Kasverschil €"></td>
+                        <td style="height:23px; text-align:right;">Airbnb €</td>
                     </tr>
-
+                    <tr>
+                        <td style="height:23px; text-align:right;">Contanten €</td>
+                    </tr>
+                    <tr>
+                        <td style="height:23px; text-align:right;font-weight: bold;">Totaal naar Kas €</td>
+                    </tr>
+                    <tr>
+                        <td style="height:23px; text-align:right;font-weight: bold;">Kasverschil €</td>
+                    </tr>
                     </tbody>
                 </table>
             </td>
             {% set ctrol = 1 %}
             {% for item in hotel %}
-                {% if item != null %}
-
-                    <td style="max-width: 120px;  font-family: Lucida; font-size: 13px">
+                <td style="font-size: 13px; ">
+                    {% if item != null %}
+                    
                         <table>
                             <thead>
-                            <tr>
-                                <th>{{ item.dated | date ('d-M') }}</th>
-                                {% set day = item.dated | date('j') %}
-                            </tr>
+                                <tr>
+                                    <th>{{ item.dated | date ('d-M') }}</th>
+                                    {% set day = item.dated | date('j') %}
+                                </tr>
                             </thead>
 
                             <tbody>
-                            <tr>
-                                <td><input disabled="disabled" tabindex="-1"
-                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
-                                           value="{{ (item.totalover + item.totalextra ) | number_format(2, ',', '.') }}">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input disabled="disabled" tabindex="-1"
-                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
-                                           value="{{ item.totalparking | number_format(2, ',', '.') }}">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input disabled="disabled" tabindex="-1"
-                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
-                                           value="{{ item.totaltoer | number_format(2, ',', '.') }}">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input disabled="disabled" tabindex="-1"
-                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
-                                           value="{{ item.saldoborg | number_format(2, ',', '.') }}">
-                                </td>
-                            </tr>
-                            
-                            <tr>
-                                <td><input disabled="disabled" tabindex="-1"
-                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
-                                           value="{{ (item.longstay) | number_format(2, ',', '.') }}">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input disabled="disabled" tabindex="-1"
-                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
-                                           value="{{ (item.totalover + item.totaltoer + item.totalextra + item.totalparking + item.saldoborg) | number_format(2, ',', '.') }}">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input disabled="disabled" tabindex="-1"
-                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
-                                           value="{{ item.totalcontanten | number_format(2, ',', '.') }}">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input disabled="disabled" tabindex="-1"
-                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
-                                           value="{{ item.totaldebit | number_format(2, ',', '.') }}">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input disabled="disabled" tabindex="-1"
-                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
-                                           value="{{ item.totalcredit| number_format(2, ',', '.') }}">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input disabled="disabled" tabindex="-1"
-                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
-                                           value="{{ (item.totalcontanten+ item.totaldebit + item.totalcredit) | number_format(2, ',', '.') }}">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input disabled="disabled" tabindex="-1"
-                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
-                                           value="{{ (item.totalont - item.totaldag - item.saldoborg - item.longstay) | number_format(2, ',', '.') }}">
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                            class=" form-control  input-sm"
+                                            value="{{ (item.totalparkingextra) | number_format(2, ',', '.') }}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                            class=" form-control  input-sm"
+                                            value="{{ item.totaltoer | number_format(2, ',', '.') }}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                            class=" form-control  input-sm"
+                                            value="{{ item.totalparking | number_format(2, ',', '.') }}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                            class=" form-control  input-sm"
+                                            value="{{ item.saldoborg | number_format(2, ',', '.') }}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                            class=" form-control  input-sm negrita"
+                                            value="{{ (item.omzet)  | number_format(2, ',', '.') }}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                            class=" form-control  input-sm"`
+                                            value="{{ item.totaldebit | number_format(2, ',', '.') }}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                            class=" form-control  input-sm"
+                                            value="{{ item.totalcredit | number_format(2, ',', '.') }}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                            class=" form-control  input-sm"
+                                            value="{{ item.stripeguesy| number_format(2, ',', '.') }}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                            class=" form-control  input-sm"
+                                            value="{{ (item.stripeinvoice) | number_format(2, ',', '.') }}">
+                                    </td>
+                                </tr>                    
+                                <tr>
+                                    <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                            class=" form-control  input-sm"
+                                            value="{{ (item.bank) | number_format(2, ',', '.') }}">
+                                    </td>
+                                </tr>                
+                                <tr>
+                                    <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                            class=" form-control  input-sm"
+                                            value="{{ (item.airbnb) | number_format(2, ',', '.') }}">
+                                    </td>
+                                </tr>          
+                                <tr>
+                                    <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                            class=" form-control  input-sm"
+                                            value="{{ (item.totalcontanten) | number_format(2, ',', '.') }}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                            class=" form-control  input-sm negrita"
+                                            value="{{ ( item.totalont) | number_format(2, ',', '.') }}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                            class=" form-control  input-sm negrita"
+                                            value="{{ (item.kasver) | number_format(2, ',', '.') }}">
+
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
-                    </td>
 
-                {% else %}
-                    <td style="max-width: 120px;  font-family: Lucida; font-size: 13px">
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>&nbsp;</th>
-                            </tr>
-                            </thead>
+                    {% else %}
+                    <table>
 
-                            <tbody>
-                            <tr>
-                                <td><input disabled="disabled" tabindex="-1"
-                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
+                        <thead>
+                        <tr>
+                            <th>&nbsp;</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr>
+                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                    class=" form-control  input-sm">
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                    class=" form-control  input-sm"
                                     >
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input disabled="disabled" tabindex="-1"
-                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                    class=" form-control  input-sm"
                                     >
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input disabled="disabled" tabindex="-1"
-                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                    class=" form-control  input-sm"
                                     >
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input disabled="disabled" tabindex="-1"
-                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                    class=" form-control  input-sm"
                                     >
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input disabled="disabled" tabindex="-1"
-                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                    class=" form-control  input-sm"
                                     >
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input disabled="disabled" tabindex="-1"
-                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                    class=" form-control  input-sm"
                                     >
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input disabled="disabled" tabindex="-1"
-                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                    class=" form-control  input-sm"
                                     >
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input disabled="disabled" tabindex="-1"
-                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                    class=" form-control  input-sm"
                                     >
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input disabled="disabled" tabindex="-1"
-                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                    class=" form-control  input-sm"
                                     >
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input disabled="disabled" tabindex="-1"
-                                           style="max-width: 80px; font-family: Lucida; font-size: 13px; text-align:right;"
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                    class=" form-control  input-sm"
+                                >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                    class=" form-control  input-sm"
                                     >
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                    class=" form-control  input-sm"
+                                    >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input style="min-width:70px;max-width:70px;padding:0 4px;background:white;border:none;height:23px; text-align:right;text-align:right;" tabindex="-1"
+                                    class=" form-control  input-sm"
+                                    >
+                            </td>
+                        </tr>
+                        
+                        </tbody>
+                    </table>
+                
+                    {% endif %}
+                </td>
+                 
                 {% set ctrol = ctrol + 1 %}
             {% endfor %}
 
         </tr>
     {% endif %}
 </table>
-
-<br/>
-<br/>

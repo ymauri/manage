@@ -127,13 +127,13 @@
                                             <td>{{ form_widget(form_basic.totaalnaar, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
                                            
                                             <td style="text-align: right">Bank 4 €</td>
-                                            <td>{{ form_widget(form_float.bank4, {'attr':{ 'class' :'input-sm  form-control real money bank', 'onkeyup':"delay(add_bank_field(this), 200)" }}) }}</td>
+                                            <td>{{ form_widget(form_float.bank4, {'attr':{ 'class' :'input-sm  form-control real money bank', 'onkeyup':"add_bank_field(this)" }}) }}</td>
                                         </tr>
                                          <tr>
                                             <td>Kasverschil €</td>
                                             <td>{{ form_widget(form_basic.kasverschil, {'attr':{ 'class' :'input-sm  form-control real'}}) }}</td>
                                             <td style="text-align: right">Bank 5 €</td>
-                                            <td><input type="text" id="bank5" name="bank[]" onkeyup="delay(add_bank_field(this), 200)" class="input-sm  form-control real money bank"></td>
+                                            <td><input type="text" id="bank5" name="bank[]" onkeyup="add_bank_field(this)" class="input-sm  form-control real money bank"></td>
                                         </tr>
                                         {% set cantidadbank = 6 %}
                                         {% for item in entity_basic.float.bank %}
@@ -143,7 +143,7 @@
                                             <td></td>
                                             <td></td>
                                             <td style="text-align: right">Bank {{ cantidadbank }} €</td>
-                                            <td><input type="text" id="bank5" name="bank[]" onkeyup="delay(add_bank_field(this), 200)" class="input-sm  form-control real money bank" value="{{ item }}"></td>
+                                            <td><input type="text" id="bank5" name="bank[]" onkeyup="add_bank_field(this)" class="input-sm  form-control real money bank" value="{{ item }}"></td>
                                         </tr>
                                             {% set cantidadbank = cantidadbank + 1 %}
                                         {% endif %}
@@ -220,7 +220,7 @@
             if ($(current).val() != "" && $(current).hasClass('last')){
                 $(current).removeClass('last')
                 cantidad_bank ++;
-                $('.bank-next').before('<tr><td></td> <td></td> <td style="text-align: right">Bank '+cantidad_bank+' €</td> <td><input type="text" id="" onkeyup="delay(add_bank_field(this), 200)" name="bank[]" class="input-sm  form-control real money bank last" ></td></tr>')
+                $('.bank-next').before('<tr><td></td> <td></td> <td style="text-align: right">Bank '+cantidad_bank+' €</td> <td><input type="text" id="" onkeyup="add_bank_field(this)" name="bank[]" class="input-sm  form-control real money bank last" ></td></tr>')
                 $('.money').trigger('keyup');
                 //tr = $(this).parent().parent()
                 //tr.append
