@@ -114,6 +114,22 @@ class HotelController extends Controller {
                 $relation->setFromguesty(TRUE);
                 $relation->setNotes($checkin->getNote());
                 $relation->setCheckin($checkin);
+                $paymenRecive = []; 
+                if ($checkin->getSource() === 'Airbnb') {
+                    $paymenRecive[] = [
+                        'betaling' => $checkin->getBetalen(),
+                        'paymentmethod' => PaymentMethod::AIRBNB,
+                        'datebank' => "",
+                        'stripeinvoicenumber' => ''
+                    ];
+                }
+                $paymenRecive[] = [
+                    'betaling' => "",
+                    'paymentmethod' => "",
+                    'datebank' => "",
+                    'stripeinvoicenumber' => ''
+                ];
+                $relation->setPaymentrecive(json_encode($paymenRecive));
                 $em->persist($relation);
             }
             $em->flush();
@@ -256,6 +272,22 @@ class HotelController extends Controller {
                         $relation->setFromguesty(TRUE);
                         $relation->setNotes($checkin->getNote());
                         $relation->setCheckin($checkin);
+                        $paymenRecive = []; 
+                        if ($checkin->getSource() === 'Airbnb') {
+                            $paymenRecive[] = [
+                                'betaling' => $checkin->getBetalen(),
+                                'paymentmethod' => PaymentMethod::AIRBNB,
+                                'datebank' => "",
+                                'stripeinvoicenumber' => ''
+                            ];
+                        }
+                        $paymenRecive[] = [
+                            'betaling' => "",
+                            'paymentmethod' => "",
+                            'datebank' => "",
+                            'stripeinvoicenumber' => ''
+                        ];
+                        $relation->setPaymentrecive(json_encode($paymenRecive));
                         $em->persist($relation);
                         $em->flush();
 
@@ -1214,7 +1246,8 @@ class HotelController extends Controller {
                 'rcheckout' => $em->getRepository('RestaurantBundle:RCheckoutHotel')->getOrderedCheckout($id),
                 'users' => $this->getUsers(),
                 //'checkout_guesty' => $this->getCheckout(),
-                //'checkin_guesty' => $this->getCheckin(),
+                //'checkin_guesty' => $this->getCheckin(),                
+                'paymentMethods' => PaymentMethod::allAssociative(),
                 'sources' => $this->getActiveSources(),
                 'listing' => $this->getActiveListing(),
                 )))
