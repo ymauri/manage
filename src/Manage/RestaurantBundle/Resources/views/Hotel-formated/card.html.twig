@@ -1,4 +1,4 @@
-<div class="col-md-4">
+<div class="col-md-6">
     <div class="portlet  light bg-inverse">
         <div class="portlet-title">
             <div class="caption">
@@ -53,6 +53,10 @@
                                     <div class="row form-group">
                                         <label for="diners" class="required">Diners €</label>
                                         <input type="text" id="diners" name="diners" required="required" class="input-sm pull-right form-control card-control real credit" value="{{entity_basic.card.diners}}">
+                                    </div>
+                                     <div class="row form-group">
+                                        <label for="alipay" class="required">AliPay €</label>
+                                        <input type="text" id="alipay" name="alipay" required="required" class="input-sm pull-right form-control card-control real credit" value="{{entity_basic.card.alipay}}">
                                     </div>
 
                             </section>
@@ -152,10 +156,7 @@
                             <section class="col-md-12" >
                                 <br/>
                                 <br/>
-                                    <div class="row form-group">
-                                        <label for="alipay" class="required">AliPay €</label>
-                                        <input type="text" id="alipay" name="alipay" required="required" class="input-sm pull-right form-control card-control real" value="{{entity_basic.card.alipay}}">
-                                    </div>
+                                   
                             </section>
                     </fieldset>
                 </div>
@@ -199,9 +200,9 @@
         totalesCard()
     })
 
-    $('#data-card').on('keyup', '#alipay', function(){
+    {# $('#data-card').on('keyup', '#alipay', function(){
         totalesCard()
-    })
+    }) #}
 
     function totalesCard(){
         ali = numeral($('#alipay').val()).value()

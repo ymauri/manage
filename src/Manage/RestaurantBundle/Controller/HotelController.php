@@ -1014,7 +1014,7 @@ class HotelController extends Controller {
         //Pin Maestro
         $pin = $entity->getCard();
         $debit = $pin->getMaestro() + $pin->getVpay();
-        $credit = $pin->getVisa() + $pin->getVisaelec() + $pin->getMastercard() + $pin->getAmerican() + $pin->getUnion() + $pin->getDiners();
+        $credit = $pin->getVisa() + $pin->getVisaelec() + $pin->getMastercard() + $pin->getAmerican() + $pin->getUnion() + $pin->getDiners() + $pin->getAlipay();
         //echo $debit;die;
         $pin->setTdebit($debit);
         $pin->setTcredit($credit);

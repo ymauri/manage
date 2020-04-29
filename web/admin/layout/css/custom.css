@@ -77,11 +77,19 @@
     #form-total-stripe fieldset,
     #form-card fieldset {
         max-width: 280px;
+        margin: 0 auto;
+        ;
     }
     
-    #form-bills,
-    fieldset#data-final {
-        max-width: 360px;
+    fieldset#data-final,
+    fieldset#data-user-final {
+        max-width: 380px;
+        margin: 0 auto;
+    }
+    
+    #form-bills {
+        max-width: 280px;
+        margin: 0 auto;
     }
     
     #form-bills label.required {

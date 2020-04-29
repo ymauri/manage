@@ -230,7 +230,7 @@
                                                                 {% endfor %}
                                                             {% endif %}
 
-                                                             <tr style="height: 30px"></tr>
+                                                             {# <tr style="height: 30px"></tr>
                                                             <tr align='center' style="height: 30px;">
                                                                 <td colspan="2" style="font-weight: bold;color: #1caf9a;font-size: 16px;">
                                                                     Dagopbrengst
@@ -277,7 +277,7 @@
                                                                         </tr>
                                                                     </table>
                                                                 </td>
-                                                            </tr>
+                                                            </tr> #}
                                                              <tr style="height: 30px"></tr>
                                                             <tr align='center' style="height: 30px;">
                                                                 <td colspan="2" style="font-weight: bold;color: #1caf9a;font-size: 16px;">
@@ -545,6 +545,15 @@
                                                                                 {% endif %}
                                                                             </td>
                                                                         </tr>
+                                                                        
+                                                                        <tr >
+                                                                            <td>AliPay €</td>
+                                                                            <td align='right'>
+                                                                                <input style="min-width: 167px; max-width: 167px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.alipay | number_format(2, ',', '.')}}" >
+                                                                            </td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                        </tr>
                                                                         <tr >
                                                                             <td style="font-weight: bold; border-top: 1px #d5d5d5 solid; "><b>Totaal Debit Cards €</b></td>
                                                                             <td style="font-weight: bold; border-top: 1px #d5d5d5 solid; " align='right'>
@@ -590,20 +599,20 @@
                                                                             </td>
                                                                         </tr> #}
 
-                                                                        <tr style="height: 15px;"></tr>
+                                                                        {# <tr style="height: 15px;"></tr>
                                                                         <tr >
                                                                             <td>AliPay €</td>
                                                                             <td align='right'>
                                                                                 <input style="min-width: 167px; max-width: 167px; padding: 0 4px; background: white; border: none;height: 23px;text-align: right" disabled="disabled" value="{{entity_basic.card.alipay | number_format(2, ',', '.')}}" >
                                                                             </td>
-                                                                        </tr>
+                                                                        </tr> #}
                                                                     </table>
                                                                 </td>
                                                             </tr>
                                                              <tr style="height: 30px"></tr>
                                                             <tr align='center' style="height: 30px;">
                                                                 <td colspan="2" style="font-weight: bold;color: #1caf9a;font-size: 16px;">
-                                                                    Kasverschil
+                                                                    Dagopbrengst
                                                                 </td>
                                                             </tr>
                                                             <tr>

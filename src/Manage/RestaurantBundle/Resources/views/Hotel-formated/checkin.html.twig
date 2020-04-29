@@ -202,7 +202,7 @@
                                                     <label class="control-label">Totaal te betalen €</label>
                                                     <input type="text" id="totalbetalen-{{control}}" class="input-sm form-control  col-md-6 real" readonly="readonly" tabindex="-1"  name='totalbetalen' value="{{var.totalbetalen}}">
                                                 </div>
-                                                <div class="custom-betaling-{{control}}">
+                                                <div class="custom-betaling-{{control}} custom-betaling">
                                                {% set betalinControl = 1 %}
                                                 {% if var.paymentrecive|length > 0 %}
                                                 {% for i, pay in var.paymentrecive | json_decode %}
@@ -298,10 +298,10 @@
                                         <div class="tools">
                                             <label><span class="timeforcheck"><input id="timeforcheck" name="timeforcheck" style="text-align: center; width: 50px;background: transparent; border: none" value=""/></span></label>
                                             <span class="serial_checkin badge bg-blue-steel"></span>&nbsp;
-                                            <a href="javascript:;" class="collapse"></a>
+                                            <a href="javascript:;" class="expand"></a>
                                         </div>
                                     </div>
-                                    <div class="portlet-body container-fluid">
+                                    <div class="portlet-body container-fluid display-hide">
                                         <div id="details-checkin-{{control}}" class="details-checkin">
                                             <div class="form-group">
                                                 <label class="control-label">Listing</label>
@@ -382,7 +382,7 @@
                                                 <input type="text" id="totalbetalen-{{control}}" class="input-sm form-control  col-md-6 real" readonly="readonly" tabindex="-1"  name='totalbetalen' value="">
                                             </div>
 
-                                            <div class="custom-betaling-{{control}}">
+                                            <div class="custom-betaling-{{control}} custom-betaling">
                                              <div class='space-betaling-1 space-betaling'>
                                                 <div class="form-group">
                                                     <label class="control-label">Betaalmethode €</label>
@@ -542,7 +542,7 @@
         <input type="text" id="totalbetalen-' + s + '" class="input-sm form-control col-md-6 real" readonly="readonly" tabindex="-1"  name="totalbetalen"> </div>'
         
         cadena += `
-                </div><div class="custom-betaling-${s}">
+                </div><div class="custom-betaling-${s} custom-betaling">
                 <div class='space-betaling-${s} space-betaling'>
                     <div class="form-group">
                         <label class="control-label">Betaalmethode €</label>
@@ -909,7 +909,7 @@
                         <input type="date" class="input-sm form-control datebank col-md-6"  value="">
                     </div>
                 </div>`);
-        } else if ($(current).val() == "" && !$(current).hasClass("first")) {
+        } else if ($(current).val() == "" && !$(current).hasClass("first") && !$(current).hasClass("last")) {
             $(current).closest('.space-betaling').remove();
         }
          profitStripeGuesty();
@@ -1051,5 +1051,4 @@
         checkinStatusClear($(this));
     })
 
-//$('.betaling').trigger('keyup')
 </script>

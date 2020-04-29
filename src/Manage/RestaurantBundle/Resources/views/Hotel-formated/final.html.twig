@@ -1,8 +1,8 @@
-<div class="col-md-4">
+<div class="col-md-6">
     <div class="portlet  light bg-inverse">
         <div class="portlet-title">
             <div class="caption">
-                    <span class="caption-subject bold font-green-haze">Kasverschil</span>
+                    <span class="caption-subject bold font-green-haze">Dagopbrengst</span>
                 <span class="caption-helper"></span>
             </div>
             <div class="tools">
@@ -14,8 +14,8 @@
         <div class="portlet-body">
             <form id="form-final" method="post" class="form-horizontal container-fluid " role="form" autocomplete="off">
                 <div class="form-body">
-                    <fieldset id="data-final" class="col-md-12">
-                        <section>
+                    <fieldset id="data-final" >
+                        <section class="col-md-12">
                         
                             <div class="row form-group">
                                 <label for="totalparkingextra" class="required">Totaal Overnachtingen inclusief extra's €</label>
@@ -82,20 +82,19 @@
                 </div>
             </form>
             <form id="form-notifier-hotel" class="container-fluid form-horizontal edit" autocomplete="off">
-                <div class="form-body">
-                <div class="form-group">
-                            <label for="" class="control-label">Ingevuld door</label>
-                            <select id="userdoor" class="form-control input-sm control-1" data-placeholder="Select..." name="userdoor">
-                                <option></option>
-                                {% for val in users%}
-                                    <option value="{{val.id}}" {% if entity_basic.userdoor != null and entity_basic.userdoor.id == val.id %} selected='selected' {% endif %}>{{val.name}}</option>
-                                {% endfor  %}
-                            </select>
-
-                </div>
-                </div>
-                <input type="hidden" id="finished" name="finished" required="required" class=" " {% if entity_basic.finished%} value="{{entity_basic.finished | date('d-m-Y') }}" {% endif %}>
-
+                <fieldset id="data-user-final">
+                    <section class="col-md-12">
+                    <div class="form-group">
+                        <label for="" class="control-label">Ingevuld door</label>
+                        <select id="userdoor" class="form-control input-sm control-1" data-placeholder="Select..." name="userdoor" style="width:100%">
+                            <option></option>
+                            {% for val in users%}
+                                <option value="{{val.id}}" {% if entity_basic.userdoor != null and entity_basic.userdoor.id == val.id %} selected='selected' {% endif %}>{{val.name}}</option>
+                            {% endfor  %}
+                        </select>
+                    </div>
+                    <input type="hidden" id="finished" name="finished" required="required" class=" " {% if entity_basic.finished%} value="{{entity_basic.finished | date('d-m-Y') }}" {% endif %}>
+                </fieldset>
             </form>
 
 
